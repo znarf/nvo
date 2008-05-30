@@ -24,7 +24,7 @@ $host = $_SERVER['HTTP_HOST'];
 $basePath = dirname($_SERVER['REQUEST_URI']);
 
 // Config and bootstrapping
-require_once dirname(__FILE__) . '/config/config.php';
+require_once dirname(__FILE__) . '/../config/config.php';
 require_once 'Bootstrap.php';
 
 Bootstrap::prepare();
