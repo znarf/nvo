@@ -1,0 +1,22 @@
+=============================================================================
+                    How to run the Exposition PHP Server
+=============================================================================
+
+The role of the widget server is to provide different ways to render widgets.
+For instance, the widget server can render widgets in standalone mode or within
+iframes.
+
+1. You need a local web server and PHP 5.2 available. Mac OS and most Linux 
+   distributions now come with Apache and PHP, but you can set up your own 
+   environment. If you are a Windows user, you may download a all-in-one package
+   like EasyPHP or WAMP5.
+
+2. To set up the Exposition widget server, copy the files from your archive to 
+   your web root. You can also create a virtual host linking to the root of the
+   Exposition package.
+
+3. Test the Exposition widget server at the following URL:
+   http://<yourserverhost>/public/widget/uwa?uwaUrl=<uwa-widget-url>
+   For instance, http://<yourserverhost>/public/widget/uwa?uwaUrl=http://www.netvibes.com/api/uwa/examples/rssreader.html
+
+More information at http://www.netvibes.org.
