@@ -23,6 +23,14 @@
  * Configuration file.
  */
 
+// Be strict or be dead
+error_reporting(E_ALL | E_STRICT);
+
+// Active debugging output ?
+if (false === defined('DEBUG')) {
+    define('DEBUG', false);
+}
+
 define('APPLICATION', dirname(__FILE__) . '/../application');
 
 if (is_dir(dirname(__FILE__) . '/../lib')) {

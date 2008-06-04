@@ -31,15 +31,30 @@ class ErrorController extends Zend_Controller_Action
      */
     public function errorAction()
     {
-        $this->view->exceptions = $this->getResponse()->getException();
-        
-        foreach ($this->view->exceptions as $e) {
-            echo '<li>';
-            echo '<strong>', $e->getMessage(), '</strong> (', $e->getFile(), ') (line ', $e->getLine(), ')';
-            echo '<pre>', $e->getTraceAsString(), '</pre>';
-            echo '</li>'; 
+        $this->view->host = $_SERVER['HTTP_HOST'];
+
+        $this->view->details = '';
+
+        foreach ($this->getResponse()->getException() as $e) {
+
+            $log_message = 'Error ' . $e->getCode() . ': ' . $e->getMessage() .
+                ' (file ' .  $e->getFile() . ') (line ' . $e->getLine() . ')';
+
+            if (DEBUG) {
+                $this->view->details .= '<li>' . $log_message . '<pre>' . $e->getTraceAsString() . '</pre>' . '</li>';
+            } else {
+                error_log($log_message);
+            }
+
+            switch ($e->getCode()) {
+                case '404':
+                    $this->view->status = 'Not found';
+                    $this->view->message = 'The requested document was not found on this server.';
+                    break;
+                default:
+                    $this->view->status = 'An error occured';
+                    $this->view->message = 'You can contact the server administrator about this problem.';
+            }
         }
-        
-        $this->_helper->viewRenderer->setNoRender(true);
     }
 }
