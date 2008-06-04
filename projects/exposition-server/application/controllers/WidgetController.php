@@ -150,4 +150,21 @@ class WidgetController extends Zend_Controller_Action
 
         echo $this->_compiler->setOptions($options)->render();
     }
+    
+    /**
+     * Renders the widget as JSON.
+     */
+    public function jsonAction()
+    {
+        $object = array(
+            'title'         => $this->_widget->getTitle(),
+            'icon'          => $this->_widget->getIcon(),
+            'metas'         => $this->_widget->getMetas(),
+            'preferences'   => $this->_widget->getPreferencesArray()
+        );
+        
+        header("Content-type: application/json");
+        
+        echo Zend_Json::encode($object);
+    }
 }
