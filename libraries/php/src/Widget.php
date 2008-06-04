@@ -241,11 +241,21 @@ class Widget
          * @see Zend_Json
          */
         require_once 'Zend/Json.php';
+        return Zend_Json::encode($this->getPreferencesArray());
+    }
+    
+    /**
+     * Returns the widget preferences as a simple PHP array
+     *
+     * @return array
+     */
+    public function getPreferencesArray()
+    {
         $preferences = array();
         foreach ($this->_preferences as $name => $preference) {
             $preferences[] = $preference->toArray();
         }
-        return Zend_Json::encode($preferences);
+        return $preferences;
     }
 
     /**
