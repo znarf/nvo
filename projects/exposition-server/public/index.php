@@ -21,7 +21,7 @@
 
 // Server host and base path
 $host = $_SERVER['HTTP_HOST'];
-$basePath = dirname($_SERVER['REQUEST_URI']);
+$basePath = dirname($_SERVER['SCRIPT_NAME']);
 
 // Config and bootstrapping
 require_once dirname(__FILE__) . '/../config/config.php';

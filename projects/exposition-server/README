@@ -1,10 +1,17 @@
 =============================================================================
-                    How to run the Exposition PHP Server
+                    How to use the Exposition PHP Server
 =============================================================================
+
+INTRODUCTION
+------------
 
 The role of the widget server is to provide different ways to render widgets.
 For instance, the widget server can render widgets in standalone mode or within
 iframes.
+
+
+INSTALL
+-------
 
 1. You need a local web server and PHP 5.2 available. Mac OS and most Linux 
    distributions now come with Apache and PHP, but you can set up your own 
@@ -16,7 +23,40 @@ iframes.
    Exposition package.
 
 3. Test the Exposition widget server at the following URL:
-   http://<yourserverhost>/public/widget/uwa?uwaUrl=<uwa-widget-url>
-   For instance, http://<yourserverhost>/public/widget/uwa?uwaUrl=http://www.netvibes.com/api/uwa/examples/rssreader.html
+   http://<host>/public/widget/frame?uwaUrl=<uwa-widget-url>
+   For example, the URL to render a RSS Reader widget within in iframe is:
+   http://<host>/public/widget/frame?uwaUrl=http%3A%2F%2Fwww.netvibes.com%2Fapi%2Fuwa%2Fexamples%2Frssreader.html
 
-More information at http://www.netvibes.org.
+If you cannot see the widget, make sure that your web server is configured
+to read .htaccess files and that URL rewriting is enabled.
+
+
+USAGE
+-----
+
+Below is the list of the available features of the Exposition widget server.
+
+1. Widget: http://<host>/public/widget/<action>?uwaUrl=<uwa-widget-url>,
+   where <action> can be one of the following:
+    - uwa:   renders a widget in standalone mode with XML well-formedness
+    - frame: renders a widget for iframe display
+    - js:    renders the JavaScript controller of a widget
+    - css:   renders the CSS styles of a widget
+
+2. Proxy: http://<host>/public/proxy/<action>?url=<url>&type=<type>
+   where <action> can be one of the following:
+    - ajax:  handles Ajax calls, where <type> can be either 'text', 'xml', or 'json'
+    - feed:  handles Ajax calls for feeds and returns a JSON output
+
+
+SECURITY NOTICE
+---------------
+
+For security purpose, it is highly recommended to install the Exposition widget
+server on a dedicated domain or subdomain. If possible, it is even better to put
+each widget iframe on a different subdomain (e.g. with an auto-generated number).
+It would prevent the iframes from communicating directly with each other or
+accessing your parent container.
+
+
+More information at http://www.netvibes.org/.
