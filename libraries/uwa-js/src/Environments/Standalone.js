@@ -63,8 +63,8 @@ onInit: function() {
 
   document.body.appendChild(wrapper);
   
-  this.html['title'] = document.getElementById('moduleTitle'); // to refactor
-  this.html['icon'] = document.getElementById('moduleIcon'); // to refactor
+  this.html['title'] = document.getElementById('moduleTitle');
+  this.html['icon'] = document.getElementById('moduleIcon');
   
   var addto = document.createElement('div');
   addto.setAttribute('id','addto');
@@ -72,10 +72,8 @@ onInit: function() {
   if( typeof UWA.widgetTrueURL == 'undefined' ) UWA.widgetTrueURL = document.location.href;
 
   addto.innerHTML =  '<a style="border:0" title="Add this module to Netvibes" href="' + NV_PATH + 'subscribe.php?module=UWA&amp;moduleUrl=' + encodeURIComponent(UWA.widgetTrueURL) + '"><img alt="Add to Netvibes" src="' + NV_PATH + 'img/uwa-netvibes.png" /></a>';
-  
-  /*
+
   addto.innerHTML +=  '<br /> <br /><a style="border:0" title="Add this module to Google Homepage" href="http://www.google.com/ig/add?moduleurl=' + encodeURIComponent(NV_PATH + 'api/uwa/compile/google.php?moduleUrl=' +  encodeURIComponent(UWA.widgetTrueURL) ) + '"><img alt="Add to Google Homepage" src="' + NV_PATH + 'img/uwa-google.png" /></a>';
-  */
 
   document.body.appendChild(addto);
     
@@ -107,8 +105,6 @@ onRegisterModule: function() {
   
   var xmlPrefs = document.getElementsByTagName("preference");
   if (xmlPrefs && xmlPrefs.length) this.module.setPreferencesXML(xmlPrefs);
-  
-  UWA.XMLTemplate.detect();
 
   var links = document.getElementsByTagName('link');
   for(var i = 0; i < links.length; i++) {
@@ -156,34 +152,6 @@ addStar: function() {
 }
 
 });
-
-UWA.XMLTemplate = {
-  
-  namespace: "http://www.netvibes.com/ns/",
-  
-  getElements: function(elName, element) {
-    var el = (element ? element : document);
-    return $A(el.getElementsByTagNameNS(this.namespace, elName));
-  },
-  
-  getElement: function(elName, element) {
-    var elements = this.getElements(elName, element);
-    return ( elements && elements[0] ? elements[0] : null);
-  },
-  
-  detect: function(doc) {
-    var templates = ['multifeeds', 'feedreader', 'image', 'flash', 'webpage'];
-    for (var i = 0, l = templates.length; i < l; i++) {
-      var tpl = templates[i];
-      var xml = this.getElement(tpl, doc);
-      if(xml) {
-        var klass = new UWA.Templates[tpl]();
-        klass.createFromXML(xml);
-      }
-    }
-  }
-  
-}
 
 var Environment = new UWA.Environment();
 
