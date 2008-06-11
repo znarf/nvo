@@ -45,7 +45,7 @@ UWA.merge(UWA.Element, {
   */
   addContent: function(content) {
     if (typeof content == 'string') {
-      UWA.log("addContent should be soon deprecated. Use alternative syntaxes.");
+      // UWA.log("addContent should be soon deprecated. Use alternative syntaxes.");
       var node = document.createElement("div");
       node.innerHTML = content;
       return this.appendChild(node);
