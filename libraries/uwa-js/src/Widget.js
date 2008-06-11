@@ -475,6 +475,7 @@ UWA.Widget.prototype = {
     // Fire "ShowEdit" notification with HTMLDivElement "edit" as argument
     this.callback('onShowEdit', this.elements['edit']);
     this.elements['edit'].show();
+    if(this.elements['editLink']) this.elements['editLink'].setHTML( _("Close Edit") );
   },
   
   /* internal or advanced use only - not documented */
@@ -488,7 +489,7 @@ UWA.Widget.prototype = {
       if(this.metas['version']) {
         content += ' - version <strong>' + this.metas['version'] + '</strong>';
       }
-      return this.createElement('p').setStyles({'padding': '10px', 'text-align': 'right'}).setHTML(content);
+      return this.createElement('p').setStyle({'padding': '10px', 'textAlign': 'right'}).setHTML(content);
     }
     return false;
   },
@@ -499,6 +500,7 @@ UWA.Widget.prototype = {
     if (this.onRefresh) this.onRefresh();
     else if (this.onLoad) this.onLoad();
     this.callback('onHideEdit');
+    if(this.elements['editLink']) this.elements['editLink'].setHTML( _("Edit") );
   },
   
   /* Group: Data storage */
