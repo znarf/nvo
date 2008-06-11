@@ -38,10 +38,37 @@ UWA.extend(UWA.Environment.prototype, {
   },
   
   onRegisterModule: function(module) {
-    this.html['body'] = $('moduleContent');
-    this.module.elements['body'] = UWA.$element(this.html['body']);
-    this.module.body = this.module.elements['body']; // shortcut
+    
+    this.html['body']       = $('moduleContent');
+    this.html['header']     = $('moduleHeader');
+    this.html['title']      = $('moduleTitle');
+    this.html['edit']       = $('editContent');
+    this.html['editLink']   = $('editLink');
+    
+    for (var key in this.html) {
+      this.widget.elements[key] = UWA.$element(this.html[key]);
+    }
+    
+    this.widget.body = this.widget.elements['body']; // shortcut
+    
+    if (this.html['editLink']) {
+      this.html['editLink'].onclick = function() {
+        Environment.callback('toggleEdit');
+        return false;
+      };
+    }
+    
     this.setPeriodical('handleResizePeriodical', this.handleResize, 250);
+  },
+  
+  toggleEdit: function() {
+    if (widget.elements['edit'].style.display == 'none') {
+      widget.callback('onEdit');
+    } else {
+      // note that we don't fire 'endEdit' there because we don't want to save form data
+      widget.elements['edit'].hide();
+      widget.elements['editLink'].setHTML( _("Edit") );
+    }
   },
     
   getData: function(name) {
@@ -82,32 +109,63 @@ UWA.extend(UWA.Environment.prototype, {
   },
   
   handleResize: function() {
-    if(typeof this.module.body == "undefined") {
+    if(typeof this.widget.body == "undefined") {
       this.widget.log('widget.body is not defined : widget #' + this.widget.id + '');
       this.widget.log(this.widget.body);
       return;
     }
-    var height = parseInt(this.module.body.getDimensions().height);
+    var height = parseInt(document.body.offsetHeight);
     if(height > 0 && height != this.prevHeight) {
       this.sendRemote('resizeHeight', false, height);
     }
     this.prevHeight = height;
   },
   
+  handleLinks: function() {
+    var links = this.widget.body.getElementsByTagName('a');
+    for (var i = 0, lnk; lnk = links[i]; i++) {
+      lnk.target = '_blank'; // problem with javascript void(0) links
+    }
+  },
+  
+  onUpdateBody: function() {
+    this.setDelayed('handleLinks', this.handleLinks, 100);
+  },
+  
+  onUpdatePreferences: function() {
+    if (widget.elements['editLink']) {
+      var editable = this.widget.preferences.some(function(pref){
+        return pref.type != 'hidden';
+      });
+      if (editable) {
+        widget.elements['editLink'].show();
+      } else {
+        widget.elements['editLink'].hide();
+      }
+    }
+  },
+  
+  setIcon: function(url) {
+    if(this.widget.elements['icon']) {
+      var iconUrl = 'http://' + NV_HOST + NV_PATH + 'proxy/favIcon.php?url=' + encodeURIComponent(url);
+      this.widget.elements['icon'].innerHTML = '<img width="16" height="16" src="' + iconUrl + '" />';
+    }
+  },
+  
   initCommunication: function() {
     // Choose the best cross-domain messaging mechanism
-    if (typeof document.postMessage === 'function') {
-      this.communicationType = 'documentPostMessage';
-    } else if (typeof window.postMessage === 'function' && !UWA.Client.Engine.gecko) {
-      this.communicationType = 'windowPostMessage';
-    } else {
-      this.communicationType = 'proxy';
+    this.communicationType = 'proxy';
+    if (UWA.Client.Engine.opera || UWA.Client.Engine.webkit) {
+      if (typeof document.postMessage === 'function') {
+        this.communicationType = 'documentPostMessage';
+      } else if (typeof window.postMessage === 'function') {
+        this.communicationType = 'windowPostMessage';
+      }
     }
-    //UWA.log('Communication type: ' + this.communicationType);
     if (this.communicationType == 'documentPostMessage' || this.communicationType == 'windowPostMessage') {
       var handler = function(e) {
         var message = UWA.Json.decode(e.data);
-        UWA.log('Received message in widget #' + this.module.id + ': ' + message.action);
+        UWA.log('Received message in widget #' + this.widget.id + ': ' + message.action);
         this.publicInterface(message.action, message.name, message.value);
       };
       document.addListener('message', handler.bind(this), false);
@@ -150,13 +208,13 @@ UWA.extend(UWA.Environment.prototype, {
   },
   
   sendRemote: function(action, name, value) {
-    if (this.module.id == '') {
+    if (this.widget.id == '') {
       UWA.log(action);
-      UWA.log('too fast. no widget id defined.');
+      UWA.log('no widget id defined yet.');
       return false;
     }
     // Encode the message into JSON
-    var message = UWA.Json.encode({'id': this.module.id, 'action': action, 'name': name, 'value': value});
+    var message = UWA.Json.encode({'id': this.widget.id, 'action': action, 'name': name, 'value': value});
     // Implementations of the different communication mechanisms
     switch (this.communicationType) {
       // HTML 5 PostMessage (Firefox 3 - Opera 9 - WebKit)
