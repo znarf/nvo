@@ -101,7 +101,11 @@ class Compiler_Uwa extends Compiler
         $preference = $preference->toArray();
         $xml = "<preference";
         foreach($preference as $key => $value) {
-            if ($key != "options") $xml .= " $key=\"$value\"";
+            if ($key != "options") {
+                $k = htmlspecialchars($key);
+                $v = htmlspecialchars($value);
+                $xml .= " $k=\"$v\"";
+            }
         }
         switch ($preference['type']) {
             case 'list':
