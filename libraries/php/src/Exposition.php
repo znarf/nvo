@@ -48,13 +48,17 @@ class Exposition
         // Zend Loader
         require_once 'Zend/Loader.php';
         Zend_Loader::registerAutoload();
-        
+
         // Exposition Registry Values
         $registryDefaultValues = array(
-            'useMergedCss'    => true,
+            'jsVersion'       => 'preview3',
+            'cssVersion'      => 'preview3',
             'useCompressedJs' => true,
+            'useMergedCss'    => true,
             'inlineWidgets'   => false,
             'uwaJsDir'        => 'http://' . NV_STATIC  . '/js/c/',
+            'uwaCssDir'       => 'http://' . NV_STATIC  . '/themes/exposition-blueberry/',
+            'uwaImgDir'       => 'http://' . NV_STATIC  . '/img/',
             'proxyEndpoint'   => 'http://' . NV_MODULES . '/proxy',
             'widgetEndpoint'  => 'http://' . NV_MODULES . '/widget'
         );

@@ -46,6 +46,13 @@ abstract class Compiler
     protected $_coreLibraries;
 
     /**
+     * Compiler options.
+     *
+     * @var array
+     */
+    public $options = array();
+
+    /**
      * Constructor.
      *
      * @param Widget $widget
@@ -107,13 +114,13 @@ abstract class Compiler
         $stylesheets = array();
 
         // Netvibes stylesheets
-        $NVstylesheets = array("http://" . NV_STATIC . "/themes/base/uwa-iframe.css");
+        $NVstylesheets = array(Zend_Registry::get('uwaCssDir') . 'uwa-iframe.css?v=' . Zend_Registry::get('cssVersion'));
         if (isset($_GET['NVthemeUrl'])) {
             $NVstylesheets[] = 'http://' . NV_STATIC . $_GET['NVthemeUrl'];
         }
         foreach ($NVstylesheets as $stylesheet) {
             if (Zend_Registry::get('useMergedCss')) {
-                $stylesheets[] = str_replace(".css", ".css.m.css", $stylesheet);
+                $stylesheets[] = str_replace('.css', '.css.m.css', $stylesheet);
             } else {
                 $stylesheets[] = $stylesheet;
             }
@@ -124,9 +131,9 @@ abstract class Compiler
         if ( !empty($style) ) {
             $cssBaseUrl = Zend_Registry::get('widgetEndpoint') . '/css';
             if (isset($this->options['uwaId'])) {
-                $stylesheets[] = $cssBaseUrl . "/" . urlencode($this->options['uwaId']);
+                $stylesheets[] = $cssBaseUrl . '/' . urlencode($this->options['uwaId']);
             } else {
-                $stylesheets[] = $cssBaseUrl . "?uwaUrl=" . urlencode($this->_widget->getUrl());
+                $stylesheets[] = $cssBaseUrl . '?uwaUrl=' . urlencode($this->_widget->getUrl());
             }
         }
 
@@ -143,16 +150,18 @@ abstract class Compiler
     protected function _getCoreLibraries($name = 'uwa')
     {
         $javascripts = array();
-         
+
         $coreLibraryName = $this->_widget->getCoreLibrary();
+
+        $version = Zend_Registry::get('jsVersion');
 
         if (Zend_Registry::get('useCompressedJs')) {
             switch ($coreLibraryName) {
                 case 'uwa':
-                    $javascripts[] = Zend_Registry::get('uwaJsDir') . 'UWA_' . $this->_environment . '.js';
+                    $javascripts[] = Zend_Registry::get('uwaJsDir') . 'UWA_' . $this->_environment . '.js?v=' . $version;
                     break;
                 case 'uwa-mootools':
-                    $javascripts[] = Zend_Registry::get('uwaJsDir') . 'UWA_' . $this->_environment . '_Mootools.js';
+                    $javascripts[] = Zend_Registry::get('uwaJsDir') . 'UWA_' . $this->_environment . '_Mootools.js?v=' . $version;
                     break;
                 default:
                     throw new Exception('CoreLibrary name not known.');
@@ -163,10 +172,10 @@ abstract class Compiler
                 throw new Exception('CoreLibrary name not known.');
             }
             foreach ($this->_coreLibraries[$coreLibraryName] as $js) {
-                $javascripts[] = Zend_Registry::get('uwaJsDir') . $js;
+                $javascripts[] = Zend_Registry::get('uwaJsDir') . $js . '?v=' . $version;
             }
             if (isset($this->_environment)) {
-                $javascripts[] = Zend_Registry::get('uwaJsDir') . 'Environments/' . $this->_environment . '.js';
+                $javascripts[] = Zend_Registry::get('uwaJsDir') . 'Environments/' . $this->_environment . '.js?v=' . $version;
             }
         }
 

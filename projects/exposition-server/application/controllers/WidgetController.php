@@ -120,6 +120,12 @@ class WidgetController extends Zend_Controller_Action
         // Iframe parameters
         $options = array();
 
+        // Header
+        $options['displayHeader'] = $this->getRequest()->getParam('header', '0');
+
+        // Status
+        $options['displayStatus'] = $this->getRequest()->getParam('status', '1');
+
         // Data
         $options['data']  = array();
         $ignoredParams = array('id', 'uwaUrl', 'commUrl', 'ifproxyUrl', 'autoresize');
@@ -128,7 +134,6 @@ class WidgetController extends Zend_Controller_Action
                 // Should be avoided
                 // Fix a problem when displaying the default webnote of netvibes for example
                 $value = stripslashes($value);
-
                 $options['data'][$name] = $value;
             }
         }
