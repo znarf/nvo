@@ -25,7 +25,7 @@ require_once 'Compiler.php';
  * UWA compilation utilities.
  */
 class Compiler_Uwa extends Compiler
-{    
+{
     /**
      * Main rendering function.
      *
@@ -36,9 +36,9 @@ class Compiler_Uwa extends Compiler
         $style = $this->_widget->getStyle();
         $script = $this->_widget->getCompressedScript();
         $preferences = $this->_widget->getPreferences();
-        
+
         $l = array();
-        
+
         $l[] = '<?xml version="1.0" encoding="utf-8"?>';
         $l[] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"' .
             ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
@@ -47,17 +47,17 @@ class Compiler_Uwa extends Compiler
         $l[] = '<head>';
         $l[] = '<title>' . $this->_widget->getTitle() . '</title>';
         $l[] = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
-        
+
         foreach ($this->_widget->getMetadata() as $key => $value) {
             $l[] = '<meta name="' . $key . '" content="' . $value . '" />';
         }
-        
+
         $l[] = '<link rel="stylesheet" type="text/css"'.
             ' href="http://' . NV_HOST . '/themes/uwa/style.css"/>';
-        
+
         $coreLibrary = $this->_widget->getCoreLibrary();
         $externalScripts = $this->_widget->getExternalScripts();
-        
+
         if (empty($externalScripts) ) {
             $library = 'http://' . NV_HOST . '/js/UWA/load.js.php?env=Standalone';
         } else if ($coreLibrary == 'uwa') {
@@ -101,10 +101,10 @@ class Compiler_Uwa extends Compiler
         $preference = $preference->toArray();
         $xml = "<preference";
         foreach($preference as $key => $value) {
-            if ($key != "options") {
-                $k = htmlspecialchars($key);
-                $v = htmlspecialchars($value);
-                $xml .= " $k=\"$v\"";
+            if ($key != "options") { 
+                $k = htmlspecialchars($key); 
+                $v = htmlspecialchars($value); 
+                $xml .= " $k=\"$v\""; 
             }
         }
         switch ($preference['type']) {
@@ -131,13 +131,13 @@ class Compiler_Uwa extends Compiler
     public function renderJavaScriptRaw()
     {
         $l = array();
-        
+
         $l[] = "(function(){";
         $l[] = $this->_widget->getCompressedScript();
         $l[] = "widget.setMetas(" . $this->_widget->getMetadataJson() . ");";
         $l[] = "widget.setPreferences(" . $this->_widget->getPreferencesJson() . ");";
         $l[] = "})();";
-        
+
         return implode("\n", $l);
     }
 
@@ -147,24 +147,24 @@ class Compiler_Uwa extends Compiler
     public function renderJavaScriptFunction()
     {
         $l = array();
-        
+
         if (isset($this->options['uwaId'])) {
             $l[] = sprintf("UWA.Scripts['%s']=UWA.script=function(widget){", $this->options['uwaId']);
         } else {
             $l[] = "UWA.script=function(widget){";
-            // echo "UWA.Widgets['" . md5($this->_widget->getUrl()) . "'] = ";  
+            // echo "UWA.Widgets['" . md5($this->_widget->getUrl()) . "'] = ";
         }
-        
+
         $l[] = $this->_widget->getCompressedScript();
         $l[] = "widget.setMetas(" . $this->_widget->getMetadataJson() . ");";
         $l[] = "widget.setPreferences(" . $this->_widget->getPreferencesJson() . ");";
         $l[] = "return widget;";
-        
+
         $l[] = "}";
-        
+
         return implode("\n", $l);
     }
-    
+
     /**
      * Renders the controller as a JavaScript closure.
      */

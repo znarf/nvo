@@ -41,91 +41,105 @@ class Compiler_Google extends Compiler
     public function render()
     {
         $l = array();
-        
+
         $l[] = '<Module>';
-        
+
         $metas = $this->_widget->getMetas();
-        
+
+        $defaultScreenshot = 'http://www.netvibes.com/img/uwa-screenshot.png';
+        $defaultThumbnail  = 'http://www.netvibes.com/img/uwa-thumbnail.png';
+
         $googleMetas = array(
-            'title' =>  $this->_widget->getTitle(),
-            'height' => 200,
-            'description' => $metas['description'],
-            'author' => $metas['author'],
-            'author_email' => $metas['email'],
-            'screenshot' =>
-                isset($metas['screenshot']) ? $metas['screenshot'] :
-                'http://www.netvibes.com/img/uwa-screenshot.png',
-            'thumbnail' =>
-                isset($metas['thumbnail']) ? $metas['thumbnail'] :
-                'http://www.netvibes.com/img/uwa-thumbnail.png',
+            'title'        => $this->_widget->getTitle(),
+            'height'       => 200,
+            'description'  => isset($metas['description']) ? $metas['description'] : '',
+            'author'       => isset($metas['author']) ? $metas['author'] : '',
+            'author_email' => isset($metas['email']) ? $metas['email'] : '',
+            'screenshot'   => isset($metas['screenshot']) ? $metas['screenshot'] : $defaultScreenshot,
+            'thumbnail'    => isset($metas['thumbnail']) ? $metas['thumbnail'] : $defaultThumbnail
         );
-        
+
         $modulePrefs = '<ModulePrefs';
         foreach ($googleMetas as $key => $value) {
             $modulePrefs .= " $key=\"$value\"";
         }
         $modulePrefs .= '>';
-        
+
         $l[] = $modulePrefs;
-        
+
         // $l[] = '<Require feature="uwa" />';
         $l[] = '<Require feature="setprefs" />';
         $l[] = '<Require feature="dynamic-height" />';
         $l[] = '<Require feature="settitle" />';
 
         $l[] = '</ModulePrefs>';
-        
+
         $l[] = $this->_getPreferences();
-        
-        $l[] = '<Content type="html"><![CDATA[';
-        
-        $l[] = '<style type="text/css">';
-        foreach ($this->_getStylesheets() as $stylesheet) {
-            $l[] = '@import "' . $stylesheet . '";';
+
+        if ($this->options['type'] == 'html') {
+
+            $l[] = '<Content type="html"><![CDATA[';
+
+            $l[] = '<style type="text/css">';
+            foreach ($this->_getStylesheets() as $stylesheet) {
+                $l[] = '@import "' . $stylesheet . '";';
+            }
+            $l[] = 'body,td,div,span,p{font-family:inherit;}';
+            $l[] = 'a {color:inherit;}a:visited {color:inherit;}a:active {color:inherit;}';
+            $l[] = 'body{margin: auto;padding: auto;background-color:transparent;}';
+            $l[] = '</style>';
+
+            $l[] = '<div id="moduleContent" class="moduleContent">';
+            $l[] = $this->_widget->getBody();
+            $l[] = '</div>';
+
+            $l[] = '<div id="moduleStatus" class="moduleStatus">';
+            $l[] = '<a href="http://eco.netvibes.com/share/?url=' . str_replace('.', '%2E', urlencode($this->_widget->getUrl())) . '" title="Share this widget" class="share" target="_blank"><img src="'. Zend_Registry::get('uwaImgDir') .'share.png" alt="Share this widget"/></a>';
+            $l[] = '<a href="http://www.netvibes.com/" class="powered" target="_blank">powered by netvibes</a>';
+            $l[] = '</div>';
+
+            $l[] = '<script type="text/javascript">';
+            $l[] = "var NV_HOST = '" . NV_HOST . "', NV_PATH = '/', NV_STATIC = '" . NV_STATIC . "', " .
+                "NV_MODULES = '". NV_MODULES ."', NV_AVATARS = '". NV_AVATARS ."';";
+            $l[] = '</script>';
+
+            foreach ($this->_getJavascripts() as $javascript) {
+                $l[] = '<script type="text/javascript" src="' . $javascript . '"></script>';
+            }
+
+            $l[] = '<script type="text/javascript">';
+            $l[] = $this->_getFrameScript();
+            $l[] = '</script>';
+
+            $l[] = ']]></Content>';
+
+        } else if ($this->options['type'] == 'url') {
+
+            $url = Zend_Registry::get('widgetEndpoint') . '/frame?uwaUrl=' . urlencode($this->_widget->getUrl());
+
+            $l[] = '<Content type="url" href="' . $url . '"></Content>';
+
         }
-        $l[] = 'body,td,div,span,p{font-family:inherit;}';
-        $l[] = 'a {color:inherit;}a:visited {color:inherit;}a:active {color:inherit;}';
-        $l[] = 'body{margin: auto;padding: auto;background-color:transparent;}';
-        $l[] = '</style>';
-        
-        $l[] = '<div id="moduleContent" class="moduleContent">';
-        $l[] = $this->_widget->getBody();
-        $l[] = '</div>';
-        
-        $l[] = '<script type="text/javascript">';
-        $l[] = "var NV_HOST = '" . NV_HOST . "', NV_PATH = '/', NV_STATIC = '" . NV_STATIC . "', " .
-            "NV_MODULES = '". NV_MODULES ."', NV_AVATARS = '". NV_AVATARS ."';";
-        $l[] = '</script>';
-        
-        foreach ($this->_getJavascripts() as $javascript) {
-            $l[] = '<script type="text/javascript" src="' . $javascript . '"></script>';
-        }
-        
-        $l[] = '<script type="text/javascript">';
-        $l[] = $this->_getFrameScript();
-        $l[] = '</script>';
-        
-        $l[] = ']]></Content>';
-        
+
         $l[] = '</Module>';
-        
+
         return implode("\n", $l);
     }
 
     private function _getFrameScript()
     {
         $l = array();
-        
+
         $proxies = array(
             'ajax' => "http://" . NV_MODULES . "/proxy/ajax",
             'feed' => "http://" . NV_MODULES . "/proxy/feed"
         );
-        
+
         $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));
-        
+
         // $l[] = 'Environment = new UWA.Environment();';
         // $l[] = 'widget = Environment.getModule();';
-        
+
         $script = $this->_widget->getScript();
         if ( !empty($script) ) {
             if (isset($this->options['uwaId'])) {
@@ -134,12 +148,12 @@ class Compiler_Google extends Compiler
                 $l[] = "UWA.script(widget);";
             }
         }
-        
+
         $l[] = "Environment.launchModule();";
 
         return implode("\n", $l);
     }
-        
+
     private function _getPreferences()
     {
         $string = '';
@@ -172,10 +186,10 @@ class Compiler_Google extends Compiler
                     }
                     break;
                 case 'boolean':
-                    $element->setAttribute('datatype', 'bool'); 
+                    $element->setAttribute('datatype', 'bool');
                     break;
                 case 'hidden':
-                    $element->setAttribute('datatype', 'hidden'); 
+                    $element->setAttribute('datatype', 'hidden');
                     break;
                 case 'string':
                 default:
@@ -185,5 +199,5 @@ class Compiler_Google extends Compiler
             $string .= $dom->saveXML($element) . "\n";
         }
         return $string;
-    }   
+    }
 }
