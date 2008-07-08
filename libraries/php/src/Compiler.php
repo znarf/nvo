@@ -122,7 +122,7 @@ abstract class Compiler
             if (Zend_Registry::get('useMergedCss')) {
                 $stylesheet = str_replace('.css', '.css.m.css', $stylesheet);
             }
-            $stylesheets[] = $stylesheet . '?v=' . Zend_Registry::get('jsVersion');
+            $stylesheets[] = $stylesheet . '?v=' . Zend_Registry::get('cssVersion');
         }
 
         // Widget style
