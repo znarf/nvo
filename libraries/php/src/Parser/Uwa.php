@@ -244,10 +244,12 @@ class Parser_Uwa extends Parser
                     preg_match("/^(UWA|App)\/([^\/]+)\/([^\/]+).js$/", $src, $matches);
                     $type = $matches[2];
                     $name = $matches[3];
-                    $libraries[] = 'http://' . NV_STATIC . '/js/c/UWA_' . $type . '_' . $name . '.js';
+                    $library = 'http://' . NV_STATIC . '/js/c/UWA_' . $type . '_' . $name . '.js';
                 } else {
-                    $libraries[] = 'http://' . NV_STATIC . '/js/' . $src;
+                    $library = 'http://' . NV_STATIC . '/js/' . $src;
                 }
+                $libraries[] = $library . '?v=' . Zend_Registry::get('jsVersion');
+                
             }
         }
         return $libraries;
