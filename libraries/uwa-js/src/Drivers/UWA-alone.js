@@ -95,6 +95,14 @@ UWA.createElement = function(tagName, options){
  return el;
 }
 
+UWA.Form = {
+  getElements: function(form) {
+    var inputArray = $(form).getElementsByTagName('input');
+    var selectArray = $(form).getElementsByTagName('select');
+    return inputArray.concat(selectArray);
+  }
+}
+
 // Ajax Interface
 UWA.Ajax = {
   getRequest: function(url, options) {
