@@ -114,7 +114,7 @@ abstract class Compiler
         $stylesheets = array();
 
         // Netvibes stylesheets
-        $NVstylesheets = array(Zend_Registry::get('uwaCssDir') . 'uwa-iframe.css?v=' . Zend_Registry::get('cssVersion'));
+        $NVstylesheets = array(Zend_Registry::get('uwaCssDir') . 'uwa-iframe.css');
         if (isset($_GET['NVthemeUrl'])) {
             $NVstylesheets[] = 'http://' . NV_STATIC . $_GET['NVthemeUrl'];
         }
