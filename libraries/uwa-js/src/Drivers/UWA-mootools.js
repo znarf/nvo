@@ -65,8 +65,13 @@ UWA.Ajax = {
   },
   onCompleteFeed: function(arg, callback, context) {
     var response = {responseText: arg[0], responseXML: arg[1]};
-    var feed = UWA.Utils.parseFeed(response);
-    if (typeof callback == "function") callback(feed)
+    if (typeof UWA.Utils.parseFeed == 'function') { 
+      response = UWA.Utils.parseFeed(response);
+    }
+    else {
+     eval('response = ' + response.responseText);
+    }
+    if (typeof callback == "function") callback(response)
   },
   onCompleteJson: function(arg, callback, context) {
     try {
