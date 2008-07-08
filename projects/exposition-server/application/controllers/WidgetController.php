@@ -77,6 +77,8 @@ class WidgetController extends Zend_Controller_Action
         // Compiler
         if ($this->getRequest()->getParam('action') == 'frame') {
             $this->_compiler = Compiler_Factory::getCompiler('frame', $this->_widget);
+        } else if ($this->getRequest()->getParam('action') == 'gspec') {
+            $this->_compiler = Compiler_Factory::getCompiler('google', $this->_widget);
         } else {
             $this->_compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
         }
@@ -103,13 +105,25 @@ class WidgetController extends Zend_Controller_Action
     }
 
     /**
-     * Renders the widget JavaScript controller.
+     * Renders the widget javascript.
      */
     public function jsAction()
     {
         header('Content-type: text/javascript; charset=utf-8');
         header('Cache-Control: max-age=300');
         echo $this->_compiler->renderJs();
+    }
+    
+    /**
+     * Renders the widget as a Google Gadget specification
+     * http://code.google.com/apis/gadgets/docs/dev_guide.html
+     */
+    public function gspecAction()
+    {
+        header('Content-type: text/xml; charset=utf-8');
+        header('Cache-Control: max-age=300');
+        $options = array( 'type' => isset($_GET['type']) ? $_GET['type'] : 'url' );
+        echo $this->_compiler->setOptions($options)->render();
     }
 
     /**
@@ -128,9 +142,17 @@ class WidgetController extends Zend_Controller_Action
 
         // Data
         $options['data']  = array();
-        $ignoredParams = array('id', 'uwaUrl', 'commUrl', 'ifproxyUrl', 'autoresize');
+        $ignoredParams = array('id', 'uwaUrl', 'ifproxyUrl', 'header', 'status');
         foreach ($_GET as $name => $value) {
-            if (!in_array($name, $ignoredParams) && substr($name, 0, 2) != "NV") {
+            // ignore netvibes 'NV' & google 'upt' prefixs
+            if (substr($name, 0, 4) == 'upt_' || substr($name, 0, 2) == 'NV') {
+                continue;
+            } 
+            // support for google style preferences
+            if (substr($name, 0, 3) == 'up_') {
+                $name = substr($name, 3);
+            }
+            if (!in_array($name, $ignoredParams)) {
                 // Should be avoided
                 // Fix a problem when displaying the default webnote of netvibes for example
                 $value = stripslashes($value);
@@ -138,7 +160,7 @@ class WidgetController extends Zend_Controller_Action
             }
         }
 
-        // Properties
+        // Properties - not yet used
         $options['properties'] = array();
         foreach (array('NVlang', 'NVlocale', 'NVdir') as $pname) {
             if (isset($_GET[$pname])) {
@@ -152,6 +174,9 @@ class WidgetController extends Zend_Controller_Action
 
         // Iframe communication proxy URL
         $options['ifproxyUrl'] = isset($_GET['ifproxyUrl']) ? $_GET['ifproxyUrl'] : null;
+
+        // Chrome color
+        $options['chromeColor'] = isset($_GET['chromeColor']) ? $_GET['chromeColor'] : null;
 
         echo $this->_compiler->setOptions($options)->render();
     }
