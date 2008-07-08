@@ -159,18 +159,21 @@ class Parser_Uwa extends Parser
         if (empty($this->_xml)) {
             return array();
         }
+        $ignore = array(
+                "/js/UWA/load.js.php",
+                "/js/c/UWA_Standalone.js",
+                "/js/c/UWA_Standalone_Mootools.js");
         $libraries = array();
         foreach ($this->_xml->head->script as $script) {
             $src = (string) $script['src'];
             if (!empty($src)) {
-                if (!stripos($src, 'UWA.js') && !stripos($src, 'load.js.php')) {
-                    if (!stripos($src, 'netvibes.com') && !stripos($src, NV_HOST)) {
-                        $libraries[] = $src;
-                    }
+                $url = parse_url($src);
+                if( !empty($url['host']) && !in_array($url['path'], $ignore) ) {
+                    $libraries[] = $src;
                 }
             }
         }
-        $libraries = array_merge($libraries, $this->getDetectedLibraries());
+        $libraries = array_unique(array_merge($libraries, $this->getDetectedLibraries()));
         $this->_widget->setExternalScripts($libraries);
     }
 
@@ -195,7 +198,9 @@ class Parser_Uwa extends Parser
         $script = $this->_widget->getScript();
         $libraries = array();
         $detect = array(
+            'getElements'            => 'uwa-mootools',
             'new Hash'               => 'uwa-mootools',
+            'Hash.'                  => 'uwa-mootools',
             'new Element'            => 'uwa-mootools',
             'removeEvents'           => 'uwa-mootools',
             '.clone()'               => 'uwa-mootools',
@@ -306,8 +311,8 @@ class Parser_Uwa extends Parser
         $body = str_replace("\xEF\xBB\xBF", "", $body);
 
         // Make the widget valid XML by adding CDATA sections
-        $body = preg_replace('/(<(title|style|script)[^>]*?>)\s*(<!\[CDATA\[)?/si', '\\1<![CDATA[', $body);
-        $body = preg_replace('/(\]\]>)?\s*(<\/(title|style|script)>)/si', ']]>\\2', $body);
+        $body = preg_replace('/(<(style|script) type[^>]*?>)\s*(<!\[CDATA\[)?/si', '\\1<![CDATA[', $body);
+        $body = preg_replace('/(\]\]>)?\s*(<\/(style|script)>)/si', ']]>\\2', $body);
 
         // Disable proxy replacement
         $comment = "\n// Proxy declaration for standalone mode disabled.\nvar isProxyDisabled = true;\n// UWA.proxies.";

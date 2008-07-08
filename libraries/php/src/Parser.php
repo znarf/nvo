@@ -66,6 +66,7 @@ abstract class Parser
      */
     public function __construct($url, $cache = true)
     {
+        $url = trim($url);
         $this->_widget = new Widget($url);
         $this->_fetcher = new Fetcher($url, $cache);
     }
