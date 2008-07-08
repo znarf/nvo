@@ -131,8 +131,8 @@ class Compiler_Google extends Compiler
         $l = array();
 
         $proxies = array(
-            'ajax' => "http://" . NV_MODULES . "/proxy/ajax",
-            'feed' => "http://" . NV_MODULES . "/proxy/feed"
+            'ajax' => Zend_Registry::get('proxyEndpoint') . '/ajax',
+            'feed' => Zend_Registry::get('proxyEndpoint') . '/feed'
         );
 
         $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));
