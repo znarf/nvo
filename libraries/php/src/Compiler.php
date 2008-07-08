@@ -120,10 +120,9 @@ abstract class Compiler
         }
         foreach ($NVstylesheets as $stylesheet) {
             if (Zend_Registry::get('useMergedCss')) {
-                $stylesheets[] = str_replace('.css', '.css.m.css', $stylesheet);
-            } else {
-                $stylesheets[] = $stylesheet;
+                $stylesheet = str_replace('.css', '.css.m.css', $stylesheet);
             }
+            $stylesheets[] = $stylesheet . '?v=' . Zend_Registry::get('jsVersion');
         }
 
         // Widget style
