@@ -37,7 +37,7 @@ UWA.extend(UWA.Environment.prototype, {
     
     initialize: function() {
       this.google = { 'inline':false, 'iframed':true };
-      if (window._IG_Prefs) this.prefs = new _IG_Prefs();
+      if (gadgets && gadgets.Prefs) this.prefs = new gadgets.Prefs();
     },
     
     onRegisterModule: function(module) {
@@ -64,13 +64,16 @@ UWA.extend(UWA.Environment.prototype, {
     },
 
     handleResize: function() {
-      if (window._IG_AdjustIFrameHeight) _IG_AdjustIFrameHeight();
+      if (gadgets && gadgets.window && gadgets.window.adjustHeight) {
+         gadgets.window.adjustHeight();
+      }
     },
 
     setTitle: function(title) {
-      return false;
       title = title.stripTags();
-      if (window._IG_SetTitle) _IG_SetTitle(title);
+      if (gadgets && gadgets.window && gadgets.window.setTitle) {
+        gadgets.window.setTitle(title);
+      }
     }
 
 } );
@@ -85,8 +88,10 @@ UWA.Data.request = function(url, request) {
     }
   }
   
+  var method = request.method || 'get';
+  
   var params = {
-    'METHOD' : request.method.toUpperCase()
+    'METHOD' : method.toUpperCase()
   }
   
   if (request.postBody) {
@@ -100,9 +105,9 @@ UWA.Data.request = function(url, request) {
   switch(request.type) {
     case 'feed':
     case 'json':
-      _IG_FetchContent(url, function(responseText) {
+      gadgets.io.makeRequest(url, function(response) {
         try {
-          eval("var j = " + responseText);
+          eval("var j = " + response.data);
           if (typeof callback == "function") callback(j);
         } catch(e) {
           UWA.log(e);
@@ -110,16 +115,17 @@ UWA.Data.request = function(url, request) {
       }, params);
       break;
     case 'text':
-      _IG_FetchContent(url, function(responseText) {
+      gadgets.io.makeRequest(url, function(response) {
         if (typeof callback == 'function') {
-          callback(responseText);
+          callback(response.data);
         }
       }, params);
       break;
     case 'xml':
-      _IG_FetchXmlContent(url, function(response) {
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(url, function(response) {
         if (typeof callback == 'function') {
-          callback(response);
+          callback(response.data);
         }
       }, params);
       break;
