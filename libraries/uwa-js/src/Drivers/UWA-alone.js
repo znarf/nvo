@@ -96,9 +96,17 @@ UWA.createElement = function(tagName, options){
 }
 
 UWA.Form = {
+  collectionToArray : function(collection) {
+    resultArray = new Array();
+    for (i = 0; i < collection.length; i++) {
+      resultArray[resultArray.length] = collection[i];
+    }
+    return resultArray;
+  },
+    
   getElements: function(form) {
-    var inputArray = $(form).getElementsByTagName('input');
-    var selectArray = $(form).getElementsByTagName('select');
+    var inputArray = UWA.Form.collectionToArray($(form).getElementsByTagName('input'));
+    var selectArray = UWA.Form.collectionToArray($(form).getElementsByTagName('select'));
     return inputArray.concat(selectArray);
   }
 }
