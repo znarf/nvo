@@ -41,6 +41,8 @@ class Compiler_Google extends Compiler
     public function render()
     {
         $l = array();
+        
+        $l[] = '<?xml version="1.0" encoding="utf-8"?>';
 
         $l[] = '<Module>';
 
