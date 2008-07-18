@@ -43,6 +43,7 @@ UWA.extend(UWA.Environment.prototype, {
     this.html['header']     = $('moduleHeader');
     this.html['title']      = $('moduleTitle');
     this.html['edit']       = $('editContent');
+    this.html['status']     = $('moduleStatus');
     this.html['editLink']   = $('editLink');
     
     for (var key in this.html) {
@@ -114,7 +115,13 @@ UWA.extend(UWA.Environment.prototype, {
       this.widget.log(this.widget.body);
       return;
     }
-    var height = parseInt(document.body.offsetHeight);
+    
+    // Calculate total widget height by adding widget body/header/status height
+    // note: document.body.offsetHeight is wrong in IE6 as it always return the full windows/iframe height
+    var height = parseInt(this.html['body'].offsetHeight);
+    height += (this.html['header']) ? this.html['header'].offsetHeight : 0;
+    height += (this.html['status']) ? this.html['status'].offsetHeight : 0;
+    
     if(height > 0 && height != this.prevHeight) {
       this.sendRemote('resizeHeight', false, height);
     }
@@ -255,6 +262,15 @@ UWA.extend(UWA.Environment.prototype, {
       return;
   },
   
+  // this method was created because removeListener needs a function
+  // as second parameter in IE, it's used in sendRemoteUsingProxy method
+  iframeDiscard: function(iframe){
+    iframe.removeListener('load', this.iframeDiscard);
+    setTimeout(function() {
+      document.body.removeChild(iframe);
+    }, 500);
+  },
+  
   sendRemoteUsingProxy: function (proxy, target, message) {
     // Create a new hidden iframe
     var iframe = this.widget.createElement('iframe');
@@ -268,12 +284,7 @@ UWA.extend(UWA.Environment.prototype, {
     });
 
     // Manage the onload event and prepare iframe discarding
-    iframe.addListener('load', function() {
-      this.removeListener('load');
-      setTimeout(function() {
-        document.body.removeChild(iframe);
-      }, 500);
-    });
+    iframe.addListener('load', this.iframeDiscard.bind(this, iframe));
 
     // Compose the message and use it as a hash identifier in the proxy
     var message = 'target='   + escape(target) +
