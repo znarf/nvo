@@ -101,11 +101,14 @@ class Fetcher
             $response = $client->request();
             if ($response->getStatus() == 200) {
                 $result = $response->getBody();
+                if (empty($result)) {
+                    throw new Zend_Http_Exception('Response body is empty.');
+                }
                 if (isset($cache)) {
                     $cache->save($result, $cacheId);
                 }
             } else {
-                throw new Exception($response->getStatus() . ": " . $response->getMessage() . " " . $this->_url);
+                throw new Zend_Http_Exception($response->getMessage(), $response->getStatus());
             }
         }
         return $result;

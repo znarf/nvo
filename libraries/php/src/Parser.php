@@ -31,6 +31,13 @@ require_once 'Zend/Registry.php';
 abstract class Parser
 {
     /**
+     * The widget url.
+     *
+     * @var string
+     */
+    protected $_url;
+    
+    /**
      * The widget to build.
      *
      * @var Widget
@@ -66,9 +73,9 @@ abstract class Parser
      */
     public function __construct($url, $cache = true)
     {
-        $url = trim($url);
-        $this->_widget = new Widget($url);
-        $this->_fetcher = new Fetcher($url, $cache);
+        $this->_url = trim($url);
+        $this->_widget = new Widget($this->_url);
+        $this->_fetcher = new Fetcher($this->_url, $cache);
     }
 
     /**
@@ -78,9 +85,28 @@ abstract class Parser
      */
     public function buildWidget()
     {
-        $this->_content = $this->_fetcher->fetchContent();
-        $this->handleContent();
-        $this->parseContentAsXml();
+        try {
+            $this->getContent();
+            $this->handleContent();
+            $parse = $this->parseContentAsXml(array('throwException' => false));
+            if ($parse === false) {
+                $this->recoverXml();
+                $this->parseContentAsXml();
+            }
+            $this->parseWidget();
+        } catch (Zend_Http_Exception $e) {
+            $this->_handleHttpErrors($e);
+        } catch (XmlException $e) {
+            $this->_handleXmlErrors($e);
+        }
+        return $this->_widget;
+    }
+    
+    /**
+     * Widget parser
+     */
+    public function parseWidget()
+    {
         $this->parseTitle();
         $this->parseMetadata();
         $this->parsePreferences();
@@ -92,7 +118,19 @@ abstract class Parser
         $this->parseBody();
         $this->parseIcon();
         $this->parseRichIcon();
-        return $this->_widget;
+    }
+
+    /**
+     * Retrieve raw content.
+     *
+     * @return string The widget content
+     */
+    public function getContent()
+    {
+        if (empty($this->_content)) {
+            $this->_content = $this->_fetcher->fetchContent();
+        }
+        return $this->_content;
     }
 
     /**
@@ -100,22 +138,20 @@ abstract class Parser
      *
      * @return SimpleXMLElement The file as XML
      */
-    public function parseContentAsXml()
+    public function parseContentAsXml(array $options = array())
     {
-        $this->_xml = @new SimpleXMLElement($this->_content);
-        if (!isset($this->_xml)) {
-            $this->_errors = $this->_getXmlErrors();
-        }
-        // Display XML errors if XML is empty
-        if (empty($this->_xml)) {
-            $message = '<ul>';
-            foreach ($this->_errors as $error) {
-                $message .= "\n" . '<li><b>' . $error['message'] . '</b> at line '. $error['line'] . ': ' .
-                '<code>' . htmlentities($error['code']) . '</code></li>' . "\n";
+        // SimpleXml send PHP notices with invalid XML
+        // we try to handle this errors elsewhere
+        try {
+            $this->_xml = @new SimpleXMLElement($this->_content);
+        } catch (Exception $e) {
+            if (empty($options) || !isset($options['throwException']) || $options['throwException'] === true) {
+                require_once 'Exceptions.php';
+                throw new XmlException($e);
             }
-            $message .= '</ul>';
-            return $message;
+            return false;
         }
+        return true;
     }
 
     /**
@@ -131,7 +167,7 @@ abstract class Parser
         $errors = libxml_get_errors();
 
         if (empty($errors)) {
-            return null;
+            return array();
         }
 
         $lines = explode("\n", $this->_content);
@@ -147,9 +183,47 @@ abstract class Parser
     }
 
     /**
+     * Fill the title & body of the widget object
+     * with XML debugging informations
+     */
+    private function _handleXmlErrors($exception)
+    {
+        $body = '<ul>';
+        $i = 0;
+        foreach ($this->_getXmlErrors() as $error) {
+            $body .= "\n" . '<li><b>' . $error['message'] . '</b> at line '. $error['line'] . ': ' .
+            '<code>' . htmlentities($error['code']) . '</code></li>' . "\n";
+            $i++;
+            if ($i == 3) {
+                break;
+            }
+        }
+        $body .= '</ul>';
+        $this->_widget->setTitle('XML Error');
+        $this->_widget->setBody($body);
+    }
+
+    /**
+     * Fill the title & body of the widget object
+     * with HTTP debugging informations
+     */
+    private function _handleHttpErrors($exception)
+    {
+        $this->_widget->setTitle('HTTP Error');
+        $this->_widget->setBody(
+            '<p>' . $exception->getMessage() . '</p>' .
+            '<p>' . 'with url: ' . $this->_url . '</p>');
+    }
+
+    /**
      * Content handler that does nothing but can be redefined in subclasses.
      */
     protected function handleContent() {}
+
+    /**
+     * Content handler that does nothing but can be redefined in subclasses.
+     */
+    protected function recoverXml() {}
 
     /*** ABSTRACT FUNCTIONS ***/
 
