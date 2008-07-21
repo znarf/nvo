@@ -28,6 +28,13 @@ require_once 'Widget/Preference.php';
 class Parser_Uwa extends Parser
 {
     /**
+     * Metas authorized in UWA widgets
+     */
+    public $authorizedMetas = array(
+        'author', 'email', 'website', 'description', 'keywords', 'version',
+        'screenshot', 'thumbnail', 'apiVersion', 'debugMode', 'autoRefresh');
+
+    /**
      * Parses the widget title.
      */
     public function parseTitle()
@@ -41,13 +48,10 @@ class Parser_Uwa extends Parser
     public function parseMetadata()
     {
         $metas = array();
-        $authorized = array(
-            'author', 'website', 'description', 'keywords', 'version',
-            'screenshot', 'thumbnail', 'apiVersion', 'debugMode', 'autoRefresh');
         foreach ($this->_xml->head->meta as $meta) {
             $name = (string) $meta['name'];
             $content = (string) $meta['content'];
-            if (!empty($content) && in_array($name, $authorized)) {
+            if (!empty($content) && in_array($name, $this->authorizedMetas)) {
                 $metas[$name] = $content;
             }
         }
@@ -301,9 +305,7 @@ class Parser_Uwa extends Parser
     }
 
     /**
-     * Normalizes a HTML document to try to make its markup XML valid.
-     * Removes the BOM (Byte Order Mark) and encapsulates title, styles
-     * and JavaScript code in a CDATA section for XML well-formedness.
+     * Apply some fixes to the content.
      */
     protected function handleContent()
     {
@@ -312,21 +314,41 @@ class Parser_Uwa extends Parser
         // Remove the BOM
         $body = str_replace("\xEF\xBB\xBF", "", $body);
 
+        // Disable proxy replacement
+        $comment = "\n// Proxy declaration for standalone mode disabled.\nvar isProxyDisabled = true;\n// UWA.proxies.";
+        $body = str_replace('UWA.proxies.', $comment, $body);
+
+        $this->_content = $body;
+    }
+
+    /**
+     * Try to make XML well formed.
+     */
+    protected function recoverXml()
+    {
+        $body = $this->_content;
+
         // Make the widget valid XML by adding CDATA sections (skipped if we find at least one CDATA section in it)
         if (strpos($body, "<![CDATA[") === false){
-            $body = preg_replace('/(<(style|script) type[^>]*?>)\s*(<!\[CDATA\[)?/si', '\\1<![CDATA[', $body);
-            $body = preg_replace('/(\]\]>)?\s*(<\/(style|script)>)/si', ']]>\\2', $body);           
+               $body = preg_replace('/(<(style|script)[^>]*?>[^<]+?)\s*(<!\[CDATA\[)?/si', '\\1<![CDATA[', $body);
+               $body = preg_replace('/(\]\]>)?\s*[^>](<\/(style|script)>)/si', ']]>\\2', $body);           
         }
 
         // replace all '&' not followed by 'amp;' by '&amp;' in body
         $bodyTag = preg_match("/<body>(.*)<\/body>/Uis", $body, $matches);
-        $bodyTag = $matches[1];
-        $modifiedBodyTag = preg_replace("/&(?!amp;)/i", "&amp;", $bodyTag);
-        $body = str_replace($bodyTag, $modifiedBodyTag, $body);
+        if (isset($matches[1])) {
+            $bodyTag = $matches[1];
+            $modifiedBodyTag = preg_replace("/&(?!amp;)/i", "&amp;", $bodyTag);
+            $body = str_replace($bodyTag, $modifiedBodyTag, $body);
+        }
 
-        // Disable proxy replacement
-        $comment = "\n// Proxy declaration for standalone mode disabled.\nvar isProxyDisabled = true;\n// UWA.proxies.";
-        $body = str_replace('UWA.proxies.', $comment, $body);
+        // replace htmlentities in the preferences tag if necessary
+        $prefTag = preg_match("/<widget:preferences>(.*)<\/widget:preferences>/Uis", $body, $matches);
+        if (isset($matches[1])) {
+            $prefTag = $matches[1];
+            $modifiedPrefTag = html_entity_decode($prefTag, ENT_NOQUOTES, 'UTF-8');
+            $body = str_replace($prefTag, $modifiedPrefTag, $body);
+        }
 
         $this->_content = $body;
     }
