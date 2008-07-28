@@ -133,13 +133,7 @@ class WidgetController extends Zend_Controller_Action
     {
         // Iframe parameters
         $options = array();
-
-        // Header
-        $options['displayHeader'] = $this->getRequest()->getParam('header', '0');
-
-        // Status
-        $options['displayStatus'] = $this->getRequest()->getParam('status', '1');
-
+        
         // Data
         $options['data']  = array();
         $ignoredParams = array('id', 'uwaUrl', 'ifproxyUrl', 'header', 'status');
@@ -169,16 +163,33 @@ class WidgetController extends Zend_Controller_Action
             }
         }
 
-        // Widget identifier
-        $options['properties']['id'] = isset($_GET['id']) ? $_GET['id'] : null;
+        $options['properties']['id'] = $this->getRequest()->getParam('id');
 
-        // Iframe communication proxy URL
-        $options['ifproxyUrl'] = isset($_GET['ifproxyUrl']) ? $_GET['ifproxyUrl'] : null;
+        $options['displayHeader'] = $this->getRequest()->getParam('header', '0');
+        $options['displayStatus'] = $this->getRequest()->getParam('status', '1');
+        $options['ifproxyUrl']    = $this->getRequest()->getParam('ifproxyUrl');
+        $options['chromeColor']   = $this->getRequest()->getParam('chromeColor');
 
-        // Chrome color
-        $options['chromeColor'] = isset($_GET['chromeColor']) ? $_GET['chromeColor'] : null;
+        $this->_compiler->setOptions($options);
 
-        echo $this->_compiler->setOptions($options)->render();
+        // Rendering
+
+        Zend_Layout::getMvcInstance()->enableLayout()->setLayout('frame');
+
+        $this->view->bodyClass = 'moduleIframe';
+        if (isset($options['chromeColor'])) {
+            $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
+        }
+
+        $this->view->headTitle( $this->_widget->getTitle() );
+
+        foreach ($this->_compiler->getStylesheets() as $stylesheet) {
+            $this->view->headLink()->appendStylesheet($stylesheet, 'screen');
+        }
+
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/html')
+            ->appendBody( $this->_compiler->getHtmlBody() );
     }
     
     /**

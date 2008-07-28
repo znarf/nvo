@@ -69,6 +69,9 @@ class Bootstrap
         require_once 'Exposition.php';
         Exposition::load();
 
+        Zend_Layout::startMvc(array('layoutPath' => APPLICATION . '/views/layouts'));
+        Zend_Layout::getMvcInstance()->disableLayout();
+
         self::$frontController = Zend_Controller_Front::getInstance();
         self::$frontController->setControllerDirectory(APPLICATION . '/controllers');
 
@@ -104,7 +107,8 @@ class Bootstrap
     {
         if (isset(self::$cacheBackend, self::$cacheBackendOptions)) {
             $frontendOptions = array('caching' => true, 'lifetime' => 300);
-            self::$registry['cache'] = Zend_Cache::factory('Core', self::$cacheBackend, $frontendOptions, self::$cacheBackendOptions);
+            self::$registry['cache'] = Zend_Cache::factory(
+                'Core', self::$cacheBackend, $frontendOptions, self::$cacheBackendOptions);
         }
     }
 }
