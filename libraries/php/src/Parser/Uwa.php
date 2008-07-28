@@ -330,8 +330,8 @@ class Parser_Uwa extends Parser
 
         // Make the widget valid XML by adding CDATA sections (skipped if we find at least one CDATA section in it)
         if (strpos($body, "<![CDATA[") === false){
-               $body = preg_replace('/(<(style|script)[^>]*?>[^<]+?)\s*(<!\[CDATA\[)?/si', '\\1<![CDATA[', $body);
-               $body = preg_replace('/(\]\]>)?\s*[^>](<\/(style|script)>)/si', ']]>\\2', $body);           
+               $body = preg_replace('/(<(style|script)[^>]*?>)[^<]+?/si', '\\1<![CDATA[', $body);
+               $body = preg_replace('/\s*[^>](<\/(style|script)>)/si', "\n]]>\\1", $body);
         }
 
         // replace all '&' not followed by 'amp;' by '&amp;' in body
