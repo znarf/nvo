@@ -18,13 +18,10 @@
  * along with Netvibes Widget Platform.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('DEBUG', true);
-// define('NV_STATIC', 'netvibes.trunk.server');
 
 // Server host and base path
 $host = $_SERVER['HTTP_HOST'];
 $basePath = dirname($_SERVER['SCRIPT_NAME']);
-$basePath = $basePath == '/' ? '' : $basePath;
 
 // Config and bootstrapping
 require_once dirname(__FILE__) . '/../config/config.php';
@@ -36,16 +33,5 @@ Bootstrap::setCache('File', array('cache_dir' => dirname(__FILE__) . '/../tmp/')
 
 Bootstrap::$registry->set('proxyEndpoint', 'http://' . $host . $basePath . '/proxy');
 Bootstrap::$registry->set('widgetEndpoint', 'http://' . $host . $basePath . '/widget');
-
-Bootstrap::$registry->set('uwaImgDir', 'http://cdn.netvibes.com/img/');
-
-Bootstrap::$registry->set('uwaJsDir', 'http://netvibes.trunk.server/js/c/');
-Bootstrap::$registry->set('useCompressedJs', true);
-
-// Bootstrap::$registry->set('uwaJsDir', 'http://exposition.local/js/c/');
-// Bootstrap::$registry->set('useCompressedJs', true);
-
-// Bootstrap::$registry->set('uwaCssDir', 'http://' . $host . $basePath . '/css/');
-// Bootstrap::$registry->set('useMergedCss', false);
 
 Bootstrap::run();
