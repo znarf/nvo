@@ -40,8 +40,6 @@ class Compiler_Frame extends Compiler
      */
     public function render()
     {
-        $scripts = $this->_getJavascripts();
-
         $l = array();
 
         $l[] = '<?xml version="1.0" encoding="utf-8"?>';
@@ -51,7 +49,7 @@ class Compiler_Frame extends Compiler
         $l[] = '<head>';
         $l[] = '<title>' . $this->_widget->getTitle() . '</title>';
         $l[] = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
-        foreach ($this->_getStylesheets() as $stylesheet) {
+        foreach ($this->getStylesheets() as $stylesheet) {
             $l[] = '<link rel="stylesheet" type="text/css" href="' . $stylesheet . '"/>';
         }
         $l[] = '</head>';
@@ -59,40 +57,39 @@ class Compiler_Frame extends Compiler
         $className = 'moduleIframe';
         if (isset($this->options['chromeColor'])) {
             $className .= ' ' .  $this->options['chromeColor'] . '-module';
-        }
+        }  
         $l[] = '<body class="' . $className . '">';
 
-        // Widget header
-        if (isset($this->options['displayHeader']) && $this->options['displayHeader'] == '1') {
-            $l[] = '<div class="moduleHeader" id="moduleHeader">';
-            $l[] = '<a id="editLink" class="edit" href="#">Edit</a>';
-            $l[] = '<div class="ico" id="moduleIcon">&nbsp;</div>';
-            $l[] = '<div id="moduleTitle" class="title">' . $this->_widget->getTitle() . '</div>';
-            $l[] = '</div>';
+        $l[] = $this->getHtmlBody();
 
-            $l[] = '<div class="editContent optionContent configureContent" id="editContent" style="display: none;"></div>';
+        $l[] = '</body>';
+        $l[] = '</html>';
+
+        return implode("\n", $l);
+    }
+    
+    public function getHtmlBody()
+    {
+        $l = array();
+
+        if (isset($this->options['displayHeader']) && $this->options['displayHeader'] == '1') {
+            $l[] = $this->_getHtmlHeader();
         }
 
-        // Widget content
         $l[] = '<div class="moduleContent" id="moduleContent">';
         $l[] = $this->_widget->getBody();
         $l[] = '</div>';
 
-        // Widget status
         if (isset($this->options['displayStatus']) && $this->options['displayStatus'] == '1') {
-            $l[] = '<div id="moduleStatus" class="moduleStatus">';
-            $l[] = '<a href="http://eco.netvibes.com/share/?url=' . str_replace('.', '%2E', urlencode($this->_widget->getUrl())) . '" title="Share this widget" class="share" target="_blank"><img src="'. Zend_Registry::get('uwaImgDir') .'share.png" alt="Share this widget"/></a>';
-            $l[] = '<a href="http://www.netvibes.com/" class="powered" target="_blank">powered by netvibes</a>';
-            $l[] = '</div>';
+            $l[] = $this->_getHtmlStatus();
         }
 
-        // Scripts
         $l[] = '<script type="text/javascript">';
         $l[] = "var NV_HOST = '" . NV_HOST . "', NV_PATH = '/', NV_STATIC = 'http://" . NV_STATIC . "', " .
             "NV_MODULES = '". NV_MODULES ."', NV_AVATARS = '". NV_AVATARS ."';";
         $l[] = '</script>';
 
-        foreach ($scripts as $script) {
+        foreach ($this->_getJavascripts() as $script) {
             $l[] = '<script type="text/javascript" src="' . $script . '"></script>';
         }
 
@@ -100,10 +97,43 @@ class Compiler_Frame extends Compiler
         $l[] = $this->_getFrameScript();
         $l[] = '</script>';
 
-        $l[] = '</body>';
-        $l[] = '</html>';
-
         return implode("\n", $l);
+    }
+
+    public function getStylesheets()
+    {
+        return $this->_getStylesheets();
+    }
+
+    protected function _getHtmlHeader()
+    {
+        $html  = '<div class="moduleHeaderContainer">' . "\n";
+        $html .= '  <div class="moduleHeader" id="moduleHeader">' . "\n";
+        $html .= '    <a id="editLink" class="edit" style="display:none" href="javascript:void(0)">Edit</a>' . "\n";
+        $html .= '    <a id="moduleIcon" class="ico">' . "\n";
+        $html .= '      <img class="hicon" width="16" height="16" src="http://' . NV_STATIC . '/modules/uwa/icon.png"/>' . "\n";
+        $html .= '    </a>' . "\n";
+        $html .= '    <span id="moduleTitle" class="title">' . $this->_widget->getTitle() . '</span>' . "\n";
+        $html .= '  </div>' . "\n";
+        $html .= '</div>' . "\n";
+
+        $html .= '<div class="editContent" id="editContent" style="display:none"></div>';
+
+        return $html;
+    }
+
+    protected function _getHtmlStatus()
+    {
+        $shareUrl = 'http://eco.netvibes.com/share/?url=' . str_replace('.', '%2E', urlencode($this->_widget->getUrl()));
+
+        $html  = '<div id="moduleStatus" class="moduleStatus">' . "\n";
+        $html .= '<a href="' . $shareUrl . '" title="Share this widget" class="share" target="_blank">';
+        $html .= '<img src="'. Zend_Registry::get('uwaImgDir') .'share.png" alt="Share this widget"/>';
+        $html .= '</a>' . "\n";
+        $html .= '<a href="http://www.netvibes.com/" class="powered" target="_blank">powered by netvibes</a>' . "\n";
+        $html .= '</div>';
+
+        return $html;
     }
 
     protected function _getJavascripts()
@@ -112,7 +142,7 @@ class Compiler_Frame extends Compiler
 
         if (isset($this->options['displayHeader']) && $this->options['displayHeader'] == '1') {
             // Temporary - should be switched to uwaJsDir when it will be available there
-            $javascripts[] = 'http://cdn.netvibes.com/js/c/UWA_Controls_PrefsForm.js';
+            $javascripts[] = 'http://' . NV_STATIC . '/js/c/UWA_Controls_PrefsForm.js';
         }
 
         if (isset($_GET['libs'])) {
@@ -135,7 +165,6 @@ class Compiler_Frame extends Compiler
             'ajax' => Zend_Registry::get('proxyEndpoint') . '/ajax',
             'feed' => Zend_Registry::get('proxyEndpoint') . '/feed'
         );
-
 
         $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));
 
