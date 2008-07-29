@@ -87,12 +87,12 @@ UWA.merge(UWA.Element, {
 });
 
 UWA.merge(Element, {
-  hasClassName: function(e, n) { e = $(e); if(e) return e.hasClassName(n) },
-  addClassName: function(e, n) { e = $(e); if(e) return e.addClassName(n) },
-  removeClassName: function(e, n) { e = $(e); if(e) return e.removeClassName(n) },
-  getDimensions: function(e) { e = $(e); if(e) return e.getDimensions() },
-  hide: function(e) { e = $(e); if(e) return e.hide() },
-  show: function(e) { e = $(e); if(e) return e.show() }
+  hasClassName: function(e, n) { e = UWA.$element(e); if(e) return e.hasClassName(n) },
+  addClassName: function(e, n) {e = UWA.$element(e); if(e) return e.addClassName(n) },
+  removeClassName: function(e, n) { e = UWA.$element(e); if(e) return e.removeClassName(n) },
+  getDimensions: function(e) { e = UWA.$element(e); if(e) return e.getDimensions() },
+  hide: function(e) { e = UWA.$element(e); if(e) return e.hide() },
+  show: function(e) { e = UWA.$element(e); if(e) return e.show() }
 });
 
 function $A(iterable) {
@@ -108,10 +108,10 @@ if (typeof Event == "undefined") Event = {};
 
 UWA.merge(Event, {
   element: function(event) {
-    return event.target;
+    return event.target || event.srcElement;
   },
   findElement: function(event, tagName) {
-    var element = event.target || new Event(event).target;
+    var element = Event.element(event);
     while (element.parentNode && (!element.tagName || (element.tagName.toUpperCase() != tagName.toUpperCase())))
       element = element.parentNode;
     return element;
