@@ -313,7 +313,13 @@ class Parser_Uwa extends Parser
 
         // Remove the BOM
         $body = str_replace("\xEF\xBB\xBF", "", $body);
-
+        
+        // Make the widget valid XML by adding CDATA sections (skipped if we find at least one CDATA section in it)
+        if (strpos($body, "<![CDATA[") === false){
+               $body = preg_replace('/(<(style|script)[^>]*?>)[^<]+?/si', '\\1<![CDATA[', $body);
+               $body = preg_replace('/\s*[^>](<\/(style|script)>)/si', "\n]]>\\1", $body);
+        }
+        
         // Disable proxy replacement
         $comment = "\n// Proxy declaration for standalone mode disabled.\nvar isProxyDisabled = true;\n// UWA.proxies.";
         $body = str_replace('UWA.proxies.', $comment, $body);
@@ -327,12 +333,6 @@ class Parser_Uwa extends Parser
     protected function recoverXml()
     {
         $body = $this->_content;
-
-        // Make the widget valid XML by adding CDATA sections (skipped if we find at least one CDATA section in it)
-        if (strpos($body, "<![CDATA[") === false){
-               $body = preg_replace('/(<(style|script)[^>]*?>)[^<]+?/si', '\\1<![CDATA[', $body);
-               $body = preg_replace('/\s*[^>](<\/(style|script)>)/si', "\n]]>\\1", $body);
-        }
 
         // replace all '&' not followed by 'amp;' by '&amp;' in body
         $bodyTag = preg_match("/<body>(.*)<\/body>/Uis", $body, $matches);
