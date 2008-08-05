@@ -222,12 +222,7 @@ UWA.Data = {
     * Nothing, but if the request is successful, the callback method is fired and receives the widget's content as parameter.
   */  
   getModule: function(url, callback, id) {
-    if (UWA.proxies['api']) {
-      url = UWA.proxies['api'] + '?moduleUrl=' + encodeURIComponent(url);
-      // if (id) url += '&moduleId=' + id;
-      return this.request(url, { method : 'GET', type: 'xml', onComplete: callback } );
-    }
-    UWA.log('no proxy URL set for module'); return false;
+    return this.request(url, { method : 'GET', type: 'xml', proxy: 'api', onComplete: callback } );
   },
 
 
@@ -301,11 +296,6 @@ UWA.Data = {
             (url.substr(0, 4) == "http" && url.indexOf("http://" + location.hostname) == -1) ) {
                 request.proxy = 'ajax';
       }
-      /*
-      if (this.useJsonRequest && typeof request.authentication == "undefined" && request.type != "xml") {
-        request.proxy = 'ajax';
-      }
-      */
     }
     
     if (typeof request.type == 'undefined') request.type = 'text';
@@ -336,7 +326,7 @@ UWA.Data = {
     }
     
     if(UWA.Client.Engine.ie) {
-      url += '&rnd='+ Math.random();
+        url += '&rnd='+ Math.random();
     }
     
     var callbacks = {
