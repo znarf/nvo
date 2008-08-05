@@ -278,8 +278,11 @@ UWA.Widget.prototype = {
   setIcon: function(url, search) {
     if (this.environment.setIcon) {
       this.environment.setIcon(url, search);
-    } else if(this.elements['icon'] && search !== true) {
-      this.elements['icon'].setHTML('<img width="16" height="16" src="' + url + '" />');
+    } else {
+      if (this.elements['icon']) {
+        url = 'http://' + NV_HOST + '/proxy/favIcon.php?url=' + encodeURIComponent(url);
+        this.elements['icon'].setHTML('<img width="16" height="16" src="' + url + '" />');
+      }
     }
   },
   
