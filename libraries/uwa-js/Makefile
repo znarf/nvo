@@ -31,7 +31,7 @@ YUI_VERSION = 2.3.5
 YUI = java -jar $(UWA_JS_BIN)/yuicompressor-$(YUI_VERSION).jar --charset UTF-8
 
 NAME = uwa-js-runtime
-VERSION = preview2
+VERSION = preview3
 STAGE = $(BUILD)/$(NAME)
 ZIP_NAME = $(NAME)-$(VERSION).zip
 TAR_NAME = $(NAME)-$(VERSION).tar.gz
