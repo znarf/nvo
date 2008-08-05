@@ -22,7 +22,7 @@ COPYING = $(ROOT)/COPYING
 COPYING_LESSER = $(ROOT)/COPYING.LESSER
 
 NAME = exposition-php-lib
-VERSION = preview2
+VERSION = preview3
 STAGE = $(BUILD)/$(NAME)
 ZIP_NAME = $(NAME)-$(VERSION).zip
 TAR_NAME = $(NAME)-$(VERSION).tar.gz
