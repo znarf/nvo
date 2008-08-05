@@ -298,11 +298,6 @@ UWA.Environment.prototype = {
     if (this.delays[name]) { clearTimeout(this.delays[name]) }
   },
 
-  /* to document */
-  setIcon: function(url) {
-    if(this.module.elements['icon']) this.module.elements['icon'].setHTML('<img width="16" height="16" src="' + url + '" />');
-  },
-
   /* Method: log
   
   Logs environment's messages in the console, if one exists and if the <debugMode> is true.
