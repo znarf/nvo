@@ -1,0 +1,97 @@
+/**
+ * Copyright (c) 2008 Netvibes (http://www.netvibes.org/).
+ *
+ * This file is part of Netvibes Widget Platform.
+ *
+ * Netvibes Widget Platform is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Netvibes Widget Platform is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Netvibes Widget Platform.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* netvibes base stylesheets */
+
+@import "http://www.netvibes.com/themes/base/nv-core.css";
+@import "http://www.netvibes.com/themes/base/nv-typo.css";
+@import "http://www.netvibes.com/themes/base/nv-module.css";
+@import "http://www.netvibes.com/themes/base/nv-icons.css";
+
+/* to have a nicer look & feel, we import parts of the netvibes garlic theme */
+
+@import "http://www.netvibes.com/themes/garlic/nv-core.css";
+@import "http://www.netvibes.com/themes/garlic/nv-module.css";
+@import "http://www.netvibes.com/themes/garlic/nv-icons.css";
+
+/* base layout */
+
+* {
+	margin:0;
+	padding:0;
+}
+
+html {
+	background: #FFF url(img/body.png) repeat-x top left;
+}
+
+body {
+	text-align:center;
+}
+
+.module {
+	width: 33%;
+	margin:10% auto 0 !important;
+	text-align:left;
+}
+
+/* rules imported from http://www.netvibes.com/themes/base/screen.css */
+
+a:link, a:visited{
+	color: #333;
+}
+a:hover{
+	color: #F60;
+}
+img{
+	border: 0;
+	-ms-interpolation-mode: bicubic;
+}
+table {
+	padding: 0;
+	margin: 0;
+}
+ul {
+	padding-left: 5px;
+}
+li {
+	list-style-type: none;
+	background: transparent url(img/bullet.png) no-repeat left 0.5ex;
+	margin-bottom: 2px;
+	padding-left: 10px;
+}
+
+/* rules imported from http://www.netvibes.com/themes/garlic/screen.css */
+
+a {
+	text-decoration: none;
+}
+
+/* hand cursor not needed in Standalone environment */
+
+.moduleHeader {
+	cursor:inherit;
+}
+
+/* tune the editContent */
+
+.editContent {
+	display:block;
+	margin-bottom:0;
+}

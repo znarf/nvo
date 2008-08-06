@@ -1,0 +1,15 @@
+.actions-window-close{
+	background: transparent url(img/actions.png) no-repeat -3px -160px;
+}
+.actions-view-refresh{
+	background: transparent url(img/actions.png) no-repeat -2px -192px;
+}
+.actions-view-options{
+	background: transparent url(img/actions.png) no-repeat -3px -64px;
+}
+.actions-view-sendModule{
+	background: transparent url(img/actions.png) no-repeat 0 -32px;
+}
+.actions-window-expand{
+	background: transparent url(img/actions.png) no-repeat 0 -100px;
+}

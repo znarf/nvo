@@ -1,0 +1,267 @@
+/**
+ * Copyright (c) 2008 Netvibes (http://www.netvibes.org/).
+ *
+ * This file is part of Netvibes Widget Platform.
+ *
+ * Netvibes Widget Platform is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Netvibes Widget Platform is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Netvibes Widget Platform.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+Module tree:
+<div class="[module|moduleEdit]">
+	<div class="moduleFrame [white-module|yellow-module|green-module|red-module|blue-module|orange-module]">
+		<div class="moduleHeaderContainer">
+			<div class="moduleHeader [white|yellow|green|red|blue|orange]">
+		<div class="editContent">
+		<div class="moduleContent">
+		<div class="moduleStatus">
+*/
+
+/*
+#moduleGhost, #todolistGhost {
+	border: 1px dashed #F00;
+	margin: 2px;
+}
+
+.resizable .module, .resizable .moduleEdit {
+	margin: 5px 0px;
+}
+
+.beingDragged{
+	z-index: 9999;
+}
+
+body #application .kbdFocus{
+	border: 3px solid #AAA;
+}
+
+*/
+
+.module, .moduleEdit{
+	background: #FFF;
+	margin: 5px;
+}
+
+.module a{
+	/* IE only: prevent long url to break layout */
+	word-wrap: break-word;
+}
+
+.module{
+	border: 3px solid #ECECEC;
+}
+* html .module{
+	zoom: 1;	
+}
+	.moduleFrame{
+		border: 1px solid #889DFF;
+		overflow: hidden;
+		background: #FFF;
+		position: relative;
+	}
+	* html .moduleFrame{
+		zoom: 1;
+	}
+.moduleEdit{
+	border: 3px solid #E1E9F4;
+}
+	.moduleEdit .moduleFrame{
+		border: 1px solid #2968B9;
+	}
+		.moduleHeader{
+			cursor: move;
+			background: #EFF5FF;
+			height: 1.8em;
+			min-height: 20px;
+			overflow: hidden;
+		}
+		.color .borderless{border: 1px dotted black;background: transparent}
+		.white{background: #FFF;}
+		.yellow{background: #FFFFE0;}
+		.green{background: #EEFFE0;}
+		.red{background: #FFE0E1;}
+		.blue{background: #EFF5FF;}
+		.orange{background: #FEE8BD;}
+			.moduleHeader .showHide{
+				width: 0;
+				height: 16px;
+				cursor: pointer;
+				float: left;
+				padding: 2px 2px 0 2px;
+				border-bottom: none;
+			}
+			.moduleHeader .ico{
+				padding-top: 2px;
+				float: left;
+				border-bottom: none;
+			}
+			.rtl .moduleHeader .ico {
+				float: right;
+				margin: 0px !important;
+				margin-right: -18px;
+			}
+			* html .moduleHeader .ico{
+				margin-left:-15px;
+			}
+			.moduleHeader .title{
+				font-weight: bold;
+				padding-left: 4px;
+				line-height: 1.8em;
+				color: #00368F;
+				overflow: hidden;
+				display: inline;
+			}
+				.moduleHeader .title a{
+					color: #00368F;
+				}
+				.moduleHeader .title a:hover{
+					color: #F60;
+				}
+				.moduleHeader .title  em,.moduleHeader .title  em a{
+					font-style: normal;
+					color: #36C;
+				}
+			.rtl .moduleHeader .title,
+			.rtl .moduleHeader .showHide {
+				float: right;
+				margin-right: 5px;
+			}
+			.moduleHeader .info,
+			.moduleHeader .edit{
+				float: right;
+				margin: 2px 5px 0 5px;
+				cursor: pointer;
+			}
+				.moduleHeader .edit a,
+				.moduleHeader a.edit {
+					color: #858585;
+					text-decoration: underline;
+					border-bottom: none;
+				}
+				.moduleHeader .edit a:hover,
+				.moduleHeader a.edit:hover{
+					color: #F60;
+				}
+			.moduleHeader .close{
+				float: right;
+				margin: 2px 2px 0 0;
+				cursor: pointer;
+				border-bottom: none;
+			}
+			.rtl .moduleHeader .close{
+				margin: 0px;
+				padding: 0px;
+				padding-top: 2px;
+				padding-left: 3px;
+				padding-right: 3px;
+			}
+			.moduleHeader .refresh{
+				float: right;
+				padding: 3px 5px 2px 0;
+				cursor: pointer;
+				border-bottom: none;
+			}
+			.moduleHeader .options{
+				float: right;
+				padding: 2px 5px 0px 0;
+				cursor: pointer;
+				border-bottom: none;
+			}
+			.rtl .moduleHeader .options,
+			.rtl .moduleHeader .edit,
+			.rtl .moduleHeader .close,
+			.rtl .moduleHeader .refresh {
+				float: left;
+			}
+
+		.moduleContent{
+			clear: both;
+			padding: 7px;
+			background: #FFF;
+		}
+
+		.editContent{
+			display: none;
+			margin: 0 0 2px 0;
+			clear:both;
+			background: #EFF5FF;
+			padding: 10px 0 10px 10px;
+			border-bottom: 1px solid #B9D0ED;
+			border-top: 1px solid #D3E2F4;
+		}
+			.editContent .optionTab{
+				background: #E5EEFF url(img/showModBlue.gif) no-repeat 4px 4px;
+				padding:2px 0 2px 18px;
+				border-bottom:1px solid #C1D8FF;
+				border-right:1px solid #C1D8FF;
+				border-top:1px solid #FAFCFF;
+				border-left:1px solid #FAFCFF;
+				cursor: pointer;
+			}
+			.editContent .optionContent{
+				padding: 10px 0 10px 10px;
+			}
+
+		.moduleStatus {
+			position: relative;
+			clear: both;
+			padding: 5px 0;
+			text-align: center;
+			border-top: 1px solid #EEE;
+			background: #fff;
+		}
+		.moduleStatus .share {
+			position: absolute;
+			left: 10px;
+		}
+		.moduleStatus a {
+			color: #999;
+			font: 8pt Arial, sans-serif;
+			text-decoration: none;
+			border-bottom:0;
+		}
+		.moduleStatus a:hover {
+			text-decoration: underline;
+		}
+
+
+		/*.postItcolorSelection div{
+cursor: pointer;
+border: 1px solid #444;
+width: 15px;
+height: 15px;
+float:left;
+margin-right: 3px;
+}
+.rtl .postItcolorSelection div {
+float: right;
+margin-right: 0;
+margin-left: 3px;
+}*/
+
+/*.borderless-module .editContent{
+background: none;
+}
+
+body div.borderless-module,
+body div.borderless-module div.module,
+body div.borderless-module div.moduleFrame,
+body div.borderless-module div.moduleunHighlight,
+body div.borderless-module div.moduleFrame div.moduleContent,
+body div.borderless-module div.moduleHeaderContainer,
+body div.borderless-module div.moduleHeader{
+background-image: none;
+border-color: transparent;
+background-color: transparent;
+}*/
