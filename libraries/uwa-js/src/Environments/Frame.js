@@ -140,14 +140,14 @@ UWA.extend(UWA.Environment.prototype, {
   },
   
   onUpdatePreferences: function() {
-    if (widget.elements['editLink']) {
+    if (this.widget.elements['editLink']) {
       var editable = this.widget.preferences.some(function(pref){
         return pref.type != 'hidden';
       });
       if (editable) {
-        widget.elements['editLink'].show();
+        this.widget.elements['editLink'].show();
       } else {
-        widget.elements['editLink'].hide();
+        this.widget.elements['editLink'].hide();
       }
     }
   },
