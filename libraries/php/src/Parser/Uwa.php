@@ -32,8 +32,31 @@ class Parser_Uwa extends Parser
      */
     public $authorizedMetas = array(
         'author', 'email', 'website', 'description', 'keywords', 'version',
-        'screenshot', 'thumbnail', 'apiVersion', 'debugMode', 'autoRefresh');
-
+        'screenshot', 'thumbnail', 'apiVersion', 'debugMode', 'chromeColor', 'autoRefresh');
+    
+    /**
+     * Known UWA Controls & Services
+     *  index: the string used to instanciate it
+     *  value: the library relative path/name
+     *
+     * NOTE:
+     * this components are not officially released as open source yet
+     * and therefore should be directly linked on Netvibes servers
+     */
+    public $knownLibraries = array(
+        'UWA.Controls.Pager'       => 'UWA/Controls/Pager.js',
+        'UWA.Controls.TabView'     => 'UWA/Controls/TabView.js',
+        'UWA.Controls.ToolTip'     => 'UWA/Controls/ToolTip.js',
+        'UWA.Controls.SearchForm'  => 'UWA/Controls/SearchForm.js',
+        'UWA.Controls.FlashPlayer' => 'App/Controls/FlashPlayer.js',
+        'UWA.Controls.FeedView'    => 'UWA/Controls/FeedView.js',
+        'UWA.Services.Search'      => 'UWA/Services/Search.js',
+        'UWA.Services.Mail'        => 'UWA/Services/Mail.js',
+        'UWA.Services.FeedHistory' => 'UWA/Services/FeedHistory.js',
+        'UWA.Controls.MultiPage'   => 'App/Controls/MultiPage.js',
+        'UWA.Controls.Timeline'    => 'App/Controls/Timeline.js'
+    );
+    
     /**
      * Parses the widget title.
      */
@@ -123,6 +146,7 @@ class Parser_Uwa extends Parser
     {
         // UWA CSS Stylesheets
         $ignore = array(
+            "/css/uwa-standalone.css",
             "/themes/uwa/style.css",
             "/api/0.3/style.css",
             "/api/0.2/style.css");
@@ -202,7 +226,7 @@ class Parser_Uwa extends Parser
         $script = $this->_widget->getScript();
         $libraries = array();
         $detect = array(
-            'getElements'            => 'uwa-mootools',
+            'getElements('           => 'uwa-mootools',
             'new Hash'               => 'uwa-mootools',
             'Hash.'                  => 'uwa-mootools',
             'new Element'            => 'uwa-mootools',
@@ -228,20 +252,7 @@ class Parser_Uwa extends Parser
     {
         $script = $this->_widget->getScript();
         $libraries = array();
-        $detect = array(
-            'UWA.Controls.Pager'       => 'UWA/Controls/Pager.js',
-            'UWA.Controls.TabView'     => 'UWA/Controls/TabView.js',
-            'UWA.Controls.ToolTip'     => 'UWA/Controls/ToolTip.js',
-            'UWA.Controls.SearchForm'  => 'UWA/Controls/SearchForm.js',
-            'UWA.Controls.FlashPlayer' => 'App/Controls/FlashPlayer.js',
-            'UWA.Controls.FeedView'    => 'UWA/Controls/FeedView.js',
-            'UWA.Services.Search'      => 'UWA/Services/Search.js',
-            'UWA.Services.Mail'        => 'UWA/Services/Mail.js',
-            'UWA.Services.FeedHistory' => 'UWA/Services/FeedHistory.js',
-            'UWA.Controls.MultiPage'   => 'App/Controls/MultiPage.js',
-            'UWA.Controls.Timeline'    => 'App/Controls/Timeline.js'
-        );
-        foreach ($detect as $string => $src) {
+        foreach ($this->knownLibraries as $string => $src) {
             if (stripos($script, $string)) {
                 $useCompressedJs = Zend_Registry::get('useCompressedJs');
                 if ($useCompressedJs) {
