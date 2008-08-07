@@ -38,95 +38,17 @@
 }
 
 html {
-	background:none;
+	background: #FFF url(base/img/body.png) repeat-x top left;
 }
 
 body {
+	text-align:center;
+}
+
+.module {
+	width: 33%;
+	margin:10% auto 0 !important;
 	text-align:left;
-}
-
-#wrapper {
-	margin:auto;
-	width:auto;
-	border:0;
-	background: transparent; 
-}
-
-#contentWrapper {
-	margin: 0;
-	padding: 0;
-	padding-left:15px;
-	padding-right:14px;
-	width: 333px;
-	background: transparent url(dashboard/background.png) repeat-y center center;
-}
-
-#moduleHeader {
-	margin: 0 0;
-	background: transparent url(dashboard/moduleheader.png) no-repeat center center;
-	height: 28px;
-	line-height: 28px;
-	padding: 0 21px;
-	width: 320px;
-}
-
-#moduleContent {
-	padding:  10px;
-	margin-left:1px;
-	margin-right:1px;
-	max-height:550px;
-	overflow:auto;
-	-apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
-}
-
-#moduleStatus {
-	margin-left:1px;
-	margin-right:1px;
-	-apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
-}
-
-#moduleFooter {
-	height: 16px;
-	padding:0 2px;
-	margin: 0;
-	width: 358px;
-	background: transparent url(dashboard/bottom.png) no-repeat center center;
-}
-
-#moduleTitle {
-	padding-top:7px; 
-}
-
-#moduleIcon {
-	padding-top:4px;
-	padding-right:2px; 	
-}
-
-#editContent {
-	background: transparent url(dashboard/background.png) repeat-y center center;
-	border:0;
-	padding: 8px 21px;
-	width: 320px;
-	margin:0;
-	-apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
-}
-
-#editLink {
-	position:absolute;
-	top:8px;
-	right:12px;
-	height:13px;
-	width:13px;
-	
-	top:12px;
-}
-
-#editContent form, #doneButton {
-	margin-left:10px;
-}
-
-.nv-pager:after {
-	content: "";
 }
 
 /* rules imported from http://www.netvibes.com/themes/base/screen.css */
@@ -150,7 +72,7 @@ ul {
 }
 li {
 	list-style-type: none;
-	background: transparent url(img/bullet.png) no-repeat left 0.5ex;
+	background: transparent url(base/img/bullet.png) no-repeat left 0.5ex;
 	margin-bottom: 2px;
 	padding-left: 10px;
 }
@@ -161,9 +83,15 @@ a {
 	text-decoration: none;
 }
 
+/* hand cursor not needed in Standalone environment */
+
+.moduleHeader {
+	cursor:inherit;
+}
+
 /* tune the editContent */
 
-#editContent {
+.editContent {
 	display:block;
 	margin-bottom:0;
 }
