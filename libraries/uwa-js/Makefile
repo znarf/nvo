@@ -58,6 +58,9 @@ MOOTOOLS_FILES = \
 	$(UWA_JS_SRC)/Drivers/UWA-mootools.js \
 	$(BASE_FILES)
 
+CONTROLS = \
+	PrefsForm
+
 ENVIRONMENTS = \
 	Frame \
 	Standalone \
@@ -83,7 +86,7 @@ export:
 	fi
 	@echo "SVN export complete."
 
-dist: core mootools environments
+dist: core mootools environments controls
 
 core:
 	@echo "Building UWA Core..."
@@ -110,6 +113,13 @@ environments:
 	-@rm -f $(STAGE)/dist/*.tmp.js
 	@echo "UWA Environments build complete."
 
+controls:
+	@echo "Building UWA Controls..."
+	@for control in $(CONTROLS) ; do \
+		$(YUI) $(UWA_JS_SRC)/Controls/$${control}.js -o $(STAGE)/dist/UWA_Controls_$${control}.js ; \
+	done
+	@echo "UWA Controls build complete."
+	
 zip:
 	@echo "Creating the ZIP archive..."
 	@(cd $(BUILD) && $(ZIP) -rq $(ZIP_NAME) $(NAME))
