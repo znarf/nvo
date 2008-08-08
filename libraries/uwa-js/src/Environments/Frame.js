@@ -162,12 +162,10 @@ UWA.extend(UWA.Environment.prototype, {
   initCommunication: function() {
     // Choose the best cross-domain messaging mechanism
     this.communicationType = 'proxy';
-    if (UWA.Client.Engine.opera || UWA.Client.Engine.webkit) {
-      if (typeof document.postMessage === 'function') {
-        this.communicationType = 'documentPostMessage';
-      } else if (typeof window.postMessage === 'function') {
-        this.communicationType = 'windowPostMessage';
-      }
+    if (typeof document.postMessage === 'function') {
+      this.communicationType = 'documentPostMessage';
+    } else if (typeof window.postMessage === 'function') {
+      this.communicationType = 'windowPostMessage';
     }
     if (this.communicationType == 'documentPostMessage' || this.communicationType == 'windowPostMessage') {
       var handler = function(e) {
@@ -235,8 +233,7 @@ UWA.extend(UWA.Environment.prototype, {
         }
         if (target && typeof target.postMessage === 'function') {
           try {
-            var origin = location.protocol + '//' + location.host;
-            target.postMessage(message, origin);
+            target.postMessage(message, '*');
           } catch (e) {
             UWA.log('Exception while trying to use ' + this.communicationType);
             if (this.ifproxyUrl) {
@@ -289,8 +286,9 @@ UWA.extend(UWA.Environment.prototype, {
     // Compose the message and use it as a hash identifier in the proxy
     var message = 'target='   + escape(target) +
                   '&message=' + escape(encodeURIComponent(message)) +
-                  '&domain='  + escape(document.domain) +
+                  '&origin='  + escape(encodeURIComponent(document.domain)) +
                   '&uri='     + escape(encodeURIComponent(location.href));
+
     iframe.src = proxy + '#' + message;
 
     // Append the iframe to the document
