@@ -27,12 +27,19 @@ require_once 'Compiler.php';
 class Compiler_Frame extends Compiler
 {
     /**
-     * Environment.
+     * Javascript UWA environment.
      *
      * @var string
      */
     protected $_environment = 'Frame';
 
+    /**
+     * Stylesheet.
+     *
+     * @var string
+     */
+    protected $_stylesheet = 'uwa-iframe.css';
+    
     /**
      * Main rendering function.
      *
@@ -84,10 +91,7 @@ class Compiler_Frame extends Compiler
             $l[] = $this->_getHtmlStatus();
         }
 
-        $l[] = '<script type="text/javascript">';
-        $l[] = "var NV_HOST = '" . NV_HOST . "', NV_PATH = '/', NV_STATIC = 'http://" . NV_STATIC . "', " .
-            "NV_MODULES = '". NV_MODULES ."', NV_AVATARS = '". NV_AVATARS ."';";
-        $l[] = '</script>';
+        $l[] = $this->_getJavascriptConstants();
 
         foreach ($this->_getJavascripts() as $script) {
             $l[] = '<script type="text/javascript" src="' . $script . '"></script>';
@@ -105,52 +109,15 @@ class Compiler_Frame extends Compiler
         return $this->_getStylesheets();
     }
 
-    protected function _getHtmlHeader()
-    {
-        $html  = '<div class="moduleHeaderContainer">' . "\n";
-        $html .= '  <div class="moduleHeader" id="moduleHeader">' . "\n";
-        $html .= '    <a id="editLink" class="edit" style="display:none" href="javascript:void(0)">Edit</a>' . "\n";
-        $html .= '    <a id="moduleIcon" class="ico">' . "\n";
-        $html .= '      <img class="hicon" width="16" height="16" src="http://' . NV_STATIC . '/modules/uwa/icon.png"/>' . "\n";
-        $html .= '    </a>' . "\n";
-        $html .= '    <span id="moduleTitle" class="title">' . $this->_widget->getTitle() . '</span>' . "\n";
-        $html .= '  </div>' . "\n";
-        $html .= '</div>' . "\n";
-
-        $html .= '<div class="editContent" id="editContent" style="display:none"></div>';
-
-        return $html;
-    }
-
-    protected function _getHtmlStatus()
-    {
-        $shareUrl = 'http://eco.netvibes.com/share/?url=' . str_replace('.', '%2E', urlencode($this->_widget->getUrl()));
-
-        $html  = '<div id="moduleStatus" class="moduleStatus">' . "\n";
-        $html .= '<a href="' . $shareUrl . '" title="Share this widget" class="share" target="_blank">';
-        $html .= '<img src="'. Zend_Registry::get('uwaImgDir') .'share.png" alt="Share this widget"/>';
-        $html .= '</a>' . "\n";
-        $html .= '<a href="http://www.netvibes.com/" class="powered" target="_blank">powered by netvibes</a>' . "\n";
-        $html .= '</div>';
-
-        return $html;
-    }
-
     protected function _getJavascripts()
     {
         $javascripts = parent::_getJavascripts();
 
         if (isset($this->options['displayHeader']) && $this->options['displayHeader'] == '1') {
-            // Temporary - should be switched to uwaJsDir when it will be available there
-            $javascripts[] = 'http://' . NV_STATIC . '/js/c/UWA_Controls_PrefsForm.js';
-        }
-
-        if (isset($_GET['libs'])) {
-            $libraries = split(',', $_GET['libs']);
-            foreach ($libraries as $script) {
-                if (preg_match('@^[a-z0-9/._-]+$@i', $script) && !preg_match('@([.][.])|([.]/)|(//)@', $script)) {
-                    $javascripts[] = "http://www.google.com/ig/f/$script";
-                }
+            if (Zend_Registry::get('useCompressedJs')) {
+                $javascripts[] = Zend_Registry::get('uwaJsDir') . 'UWA_Controls_PrefsForm.js';
+            } else {
+                $javascripts[] = Zend_Registry::get('uwaJsDir') . 'Controls/PrefsForm.js';
             }
         }
 

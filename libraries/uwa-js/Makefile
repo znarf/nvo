@@ -63,8 +63,10 @@ CONTROLS = \
 
 ENVIRONMENTS = \
 	Frame \
+	Frame_Google \
 	Standalone \
-	Google
+	Google \
+	Dashboard2
 
 UWA_CORE = $(STAGE)/dist/UWA_Core.js
 UWA_MOOTOOLS = $(STAGE)/dist/UWA_Mootools.js
@@ -94,7 +96,7 @@ core:
 	@$(YUI) $(UWA_CORE).tmp.js -o $(UWA_CORE)
 	-@rm -f $(UWA_CORE).tmp.js
 	@echo "UWA Core build complete."
-	
+
 mootools:
 	@echo "Building UWA MooTools..."
 	@cat $(MOOTOOLS_FILES) >> $(UWA_MOOTOOLS).tmp.js
@@ -119,7 +121,7 @@ controls:
 		$(YUI) $(UWA_JS_SRC)/Controls/$${control}.js -o $(STAGE)/dist/UWA_Controls_$${control}.js ; \
 	done
 	@echo "UWA Controls build complete."
-	
+
 zip:
 	@echo "Creating the ZIP archive..."
 	@(cd $(BUILD) && $(ZIP) -rq $(ZIP_NAME) $(NAME))

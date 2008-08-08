@@ -38,13 +38,6 @@ class WidgetController extends Zend_Controller_Action
     private $_widget = null;
 
     /**
-     * UWA compiler.
-     *
-     * @var Compiler
-     */
-    private $_compiler = null;
-
-    /**
      * Either to use the parsing cache.
      *
      * @var boolean
@@ -73,15 +66,6 @@ class WidgetController extends Zend_Controller_Action
 
         // Prevent default rendering
         $this->_helper->viewRenderer->setNoRender(true);
-
-        // Compiler
-        if ($this->getRequest()->getParam('action') == 'frame') {
-            $this->_compiler = Compiler_Factory::getCompiler('frame', $this->_widget);
-        } else if ($this->getRequest()->getParam('action') == 'gspec') {
-            $this->_compiler = Compiler_Factory::getCompiler('google', $this->_widget);
-        } else {
-            $this->_compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
-        }
     }
 
     /**
@@ -89,9 +73,12 @@ class WidgetController extends Zend_Controller_Action
      */
     public function uwaAction()
     {
-        header('Content-type:application/xhtml+xml; charset=utf-8');
-        header('Cache-Control: max-age=300');
-        echo $this->_compiler->render();
+        $compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
+        $content = $compiler->render();
+        $this->getResponse()
+            ->setHeader('Content-Type', 'application/xhtml+xml; charset=utf-8')
+            ->setHeader('Cache-Control', 'max-age=300')
+            ->appendBody($content);
     }
 
     /**
@@ -99,9 +86,12 @@ class WidgetController extends Zend_Controller_Action
      */
     public function cssAction()
     {
-        header('Content-type: text/css; charset=utf-8');
-        header('Cache-Control: max-age=300');
-        echo $this->_compiler->renderCss();
+        $compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
+        $content = $compiler->renderCss();
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/css; charset=utf-8')
+            ->setHeader('Cache-Control', 'max-age=300')
+            ->appendBody($content);
     }
 
     /**
@@ -109,9 +99,17 @@ class WidgetController extends Zend_Controller_Action
      */
     public function jsAction()
     {
-        header('Content-type: text/javascript; charset=utf-8');
-        header('Cache-Control: max-age=300');
-        echo $this->_compiler->renderJs();
+        $compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
+        $uwaId = $this->getRequest()->getParam('uwaId');
+        if (isset($uwaId)) {
+            $options = array('uwaId' => $uwaId);
+            $compiler->setOptions($options);
+        }
+        $content = $compiler->renderJs();
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/css; charset=utf-8')
+            ->setHeader('Cache-Control', 'max-age=300')
+            ->appendBody($content);
     }
     
     /**
@@ -120,10 +118,14 @@ class WidgetController extends Zend_Controller_Action
      */
     public function gspecAction()
     {
-        header('Content-type: text/xml; charset=utf-8');
-        header('Cache-Control: max-age=300');
+        $compiler = Compiler_Factory::getCompiler('google', $this->_widget);
         $options = array( 'type' => isset($_GET['type']) ? $_GET['type'] : 'url' );
-        echo $this->_compiler->setOptions($options)->render();
+        $compiler->setOptions($options);
+        $content = $compiler->render();
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/xml; charset=utf-8')
+            ->setHeader('Cache-Control', 'max-age=300')
+            ->appendBody($content);
     }
 
     /**
@@ -131,31 +133,61 @@ class WidgetController extends Zend_Controller_Action
      */
     public function frameAction()
     {
-        // Iframe parameters
-        $options = array();
-        
-        // Data
-        $options['data']  = array();
+        $synd = $this->getRequest()->getParam('synd');
+
+        $compiler = Compiler_Factory::getCompiler('frame', $this->_widget);
+
+        if ($this->getRequest()->has('synd') && $this->getRequest()->has('libs')) {
+            $compiler->setEnvironment('Frame_Google');
+            $options = $this->_getFrameOptionsGoogle();
+        } else {
+            $options = $this->_getFrameOptions();
+        }
+
+        $compiler->setOptions($options);
+
+        Zend_Layout::getMvcInstance()->enableLayout()->setLayout('frame');
+
+        $this->view->bodyClass = 'moduleIframe';
+        if (isset($options['chromeColor'])) {
+            $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
+        }
+
+        $this->view->headTitle( $this->_widget->getTitle() );
+
+        foreach ($compiler->getStylesheets() as $stylesheet) {
+            $this->view->headLink()->appendStylesheet($stylesheet, 'screen');
+        }
+
+        if ($this->getRequest()->has('libs')) {
+            $libraries = split(',', $this->getRequest()->getParam('libs'));
+            foreach ($libraries as $script) {
+                if (preg_match('@^[a-z0-9/._-]+$@i', $script) && !preg_match('@([.][.])|([.]/)|(//)@', $script)) {
+                    $this->view->headScript()->appendFile("http://www.google.com/ig/f/$script");
+                }
+            }
+        }
+
+        $content = $compiler->getHtmlBody();
+
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/html')
+            ->appendBody($content);
+    }
+    
+    private function _getFrameOptions()
+    {
+        $options = array( 'data' => array(), 'properties' => array() );
+
         $ignoredParams = array('id', 'uwaUrl', 'ifproxyUrl', 'header', 'status');
         foreach ($_GET as $name => $value) {
-            // ignore netvibes 'NV' & google 'upt' prefixs
-            if (substr($name, 0, 4) == 'upt_' || substr($name, 0, 2) == 'NV') {
-                continue;
-            } 
-            // support for google style preferences
-            if (substr($name, 0, 3) == 'up_') {
-                $name = substr($name, 3);
-            }
-            if (!in_array($name, $ignoredParams)) {
-                // Should be avoided
+            if (!in_array($name, $ignoredParams) && substr($name, 0, 2) != 'NV') {
                 // Fix a problem when displaying the default webnote of netvibes for example
                 $value = stripslashes($value);
                 $options['data'][$name] = $value;
             }
         }
 
-        // Properties - not yet used
-        $options['properties'] = array();
         foreach (array('NVlang', 'NVlocale', 'NVdir') as $pname) {
             if (isset($_GET[$pname])) {
                 $name = substr($pname, 2);
@@ -170,28 +202,26 @@ class WidgetController extends Zend_Controller_Action
         $options['ifproxyUrl']    = $this->getRequest()->getParam('ifproxyUrl');
         $options['chromeColor']   = $this->getRequest()->getParam('chromeColor');
 
-        $this->_compiler->setOptions($options);
-
-        // Rendering
-
-        Zend_Layout::getMvcInstance()->enableLayout()->setLayout('frame');
-
-        $this->view->bodyClass = 'moduleIframe';
-        if (isset($options['chromeColor'])) {
-            $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
-        }
-
-        $this->view->headTitle( $this->_widget->getTitle() );
-
-        foreach ($this->_compiler->getStylesheets() as $stylesheet) {
-            $this->view->headLink()->appendStylesheet($stylesheet, 'screen');
-        }
-
-        $this->getResponse()
-            ->setHeader('Content-Type', 'text/html')
-            ->appendBody( $this->_compiler->getHtmlBody() );
+        return $options;
     }
-    
+
+    private function _getFrameOptionsGoogle()
+    {
+        $options = array( 'data' => array(), 'displayStatus' => 1 );
+        foreach ($_GET as $name => $value) {
+            if (substr($name, 0, 4) == 'upt_') {
+                continue;
+            } 
+            if (substr($name, 0, 3) == 'up_') {
+                $name = substr($name, 3);
+                // Fix a problem when displaying the default webnote of netvibes for example
+                $value = stripslashes($value);
+                $options['data'][$name] = $value;
+            }
+        }
+        return $options;
+    }
+
     /**
      * Renders the widget as JSON.
      */
@@ -203,9 +233,24 @@ class WidgetController extends Zend_Controller_Action
             'metas'         => $this->_widget->getMetas(),
             'preferences'   => $this->_widget->getPreferencesArray()
         );
-        
-        header("Content-type: application/json");
-        
-        echo Zend_Json::encode($object);
+        $content = Zend_Json::encode($object);
+        $this->getResponse()
+            ->setHeader('Content-Type', 'application/json')
+            ->appendBody($content);
     }
+
+    /**
+     * Renders the widget as an Apple Dashboard package.
+     */
+    public function dashboardAction()
+    {
+        $compiler = Compiler_Factory::getCompiler('Dashboard', $this->_widget);
+        $content = $compiler->getFileContent();
+        $this->getResponse()
+            ->setHeader('Pragma', 'public')
+            ->setHeader('Content-Type', $compiler->getFileMimeType())
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
+    }
+
 }

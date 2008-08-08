@@ -32,12 +32,19 @@ abstract class Compiler
     protected $_widget;
 
     /**
-     * JavaScript environment name.
+     * Javascript UWA environment.
      *
      * @var string
      */
     protected $_environment;
 
+    /**
+     * Stylesheet.
+     *
+     * @var string
+     */
+    protected $_stylesheet;
+    
     /**
      * JavaScript core libraries.
      *
@@ -61,10 +68,7 @@ abstract class Compiler
     {
         $this->_widget = $widget;
 
-        $this->_coreLibraries['uwa'] = array(
-            'UWA.js',
-            'Drivers/UWA-alone.js',
-            'Drivers/UWA-legacy.js',
+        $baseLibraries = array(
             'String.js',
             'Array.js',
             'Element.js',
@@ -72,22 +76,14 @@ abstract class Compiler
             'Environment.js',
             'Widget.js',
             'Utils.js',
-            'Utils/Client.js',
+            'Utils/Client.js'
         );
 
-        $this->_coreLibraries['uwa-mootools'] = array(
-            '../lib/mootools.js',
-            'UWA.js',
-            'Drivers/UWA-mootools.js',
-            'String.js',
-            'Array.js',
-            'Element.js',
-            'Data.js',
-            'Environment.js',
-            'Widget.js',
-            'Utils.js',
-            'Utils/Client.js',
-        );
+        $this->_coreLibraries['uwa'] = array_merge(
+            array('UWA.js', 'Drivers/UWA-alone.js', 'Drivers/UWA-legacy.js'), $baseLibraries);
+
+        $this->_coreLibraries['uwa-mootools'] = array_merge(
+            array('../lib/mootools.js', 'UWA.js', 'Drivers/UWA-mootools.js'), $baseLibraries);
     }
 
     /**
@@ -105,6 +101,16 @@ abstract class Compiler
     }
 
     /**
+     * Set the UWA javascript environment
+     *
+     * @param string $environment
+     */
+    public function setEnvironment($environment)
+    {
+        $this->_environment = $environment;
+    }
+    
+    /**
      * Retrieves the list of the stylesheets used in a widget.
      *
      * @return array
@@ -114,7 +120,7 @@ abstract class Compiler
         $stylesheets = array();
 
         // Netvibes stylesheets
-        $NVstylesheets = array(Zend_Registry::get('uwaCssDir') . 'uwa-iframe.css');
+        $NVstylesheets = array(Zend_Registry::get('uwaCssDir') . $this->_stylesheet);
         if (isset($_GET['NVthemeUrl'])) {
             $NVstylesheets[] = 'http://' . NV_STATIC . $_GET['NVthemeUrl'];
         }
@@ -157,10 +163,12 @@ abstract class Compiler
         if (Zend_Registry::get('useCompressedJs')) {
             switch ($coreLibraryName) {
                 case 'uwa':
-                    $javascripts[] = Zend_Registry::get('uwaJsDir') . 'UWA_' . $this->_environment . '.js?v=' . $version;
+                    $javascripts[] = Zend_Registry::get('uwaJsDir') .
+                        'UWA_' . ucfirst($this->_environment) . '.js?v=' . $version;
                     break;
                 case 'uwa-mootools':
-                    $javascripts[] = Zend_Registry::get('uwaJsDir') . 'UWA_' . $this->_environment . '_Mootools.js?v=' . $version;
+                    $javascripts[] = Zend_Registry::get('uwaJsDir') .
+                        'UWA_' . ucfirst($this->_environment) . '_Mootools.js?v=' . $version;
                     break;
                 default:
                     throw new Exception('CoreLibrary name not known.');
@@ -171,10 +179,12 @@ abstract class Compiler
                 throw new Exception('CoreLibrary name not known.');
             }
             foreach ($this->_coreLibraries[$coreLibraryName] as $js) {
-                $javascripts[] = Zend_Registry::get('uwaJsDir') . $js . '?v=' . $version;
+                $javascripts[] = Zend_Registry::get('uwaJsDir') .
+                    $js . '?v=' . $version;
             }
             if (isset($this->_environment)) {
-                $javascripts[] = Zend_Registry::get('uwaJsDir') . 'Environments/' . $this->_environment . '.js?v=' . $version;
+                $javascripts[] = Zend_Registry::get('uwaJsDir') .
+                    'Environments/' . ucfirst($this->_environment) . '.js?v=' . $version;
             }
         }
 
@@ -204,6 +214,67 @@ abstract class Compiler
 
         // Merge with external scripts
         return array_merge($javascripts, $this->_widget->getExternalScripts());
+    }
+
+    /**
+     * Retrieves widget HTML header (moduleHeader)
+     *
+     * @return string
+     */
+    protected function _getHtmlHeader()
+    {   
+        $icon = $this->_widget->getIcon();
+        if (empty($icon)) {
+            $icon = 'http://' . NV_STATIC . '/modules/uwa/icon.png';
+        }
+        
+        $html  = '<div class="moduleHeaderContainer">' . "\n";
+        $html .= '  <div class="moduleHeader" id="moduleHeader">' . "\n";
+        $html .= '    <a id="editLink" class="edit" style="display:none" href="javascript:void(0)">Edit</a>' . "\n";
+        $html .= '    <a id="moduleIcon" class="ico">' . "\n";
+        $html .= '      <img class="hicon" width="16" height="16" src="' . $icon . '"/>' . "\n";
+        $html .= '    </a>' . "\n";
+        $html .= '    <span id="moduleTitle" class="title">' . $this->_widget->getTitle() . '</span>' . "\n";
+        $html .= '  </div>' . "\n";
+        $html .= '</div>' . "\n";
+
+        $html .= '<div class="editContent" id="editContent" style="display:none"></div>';
+
+        return $html;
+    }
+
+    /**
+     * Retrieves widget HTML status bar (moduleStatus)
+     *
+     * @return string
+     */
+    protected function _getHtmlStatus()
+    {
+        $shareUrl = 'http://' . NV_ECO . '/share/?url=' . str_replace('.', '%2E', urlencode($this->_widget->getUrl()));
+
+        $html  = '<div id="moduleStatus" class="moduleStatus">' . "\n";
+        $html .= '<a href="' . $shareUrl . '" title="Share this widget" class="share" target="_blank">';
+        $html .= '<img src="'. Zend_Registry::get('uwaImgDir') .'share.png" alt="Share this widget"/>';
+        $html .= '</a>' . "\n";
+        $html .= '<a href="http://www.netvibes.com/" class="powered" target="_blank">powered by netvibes</a>' . "\n";
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    /**
+     * Retrieves a script containing NV_* constants
+     *
+     * @return string
+     */    
+    protected function _getJavascriptConstants()
+    {
+        $html  = '<script type="text/javascript">' . "\n";
+        $html .= "var NV_HOST = '" . NV_HOST . "', NV_PATH = 'http://" . NV_HOST . "/', NV_STATIC = 'http://" . NV_STATIC . "', " . "\n";
+        $html .= "NV_MODULES = '". NV_MODULES ."', NV_AVATARS = '". NV_AVATARS ."';" . "\n";
+        $html .= '</script>';
+        
+        return $html;
     }
 
     /*** ABSTRACT FUNCTIONS ***/
