@@ -23,27 +23,18 @@ License:
 */
 
 UWA.extend(UWA.Environment.prototype, {
-  
-    init: function() {
-      if (document.body && $('moduleContent')) {
-        this.callback('onInit');
-        this.clearPeriodical('init');
-        this.log('Environnement loaded');
-        this.loaded = true;
-        return true;
-      }
-      return false;
-    },
-    
+
     initialize: function() {
       this.google = { 'inline':false, 'iframed':true };
       if (gadgets && gadgets.Prefs) this.prefs = new gadgets.Prefs();
     },
-    
+
     onRegisterModule: function(module) {
        this.html['body'] = $('moduleContent');
-       this.module.elements['body'] = UWA.$element(this.html['body']);
-       this.module.body = this.module.elements['body']; // shortcut
+       this.html['status'] = $('moduleStatus');
+       this.module.elements['body'] = UWA.extendElement(this.html['body']);
+       this.module.body = this.module.elements['body'];
+       this.setPeriodical('handleResizePeriodical', this.handleResize, 250);
      },
 
     getData: function(name) {
@@ -63,16 +54,41 @@ UWA.extend(UWA.Environment.prototype, {
       this.setDelayed('handleResize', this.handleResize, 100);
     },
 
-    handleResize: function() {
-      if (gadgets && gadgets.window && gadgets.window.adjustHeight) {
-         gadgets.window.adjustHeight();
+    handleLinks: function() {
+      var links = this.widget.body.getElementsByTagName('a');
+      for (var i = 0, lnk; lnk = links[i]; i++) {
+        lnk.target = '_blank';
       }
+    },
+
+    handleResize: function() {
+      // Calculate total widget height by adding widget body/header/status height
+      // note: document.body.offsetHeight is wrong in IE6 as it always return the full windows/iframe height
+      var height = parseInt(this.html['body'].offsetHeight);
+      height += (this.html['header']) ? this.html['header'].offsetHeight : 0;
+      height += (this.html['status']) ? this.html['status'].offsetHeight : 0;
+      if (height > 0 && height != this.prevHeight) {
+        if (gadgets && gadgets.window && gadgets.window.adjustHeight) {
+           gadgets.window.adjustHeight(height);
+        }
+      }
+      this.prevHeight = height;
     },
 
     setTitle: function(title) {
       title = title.stripTags();
       if (gadgets && gadgets.window && gadgets.window.setTitle) {
         gadgets.window.setTitle(title);
+      }
+    },
+
+    onUpdatePreferences: function() {
+      // fix boolean
+      for (var i = 0 ; i < widget.preferences.length; i++) {
+        var pref = widget.preferences[i];
+        if (pref.type == 'boolean' && widget.data[pref.name] == '1') {
+          widget.data[pref.name] = 'true';
+        }
       }
     }
 
@@ -102,7 +118,7 @@ UWA.Data.request = function(url, request) {
     delete request.parameters;
   }
   
-  switch(request.type) {
+  switch (request.type) {
     case 'feed':
     case 'json':
       gadgets.io.makeRequest(url, function(response) {
