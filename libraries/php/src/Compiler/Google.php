@@ -27,11 +27,18 @@ require_once 'Compiler.php';
 class Compiler_Google extends Compiler
 {
     /**
-     * Environment.
+     * Javascript UWA environment.
      *
      * @var string
      */
     protected $_environment = 'Google';
+
+    /**
+     * Stylesheet.
+     *
+     * @var string
+     */
+    protected $_stylesheet = 'uwa-iframe.css';
 
     /**
      * Main rendering function.
@@ -41,15 +48,15 @@ class Compiler_Google extends Compiler
     public function render()
     {
         $l = array();
-        
+
         $l[] = '<?xml version="1.0" encoding="utf-8"?>';
 
         $l[] = '<Module>';
 
         $metas = $this->_widget->getMetas();
 
-        $defaultScreenshot = 'http://www.netvibes.com/img/uwa-screenshot.png';
-        $defaultThumbnail  = 'http://www.netvibes.com/img/uwa-thumbnail.png';
+        $defaultScreenshot = Zend_Registry::get('uwaImgDir') . 'uwa-screenshot.png';
+        $defaultThumbnail  = Zend_Registry::get('uwaImgDir') . 'uwa-thumbnail.png';
 
         $googleMetas = array(
             'title'        => $this->_widget->getTitle(),
@@ -95,15 +102,9 @@ class Compiler_Google extends Compiler
             $l[] = $this->_widget->getBody();
             $l[] = '</div>';
 
-            $l[] = '<div id="moduleStatus" class="moduleStatus">';
-            $l[] = '<a href="http://eco.netvibes.com/share/?url=' . str_replace('.', '%2E', urlencode($this->_widget->getUrl())) . '" title="Share this widget" class="share" target="_blank"><img src="'. Zend_Registry::get('uwaImgDir') .'share.png" alt="Share this widget"/></a>';
-            $l[] = '<a href="http://www.netvibes.com/" class="powered" target="_blank">powered by netvibes</a>';
-            $l[] = '</div>';
+            $l[] = $this->_getHtmlStatus();
 
-            $l[] = '<script type="text/javascript">';
-            $l[] = "var NV_HOST = '" . NV_HOST . "', NV_PATH = '/', NV_STATIC = '" . NV_STATIC . "', " .
-                "NV_MODULES = '". NV_MODULES ."', NV_AVATARS = '". NV_AVATARS ."';";
-            $l[] = '</script>';
+            $l[] = $this->_getJavascriptConstants();
 
             foreach ($this->_getJavascripts() as $javascript) {
                 $l[] = '<script type="text/javascript" src="' . $javascript . '"></script>';

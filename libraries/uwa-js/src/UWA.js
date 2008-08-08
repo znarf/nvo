@@ -3,6 +3,9 @@
 if (typeof window.NV_HOST == "undefined") {
   NV_HOST = 'www.netvibes.com';
 }
+if (typeof window.NV_MODULES == "undefined") {
+  NV_MODULES = 'nvmodules.netvibes.com';
+}
 if (typeof window.NV_AVATARS == "undefined") {
   NV_AVATARS = 'avatars.netvibes.com';
 }

@@ -18,10 +18,13 @@
  * along with Netvibes Widget Platform.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 // Server host and base path
 $host = $_SERVER['HTTP_HOST'];
-$basePath = dirname($_SERVER['SCRIPT_NAME']);
+$dirname = dirname($_SERVER['SCRIPT_NAME']);
+$basePath = $dirname == '/' ? '' : $dirname;
+
+// Temporary directory
+$tmpDir = dirname(__FILE__) . '/../tmp/';
 
 // Config and bootstrapping
 require_once dirname(__FILE__) . '/../config/config.php';
@@ -29,9 +32,15 @@ require_once 'Bootstrap.php';
 
 Bootstrap::prepare();
 
-Bootstrap::setCache('File', array('cache_dir' => dirname(__FILE__) . '/../tmp/'));
+Bootstrap::$registry->set('tmpDir', $tmpDir);
+Bootstrap::setCache('File', array('cache_dir' => $tmpDir));
 
 Bootstrap::$registry->set('proxyEndpoint', 'http://' . $host . $basePath . '/proxy');
 Bootstrap::$registry->set('widgetEndpoint', 'http://' . $host . $basePath . '/widget');
+
+Bootstrap::$registry->set('uwaCssDir', 'http://' . $host . $basePath . '/css/');
+Bootstrap::$registry->set('useMergedCss', false);
+
+Bootstrap::$registry->set('uwaRessourcesDir', dirname(__FILE__) . '/../ressources/');
 
 Bootstrap::run();

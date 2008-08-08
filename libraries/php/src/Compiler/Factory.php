@@ -25,16 +25,17 @@
 class Compiler_Factory
 {
     /**
-     * Widget compilers list.
+     * Known compilers list.
      *
      * @var array
-     */
+    */    
     protected static $_compilers = array(
-        'uwa'    => 'Compiler_Uwa',                  // UWA Rendering functionality
-        'frame'  => 'Compiler_Frame',                // Frame
-        'google' => 'Compiler_Google'                // Google Gadget
+        'Uwa'        => 'Compiler_Uwa',
+        'Frame'      => 'Compiler_Frame',
+        'Google'     => 'Compiler_Google',
+        'Dashboard'  => 'Compiler_Desktop_Dashboard'
     );
-
+    
     /**
      * Creates a compiler for the appropriate platform.
      *
@@ -45,16 +46,15 @@ class Compiler_Factory
     public static function getCompiler($environment, Widget $widget)
     {
         if (isset(self::$_compilers[$environment])) {
-            $classFile = str_replace('_', DIRECTORY_SEPARATOR, self::$_compilers[$environment]) . '.php';
-            require_once $classFile;
-            $class = ucfirst(self::$_compilers[$environment]);
-
-            if (class_exists($class)) {
-                return new $class($widget);
-            }
+            $class = self::$_compilers[$environment];
+        } else {
+            $class = 'Compiler_' . ucfirst($environment);
         }
 
-        // Exception
-        throw new Exception('Unsupported platform.');
+        try {
+            return new $class($widget);
+        } catch(Exception $e) {
+            throw new Exception('Unsupported platform : ' . $environment);
+        }
     }
 }

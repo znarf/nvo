@@ -34,7 +34,8 @@ class Exposition
             'NV_STATIC'  => 'cdn.netvibes.com',
             'NV_MODULES' => 'nvmodules.netvibes.com',
             'NV_AVATARS' => 'avatars.netvibes.com',
-            'NV_REST'    => 'rest.netvibes.com'
+            'NV_REST'    => 'rest.netvibes.com',
+            'NV_ECO'     => 'eco.netvibes.com'
         );
         foreach ($constants as $name => $value) {
             if (false === defined($name)) {
@@ -60,7 +61,8 @@ class Exposition
             'uwaCssDir'       => 'http://' . NV_STATIC  . '/themes/exposition-blueberry/',
             'uwaImgDir'       => 'http://' . NV_STATIC  . '/img/',
             'proxyEndpoint'   => 'http://' . NV_MODULES . '/proxy',
-            'widgetEndpoint'  => 'http://' . NV_MODULES . '/widget'
+            'widgetEndpoint'  => 'http://' . NV_MODULES . '/widget',
+            'tmpDir'          => '/tmp/'
         );
         foreach ($registryDefaultValues as $key => $value) {
             if (!Zend_Registry::isRegistered($key)) {
