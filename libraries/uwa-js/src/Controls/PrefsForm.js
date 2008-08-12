@@ -36,22 +36,22 @@ UWA.Controls.PrefsForm = function(options) {
 UWA.Controls.PrefsForm.prototype.controls = {}
 
 UWA.Controls.PrefsForm.prototype.controls['default'] = function(pref) {
-  var input = widget.createElement('input', {
-    'id'    : 'm_' + widget.id + '_' + pref.name,
+  var input = this.widget.createElement('input', {
+    'id'    : 'm_' + this.widget.id + '_' + pref.name,
     'type'  : 'text',
     'name'  : pref.name,
-    'value' : widget.getValue(pref.name) || ''
+    'value' : this.widget.getValue(pref.name) || ''
   });
   return input;
 }
 
 UWA.Controls.PrefsForm.prototype.controls['boolean'] = function(pref) {
-  var input = widget.createElement('input', {
-    'id'   : 'm_' + widget.id + '_' + pref.name,
+  var input = this.widget.createElement('input', {
+    'id'   : 'm_' + this.widget.id + '_' + pref.name,
     'type' : 'checkbox',
     'name' : pref.name
   });
-  if (widget.getBool(pref.name) === true) {
+  if (this.widget.getBool(pref.name) === true) {
     input.setAttribute('checked', 'checked');
     input.defaultChecked = true; // for IE
   }
@@ -59,19 +59,19 @@ UWA.Controls.PrefsForm.prototype.controls['boolean'] = function(pref) {
     input.onclick = ( function(e) {
       var sender = (e.target || e.srcElement);
       if(sender.checked == true) {
-        widget.setValue(pref.name, 'true');
+        this.widget.setValue(pref.name, 'true');
       } else {
-        widget.setValue(pref.name, 'false');
+        this.widget.setValue(pref.name, 'false');
       }
-      widget.callback(pref.onchange);
+      this.widget.callback(pref.onchange);
     } ).bindAsEventListener(this);
   }
   return input;
 }
 
 UWA.Controls.PrefsForm.prototype.controls['password'] = function(pref) {
-  var input = widget.createElement('input', {
-    'id'    : 'm_' + widget.id + '_' + 'pass',
+  var input = this.widget.createElement('input', {
+    'id'    : 'm_' + this.widget.id + '_' + 'pass',
     'type'  : 'password',
     'name'  : 'pass',
     'value' : ''
@@ -80,22 +80,22 @@ UWA.Controls.PrefsForm.prototype.controls['password'] = function(pref) {
 }
 
 UWA.Controls.PrefsForm.prototype.controls['textarea'] = function(pref) {
-  var input = widget.createElement('textarea', {
-    'id'   : 'm_' + widget.id + '_' + pref.name,
+  var input = this.widget.createElement('textarea', {
+    'id'   : 'm_' + this.widget.id + '_' + pref.name,
     'name' : pref.name
-  }).setText( widget.getValue(pref.name) || '' );
+  }).setText( this.widget.getValue(pref.name) || '' );
   return textarea;
 }
 
 UWA.Controls.PrefsForm.prototype.controls['range'] = function(pref) {   
-  var select = widget.createElement('select', {
-    'id'   : 'm_' + widget.id + '_' + pref.name,
+  var select = this.widget.createElement('select', {
+    'id'   : 'm_' + this.widget.id + '_' + pref.name,
     'name' : pref.name
   });
   if (parseInt(pref.step) > 0) {
     for (var i = parseInt(pref.min); i <= parseInt(pref.max); i += parseInt(pref.step)) {
-      var option = widget.createElement('option', { 'value': i }).setText(i);
-      if (widget.getValue(pref.name) == i) {
+      var option = this.widget.createElement('option', { 'value': i }).setText("" + i);
+      if (this.widget.getValue(pref.name) == i) {
         option.setAttribute('selected', 'selected');
       } 
       select.appendChild(option);
@@ -104,32 +104,32 @@ UWA.Controls.PrefsForm.prototype.controls['range'] = function(pref) {
   if (pref.onchange) {
     select.onchange = ( function(e) {
       var sender = (e.target || e.srcElement);
-      widget.setValue(pref.name, sender.value)
-      widget.callback(pref.onchange);
+      this.widget.setValue(pref.name, sender.value)
+      this.widget.callback(pref.onchange);
     } ).bindAsEventListener(this);
   }
   return select;
 }
 
 UWA.Controls.PrefsForm.prototype.controls['list'] = function(pref) {   
-  var select = widget.createElement('select', {
-    'id'   :  'm_' + widget.id + '_' + pref.name,
+  var select = this.widget.createElement('select', {
+    'id'   :  'm_' + this.widget.id + '_' + pref.name,
     'name' :  pref.name,
   });
   for (var i = 0; i < pref.options.length; i++) {
     var option = pref.options[i];
     option.label = option.label || option.value;
-    var optionElement = widget.createElement('option').setText(option.label).inject(select);
+    var optionElement = this.widget.createElement('option').setText(option.label).inject(select);
     optionElement.value = option.value;
-    if (widget.getValue(pref.name) == option.value) {
+    if (this.widget.getValue(pref.name) == option.value) {
       optionElement.setAttribute('selected', 'selected');
     }
   }
   if (pref.onchange) {
     select.onchange = ( function(e) {
       var sender = (e.target || e.srcElement);
-      widget.setValue(pref.name, sender.value)
-      widget.callback(pref.onchange);
+      this.widget.setValue(pref.name, sender.value)
+      this.widget.callback(pref.onchange);
     } ).bindAsEventListener(this);
   }
   return select;
@@ -159,15 +159,15 @@ UWA.Controls.PrefsForm.prototype.build = function() {
     if (pref.type == 'hidden') {
       continue;
     } 
-    pref.label = _( (pref.label || pref.name) + ':' );
+    var label = _( (pref.label || pref.name) + ':' );
     var tdl = widget.createElement("td").inject(tr);
     var label = widget.createElement("label", {
       'for': widget.id + '_' + pref.name 
-    }).setText(pref.label).inject(tdl);
+    }).setText(label).inject(tdl);
     if (typeof this.controls[pref.type] == 'undefined') {
       pref.type = 'default';
     }
-    var control = this.controls[pref.type](pref);
+    var control = this.controls[pref.type].bind(this)(pref);
     widget.createElement("td").setContent(control).inject(tr);
   }
 
