@@ -33,6 +33,8 @@ class Compiler_Factory
         'Uwa'        => 'Compiler_Uwa',
         'Frame'      => 'Compiler_Frame',
         'Google'     => 'Compiler_Google',
+        'Live'       => 'Compiler_Live',
+        'Opera'      => 'Compiler_Desktop_Opera',
         'Dashboard'  => 'Compiler_Desktop_Dashboard'
     );
     

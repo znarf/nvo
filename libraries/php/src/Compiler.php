@@ -44,7 +44,14 @@ abstract class Compiler
      * @var string
      */
     protected $_stylesheet;
-    
+
+    /**
+     * Platform Name.
+     *
+     * @var string
+     */
+    protected $_platform;
+        
     /**
      * JavaScript core libraries.
      *
@@ -76,7 +83,8 @@ abstract class Compiler
             'Environment.js',
             'Widget.js',
             'Utils.js',
-            'Utils/Client.js'
+            'Utils/Client.js',
+            'Controls/PrefsForm.js'
         );
 
         $this->_coreLibraries['uwa'] = array_merge(
@@ -197,20 +205,24 @@ abstract class Compiler
      * @param string $name
      * @return array
      */
-    protected function _getJavascripts()
+    protected function _getJavascripts($options = array())
     {
         $javascripts = $this->_getCoreLibraries();
 
         // Widget script
-        $script = $this->_widget->getScript();
-        if (!empty($script)) {
-            $jsBaseUrl = Zend_Registry::get('widgetEndpoint')  . '/js';
-            if (isset($this->options['uwaId'])) {
-                $javascripts[] = $jsBaseUrl . '/' . urlencode($this->options['uwaId']);
-            } else {
-                $javascripts[] = $jsBaseUrl . '?uwaUrl=' . urlencode($this->_widget->getUrl());
+        $jsBaseUrl = Zend_Registry::get('widgetEndpoint')  . '/js';
+        if (isset($this->options['uwaId'])) {
+            $widgetJs = $jsBaseUrl . '/' . urlencode($this->options['uwaId']);
+            if (isset($options['platform'])) {
+                $widgetJs .= '?platform=' . $options['platform'];
+            }
+        } else {
+            $widgetJs = $jsBaseUrl . '?uwaUrl=' . urlencode($this->_widget->getUrl());
+            if (isset($options['platform'])) {
+                $widgetJs .= '&platform=' . $options['platform'];
             }
         }
+        $javascripts[] = $widgetJs;
 
         // Merge with external scripts
         return array_merge($javascripts, $this->_widget->getExternalScripts());

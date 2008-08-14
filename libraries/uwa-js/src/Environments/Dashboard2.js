@@ -26,8 +26,8 @@ UWA.extend(UWA.Environment.prototype, {
 
     this.widget.body = this.widget.elements['body'];
 
-    this.widget.elements['editLink'].empty().show();
-    new AppleInfoButton(this.html['editLink'], $('wrapper'), "black", "white", this.showDashboardPrefs.bind(this) );
+    this.widget.elements['editLink'].empty().show().addClassName('infoButton');
+    new AppleInfoButton(this.html['editLink'], $('wrapper'), "black", "white", this.showDashboardPrefs.bind(this));
 
     this.callback('onUpdatePreferences');
 

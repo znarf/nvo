@@ -44,7 +44,8 @@ BASE_FILES = \
 	$(UWA_JS_SRC)/Environment.js\
 	$(UWA_JS_SRC)/Widget.js \
 	$(UWA_JS_SRC)/Utils.js \
-	$(UWA_JS_SRC)/Utils/Client.js
+	$(UWA_JS_SRC)/Utils/Client.js \
+	$(UWA_JS_SRC)/Controls/PrefsForm.js
 
 CORE_FILES = \
 	$(UWA_JS_SRC)/UWA.js \
@@ -66,7 +67,9 @@ ENVIRONMENTS = \
 	Frame_Google \
 	Standalone \
 	Google \
-	Dashboard2
+	Dashboard2 \
+	Live2 \
+	Opera2
 
 UWA_CORE = $(STAGE)/dist/UWA_Core.js
 UWA_MOOTOOLS = $(STAGE)/dist/UWA_Mootools.js

@@ -103,3 +103,19 @@ a {
 	display:block;
 	margin-bottom:0;
 }
+
+/* should be moved to nv-module/uwa-module stylesheet */
+
+.moduleStatus .configure {
+	display: block;
+	width: 20px;
+	height: 18px;
+	margin: 0;
+	position: absolute;
+	top: -1px;
+	right: 5px;
+	background-image: url(base/img/options.png);
+	text-decoration: none;
+	border: none;
+}
+

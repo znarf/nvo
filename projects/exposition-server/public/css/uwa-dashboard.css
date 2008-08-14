@@ -111,13 +111,12 @@ body {
 	-apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
 }
 
-#editLink {
+.infoButton {
 	position:absolute;
 	top:8px;
 	right:12px;
 	height:13px;
 	width:13px;
-	
 	top:12px;
 }
 
