@@ -114,7 +114,7 @@ UWA.Controls.PrefsForm.prototype.controls['range'] = function(pref) {
 UWA.Controls.PrefsForm.prototype.controls['list'] = function(pref) {   
   var select = this.widget.createElement('select', {
     'id'   :  'm_' + this.widget.id + '_' + pref.name,
-    'name' :  pref.name,
+    'name' :  pref.name
   });
   for (var i = 0; i < pref.options.length; i++) {
     var option = pref.options[i];
@@ -154,11 +154,11 @@ UWA.Controls.PrefsForm.prototype.build = function() {
   var tbody = widget.createElement("tbody").inject(table);
 
   for (var i = 0; i < widget.preferences.length; i++) {
-    var tr = widget.createElement("tr").inject(tbody);
     var pref = widget.preferences[i];
     if (pref.type == 'hidden') {
       continue;
-    } 
+    }
+    var tr = widget.createElement("tr").inject(tbody);
     var label = _( (pref.label || pref.name) + ':' );
     var tdl = widget.createElement("td").inject(tr);
     var label = widget.createElement("label", {
