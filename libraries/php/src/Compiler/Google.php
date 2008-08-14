@@ -22,7 +22,7 @@
 require_once 'Compiler.php';
 
 /**
- * Frame Compiler to render a UWA widget within an iframe.
+ * Google Compiler to render a widget as a Google Gadget specification
  */
 class Compiler_Google extends Compiler
 {
@@ -39,6 +39,13 @@ class Compiler_Google extends Compiler
      * @var string
      */
     protected $_stylesheet = 'uwa-iframe.css';
+
+    /**
+     * Platform Name.
+     *
+     * @var string
+     */
+    protected $_platform = 'google';
 
     /**
      * Main rendering function.
@@ -70,16 +77,17 @@ class Compiler_Google extends Compiler
 
         $modulePrefs = '<ModulePrefs';
         foreach ($googleMetas as $key => $value) {
-            $modulePrefs .= " $key=\"$value\"";
+            $k = htmlspecialchars($key); 
+            $v = htmlspecialchars($value); 
+            $modulePrefs .= " $k=\"$v\"";
         }
         $modulePrefs .= '>';
 
         $l[] = $modulePrefs;
 
-        // $l[] = '<Require feature="uwa" />';
-        $l[] = '<Require feature="setprefs" />';
-        $l[] = '<Require feature="dynamic-height" />';
-        $l[] = '<Require feature="settitle" />';
+        $l[] = '<Require feature="setprefs"/>';
+        $l[] = '<Require feature="dynamic-height"/>';
+        $l[] = '<Require feature="settitle"/>';
 
         $l[] = '</ModulePrefs>';
 
@@ -106,7 +114,9 @@ class Compiler_Google extends Compiler
 
             $l[] = $this->_getJavascriptConstants();
 
-            foreach ($this->_getJavascripts() as $javascript) {
+            $javascripts = $this->_getJavascripts( array('platform' => $this->_platform) );
+            
+            foreach ($javascripts as $javascript) {
                 $l[] = '<script type="text/javascript" src="' . $javascript . '"></script>';
             }
 
@@ -140,16 +150,11 @@ class Compiler_Google extends Compiler
 
         $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));
 
-        // $l[] = 'Environment = new UWA.Environment();';
-        // $l[] = 'widget = Environment.getModule();';
-
         $script = $this->_widget->getScript();
-        if ( !empty($script) ) {
-            if (isset($this->options['uwaId'])) {
-                $l[] = sprintf("UWA.Scripts['%s'](widget);", $this->options['uwaId']);
-            } else {
-                $l[] = "UWA.script(widget);";
-            }
+        if (isset($this->options['uwaId'])) {
+            $l[] = sprintf("UWA.Scripts['%s'](widget);", $this->options['uwaId']);
+        } else {
+            $l[] = "UWA.script(widget);";
         }
 
         $l[] = "Environment.launchModule();";

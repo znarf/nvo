@@ -107,11 +107,11 @@ class WidgetController extends Zend_Controller_Action
         }
         $content = $compiler->renderJs();
         $this->getResponse()
-            ->setHeader('Content-Type', 'text/css; charset=utf-8')
+            ->setHeader('Content-Type', 'text/javascript; charset=utf-8')
             ->setHeader('Cache-Control', 'max-age=300')
             ->appendBody($content);
     }
-    
+
     /**
      * Renders the widget as a Google Gadget specification
      * http://code.google.com/apis/gadgets/docs/dev_guide.html
@@ -250,6 +250,34 @@ class WidgetController extends Zend_Controller_Action
             ->setHeader('Pragma', 'public')
             ->setHeader('Content-Type', $compiler->getFileMimeType())
             ->setHeader('Content-Disposition', 'attachment; filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
+    }
+
+    /**
+     * Renders the widget as an Opera package.
+     */
+    public function operaAction()
+    {
+        $compiler = Compiler_Factory::getCompiler('Opera', $this->_widget);
+        $content = $compiler->getFileContent();
+        $this->getResponse()
+            ->setHeader('Pragma', 'no-cache')
+            ->setHeader('Cache-Control', 'no-cache')
+            ->setHeader('Content-Type', $compiler->getFileMimeType())
+            ->setHeader('Content-Disposition', 'filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
+    }
+    
+    /**
+     * Renders the widget as a Microsoft live.com gadget manifest.
+     */
+    public function liveAction()
+    {
+        $compiler = Compiler_Factory::getCompiler('Live', $this->_widget);
+        $content = $compiler->render();
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/xml; charset=utf-8')
+            ->setHeader('Cache-Control', 'max-age=300')
             ->appendBody($content);
     }
 

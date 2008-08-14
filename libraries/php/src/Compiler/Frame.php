@@ -109,21 +109,6 @@ class Compiler_Frame extends Compiler
         return $this->_getStylesheets();
     }
 
-    protected function _getJavascripts()
-    {
-        $javascripts = parent::_getJavascripts();
-
-        if (isset($this->options['displayHeader']) && $this->options['displayHeader'] == '1') {
-            if (Zend_Registry::get('useCompressedJs')) {
-                $javascripts[] = Zend_Registry::get('uwaJsDir') . 'UWA_Controls_PrefsForm.js';
-            } else {
-                $javascripts[] = Zend_Registry::get('uwaJsDir') . 'Controls/PrefsForm.js';
-            }
-        }
-
-        return $javascripts;
-    }
-
     private function _getFrameScript()
     {
         $l = array();
