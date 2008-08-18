@@ -79,7 +79,9 @@ UWA.extend(UWA.Environment.prototype, {
     this.widget.elements['body'].hide();
     this.widget.elements['edit'].show();
     this.widget.elements['editLink'].hide();
-
+    
+    this.widget.callback('onShowEdit', this.widget.elements['edit']);
+    
     if (window.widget) {
       setTimeout("window.widget.performTransition()", 0);
     }
