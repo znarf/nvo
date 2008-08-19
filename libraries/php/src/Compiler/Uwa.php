@@ -148,16 +148,34 @@ class Compiler_Uwa extends Compiler
     {
         $l = array();
 
+        $l[] = 'if (typeof UWA == "undefined") var UWA = {};';
+
         if (isset($this->options['uwaId'])) {
+            $l[] = 'if (typeof UWA.Scripts == "undefined") UWA.Scripts = [];';
             $l[] = sprintf("UWA.Scripts['%s']=UWA.script=function(widget){", $this->options['uwaId']);
         } else {
             $l[] = "UWA.script=function(widget){";
-            // echo "UWA.Widgets['" . md5($this->_widget->getUrl()) . "'] = ";
         }
 
+        $l[] = sprintf('widget.uwaUrl = %s;', Zend_Json::encode($this->_widget->getUrl()));
+
         $l[] = $this->_widget->getCompressedScript();
-        $l[] = "widget.setMetas(" . $this->_widget->getMetadataJson() . ");";
-        $l[] = "widget.setPreferences(" . $this->_widget->getPreferencesJson() . ");";
+
+        $metas = $this->_widget->getMetas();
+        $l[] = sprintf("widget.setMetas(%s);", Zend_Json::encode($metas));
+
+        $preferences = $this->_widget->getPreferencesArray();
+        if (count($preferences) > 0) {
+            $l[] = sprintf("widget.setPreferences(%s);", Zend_Json::encode($preferences));
+        }
+
+        if (isset($this->options['platform']) && in_array($this->options['platform'], array('live', 'opera', 'dashboard'))) {
+            $body = $this->_widget->getBody();
+            if (!empty($body) && $body != '<p>Loading...</p>') {
+                $l[] = sprintf('widget.setBody(%s);', Zend_Json::encode($body));
+            }
+        }
+
         $l[] = "return widget;";
 
         $l[] = "}";
