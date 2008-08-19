@@ -100,11 +100,11 @@ class WidgetController extends Zend_Controller_Action
     public function jsAction()
     {
         $compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
-        $uwaId = $this->getRequest()->getParam('uwaId');
-        if (isset($uwaId)) {
-            $options = array('uwaId' => $uwaId);
-            $compiler->setOptions($options);
-        }
+        $options = array(
+            'uwaId' => $this->getRequest()->getParam('uwaId'),
+            'platform' => $this->getRequest()->getParam('platform')
+        );
+        $compiler->setOptions($options);
         $content = $compiler->renderJs();
         $this->getResponse()
             ->setHeader('Content-Type', 'text/javascript; charset=utf-8')
@@ -133,8 +133,6 @@ class WidgetController extends Zend_Controller_Action
      */
     public function frameAction()
     {
-        $synd = $this->getRequest()->getParam('synd');
-
         $compiler = Compiler_Factory::getCompiler('frame', $this->_widget);
 
         if ($this->getRequest()->has('synd') && $this->getRequest()->has('libs')) {
