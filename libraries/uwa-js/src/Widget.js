@@ -349,18 +349,15 @@ UWA.Widget.prototype = {
     * None.
   */
   initPreferences: function() {
-    for(var i = 0; i < this.preferences.length; i++) {
+    for (var i = 0; i < this.preferences.length; i++) {
       var pref = this.preferences[i];
-      if (typeof pref.name == "undefined") continue; // no name = preference ignored
-      if (pref.defaultvalue) pref.defaultValue = pref.defaultvalue; // fix after xml parsing
-      var value = this.getValue(pref.name);
-      if (value == undefined || value == null || value == 'undefined') { // the last not really needed but could help
-        if (typeof pref.defaultValue != "undefined") this.data[pref.name] = pref.defaultValue;
-        else this.data[pref.name] = null;
+      if (typeof pref.name == "undefined") { // no name = preference ignored
+         continue; 
       }
-      if(pref.defaultValue && value && pref.defaultValue == value) {
-        // if (this.environment && this.environment.deleteData) this.environment.deleteData(pref.name);
-      }
+      if (pref.defaultvalue) {
+        pref.defaultValue = pref.defaultvalue; // fix after xml parsing
+      } 
+      this.data[pref.name] = this.getValue(pref.name) || pref.defaultValue || null;
     }
   },
   
@@ -499,11 +496,17 @@ UWA.Widget.prototype = {
   
   /* to document */
   endEdit: function() {
+    this.elements['body'].show();
     this.elements['edit'].hide();
-    if (this.onRefresh) this.onRefresh();
-    else if (this.onLoad) this.onLoad();
+    if (this.elements['editLink']) {
+      this.elements['editLink'].show().setHTML( _("Edit") );
+    } 
+    if (this.onRefresh) {
+      this.onRefresh();
+    } else if (this.onLoad) {
+      this.onLoad();
+    }
     this.callback('onHideEdit');
-    if(this.elements['editLink']) this.elements['editLink'].setHTML( _("Edit") );
   },
   
   /* Group: Data storage */
@@ -523,10 +526,14 @@ UWA.Widget.prototype = {
     > var url = widget.getValue("feedUrl");
   */
   getValue: function(name) {
-    if (typeof this.data[name] != "undefined") return this.data[name];
+    if (typeof this.data[name] != "undefined") {
+      return this.data[name];
+    } 
     if (this.environment && this.environment.getData) {
       var value = this.environment.getData(name);
-      if (value == 'null') value = null;
+      if (value == 'null') {
+        value = null;
+      } 
       this.data[name] = value;
       return value;
     }
@@ -548,7 +555,9 @@ UWA.Widget.prototype = {
   */
   getInt: function(name) {
     var value = this.getValue(name);
-    if(value == 'true' || value == true) value = 1;
+    if (value == 'true' || value == true) {
+      value = 1;
+    }
     value = parseInt(value, 10);
     return isNaN(value) ? 0 : value;
   },
@@ -586,22 +595,23 @@ UWA.Widget.prototype = {
     > widget.setValue("nbItems", "5");
   */
   setValue: function(name, value) {
-    if (this.data[name] == value) return value;
+    if (this.data[name] == value) {
+      return value;
+    } 
     this.data[name] = value;
     var pref = this.getPreference(name);
-    // if(pref && pref.defaultValue && pref.defaultValue == value) {
-    // if (this.environment && this.environment.deleteData) this.environment.deleteData(name);
-    // } else {
-    if (this.environment && this.environment.setData) this.environment.setData(name, value);
-    // }
+    if (this.environment && this.environment.setData) {
+      this.environment.setData(name, value);
+    } 
     return value;
   },
   
   /* new - to document */
   deleteValue: function(name) {
     delete this.data[name];
-    if (this.environment && this.environment.deleteData) return this.environment.deleteData(name);
-    return false;
+    if (this.environment && this.environment.deleteData) {
+      return this.environment.deleteData(name);
+    }
   },
   
   /* internal or advanced use only - not documented */
