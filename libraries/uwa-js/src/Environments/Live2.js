@@ -187,9 +187,25 @@ UWA.Data.request = function(url, request) {
       request.cache is not handled
   */
 
+  if (typeof request.authentication == 'object') {
+    request.proxy = 'ajax';
+  }
+
   if (UWA.proxies[request.proxy]) {
     if (request.proxy == 'feed') {
       url = UWA.proxies[request.proxy] + '?url=' + encodeURIComponent(url) + "&rss=1";
+    } else if (typeof request.authentication == 'object') {
+      url = UWA.proxies[request.proxy] + '?url=' + encodeURIComponent(url);
+      var auth = request.authentication;
+      if (auth.type) {
+        url += '&auth=' + auth.type;
+      }
+      if (auth.username) {
+        url += '&username=' + encodeURIComponent(auth.username);
+      }
+      if (auth.password) {
+        url += '&password=' + encodeURIComponent(auth.password);
+      }
     }
   }
 
