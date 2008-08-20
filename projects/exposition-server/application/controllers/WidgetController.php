@@ -246,7 +246,7 @@ class WidgetController extends Zend_Controller_Action
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
-        $this->_compiler->setOptions($options);
+        $compiler->setOptions($options);
         $content = $compiler->getFileContent();
         $this->getResponse()
             ->setHeader('Pragma', 'public')
@@ -264,7 +264,7 @@ class WidgetController extends Zend_Controller_Action
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
-        $this->_compiler->setOptions($options);
+        $compiler->setOptions($options);
         $content = $compiler->getFileContent();
         $this->getResponse()
             ->setHeader('Pragma', 'no-cache')
