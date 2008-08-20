@@ -243,6 +243,10 @@ class WidgetController extends Zend_Controller_Action
     public function dashboardAction()
     {
         $compiler = Compiler_Factory::getCompiler('Dashboard', $this->_widget);
+        $options = array(
+            'appendBody' => $this->getRequest()->getUserParam('appendBody')
+        );
+        $this->_compiler->setOptions($options);
         $content = $compiler->getFileContent();
         $this->getResponse()
             ->setHeader('Pragma', 'public')
@@ -257,6 +261,10 @@ class WidgetController extends Zend_Controller_Action
     public function operaAction()
     {
         $compiler = Compiler_Factory::getCompiler('Opera', $this->_widget);
+        $options = array(
+            'appendBody' => $this->getRequest()->getUserParam('appendBody')
+        );
+        $this->_compiler->setOptions($options);
         $content = $compiler->getFileContent();
         $this->getResponse()
             ->setHeader('Pragma', 'no-cache')
