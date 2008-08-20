@@ -46,8 +46,8 @@ abstract class Compiler_Desktop_W3c extends Compiler_Desktop
         $l = array();
 
         $l[] = '<?xml version="1.0" encoding="utf-8"?>';
-        $l[] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+        $l[] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"' .
+            ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
         $l[] = '<html xmlns="http://www.w3.org/1999/xhtml">';
         $l[] = '<head>';
         $l[] = '<title>' . $this->_widget->getTitle() . '</title>';
@@ -56,7 +56,7 @@ abstract class Compiler_Desktop_W3c extends Compiler_Desktop
         foreach ($this->_getStylesheets() as $stylesheet) {
             $l[] = '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($stylesheet) . '"/>';
         }
-        
+
         $l[] = '</head>';
         $l[] = '<body>';
 
@@ -73,6 +73,10 @@ abstract class Compiler_Desktop_W3c extends Compiler_Desktop
         $l[] = '<script type="text/javascript">';
         $l[] = $this->_getScript();
         $l[] = '</script>';
+
+        if (isset($this->options['appendBody'])) {
+            $l[] = $this->options['appendBody'];
+        }
 
         $l[] = '</body>';
         $l[] = '</html>';
@@ -112,7 +116,6 @@ abstract class Compiler_Desktop_W3c extends Compiler_Desktop
         $l[] = "var id = window.widget ? widget.identifier : Math.round(Math.random() * 1000);";
         $l[] = "Environments[id] = new UWA.Environment();";
         $l[] = "Widgets[id] = Environments[id].getModule();";
-        $l[] = sprintf('Widgets[id].uwaUrl = %s;', Zend_Json::encode($this->_widget->getUrl()));
         $l[] = "UWA.script(Widgets[id]);";
         $l[] = "Environments[id].launchModule();";
 
