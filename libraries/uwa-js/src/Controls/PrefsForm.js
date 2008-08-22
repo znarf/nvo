@@ -80,7 +80,7 @@ UWA.Controls.PrefsForm.prototype.controls['password'] = function(pref) {
 }
 
 UWA.Controls.PrefsForm.prototype.controls['textarea'] = function(pref) {
-  var input = this.widget.createElement('textarea', {
+  var textarea = this.widget.createElement('textarea', {
     'id'   : 'm_' + this.widget.id + '_' + pref.name,
     'name' : pref.name
   }).setText( this.widget.getValue(pref.name) || '' );
