@@ -357,7 +357,10 @@ UWA.Widget.prototype = {
       if (pref.defaultvalue) {
         pref.defaultValue = pref.defaultvalue; // fix after xml parsing
       } 
-      this.data[pref.name] = this.getValue(pref.name) || pref.defaultValue || null;
+      this.data[pref.name] = this.getValue(pref.name);
+      if (this.data[pref.name] == null && pref.defaultValue) {
+        this.data[pref.name] = pref.defaultValue;
+      }
     }
   },
   
