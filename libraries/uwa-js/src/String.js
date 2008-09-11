@@ -249,3 +249,6 @@ UWA.merge(String.prototype, {
 
 // Timeline control use String.parseRelativeTime(string)
 String.parseRelativeTime = String.prototype.parseRelativeTime;
+
+// Avoid breaking an old example
+if (typeof String.highlight == 'undefined') { String.highlight = function(s) { return s } }
