@@ -214,23 +214,31 @@ UWA.merge(String.prototype, {
     
   */
   makeClickable: function() {
-    var lines = this.split("<br>");
-    for(var z=0; z<lines.length; z++){
-      var tmp = lines[z].split(" ");
-      for(var i=0; i<tmp.length; i++){
-        if(tmp[i].indexOf("www.")!=-1 && tmp[i].indexOf("http://")==-1 && tmp[i].indexOf("https://")==-1){
-          tmp[i] = "<a href='http://"+tmp[i]+"' target='_blank'>"+tmp[i]+"</a>";
-        } else if(tmp[i].indexOf("http://")!=-1 || tmp[i].indexOf("ftp://")!=-1 || tmp[i].indexOf("https://")!=-1){
-          tmp[i] = "<a href='"+tmp[i]+"' target='_blank'>"+tmp[i]+"</a>";
-        } else if(tmp[i].indexOf("@")>0){
-          tmp[i] = "<a href='mailto:"+tmp[i]+"' target='_blank'>"+tmp[i]+"</a>";
-        }
-        // remove trailing '.', '?', '!', ':' characters
-        tmp[i]  = tmp[i] .replace(/<a href='(.*?)[\.\!\?\:]' target='_blank'>(.*?)([\.\!\?\:])<\/a>/g, '<a href="$1" target="_blank">$2</a>$3');
+    var htmlCode = this;
+    
+    htmlCode = htmlCode.replace(/([\w]+:\/\/|www\.)[\w\d-_]+\.[\w\d-_:%&\?\/.=]+/gi, function(m, match1) {
+      var url = m;
+      var text = m;
+      var trail = '';
+      
+      var trailingChar = /(.*)([\.\!\?\:\=]$)/.exec(m);
+      if (trailingChar){
+        url   = trailingChar[1];
+        text  = url;
+        trail = trailingChar[2];
       }
-      lines[z] = tmp.join(" ");
-    }
-    return lines.join("<br>");
+      
+      if (match1 == 'www.'){
+        url = 'http://' + url;
+      }
+      
+      return text.link(url) + trail;
+    });
+    
+    // add link to mail address
+    htmlCode = htmlCode.replace(/([\w\.\+-]+@[\w\.-]+)/g, '<a href="mailto:$1" target="_blank">$1</a>');
+
+    return htmlCode;
   },
 
 /**
