@@ -45,7 +45,8 @@ UWA.extend(UWA.Environment.prototype, {
     this.html['edit']       = $('editContent');
     this.html['status']     = $('moduleStatus');
     this.html['editLink']   = $('editLink');
-    
+    this.html['icon']       = $('moduleIcon');
+
     for (var key in this.html) {
       this.widget.elements[key] = UWA.$element(this.html[key]);
     }
@@ -98,7 +99,12 @@ UWA.extend(UWA.Environment.prototype, {
   },
   
   setIcon: function(icon) {
-    this.sendRemote('setIcon', false, icon)
+    if (this.widget.elements['icon']) {
+        url = 'http://' + NV_HOST + '/proxy/favIcon.php?url=' + encodeURIComponent(icon);
+        this.widget.elements['icon'].setHTML('<img width="16" height="16" src="' + url + '" />');
+    } else {
+        this.sendRemote('setIcon', false, icon)
+    }
   },
   
   addStar: function(data) {
@@ -151,13 +157,6 @@ UWA.extend(UWA.Environment.prototype, {
       } else {
         this.widget.elements['editLink'].hide();
       }
-    }
-  },
-  
-  setIcon: function(url) {
-    if(this.widget.elements['icon']) {
-      var iconUrl = 'http://' + NV_HOST + NV_PATH + 'proxy/favIcon.php?url=' + encodeURIComponent(url);
-      this.widget.elements['icon'].innerHTML = '<img width="16" height="16" src="' + iconUrl + '" />';
     }
   },
   
