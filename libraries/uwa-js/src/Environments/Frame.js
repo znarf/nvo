@@ -116,12 +116,14 @@ UWA.extend(UWA.Environment.prototype, {
       return;
     }
     
-    // Calculate total widget height by adding widget body/header/status height
+    // Calculate total widget height by adding widget body/header/status/edit height
     // note: document.body.offsetHeight is wrong in IE6 as it always return the full windows/iframe height
     var height = parseInt(this.html['body'].offsetHeight);
-    height += (this.html['header']) ? this.html['header'].offsetHeight : 0;
-    height += (this.html['status']) ? this.html['status'].offsetHeight : 0;
-    
+    var html = this.html;
+    ['header', 'status', 'edit'].forEach(function(name){
+        height += (html[name]) ? html[name].offsetHeight : 0;
+    })
+
     if(height > 0 && height != this.prevHeight) {
       this.sendRemote('resizeHeight', false, height);
     }
