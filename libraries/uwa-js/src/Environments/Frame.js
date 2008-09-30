@@ -103,7 +103,7 @@ UWA.extend(UWA.Environment.prototype, {
         url = 'http://' + NV_HOST + '/proxy/favIcon.php?url=' + encodeURIComponent(icon);
         this.widget.elements['icon'].setHTML('<img width="16" height="16" src="' + url + '" />');
     } else {
-        this.sendRemote('setIcon', false, icon)
+        this.sendRemote('setIcon', false, icon);
     }
   },
   
