@@ -128,9 +128,9 @@ class Compiler_Google extends Compiler
 
         } else if ($this->options['type'] == 'url') {
 
-            $url = Zend_Registry::get('widgetEndpoint') . '/frame?uwaUrl=' . urlencode($this->_widget->getUrl());
+            $url = Zend_Registry::get('widgetEndpoint') . '/frame?platform=igoogle&uwaUrl=' . urlencode($this->_widget->getUrl());
 
-            $l[] = '<Content type="url" href="' . $url . '"></Content>';
+            $l[] = '<Content type="url" href="' . htmlspecialchars($url) . '"></Content>';
 
         }
 
