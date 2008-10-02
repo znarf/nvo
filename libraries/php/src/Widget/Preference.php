@@ -83,7 +83,7 @@ class Widget_Preference
         if (in_array((string) $type, array('text', 'password', 'boolean', 'hidden', 'range', 'list', 'color', 'textarea'))) {
             $this->_type = (string) $type;
         } else {
-            throw new Exception('Invalid Preference Type.');
+            $this->_type = 'text';
         }
     }
 
