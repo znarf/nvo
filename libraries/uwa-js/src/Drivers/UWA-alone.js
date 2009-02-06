@@ -22,10 +22,14 @@ License:
   along with Netvibes Widget Platform.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Shortcut for getElementById
+// Shortcut for getElementById AND extend element
 $ = function(el) {
   if (typeof el == 'string') {
     el = document.getElementById(el);
+  }
+  if (el && !el.isUwaExtended) {
+    UWA.merge(el, UWA.Element);
+    el.isUwaExtended = true;
   }
   return el;
 }
@@ -52,12 +56,7 @@ UWA.merge(document, {
 
 // Extend an Element with UWA element extensions
 UWA.extendElement = function(el) {
-  el = $(el);
-  if (el && !el.isUwaExtended) {
-    UWA.merge(el, UWA.Element);
-    el.isUwaExtended = true;
-  }
-  return el;
+  return $(el);
 }
 
 UWA.$element = UWA.extendElement;

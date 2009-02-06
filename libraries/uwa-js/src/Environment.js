@@ -144,6 +144,10 @@ UWA.Environment.prototype = {
     } else {
       var module = new UWA.Module();
       this.registerModule(module);
+      // create the instances array if not yet exists
+      if (typeof UWA.Widgets.instances == 'undefined') { UWA.Widgets.instances = []; }
+      // add the widget object to the instances list
+      UWA.Widgets.instances.push(module);
     }
     return module;
   },

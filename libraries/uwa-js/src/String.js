@@ -215,29 +215,21 @@ UWA.merge(String.prototype, {
   */
   makeClickable: function() {
     var htmlCode = this;
-    
-    htmlCode = htmlCode.replace(/([\w]+:\/\/|[\w]+:\/\/[\w\d-_:]+@|www\.)[\w\d-_]+[\.\/][\w\d-_:%&\?\/.=~;\+]+/gi, function(m, match1) {
-      var url = m;
+    // ( protocol (with optional auth) OR www. ) AND ( host )
+    htmlCode = htmlCode.replace(/((\w+:\/\/(\w+(:\w+)?@)?)|www\.)[^\s<$]+/g, function(m, match1) {
+	  var url = m.replace(/([\.!\?:;\)\]]$)/, '');
       var text = m;
-      var trail = '';
       
-      var trailingChar = /(.*)([\.!\?:=;]$)/.exec(m);
-      if (trailingChar){
-        url   = trailingChar[1];
-        text  = url;
-        trail = trailingChar[2];
-      }
-
-      if (match1 == 'www.'){
+      if (url.test(/^www./)){
         url = 'http://' + url;
       }
       
-      return '<a href="' + url + '" target="_blank">' + text + '</a>' + trail;
+      return '<a href="' + url + '" target="_blank">' + text + '</a>';
     });
     
     // add link to mail address
     // avoid links like http://bob@www.test.com to be considered as email
-    htmlCode = htmlCode.replace(/([\/:\w\.\+-]+@[\w\.-]+)/g, function(m, match1){
+    htmlCode = htmlCode.replace(/([\/:\w\+\_-]+(\.[\w\+\_-]+)*@[\w\.-]+)/g, function(m, match1){
         var str = m;
         if (!m.test(/^[\w]+:\/\//)){
             str = '<a href="mailto:' + m + '">' + m + '</a>';

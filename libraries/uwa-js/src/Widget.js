@@ -278,11 +278,8 @@ UWA.Widget.prototype = {
   setIcon: function(url, search) {
     if (this.environment.setIcon) {
       this.environment.setIcon(url, search);
-    } else {
-      if (this.elements['icon']) {
-        url = 'http://' + NV_HOST + '/proxy/favIcon.php?url=' + encodeURIComponent(url);
-        this.elements['icon'].setHTML('<img width="16" height="16" src="' + url + '" />');
-      }
+    } else if(this.elements['icon'] && search !== true) {
+      this.elements['icon'].setHTML('<img width="16" height="16" src="' + url + '" />');
     }
   },
   
@@ -406,7 +403,16 @@ UWA.Widget.prototype = {
     > ]);
   */
   setPreferences: function(schema) {
-    if(typeof schema == 'object') this.preferences = schema;
+    if (typeof schema == 'object') {
+        this.preferences = schema;
+        for (var i = 0, l = this.preferences.length; i < l; i++) {
+            var name = this.preferences[i].name;
+            var defaultValue = this.preferences[i].defaultValue;
+            if (defaultValue && !this.getValue(name)) {
+                this.setValue(name, defaultValue);
+            }
+        }
+    }
     this.callback('onUpdatePreferences');
   },
   

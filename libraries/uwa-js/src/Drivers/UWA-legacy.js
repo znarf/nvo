@@ -82,6 +82,17 @@ UWA.merge(UWA.Element, {
         this.addEvent(key, events[key]);
     }
     return this;
+  },
+  
+  removeEvent: function(type, fn) {
+    return this.removeListener(type, fn);
+  },
+  
+  removeEvents: function(events) {
+    for (key in events) {
+        this.removeEvent(key, events[key]);
+    }
+    return this;
   }
   
 });
@@ -115,5 +126,17 @@ UWA.merge(Event, {
     while (element.parentNode && (!element.tagName || (element.tagName.toUpperCase() != tagName.toUpperCase())))
       element = element.parentNode;
     return element;
+  },
+  stop: function(e){
+    Event.stopPropagation(e)
+    Event.preventDefault(e);
+  },
+  stopPropagation: function(e){
+    if (e.stopPropagation) e.stopPropagation();
+    else e.cancelBubble = true;
+  },
+  preventDefault: function(e){
+    if (e.preventDefault) e.preventDefault();
+    else e.returnValue = false;
   }
 });
