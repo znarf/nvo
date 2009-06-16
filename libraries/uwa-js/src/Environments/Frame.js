@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -29,15 +29,17 @@ UWA.merge(document, {
   'addListener': UWA.Element.addListener
 });
 
+UWA.Data.useJsonRequest = true;
+
 UWA.extend(UWA.Environment.prototype, {
-  
+
   initialize: function() {
     this.generic = { 'inline':false, 'iframed':true };
     this.initCommunication();
   },
-  
+
   onRegisterModule: function(module) {
-    
+
     this.html['body']       = $('moduleContent');
     this.html['header']     = $('moduleHeader');
     this.html['title']      = $('moduleTitle');
@@ -49,19 +51,19 @@ UWA.extend(UWA.Environment.prototype, {
     for (var key in this.html) {
       this.widget.elements[key] = UWA.$element(this.html[key]);
     }
-    
+
     this.widget.body = this.widget.elements['body']; // shortcut
-    
+
     if (this.html['editLink']) {
       this.html['editLink'].onclick = function() {
         Environment.callback('toggleEdit');
         return false;
       };
     }
-    
+
     this.setPeriodical('handleResizePeriodical', this.handleResize, 250);
   },
-  
+
   toggleEdit: function() {
     if (widget.elements['edit'].style.display == 'none') {
       widget.callback('onEdit');
@@ -71,32 +73,32 @@ UWA.extend(UWA.Environment.prototype, {
       widget.elements['editLink'].setHTML( _("Edit") );
     }
   },
-    
+
   getData: function(name) {
     if (this.data[name]) return this.data[name];
     return undefined;
   },
-  
+
   setData: function(name, value) {
     if (this.data[name] != value) {
       this.data[name] = value;
       this.sendRemote('setValue', name, value);
     }
   },
-  
+
   deleteData: function(name) {
     delete this.data[name];
     this.sendRemote('deleteValue', name);
   },
-  
+
   setUnreadCount: function(count) {
     this.sendRemote('setUnreadCount', false, count);
   },
-  
+
   setTitle: function(title) {
     this.sendRemote('setTitle', false, title);
   },
-  
+
   setIcon: function(icon) {
     if (this.widget.elements['icon']) {
         url = 'http://' + NV_HOST + '/proxy/favIcon.php?url=' + encodeURIComponent(icon);
@@ -105,22 +107,22 @@ UWA.extend(UWA.Environment.prototype, {
         this.sendRemote('setIcon', false, icon);
     }
   },
-  
+
   addStar: function(data) {
     this.sendRemote('addStar', false, UWA.Json.encode(data));
   },
-  
+
   setSearchResultCount: function(count) {
     this.sendRemote('setSearchResultCount', false, count);
   },
-  
+
   handleResize: function() {
     if(typeof this.widget.body == "undefined") {
       this.widget.log('widget.body is not defined : widget #' + this.widget.id + '');
       this.widget.log(this.widget.body);
       return;
     }
-    
+
     // Calculate total widget height by adding widget body/header/status/edit height
     // note: document.body.offsetHeight is wrong in IE6 as it always return the full windows/iframe height
     var height = parseInt(this.html['body'].offsetHeight);
@@ -134,18 +136,18 @@ UWA.extend(UWA.Environment.prototype, {
     }
     this.prevHeight = height;
   },
-  
+
   handleLinks: function() {
     var links = this.widget.body.getElementsByTagName('a');
     for (var i = 0, lnk; lnk = links[i]; i++) {
       lnk.target = '_blank'; // problem with javascript void(0) links
     }
   },
-  
+
   onUpdateBody: function() {
     this.setDelayed('handleLinks', this.handleLinks, 100);
   },
-  
+
   onUpdatePreferences: function() {
     if (this.widget.elements['editLink']) {
       var editable = this.widget.preferences.some(function(pref){
@@ -158,7 +160,7 @@ UWA.extend(UWA.Environment.prototype, {
       }
     }
   },
-  
+
   initCommunication: function() {
     // Choose the best cross-domain messaging mechanism
     this.communicationType = 'proxy';
@@ -211,7 +213,7 @@ UWA.extend(UWA.Environment.prototype, {
       }
     }
   },
-  
+
   sendRemote: function(action, name, value) {
     if (this.widget.id == '') {
       UWA.log(action);
@@ -258,7 +260,7 @@ UWA.extend(UWA.Environment.prototype, {
       }
       return;
   },
-  
+
   // this method was created because removeListener needs a function
   // as second parameter in IE, it's used in sendRemoteUsingProxy method
   iframeDiscard: function(iframe){
@@ -267,7 +269,7 @@ UWA.extend(UWA.Environment.prototype, {
       document.body.removeChild(iframe);
     }, 500);
   },
-  
+
   sendRemoteUsingProxy: function (proxy, target, message) {
     // Create a new hidden iframe
     var iframe = this.widget.createElement('iframe');
@@ -295,8 +297,8 @@ UWA.extend(UWA.Environment.prototype, {
     document.body.appendChild(iframe);
 
     // Public interface notice
-    this.publicInterface(message.action, message.name, message.value); 
-  } 
+    this.publicInterface(message.action, message.name, message.value);
+  }
 });
 
 var Environment = new UWA.Environment();

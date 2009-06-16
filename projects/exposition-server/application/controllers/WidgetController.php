@@ -2,17 +2,17 @@
 /**
  * Copyright Netvibes 2006-2009.
  * This file is part of Exposition PHP Server.
- * 
+ *
  * Exposition PHP Server is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Exposition PHP Server is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -171,7 +171,7 @@ class WidgetController extends Zend_Controller_Action
             ->setHeader('Content-Type', 'text/html')
             ->appendBody($content);
     }
-    
+
     private function _getFrameOptions()
     {
         $options = array( 'data' => array(), 'properties' => array() );
@@ -208,7 +208,7 @@ class WidgetController extends Zend_Controller_Action
         foreach ($_GET as $name => $value) {
             if (substr($name, 0, 4) == 'upt_') {
                 continue;
-            } 
+            }
             if (substr($name, 0, 3) == 'up_') {
                 $name = substr($name, 3);
                 // Fix a problem when displaying the default webnote of netvibes for example
@@ -255,6 +255,24 @@ class WidgetController extends Zend_Controller_Action
     }
 
     /**
+     * Renders the widget as an Screenlets package for Gnome.
+     */
+    public function screenletsAction()
+    {
+        $compiler = Compiler_Factory::getCompiler('Screenlets', $this->_widget);
+        $options = array(
+            'appendBody' => $this->getRequest()->getUserParam('appendBody')
+        );
+        $compiler->setOptions($options);
+        $content = $compiler->getFileContent();
+        $this->getResponse()
+            ->setHeader('Pragma', 'public')
+            ->setHeader('Content-Type', $compiler->getFileMimeType())
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
+    }
+
+    /**
      * Renders the widget as an Opera package.
      */
     public function operaAction()
@@ -272,7 +290,7 @@ class WidgetController extends Zend_Controller_Action
             ->setHeader('Content-Disposition', 'filename="' . $compiler->getFileName() . '"')
             ->appendBody($content);
     }
-    
+
     /**
      * Renders the widget as a Microsoft live.com gadget manifest.
      */
