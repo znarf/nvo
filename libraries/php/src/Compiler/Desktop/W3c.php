@@ -25,7 +25,6 @@ require_once 'Compiler/Desktop.php';
  */
 abstract class Compiler_Desktop_W3c extends Compiler_Desktop
 {
-
     /**
      * Extension.
      *

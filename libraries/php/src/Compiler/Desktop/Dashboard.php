@@ -2,17 +2,17 @@
 /**
  * Copyright Netvibes 2006-2009.
  * This file is part of Exposition PHP Lib.
- * 
+ *
  * Exposition PHP Lib is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Exposition PHP Lib is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with Exposition PHP Lib.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -59,7 +59,7 @@ final class Compiler_Desktop_Dashboard extends Compiler_Desktop_W3c
      * @var string
      */
     protected $_platform = 'dashboard';
-       
+
     /**
      * Extension.
      *
@@ -85,9 +85,9 @@ final class Compiler_Desktop_Dashboard extends Compiler_Desktop_W3c
             $this->addDistantFileToZip($richIcon, $dirname . 'Icon.png');
         }
 
-        $this->_zip->addFromString($dirname . 'index.html', $this->getHtml() );
+        $this->addFileFromStringToZip($dirname . 'index.html', $this->getHtml() );
 
-        $this->_zip->addFromString($dirname . 'Info.plist', $this->_getXmlManifest() );
+        $this->addFileFromStringToZip($dirname . 'Info.plist', $this->_getXmlManifest() );
     }
 
     protected function _getXmlManifest()
