@@ -144,38 +144,68 @@ final class Compiler_Desktop_Screenlets extends Compiler_Desktop
 # Author: {widgetAuthor}
 
 import screenlets
-from screenlets.options import StringOption
+from screenlets import sensors
+from screenlets import DefaultMenuItem
+from screenlets.options import BoolOption, IntOption, ColorOption, StringOption
 import cairo
 import gtk
+import gobject
+import commands
 import sys
 import os
-import commands
 from os import system
+from screenlets import sensors
 
-#########WORKARROUND FOR GTKOZEMBED BUG################
+#########WORKARROUND FOR GTKOZEMBED BUG BY WHISE################
+myfile = '{widgetClassName}Screenlet.py'
+mypath = sys.argv[0][:sys.argv[0].find(myfile)].strip()
 
-if sys.argv[0].endswith('{widgetClassName}Screenlet.py'):
-	if commands.getoutput("lsb_release -is") == 'Ubuntu':
-		mypath = sys.argv[0][:sys.argv[0].find('{widgetClassName}Screenlet.py')].strip()
-		if os.path.isfile('/tmp/screenlets/WidgetRunning'):
-			os.system("rm -f /tmp/screenlets/WidgetRunning")
+if sys.argv[0].endswith(myfile): # Makes Shure its not the manager running...
+		# First workarround
+		c = None
+		workarround =  "python "+ sys.argv[0] + " &"
+		a = str(commands.getoutput('whereis firefox')).replace('firefox: ','').split(' ')
+		for b in a:
+			if os.path.isfile(b + '/run-mozilla.sh'):
+				c = b + '/run-mozilla.sh'
+				workarround = c + " " + sys.argv[0] + " &"
+
+
+		if c == None:
+			# Second workarround
+			print 'First workarround didnt work let run a second manual workarround'
+			if str(sensors.sys_get_distrib_name()).lower().find('ubuntu') != -1: # Works for ubuntu 32
+				workarround = "export LD_LIBRARY_PATH=/usr/lib/firefox \\n export MOZILLA_FIVE_HOME=/usr/lib/firefox \\n python "+ sys.argv[0] + " &"
+			elif str(sensors.sys_get_distrib_name()).lower().find('debian') != -1: # Works for debian 32 with iceweasel installed
+				workarround = "export LD_LIBRARY_PATH=/usr/lib/iceweasel \\n export MOZILLA_FIVE_HOME=/usr/lib/iceweasel \\n python " + sys.argv[0] + " &"
+			elif str(sensors.sys_get_distrib_name()).lower().find('suse') != -1: # Works for suse 32 with seamonkey installed
+				workarround = "export LD_LIBRARY_PATH=/usr/lib/seamonkey \\n export MOZILLA_FIVE_HOME=/usr/lib/seamonkey \\n python "+ sys.argv[0] + " &"
+				print 'Your running suse , make shure you have seamonkey installed'
+			elif str(sensors.sys_get_distrib_name()).lower().find('fedora') != -1: # Works for fedora 32 with seamonkey installed
+				workarround = "export LD_LIBRARY_PATH=/usr/lib/seamonkey \\n export MOZILLA_FIVE_HOME=/usr/lib/seamonkey \\n python "+ sys.argv[0] + " &"
+				print 'Your running fedora , make shure you have seamonkey installed'
+
+
+		if os.path.isfile("/tmp/"+ myfile+"running"):
+			os.system("rm -f " + "/tmp/"+ myfile+"running")
 
 		else:
-			os.system ("export LD_LIBRARY_PATH=/usr/lib/firefox \\n export MOZILLA_FIVE_HOME=/usr/lib/firefox \\n python  "+ sys.argv[0] + " &")
-			fileObj = open('/tmp/screenlets/WidgetRunning',"w") #// open for for write
+			if workarround == "python "+ sys.argv[0] + " &":
+				print 'No workarround will be applied to your system, this screenlet will probably not work properly'
+			os.system (workarround)
+			fileObj = open("/tmp/"+ myfile+"running","w") #// open for for write
 			fileObj.write('gtkmozembed bug workarround')
 
 			fileObj.close()
-			exit()
+			sys.exit()
 else:
 	pass
 try:
 	import gtkmozembed
 except:
-	print 'You dont have gtkmozembed , please install python gnome extras'
-
-
-######################################################
+	if sys.argv[0].endswith(myfile):screenlets.show_error(None,"You need Gtkmozembed to run this Screenlet, please install \"python-gnome2-extras\" package.")
+	else: print "You need Gtkmozembed to run this Screenlet, please install \"python-gnome2-extras\" package."
+#########WORKARROUND FOR GTKOZEMBED BUG BY WHISE################
 
 class {widgetClassName}Screenlet (screenlets.Screenlet):
 
