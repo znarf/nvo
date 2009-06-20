@@ -54,16 +54,6 @@ final class Compiler_Desktop_Screenlets extends Compiler_Desktop
     protected $_platform = 'frame';
 
     /**
-     * Compiler Options.
-     *
-     * @var string
-     */
-    protected $_platformOptions = array(
-        'displayHeader'  => 1,
-        'displayStatus'  => 1,
-    );
-
-    /**
      * Extension.
      *
      * @var string
@@ -107,7 +97,16 @@ final class Compiler_Desktop_Screenlets extends Compiler_Desktop
     protected function getHtml()
     {
         $compiler = Compiler_Factory::getCompiler($this->_platform, $this->_widget);
-        $compiler->setOptions($this->_platformOptions);
+
+        $options = array(
+            'displayHeader' => 1,
+            'displayStatus' => 1,
+            'properties'    => array(
+                'id' => time(),
+            ),
+        );
+
+        $compiler->setOptions($options);
 
         return $compiler->render();
     }
