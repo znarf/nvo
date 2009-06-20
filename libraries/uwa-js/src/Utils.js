@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -22,7 +22,7 @@ Library: UWA Utils
 */
 
 UWA.Utils = {
-  
+
   /* only used in /modules/uwa/uwa2.js */
   buildUrl: function (moduleUrl, linkHref) {
         var first_split = moduleUrl.split("://");
@@ -48,36 +48,36 @@ UWA.Utils = {
       new App.toolTip(element, text, width, "left");
     return false;
   },
-  
+
   /* used in /js/UWA/Widget.js & /modules/uwa/uwa2.js */
   setCss: function(id, content, namespace) {
-    
+
     if (typeof namespace == 'undefined') {
       var namespace = ( id && id != '' ? '#m_' + id : '');
     }
-    
+
     var cssId = 'css_' + id;
-    
+
     if (!$(cssId)) {
       var css = document.createElement("style");
       css.setAttribute('id', cssId);
       css.setAttribute('type','text/css');
       var head = document.getElementsByTagName('head').item(0);
       head.appendChild(css);
-    } 
-    
+    }
+
     content = "\n" + content + "\n"; // fix a problem with the final regexp
     content = content.replace(/,/g, ",\n"); // fix a problem with the final regexp
     content = content.replace(/#moduleContent/g, ''); // remove namespace (Netvibes - not documented)
     content = content.replace(/#container/g, ''); // remove namespace (WZD)
     content = content.replace(/\n\s*([a-zA-z0-9\.\-, :#]*)\s*([{|,])/g, "\n" + namespace + " $1$2");
-    
+
     if ($(cssId).styleSheet){ // IE
       $(cssId).styleSheet.cssText = content;
     } else { // w3c
       $(cssId).appendChild( document.createTextNode(content) );
     }
-    
+
   }
-  
+
 }

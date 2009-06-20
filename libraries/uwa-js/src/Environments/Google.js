@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -94,21 +94,21 @@ UWA.extend(UWA.Environment.prototype, {
 } );
 
 UWA.Data.request = function(url, request) {
-  
+
   var callback = request.onComplete;
-  
+
   if (UWA.proxies[request.proxy]) {
     if (request.proxy == 'feed') {
       url = UWA.proxies[request.proxy] + '?url=' + encodeURIComponent(url) + "&rss=1";
     }
   }
-  
+
   var method = request.method || 'get';
-  
+
   var params = {
     'METHOD' : method.toUpperCase()
   }
-  
+
   if (request.postBody) {
     params.POST_DATA = request.postBody;
     delete request.postBody;
@@ -116,7 +116,7 @@ UWA.Data.request = function(url, request) {
     params.POST_DATA = request.parameters;
     delete request.parameters;
   }
-  
+
   switch (request.type) {
     case 'feed':
     case 'json':

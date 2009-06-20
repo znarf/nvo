@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -87,7 +87,7 @@ License:
   along with Netvibes Widget Platform.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* Method: extend 
+/* Method: extend
 
 Copies all the properties from the second passed object to the first passed Object.
 
@@ -106,7 +106,7 @@ UWA.extend = function(original, extended) {
     return original;
 }
 
-/* Method: merge 
+/* Method: merge
 
 Copies the properties from the second passed object to the first passed Object if it not exists already.
 
@@ -119,7 +119,7 @@ UWA.merge = function() {
     return arguments[0];
 }
 
-/* Method: log 
+/* Method: log
 
 Log a message to a console, if one available.
 

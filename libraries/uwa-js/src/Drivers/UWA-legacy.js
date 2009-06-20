@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -50,7 +50,7 @@ Element = function(tagName, options) {
 }
 
 UWA.merge(UWA.Element, {
-  
+
   setAttributes: function(properties) {
     UWA.log('warning el.setAttributes : partially implemented');
     for (key in properties) {
@@ -58,7 +58,7 @@ UWA.merge(UWA.Element, {
     }
     return this;
   },
-  
+
   getElements: function(selector) {
     UWA.log('warning el.getElements("' + selector + '") : partially implemented');
     // if string without spaces ->
@@ -66,34 +66,34 @@ UWA.merge(UWA.Element, {
     // if string starting with a . ->
     // return this.getElementsByClassName(selector);
   },
-  
+
   getElement: function(selector) {
     UWA.log('warning el.getElement("' + selector + '") : partially implemented');
     return this.getElements(selector)[0];
   },
-  
+
   addEvent: function(type, fn) {
     return this.addListener(type, fn);
   },
-  
+
   addEvents: function(events) {
     for (key in events) {
         this.addEvent(key, events[key]);
     }
     return this;
   },
-  
+
   removeEvent: function(type, fn) {
     return this.removeListener(type, fn);
   },
-  
+
   removeEvents: function(events) {
     for (key in events) {
         this.removeEvent(key, events[key]);
     }
     return this;
   }
-  
+
 });
 
 UWA.merge(Element, {

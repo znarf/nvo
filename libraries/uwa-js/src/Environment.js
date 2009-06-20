@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -37,7 +37,7 @@ UWA.Environment = function() {
   /* Property: html
 
   *Object*: HTML Dom elements related to this environnement
-  
+
   Common Elements are 'title', 'edit', 'body' & 'icon'
   */
   this.html = {};
@@ -69,7 +69,7 @@ UWA.Environment = function() {
 
   /* Property: debugMode
 
-  *Boolean*: activates or desactivates the debug mode for the widget. 
+  *Boolean*: activates or desactivates the debug mode for the widget.
 
   The default value is TRUE. When TRUE, messages written with <log> method will appear in the console.
   */
@@ -77,7 +77,7 @@ UWA.Environment = function() {
 
   /* Property: periodicals
 
-  *Object*: Stores environment's periodical events. 
+  *Object*: Stores environment's periodical events.
 
   The object is initially empty. It is filled by the <setPeriodical> method.
   */
@@ -85,7 +85,7 @@ UWA.Environment = function() {
 
   /* Property: delays
 
-  *Object*: Stores environment's delayed events. 
+  *Object*: Stores environment's delayed events.
 
   The object is initially empty. It is filled by the <setDelayed> method.
   */
@@ -107,14 +107,14 @@ UWA.Environment = function() {
 }
 
 UWA.Environment.prototype = {
-  
+
   /* Method: init
 
   Initialize the Environment, when DOM is ready
 
   Parameters:
   * None.
-  */ 
+  */
   init: function() {
     if (document.body) {
       this.callback('onInit');
@@ -128,7 +128,7 @@ UWA.Environment.prototype = {
 
   /* Method: getModule
 
-  Returns the widget (= module) currently registered in the Environment. 
+  Returns the widget (= module) currently registered in the Environment.
   If no widget is registered, the Environment creates one and registers it.
 
   Parameters:
@@ -136,7 +136,7 @@ UWA.Environment.prototype = {
 
   Returns:
   * Widget: the (maybe newly created) registered widget.
-  */ 
+  */
   getModule: function() {
     if (this.module) {
       var module = this.module;
@@ -160,7 +160,7 @@ UWA.Environment.prototype = {
 
   Returns:
   * Nothing.
-  */ 
+  */
   registerModule: function(module) {
     this.module = module;
     this.widget = this.module;
@@ -178,7 +178,7 @@ UWA.Environment.prototype = {
   /* Method: launchModule
 
   Launch the registered widget by fire the widget.launch method.
-  
+
   If needed, wait until the environment is fully loaded and a widget registered.
 
   Parameters:
@@ -209,11 +209,11 @@ UWA.Environment.prototype = {
 
   Parameters:
     * String name: the callback name (e.g. "onUpdateTitle");
-    * Object args: one optional argument 
+    * Object args: one optional argument
     * Object: an object to bind the callback to
 
   Returns:
-    * Nothing, but calls the method associated with the given callback name (key) 
+    * Nothing, but calls the method associated with the given callback name (key)
   */
   callback: function(name, args, bind) {
     if (typeof bind == 'undefined') bind = this;
@@ -226,7 +226,7 @@ UWA.Environment.prototype = {
     return false;
   },
 
-  /* Method: setPeriodical 
+  /* Method: setPeriodical
 
   Register a function as periodical event.
 
@@ -249,7 +249,7 @@ UWA.Environment.prototype = {
     if (force) fn();
   },
 
-  /* Method: clearPeriodical 
+  /* Method: clearPeriodical
 
   Unregister a periodical event previously registered with <setPeriodical>
 
@@ -264,7 +264,7 @@ UWA.Environment.prototype = {
     if (this.periodicals[name]) { clearInterval(this.periodicals[name]) }
   },
 
-  /* Method: setDelayed 
+  /* Method: setDelayed
 
   Registers a function as delayed event.
 
@@ -286,7 +286,7 @@ UWA.Environment.prototype = {
     this.delays[name] = setTimeout(fn, delay);
   },
 
-  /* Method: clearDelayed 
+  /* Method: clearDelayed
 
   Unregister a delayed event previously registered with <setDelayed>
 
@@ -302,7 +302,7 @@ UWA.Environment.prototype = {
   },
 
   /* Method: log
-  
+
   Logs environment's messages in the console, if one exists and if the <debugMode> is true.
   It is using <UWA.log> which usually works with Firebug, Safari and Opera.
 

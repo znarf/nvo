@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -38,10 +38,10 @@ Netvibes.UWA.Live = function(p_elSource, p_args, p_namespace) {
 
   // initialize is always called immediately after the object is instantiated
   this.initialize = function(p_objScope) {
-      
+
       // always call the base object's initialize first
       Netvibes.UWA.Live.getBaseMethod(this, "initialize", "Web.Bindings.Base").call(this, p_objScope);
-      
+
       this.environment = Environment = new UWA.Environment();
       this.environment.liveObject = this;
       this.environment.callback('buildSkeleton');

@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -62,16 +62,16 @@ UWA.$element = UWA.extendElement;
 
 // Element builder
 UWA.createElement = function(tagName, options){
-  var el = UWA.extendElement( document.createElement(tagName) ); 
+  var el = UWA.extendElement( document.createElement(tagName) );
   if (typeof options == 'string') {
     UWA.log('widget.createElement : elName as 2nd argument is deprecated');
     this.elements[options] = el;
   } else if (typeof options == "object") {
-    for (var name in options) { 
-     var option = options[name]; 
-     switch(name) { 
-       case 'styles': 
-         el.setStyle(option); 
+    for (var name in options) {
+     var option = options[name];
+     switch(name) {
+       case 'styles':
+         el.setStyle(option);
          break;
        case 'attributes':
          el.setAttributes(option);
@@ -84,12 +84,12 @@ UWA.createElement = function(tagName, options){
          break;
        case 'events':
          el.addEvents(option);
-         break; 
+         break;
        default:
-         el.setAttribute(name, option); 
-     } 
-   } 
- } 
+         el.setAttribute(name, option);
+     }
+   }
+ }
  return el;
 }
 
@@ -101,7 +101,7 @@ UWA.Form = {
     }
     return resultArray;
   },
-    
+
   getElements: function(form) {
     var inputArray = UWA.Form.collectionToArray($(form).getElementsByTagName('input'));
     var selectArray = UWA.Form.collectionToArray($(form).getElementsByTagName('select'));
@@ -157,7 +157,7 @@ UWA.Ajax = {
   },
   onCompleteFeed: function(arg, callback, context) {
     var response = {responseText: arg[0], responseXML: arg[1]};
-    if (typeof UWA.Utils.parseFeed == 'function') { 
+    if (typeof UWA.Utils.parseFeed == 'function') {
       response = UWA.Utils.parseFeed(response);
     }
     else {
@@ -179,15 +179,15 @@ UWA.Ajax = {
 if (typeof UWA.Element == "undefined") UWA.Element = {};
 
 UWA.merge(UWA.Element, {
-  
+
   getElementById: function(id) {
     return document.getElementById(id);
   },
-  
+
   getElementsByClassName: function(className) {
     return document.getElementsByClassName(className, this);
   }
-  
+
 });
 
 // Function extensions
@@ -200,7 +200,7 @@ UWA.merge(Function.prototype, {
       return __method.apply(object, args.concat($A(arguments)));
     }
   },
-  
+
   bindAsEventListener: function() {
     var __method = this, args = $A(arguments), object = args.shift();
     return function(event) {

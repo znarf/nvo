@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -33,7 +33,7 @@ Credits:
 
 UWA.merge(String.prototype, {
 
-  /* Method: stripTags 
+  /* Method: stripTags
 
   Strips a string of any HTML tag.
 
@@ -45,7 +45,7 @@ UWA.merge(String.prototype, {
     return this.replace(/<\/?[^>]+>/gi, '');
   },
 
-  /* Method: truncate 
+  /* Method: truncate
 
   Truncates a string to the given length and appends a suffix to it (indicating that it is only an excerpt).
 
@@ -63,7 +63,7 @@ UWA.merge(String.prototype, {
       this.slice(0, length - truncation.length) + truncation : String(this);
   },
 
-  /* Method: escapeRegExp 
+  /* Method: escapeRegExp
 
   Returns string with escaped regular expression characters
 
@@ -78,7 +78,7 @@ UWA.merge(String.prototype, {
     return this.replace(/([.*+?^${}()|[\]\/\\])/g, '\\$1');
   },
 
-  /* Method: trim 
+  /* Method: trim
 
   Trims the leading and trailing spaces off a string.
 
@@ -109,7 +109,7 @@ UWA.merge(String.prototype, {
   /* Method: s
 
   Not documented
-    
+
   Notes:
     needed for compatibility with various Netvibes native widget
 
@@ -128,11 +128,11 @@ UWA.merge(String.prototype, {
     }
     return str;
   },
-  
+
   /* Method: format
 
   Not documented
-    
+
   Notes:
     needed for compatibility with various Netvibes native widget (new format)
 
@@ -143,7 +143,7 @@ UWA.merge(String.prototype, {
       return args[i];
     });
   },
-    
+
   /* Method: parseRelativeTime
 
   Not documented
@@ -180,24 +180,24 @@ UWA.merge(String.prototype, {
   },
 
   /* Method: contains
-  
+
   Not documented
 
   Notes:
     used in el.hasClassName implementation in Element.js
-    
+
   */
   contains: function(string, separator) {
     return (separator) ? (separator + this + separator).indexOf(separator + string + separator) > -1 : this.indexOf(string) > -1;
   },
 
   /* Method: camelCase
-  
+
   Not documented
 
   Notes:
     used in el.setStyle implementation in Element.js
-    
+
   */
   camelCase: function() {
     return this.replace(/-\D/g, function(match) {
@@ -206,12 +206,12 @@ UWA.merge(String.prototype, {
   },
 
   /* Method: makeClickable
-  
+
   Not documented
 
   Notes:
     needed for compatibility with various Netvibes native widget
-    
+
   */
   makeClickable: function() {
     var htmlCode = this;
@@ -219,21 +219,21 @@ UWA.merge(String.prototype, {
     htmlCode = htmlCode.replace(/((\w+:\/\/(\w+(:\w+)?@)?)|www\.)[^\s<$]+/g, function(m, match1) {
 	  var url = m.replace(/([\.!\?:;\)\]]$)/, '');
       var text = m;
-      
+
       if (url.test(/^www./)){
         url = 'http://' + url;
       }
-      
+
       return '<a href="' + url + '" target="_blank">' + text + '</a>';
     });
-    
+
     // add link to mail address
     // avoid links like http://bob@www.test.com to be considered as email
     htmlCode = htmlCode.replace(/([\/:\w\+\_-]+(\.[\w\+\_-]+)*@[\w\.-]+)/g, function(m, match1){
         var str = m;
         if (!m.test(/^[\w]+:\/\//)){
             str = '<a href="mailto:' + m + '">' + m + '</a>';
-        } 
+        }
         return str;
     });
 
@@ -251,7 +251,7 @@ UWA.merge(String.prototype, {
     div.innerHTML = this.stripTags();
     return div.childNodes[0] ? div.childNodes[0].nodeValue : '';
   }
-    
+
 });
 
 // Timeline control use String.parseRelativeTime(string)

@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -25,19 +25,19 @@ UWA.extend(UWA.Environment.prototype, {
   },
 
   onRegisterModule: function(module) {
-    
+
     this.html['body']       = $('moduleContent');
     this.html['status']     = $('moduleStatus');
-    
+
     for (var key in this.html) {
       this.widget.elements[key] = UWA.extendElement(this.html[key]);
     }
-    
+
     this.widget.body = this.widget.elements['body'];
 
     this.setPeriodical('handleResizePeriodical', this.handleResize, 250);
   },
-  
+
   getData: function(name) {
     if (this.prefs) {
       var value = this.prefs.getString(name);
@@ -82,7 +82,7 @@ UWA.extend(UWA.Environment.prototype, {
     title = title.stripTags();
     if (window._IG_SetTitle) _IG_SetTitle(title);
   },
-  
+
   onUpdatePreferences: function() {
     // fix boolean
     for (var i = 0 ; i < widget.preferences.length; i++) {

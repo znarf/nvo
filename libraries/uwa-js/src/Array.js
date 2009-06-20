@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -32,7 +32,7 @@ Credits:
 
 UWA.merge(Array.prototype, {
 
-  /* Method: forEach 
+  /* Method: forEach
 
   Executes a provided function once per array element.
 
@@ -46,7 +46,7 @@ UWA.merge(Array.prototype, {
     for (var i = 0, j = this.length; i < j; i++) fn.call(bind, this[i], i, this);
   },
 
-  /* Method: filter 
+  /* Method: filter
 
   Creates a new array with all elements that pass the test implemented by the provided function.
 
@@ -64,7 +64,7 @@ UWA.merge(Array.prototype, {
     return results;
   },
 
-  /* Method: map 
+  /* Method: map
 
   Creates a new array with the results of calling a provided function on every element in this array.
 
@@ -80,7 +80,7 @@ UWA.merge(Array.prototype, {
     return results;
   },
 
-  /* Method: every 
+  /* Method: every
 
   Tests whether all elements in the array pass the test implemented by the provided function.
 
@@ -97,7 +97,7 @@ UWA.merge(Array.prototype, {
     return true;
   },
 
-  /* Method: some 
+  /* Method: some
 
   Tests whether some element in the array passes the test implemented by the provided function.
 
@@ -114,7 +114,7 @@ UWA.merge(Array.prototype, {
     return false;
   },
 
-  /* Method: indexOf 
+  /* Method: indexOf
 
   Returns the first index at which a given element can be found in the array, or -1 if it is not present.
 

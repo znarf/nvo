@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -98,9 +98,9 @@ UWA.extend(UWA.Environment.prototype, {
     this.widget.elements['body'].hide();
     this.widget.elements['edit'].show();
     this.widget.elements['editLink'].hide();
-    
+
     this.widget.callback('onShowEdit', this.widget.elements['edit']);
-    
+
     if (window.widget) {
       setTimeout("window.widget.performTransition()", 0);
     }
@@ -111,12 +111,12 @@ UWA.extend(UWA.Environment.prototype, {
 
     if (this.prefsForm) {
       this.prefsForm.saveValues();
-    } 
+    }
 
     if (window.widget) {
       this.html['editLink'].show();
       // freezes the widget so that you can change it without the user noticing
-      window.widget.prepareForTransition("ToFront");   
+      window.widget.prepareForTransition("ToFront");
     }
 
     this.widget.elements['body'].show();
@@ -126,7 +126,7 @@ UWA.extend(UWA.Environment.prototype, {
       this.widget.onRefresh();
     } else if (this.widget.onLoad) {
       this.widget.onLoad();
-    } 
+    }
 
     // and flip the widget over
     if (window.widget) {
@@ -186,7 +186,7 @@ UWA.extend(UWA.Environment.prototype, {
       return window.widget.openURL(url);
     } else {
       return window.open(url);
-    } 
+    }
   }
 
 } );

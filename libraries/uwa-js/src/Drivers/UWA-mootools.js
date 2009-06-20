@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -64,7 +64,7 @@ UWA.Ajax = {
   },
   onCompleteFeed: function(arg, callback, context) {
     var response = {responseText: arg[0], responseXML: arg[1]};
-    if (typeof UWA.Utils.parseFeed == 'function') { 
+    if (typeof UWA.Utils.parseFeed == 'function') {
       response = UWA.Utils.parseFeed(response);
     }
     else {
@@ -81,7 +81,7 @@ UWA.Ajax = {
     }
   }
 }
-  
+
 UWA.createElement = function(tagName, options){
   return UWA.$element( new Element(tagName, options) );
 }
@@ -103,11 +103,11 @@ UWA.$element = UWA.extendElement;
 if (typeof UWA.Element == "undefined") UWA.Element = {};
 
 UWA.extend(UWA.Element, {
-  
+
   setAttributes: function(properties) {
      return this.setProperties(properties);
   }
-  
+
 });
 
 if (typeof UWA.Json == "undefined") UWA.Json = {};
