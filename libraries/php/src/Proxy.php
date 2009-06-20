@@ -101,6 +101,13 @@ class Proxy
     );
 
     /**
+     * Default Mine Type.
+     *
+     * @var string
+     */
+    const DEFAULT_MINE_TYPE = 'text';
+
+    /**
      * Cache key.
      *
      * @var string
@@ -223,6 +230,11 @@ class Proxy
         // experimental, encode utf8 automatically
         if (!$this->isUtf8Encoded($body)) {
             $body = utf8_encode($body);
+        }
+
+        // use default minType if not valide
+        if (!isset($this->_mimeTypes[$this->_type])) {
+            $this->_type = self::DEFAULT_MINE_TYPE;
         }
 
         $mimeType = $this->_mimeTypes[$this->_type];
