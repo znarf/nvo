@@ -30,7 +30,7 @@ final class Compiler_Desktop_Jil extends Compiler_Desktop
      *
      * @var string
      */
-    protected $archiveFormat = 'Zip';
+    protected $archiveFormat = 'zip';
 
     /**
      * Width of the widget.
@@ -74,17 +74,18 @@ final class Compiler_Desktop_Jil extends Compiler_Desktop
         if (!is_readable($ressourcesDir)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
-        $this->addDirToZip($ressourcesDir . 'jil');
+
+        $this->addDirToArchive($ressourcesDir . 'jil');
 
         // Replace the default icon if a rich icon is given
         $richIcon = $this->_widget->getRichIcon();
         if (!empty($richIcon) && preg_match('/\\.png$/i', $richIcon)) {
-            $this->addDistantFileToZip($richIcon, 'Icon.png');
+            $this->addDistantFileToArchive($richIcon, 'Icon.png');
         }
 
-        $this->addFileFromStringToZip('widget.html', $this->getHtml());
+        $this->addFileFromStringToArchive('widget.html', $this->getHtml());
 
-        $this->addFileFromStringToZip('config.xml', $this->_getXmlManifest());
+        $this->addFileFromStringToArchive('config.xml', $this->_getXmlManifest());
     }
 
     protected function getHtml()

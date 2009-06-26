@@ -97,17 +97,17 @@ final class Compiler_Desktop_Dashboard extends Compiler_Desktop_W3c
         $identifier = preg_replace('/[^a-z0-9]/i', '', $this->_widget->getTitle());
 
         $options = array(
-            'AllowNetworkAccess' => true,
-            'AllowInternetPlugins' => true,
-            'MainHTML' => 'index.html',
-            'Width' => $this->_width,
-            'Height' => $this->_height,
-            'CloseBoxInsetX' => 15,
-            'CloseBoxInsetY' => 5,
-            'CFBundleIdentifier' => 'com.netvibes.widget.' . $identifier,
-            'CFBundleDisplayName' => $title,
-            'CFBundleName' => $title,
-            'CFBundleVersion' => isset($metas['version']) ? $metas['version'] : '1.0'
+            'AllowNetworkAccess' 		=> true,
+            'AllowInternetPlugins'	 	=> true,
+            'MainHTML' 					=> 'index.html',
+            'Width' 					=> $this->_width,
+            'Height' 					=> $this->_height,
+            'CloseBoxInsetX' 			=> 15,
+            'CloseBoxInsetY' 			=> 5,
+            'CFBundleIdentifier' 		=> 'com.netvibes.widget.' . $identifier,
+            'CFBundleDisplayName' 		=> $title,
+            'CFBundleName' 				=> $title,
+            'CFBundleVersion' 			=> isset($metas['version']) ? $metas['version'] : '1.0'
         );
 
         $l = array();

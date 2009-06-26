@@ -18,10 +18,10 @@
  */
 
 
-require_once 'Compiler/Desktop/W3c.php';
+require_once 'Compiler/Desktop.php';
 
 /**
- * Apple Dashboard Widgets Compiler.
+ * Gnome Screenlets Widgets Compiler.
  */
 final class Compiler_Desktop_Screenlets extends Compiler_Desktop
 {
@@ -30,7 +30,7 @@ final class Compiler_Desktop_Screenlets extends Compiler_Desktop
      *
      * @var string
      */
-    protected $archiveFormat = 'Tar';
+    protected $archiveFormat = 'tar';
 
     /**
      * Width of the widget.
@@ -93,7 +93,6 @@ final class Compiler_Desktop_Screenlets extends Compiler_Desktop
         $this->addFileFromStringToArchive($dirname . $identifier . 'Screenlet.py', $this->_getScreenletScript() );
     }
 
-
     protected function getHtml()
     {
         $compiler = Compiler_Factory::getCompiler($this->_platform, $this->_widget);
@@ -129,7 +128,7 @@ final class Compiler_Desktop_Screenlets extends Compiler_Desktop
             '{widgetName}'          => self::stringToAscii($title),
             '{widgetClassName}'     => $identifier,
             '{widgetDescription}'   => self::stringToAscii($metas['description']),
-            '{widgetVersion}'       => $metas['apiVersion'],
+            '{widgetVersion}'       => (isset($metas['version']) ? $metas['version'] : '1.0'),
             '{widgetAuthor}'        => self::stringToAscii($metas['author']),
             '{widgetHeight}'        => $this->_height,
             '{widgetWidth}'         => $this->_width,
@@ -298,7 +297,7 @@ EOF;
      * Convert a string to ascii
      *
      * @param string $string a little string
-     * @return array $array value
+     * @return string clean ascii string
      */
     static protected function stringToAscii($string)
     {

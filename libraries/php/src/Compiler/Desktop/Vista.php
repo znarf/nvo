@@ -21,7 +21,7 @@
 require_once 'Compiler/Desktop.php';
 
 /**
- * Jil Widgets Compiler.
+ * Vista Widgets Compiler.
  */
 final class Compiler_Desktop_Vista extends Compiler_Desktop
 {
@@ -30,7 +30,21 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
      *
      * @var string
      */
-    protected $archiveFormat = 'Zip';
+    protected $archiveFormat = 'zip';
+
+	/**
+     * Javascript UWA environment.
+     *
+     * @var string
+     */
+    protected $_environment = 'Vista';
+
+	/**
+     * Stylesheet.
+     *
+     * @var string
+     */
+    protected $_stylesheet = 'uwa-vista.css';
 
     /**
      * Width of the widget.
@@ -46,19 +60,19 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
      */
     protected $_height = 370;
 
+	/**
+     * Compiler Name.
+     *
+     * @var string
+     */
+    protected $_platform = 'vista';
+
     /**
      * Extension.
      *
      * @var string
      */
     protected $_extension = 'gadget';
-
-    /**
-     * Compiler Name.
-     *
-     * @var string
-     */
-    protected $_platform = 'vista';
 
     /**
      * Mime Type.
@@ -77,11 +91,17 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
 
         $this->addDirToArchive($ressourcesDir . 'vista');
 
-        $this->addFileFromStringToZip('UWA.html', $this->getHtml(false));
+		// Replace the default icon if a rich icon is given
+        $richIcon = $this->_widget->getRichIcon();
+        if (!empty($richIcon) && preg_match('/\\.png$/i', $richIcon)) {
+            $this->addDistantFileToArchive($richIcon, 'Icon.png');
+        }
 
-        $this->addFileFromStringToZip('flyout.html', $this->getHtml(true));
+        $this->addFileFromStringToArchive('UWA.html', $this->getHtml(false));
 
-        $this->addFileFromStringToZip('gadget.xml', $this->_getXmlManifest());
+        $this->addFileFromStringToArchive('flyout.html', $this->getHtml(true));
+
+        $this->addFileFromStringToArchive('gadget.xml', $this->_getXmlManifest());
     }
 
     protected function getHtml($vistaModule = false)
@@ -100,15 +120,26 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
         $l[] = '    <link rel="icon" href="' . $icon . '" type="image/x-icon" />';
 
         /* @todo reverve ingenering */
-        $l[] = '    <link rel="stylesheet" type="text/css" href="http://www.netvibes.com/themes/uwa/vista/vista.css" />';
-        $l[] = '    <script type="text/javascript" src="http://www.netvibes.com/js/UWA/load.js.php?env=Vista"></script>';
-        $l[] = '    <script type="text/javascript" src="http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()) . '"></script>';
+        //$l[] = '    <script type="text/javascript" src="http://www.netvibes.com/js/UWA/load.js.php?env=Vista"></script>';
+        //$l[] = '    <script type="text/javascript" src="http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()) . '"></script>';
 
+		$javascripts = $this->_getJavascripts(array(
+			'platform' 	=> $this->_platform,
+			'className'	=> 'CompiledModule'
+		));
+
+        foreach ($javascripts as $script) {
+            $l[] = "<script type='text/javascript' src='" . htmlspecialchars($script) . "' charset='utf-8'/>";
+        }
+
+		foreach ($this->_getStylesheets() as $stylesheet) {
+            $l[] = '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($stylesheet) . '"/>';
+        }
 
         $l[] = '    <script type="text/javascript" src="js/VistaModule.js"></script>';
         $l[] = '    <script type="text/javascript" src="js/PrefsForm.js"></script>';
         $l[] = '    <script type="text/javascript">';
-        $l[] = '        var vistaModule = new VistaModule( ' . ($vistaModule ? 'true' : 'false')  . ' );';
+        $l[] = '        var vistaModule = new VistaModule(' . ($vistaModule ? 'true' : 'false')  . ');';
         $l[] = '    </script>';
 
         $l[] = '</head>';
@@ -136,9 +167,10 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
         $l = array();
 
         $l[] = '<div id="wrapper">';
+
         $l[] = '    <div id="moduleHeader" class="moduleHeader">';
         $l[] = '		<div class="refresh"><img src="img/refresh.png" onclick="vistaModule.refresh()"></div>';
-        $l[] = '        <div id="moduleTitle" class="title">' . $this->_widget->getTitle() . '</div>';
+        $l[] = '        <div id="moduleTitle" class="title">' . htmlspecialchars($this->_widget->getTitle()) . '</div>';
         $l[] = '    </div>';
 
         $l[] = '    <div id="contentWrapper">';
@@ -150,6 +182,7 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
         $l[] = '    <div class="moduleFooter" id="moduleFooter">';
         $l[] = '        &nbsp;';
         $l[] = '    </div>';
+
         $l[] = '</div>';
 
         return implode("\n", $l);
@@ -165,7 +198,7 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
         $l[] = '<gadget>';
         $l[] = '    <name>' . htmlspecialchars($title) . '</name>';
         $l[] = '    <namespace>UWA</namespace>';
-        $l[] = '    <version>1.0.0.0</version>';
+        $l[] = '    <version>' . (isset($metas['version']) ? $metas['version'] : '1.0') . '</version>';
         $l[] = '    <hosts>';
         $l[] = '        <host name="sidebar">';
         $l[] = '            <base type="HTML" apiVersion="1.0.0" src="UWA.html"/>';

@@ -1,0 +1,155 @@
+/**
+ * Copyright Netvibes 2006-2009.
+ * This file is part of Exposition PHP Server.
+ *
+ * Exposition PHP Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Exposition PHP Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* netvibes base stylesheets */
+
+@import "http://www.netvibes.com/themes/base/nv-core.css";
+@import "http://www.netvibes.com/themes/base/nv-typo.css";
+@import "http://www.netvibes.com/themes/base/nv-module.css";
+@import "http://www.netvibes.com/themes/base/nv-icons.css";
+
+/* to have a nicer look & feel, we import parts of the netvibes garlic theme */
+
+@import "http://www.netvibes.com/themes/garlic/nv-core.css";
+@import "http://www.netvibes.com/themes/garlic/nv-module.css";
+@import "http://www.netvibes.com/themes/garlic/nv-icons.css";
+
+/* base layout */
+
+body {
+  width:311px;
+  height:100px;
+  text-align:left;
+  background: transparent;
+}
+
+#vistaContent {
+  width:100%;
+  position:absolute;
+  left:0;
+  top:0;
+  background: transparent;
+}
+
+#wrapper {
+  margin:auto;
+  width:auto;
+  border:0;
+  background: transparent;
+}
+
+#contentWrapper{
+	margin: 0;
+	padding: 0;
+	padding-left:14px;
+	padding-right:14px;
+	width: 311px;
+	background: transparent url(moduleContent.gif) repeat-y center center;
+}
+
+#wrapper .moduleHeader{
+	margin: 0;
+	background: transparent url(moduleHeader.gif) no-repeat center center;
+	height: 34px;
+	line-height: 34px;
+	padding: 0 5px;
+	width: 311px;
+}
+
+#wrapper .moduleContent{
+ font-family: Segoe UI, Tahoma, Sans-Serif;
+ font-size: 12px;
+  padding:  2px;
+  margin-left:1px;
+  margin-right:1px;
+  width: 281px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#wrapper .moduleFooter{
+	height: 12px;
+	padding:0 2px;
+	margin: -2px 0 0 0;
+	width: 311px;
+	background: transparent url(moduleFooter.gif) no-repeat center center;
+}
+
+#wrapper .title {
+ height: 22px;
+ font-family: Segoe UI, Tahoma, Sans-Serif;
+ font-size: 12px;
+ margin-top:3px;
+ padding-top:0px;
+ color: white;
+ overflow: hidden;
+}
+
+#wrapper .title a, #wrapper .title a:hover{
+ color: white;
+}
+
+#wrapper .refresh {
+ margin-top: 3px;
+}
+
+#wrapper .ico {
+ float: left;
+ text-indent: 15px;
+ margin-top: 3px;
+}
+
+.nv-pager a.next:hover, .nv-pager a.prev:hover{
+	text-decoration: none;
+	border-bottom: none;
+}
+
+/*
+Docked
+*/
+
+#wrapper.docked .moduleDocked {
+	margin: 0;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	text-indent: 0;
+	width: 137px;
+	height: 63px;
+	line-height: 25px;
+}
+
+#wrapper.docked .title {
+	height: 50px;
+	margin: 0;
+	padding: 0;
+	text-indent: 0;
+}
+
+#wrapper.docked .ico {
+ text-indent: 3px;
+}
+
+/*
+Fix problem with tabList
+*/
+
+ul.nv-tabList li a:hover{
+	border-bottom: 0;
+}
+
