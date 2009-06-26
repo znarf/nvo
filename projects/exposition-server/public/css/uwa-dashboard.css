@@ -1,17 +1,17 @@
 /**
  * Copyright Netvibes 2006-2009.
  * This file is part of Exposition PHP Server.
- * 
+ *
  * Exposition PHP Server is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Exposition PHP Server is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,136 +32,136 @@
 /* base layout */
 
 * {
-	margin:0;
-	padding:0;
+    margin:0;
+    padding:0;
 }
 
 html {
-	background:none;
+    background:none;
 }
 
 body {
-	text-align:left;
+    text-align:left;
 }
 
 #wrapper {
-	margin:auto;
-	width:auto;
-	border:0;
-	background: transparent; 
+    margin:auto;
+    width:auto;
+    border:0;
+    background: transparent;
 }
 
 #contentWrapper {
-	margin: 0;
-	padding: 0;
-	padding-left:15px;
-	padding-right:14px;
-	width: 333px;
-	background: transparent url(dashboard/background.png) repeat-y center center;
+    margin: 0;
+    padding: 0;
+    padding-left:15px;
+    padding-right:14px;
+    width: 333px;
+    background: transparent url(dashboard/background.png) repeat-y center center;
 }
 
 #moduleHeader {
-	margin: 0 0;
-	background: transparent url(dashboard/moduleheader.png) no-repeat center center;
-	height: 28px;
-	line-height: 28px;
-	padding: 0 21px;
-	width: 320px;
+    margin: 0 0;
+    background: transparent url(dashboard/moduleheader.png) no-repeat center center;
+    height: 28px;
+    line-height: 28px;
+    padding: 0 21px;
+    width: 320px;
 }
 
 #moduleContent {
-	padding:  10px;
-	margin-left:1px;
-	margin-right:1px;
-	max-height:550px;
-	overflow:auto;
-	-apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
+    padding:  10px;
+    margin-left:1px;
+    margin-right:1px;
+    max-height:550px;
+    overflow:auto;
+    -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
 }
 
 #moduleStatus {
-	margin-left:1px;
-	margin-right:1px;
-	-apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
+    margin-left:1px;
+    margin-right:1px;
+    -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
 }
 
 #moduleFooter {
-	height: 16px;
-	padding:0 2px;
-	margin: 0;
-	width: 358px;
-	background: transparent url(dashboard/bottom.png) no-repeat center center;
+    height: 16px;
+    padding:0 2px;
+    margin: 0;
+    width: 358px;
+    background: transparent url(dashboard/bottom.png) no-repeat center center;
 }
 
 #moduleTitle {
-	padding-top:7px; 
+    padding-top:7px;
 }
 
 #moduleIcon {
-	padding-top:4px;
-	padding-right:2px; 	
+    padding-top:4px;
+    padding-right:2px;
 }
 
 #editContent {
-	background: transparent url(dashboard/background.png) repeat-y center center;
-	border:0;
-	padding: 8px 21px;
-	width: 320px;
-	margin:0;
-	-apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
+    background: transparent url(dashboard/background.png) repeat-y center center;
+    border:0;
+    padding: 8px 21px;
+    width: 320px;
+    margin:0;
+    -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
 }
 
 .infoButton {
-	position:absolute;
-	top:8px;
-	right:12px;
-	height:13px;
-	width:13px;
-	top:12px;
+    position:absolute;
+    top:8px;
+    right:12px;
+    height:13px;
+    width:13px;
+    top:12px;
 }
 
 #editContent form, #doneButton {
-	margin-left:10px;
+    margin-left:10px;
 }
 
 .nv-pager:after {
-	content: "";
+    content: "";
 }
 
 /* rules imported from http://www.netvibes.com/themes/base/screen.css */
 
 a:link, a:visited{
-	color: #333;
+    color: #333;
 }
 a:hover{
-	color: #F60;
+    color: #F60;
 }
 img{
-	border: 0;
-	-ms-interpolation-mode: bicubic;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
 }
 table {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
 }
 ul {
-	padding-left: 5px;
+    padding-left: 5px;
 }
 li {
-	list-style-type: none;
-	background: transparent url(base/img/bullet.png) no-repeat left 0.5ex;
-	margin-bottom: 2px;
-	padding-left: 10px;
+    list-style-type: none;
+    background: transparent url(base/img/bullet.png) no-repeat left 0.5ex;
+    margin-bottom: 2px;
+    padding-left: 10px;
 }
 
 /* rules imported from http://www.netvibes.com/themes/garlic/screen.css */
 
 a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 /* tune the editContent */
 
 #editContent {
-	display:block;
-	margin-bottom:0;
+    display:block;
+    margin-bottom:0;
 }

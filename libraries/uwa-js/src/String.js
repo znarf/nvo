@@ -217,7 +217,7 @@ UWA.merge(String.prototype, {
     var htmlCode = this;
     // ( protocol (with optional auth) OR www. ) AND ( host )
     htmlCode = htmlCode.replace(/((\w+:\/\/(\w+(:\w+)?@)?)|www\.)[^\s<$]+/g, function(m, match1) {
-	  var url = m.replace(/([\.!\?:;\)\]]$)/, '');
+      var url = m.replace(/([\.!\?:;\)\]]$)/, '');
       var text = m;
 
       if (url.test(/^www./)){

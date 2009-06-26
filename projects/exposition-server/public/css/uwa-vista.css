@@ -54,21 +54,21 @@ body {
 }
 
 #contentWrapper{
-	margin: 0;
-	padding: 0;
-	padding-left:14px;
-	padding-right:14px;
-	width: 311px;
-	background: transparent url(moduleContent.gif) repeat-y center center;
+    margin: 0;
+    padding: 0;
+    padding-left:14px;
+    padding-right:14px;
+    width: 311px;
+    background: transparent url(moduleContent.gif) repeat-y center center;
 }
 
 #wrapper .moduleHeader{
-	margin: 0;
-	background: transparent url(moduleHeader.gif) no-repeat center center;
-	height: 34px;
-	line-height: 34px;
-	padding: 0 5px;
-	width: 311px;
+    margin: 0;
+    background: transparent url(moduleHeader.gif) no-repeat center center;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 5px;
+    width: 311px;
 }
 
 #wrapper .moduleContent{
@@ -83,11 +83,11 @@ body {
 }
 
 #wrapper .moduleFooter{
-	height: 12px;
-	padding:0 2px;
-	margin: -2px 0 0 0;
-	width: 311px;
-	background: transparent url(moduleFooter.gif) no-repeat center center;
+    height: 12px;
+    padding:0 2px;
+    margin: -2px 0 0 0;
+    width: 311px;
+    background: transparent url(moduleFooter.gif) no-repeat center center;
 }
 
 #wrapper .title {
@@ -115,8 +115,8 @@ body {
 }
 
 .nv-pager a.next:hover, .nv-pager a.prev:hover{
-	text-decoration: none;
-	border-bottom: none;
+    text-decoration: none;
+    border-bottom: none;
 }
 
 /*
@@ -124,21 +124,21 @@ Docked
 */
 
 #wrapper.docked .moduleDocked {
-	margin: 0;
-	padding-left: 3px;
-	padding-right: 3px;
-	padding-top: 3px;
-	text-indent: 0;
-	width: 137px;
-	height: 63px;
-	line-height: 25px;
+    margin: 0;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+    text-indent: 0;
+    width: 137px;
+    height: 63px;
+    line-height: 25px;
 }
 
 #wrapper.docked .title {
-	height: 50px;
-	margin: 0;
-	padding: 0;
-	text-indent: 0;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+    text-indent: 0;
 }
 
 #wrapper.docked .ico {
@@ -150,6 +150,6 @@ Fix problem with tabList
 */
 
 ul.nv-tabList li a:hover{
-	border-bottom: 0;
+    border-bottom: 0;
 }
 

@@ -148,7 +148,7 @@ final class Compiler_Desktop_Jil extends Compiler_Desktop
         }
     }
 
-	public function getFileMimeType()
+    public function getFileMimeType()
     {
         return $this->_mimeType;
     }

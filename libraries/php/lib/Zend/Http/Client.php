@@ -336,7 +336,7 @@ class Zend_Http_Client
                 require_once 'Zend/Http/Client/Exception.php';
                 throw new Zend_Http_Client_Exception("{$name} is not a valid HTTP header name");
             }
-            
+
             $normalized_name = strtolower($name);
 
             // If $value is null or false, unset the header
@@ -873,13 +873,13 @@ class Zend_Http_Client
         // Set the Accept-encoding header if not set - depending on whether
         // zlib is available or not.
         if (! isset($this->headers['accept-encoding'])) {
-        	if (function_exists('gzinflate')) {
-        		$headers[] = 'Accept-encoding: gzip, deflate';
-        	} else {
-        		$headers[] = 'Accept-encoding: identity';
-        	}
+            if (function_exists('gzinflate')) {
+                $headers[] = 'Accept-encoding: gzip, deflate';
+            } else {
+                $headers[] = 'Accept-encoding: identity';
+            }
         }
-        
+
         // Set the content-type header
         if ($this->method == self::POST &&
            (! isset($this->headers['content-type']) && isset($this->enctype))) {
@@ -908,7 +908,7 @@ class Zend_Http_Client
 
         // Add all other user defined headers
         foreach ($this->headers as $header) {
-        	list($name, $value) = $header;
+            list($name, $value) = $header;
             if (is_array($value))
                 $value = implode(', ', $value);
 

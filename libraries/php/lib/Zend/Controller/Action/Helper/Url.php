@@ -109,7 +109,7 @@ class Zend_Controller_Action_Helper_Url extends Zend_Controller_Action_Helper_Ab
 
         if ($encode) {
             foreach ($urlOptions as $key => $option) {
-	        $urlOptions[$key] = urlencode($option);
+            $urlOptions[$key] = urlencode($option);
             }
         }
 

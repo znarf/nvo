@@ -162,7 +162,7 @@ class Zend_Http_Response
         if (! is_array($headers)) {
             require_once 'Zend/Http/Exception.php';
             throw new Zend_Http_Exception('No valid headers were passed');
-	}
+    }
 
         foreach ($headers as $name => $value) {
             if (is_int($name))
@@ -483,11 +483,11 @@ class Zend_Http_Response
     public static function extractHeaders($response_str)
     {
         $headers = array();
-        
+
         // First, split body and headers
         $parts = preg_split('|(?:\r?\n){2}|m', $response_str, 2);
         if (! $parts[0]) return $headers;
-        
+
         // Split headers part to lines
         $lines = explode("\n", $parts[0]);
         unset($parts);
@@ -535,10 +535,10 @@ class Zend_Http_Response
     public static function extractBody($response_str)
     {
         $parts = preg_split('|(?:\r?\n){2}|m', $response_str, 2);
-        if (isset($parts[1])) { 
-        	return $parts[1];
+        if (isset($parts[1])) {
+            return $parts[1];
         } else {
-        	return '';
+            return '';
         }
     }
 
@@ -551,7 +551,7 @@ class Zend_Http_Response
     public static function decodeChunkedBody($body)
     {
         $decBody = '';
-        
+
         while (trim($body)) {
             if (! preg_match("/^([\da-fA-F]+)[^\r\n]*\r\n/sm", $body, $m)) {
                 require_once 'Zend/Http/Exception.php';
@@ -580,8 +580,8 @@ class Zend_Http_Response
     {
         if (! function_exists('gzinflate')) {
             require_once 'Zend/Http/Exception.php';
-            throw new Zend_Http_Exception('Unable to decode gzipped response ' . 
-                'body: perhaps the zlib extension is not loaded?'); 
+            throw new Zend_Http_Exception('Unable to decode gzipped response ' .
+                'body: perhaps the zlib extension is not loaded?');
         }
 
         return gzinflate(substr($body, 10));
@@ -599,11 +599,11 @@ class Zend_Http_Response
     {
         if (! function_exists('gzuncompress')) {
             require_once 'Zend/Http/Exception.php';
-            throw new Zend_Http_Exception('Unable to decode deflated response ' . 
-                'body: perhaps the zlib extension is not loaded?'); 
+            throw new Zend_Http_Exception('Unable to decode deflated response ' .
+                'body: perhaps the zlib extension is not loaded?');
         }
 
-    	return gzuncompress($body);
+        return gzuncompress($body);
     }
 
     /**

@@ -32,14 +32,14 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
      */
     protected $archiveFormat = 'zip';
 
-	/**
+    /**
      * Javascript UWA environment.
      *
      * @var string
      */
     protected $_environment = 'Vista';
 
-	/**
+    /**
      * Stylesheet.
      *
      * @var string
@@ -60,7 +60,7 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
      */
     protected $_height = 370;
 
-	/**
+    /**
      * Compiler Name.
      *
      * @var string
@@ -91,7 +91,7 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
 
         $this->addDirToArchive($ressourcesDir . 'vista');
 
-		// Replace the default icon if a rich icon is given
+        // Replace the default icon if a rich icon is given
         $richIcon = $this->_widget->getRichIcon();
         if (!empty($richIcon) && preg_match('/\\.png$/i', $richIcon)) {
             $this->addDistantFileToArchive($richIcon, 'Icon.png');
@@ -123,16 +123,16 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
         //$l[] = '    <script type="text/javascript" src="http://www.netvibes.com/js/UWA/load.js.php?env=Vista"></script>';
         //$l[] = '    <script type="text/javascript" src="http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()) . '"></script>';
 
-		$javascripts = $this->_getJavascripts(array(
-			'platform' 	=> $this->_platform,
-			'className'	=> 'CompiledModule'
-		));
+        $javascripts = $this->_getJavascripts(array(
+            'platform'     => $this->_platform,
+            'className'    => 'CompiledModule'
+        ));
 
         foreach ($javascripts as $script) {
             $l[] = "<script type='text/javascript' src='" . htmlspecialchars($script) . "' charset='utf-8'/>";
         }
 
-		foreach ($this->_getStylesheets() as $stylesheet) {
+        foreach ($this->_getStylesheets() as $stylesheet) {
             $l[] = '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($stylesheet) . '"/>';
         }
 
@@ -169,7 +169,7 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
         $l[] = '<div id="wrapper">';
 
         $l[] = '    <div id="moduleHeader" class="moduleHeader">';
-        $l[] = '		<div class="refresh"><img src="img/refresh.png" onclick="vistaModule.refresh()"></div>';
+        $l[] = '        <div class="refresh"><img src="img/refresh.png" onclick="vistaModule.refresh()"></div>';
         $l[] = '        <div id="moduleTitle" class="title">' . htmlspecialchars($this->_widget->getTitle()) . '</div>';
         $l[] = '    </div>';
 
@@ -231,7 +231,7 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
         }
     }
 
-	public function getFileMimeType()
+    public function getFileMimeType()
     {
         return $this->_mimeType;
     }

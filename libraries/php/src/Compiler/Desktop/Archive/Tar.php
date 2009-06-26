@@ -35,37 +35,37 @@ class Compiler_Desktop_Archive_Tar extends Compiler_Desktop_Archive_Abstract
     protected function buildArchive()
     {
         foreach ($this->files as $current)
-		{
-			if ($current['name'] == $this->options['name']) {
-				continue;
+        {
+            if ($current['name'] == $this->options['name']) {
+                continue;
             }
 
-			if (strlen($current['path']) > 99) {
-				$path = substr($current['path'], 0, strpos($current['path'], "/", strlen($current['path']) - 100) + 1);
-				$current['path'] = substr($current['path'], strlen($path));
+            if (strlen($current['path']) > 99) {
+                $path = substr($current['path'], 0, strpos($current['path'], "/", strlen($current['path']) - 100) + 1);
+                $current['path'] = substr($current['path'], strlen($path));
 
-				if (strlen($path) > 154 || strlen($current['path']) > 99) {
+                if (strlen($path) > 154 || strlen($current['path']) > 99) {
                     throw new Exception(sprintf('Could not add %s%s to archive because the filename is too long.', $path, $current['path']));
-				}
-			}
-
-			$block = pack("a100a8a8a8a12a12a8a1a100a6a2a32a32a8a8a155a12", $current['path'], sprintf("%07o",
-				$current['stat'][2]), sprintf("%07o", $current['stat'][4]), sprintf("%07o", $current['stat'][5]),
-				sprintf("%011o", $current['type'] == 2 ? 0 : $current['stat'][7]), sprintf("%011o", $current['stat'][9]),
-				"        ", $current['type'], $current['type'] == 2 ? @readlink($current['name']) : "", "ustar ", " ",
-				"Unknown", "Unknown", "", "", !empty ($path) ? $path : "", "");
-
-			$checksum = 0;
-			for ($i = 0; $i < 512; $i++) {
-				$checksum += ord(substr($block, $i, 1));
+                }
             }
 
-			$checksum = pack("a8", sprintf("%07o", $checksum));
-			$block = substr_replace($block, $checksum, 148, 8);
+            $block = pack("a100a8a8a8a12a12a8a1a100a6a2a32a32a8a8a155a12", $current['path'], sprintf("%07o",
+                $current['stat'][2]), sprintf("%07o", $current['stat'][4]), sprintf("%07o", $current['stat'][5]),
+                sprintf("%011o", $current['type'] == 2 ? 0 : $current['stat'][7]), sprintf("%011o", $current['stat'][9]),
+                "        ", $current['type'], $current['type'] == 2 ? @readlink($current['name']) : "", "ustar ", " ",
+                "Unknown", "Unknown", "", "", !empty ($path) ? $path : "", "");
 
-			if ($current['type'] == 2 || $current['stat'][7] == 0) {
-				$this->addArchiveData($block);
-			} else {
+            $checksum = 0;
+            for ($i = 0; $i < 512; $i++) {
+                $checksum += ord(substr($block, $i, 1));
+            }
+
+            $checksum = pack("a8", sprintf("%07o", $checksum));
+            $block = substr_replace($block, $checksum, 148, 8);
+
+            if ($current['type'] == 2 || $current['stat'][7] == 0) {
+                $this->addArchiveData($block);
+            } else {
 
                 if (isset($current['content'])) {
                     $temp = $current['content'];
@@ -76,21 +76,21 @@ class Compiler_Desktop_Archive_Tar extends Compiler_Desktop_Archive_Abstract
                     throw new Exception(sprintf('Could not open file %s for reading. It was not added."', $this->options['name']));
                 }
 
-				$this->addArchiveData($block);
+                $this->addArchiveData($block);
                 $this->addArchiveData($temp);
 
-				if ($current['stat'][7] % 512 > 0) {
-					$temp = "";
-					for ($i = 0; $i < 512 - $current['stat'][7] % 512; $i++) {
-						$temp .= "\0";
+                if ($current['stat'][7] % 512 > 0) {
+                    $temp = "";
+                    for ($i = 0; $i < 512 - $current['stat'][7] % 512; $i++) {
+                        $temp .= "\0";
                     }
 
-					$this->addArchiveData($temp);
-				}
-			}
-		}
+                    $this->addArchiveData($temp);
+                }
+            }
+        }
 
-		$this->addArchiveData(pack("a1024", ""));
+        $this->addArchiveData(pack("a1024", ""));
     }
 
     public function getFileMimeType()
