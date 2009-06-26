@@ -35,7 +35,10 @@ class Compiler_Factory
         'Live'       => 'Compiler_Live',
         'Opera'      => 'Compiler_Desktop_Opera',
         'Dashboard'  => 'Compiler_Desktop_Dashboard',
-        'Screenlets' => 'Compiler_Desktop_Screenlets'
+        'Screenlets' => 'Compiler_Desktop_Screenlets',
+        'Jil'        => 'Compiler_Desktop_Jil',
+        'Vista'      => 'Compiler_Desktop_Vista',
+
     );
 
     /**

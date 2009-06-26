@@ -1,0 +1,74 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="http://www.netvibes.com/themes/uwa/vista/vistaSettings.css" />
+    <script type="text/javascript">
+		/*
+			Values to save is a temporary array that contains preferences that will be saved
+			if the user clicks on 'validate'
+			This array is fulled by the onchange methods of the fields
+		*/
+		var vistaPrefs = { valuesToSave: [] };
+		
+		/*
+			Loads the settings from a file created by UWA.html
+		*/
+        vistaPrefs.loadSettings = function()
+        {
+			var fileName = System.Gadget.Settings.readString( 'modulePrefsFile' );
+			var prefsContent = '';
+			try
+			{  
+				var fs = new ActiveXObject("Scripting.FileSystemObject");  
+				var file = fs.OpenTextFile( System.Gadget.path + "\\" + fileName, 1, true);  
+				prefsContent = file.ReadAll();
+				file.close();
+				fs.DeleteFile( System.Gadget.path + "\\" + fileName );
+				System.Gadget.Settings.writeString( 'modulePrefsFile', '' );
+			}
+			catch(e)
+			{
+				//nothing
+			}
+			document.getElementById( 'vistaContent' ).innerHTML = prefsContent;
+			//the height of the preferences is adapted to the content
+			document.body.style.height = ( document.getElementById( 'vistaContent' ).offsetHeight + 30 ) + 'px';
+        }
+    	
+		/*
+			Saves the temporary array of values in System.Gadget.Settings
+			if the user has clicked on 'validate'
+		*/
+        vistaPrefs.settingsClosing = function(event)
+        {
+            if (event.closeAction == event.Action.commit)
+            {
+				//widget preferences
+				document.body.focus();
+				for( var i = 0; i < vistaPrefs.valuesToSave.length; i++ )
+				{
+					var pref = vistaPrefs.valuesToSave[i];
+					System.Gadget.Settings.write( 'uwa_' + pref.name, pref.value );
+				}
+            }
+        }
+		
+		/*
+			Saves a temporary value for a preference.
+			Called by onchange methods of the fields
+		*/
+		vistaPrefs.saveTmpValue = function( name, value )
+		{
+			vistaPrefs.valuesToSave.push( { 'name': name, 'value': value } );
+		}
+		
+		/*
+			Gadget bindings
+		*/
+        System.Gadget.onSettingsClosing = vistaPrefs.settingsClosing;
+    </script>
+</head>
+<body onload="vistaPrefs.loadSettings()">
+	<div id="vistaContent">
+	</div>
+</body>
+</html>

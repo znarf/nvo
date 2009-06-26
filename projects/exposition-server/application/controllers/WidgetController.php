@@ -292,6 +292,44 @@ class WidgetController extends Zend_Controller_Action
     }
 
     /**
+     * Renders the widget as an JIL package.
+     */
+    public function jilAction()
+    {
+        $compiler = Compiler_Factory::getCompiler('Jil', $this->_widget);
+        $options = array(
+            'appendBody' => $this->getRequest()->getUserParam('appendBody')
+        );
+        $compiler->setOptions($options);
+        $content = $compiler->getFileContent();
+        $this->getResponse()
+            ->setHeader('Pragma', 'no-cache')
+            ->setHeader('Cache-Control', 'no-cache')
+            ->setHeader('Content-Type', $compiler->getFileMimeType())
+            ->setHeader('Content-Disposition', 'filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
+    }
+
+    /**
+     * Renders the widget as an Vista package.
+     */
+    public function vistaAction()
+    {
+        $compiler = Compiler_Factory::getCompiler('Vista', $this->_widget);
+        $options = array(
+            'appendBody' => $this->getRequest()->getUserParam('appendBody')
+        );
+        $compiler->setOptions($options);
+        $content = $compiler->getFileContent();
+        $this->getResponse()
+            ->setHeader('Pragma', 'no-cache')
+            ->setHeader('Cache-Control', 'no-cache')
+            ->setHeader('Content-Type', $compiler->getFileMimeType())
+            ->setHeader('Content-Disposition', 'filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
+    }
+
+    /**
      * Renders the widget as a Microsoft live.com gadget manifest.
      */
     public function liveAction()
