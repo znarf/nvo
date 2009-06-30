@@ -133,17 +133,17 @@ showEdit: function() {
 
 getData: function(name) {
   widget.log('getData:' + name);
-  if(window.Cookie) return Cookie.get('uwa-' + name);
+  if(window.Cookie) return Cookie.read('uwa-' + name);
 },
 
 setData: function(name, value) {
   widget.log('setData:' + name + ':' + value);
-  if(window.Cookie) return Cookie.set('uwa-' + name, value);
+  if(window.Cookie) return Cookie.write('uwa-' + name, value);
 },
 
 deleteData: function(name) {
   widget.log('deleteData:' + name);
-  if(window.Cookie) return Cookie.remove('uwa-' + name);
+  if(window.Cookie) return Cookie.dispose('uwa-' + name);
 },
 
 addStar: function() {
