@@ -94,3 +94,24 @@ a {
     display:block;
     margin-bottom:0;
 }
+
+#moduleIcon {
+    padding: 2px 5px 0 3px !important;
+}
+
+/* Wrapper */
+
+body {
+	text-align:center;
+}
+
+#wrapper {
+	width: 33%;
+	border: 3px solid #EEE;
+	border: 1px solid #79A7E2;
+	background: #FFF;
+	margin:10% auto 0;
+	text-align:left;
+}
+
+
