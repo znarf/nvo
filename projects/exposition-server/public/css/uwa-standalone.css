@@ -114,4 +114,10 @@ body {
 	text-align:left;
 }
 
+/* Add to button */
+
+#addto {
+	text-align:center;
+	margin:25px auto;
+}
 
