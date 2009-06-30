@@ -59,12 +59,12 @@ body {
     padding-left:14px;
     padding-right:14px;
     width: 311px;
-    background: transparent url(moduleContent.gif) repeat-y center center;
+    background: transparent url(vista/moduleContent.gif) repeat-y center center;
 }
 
 #wrapper .moduleHeader{
     margin: 0;
-    background: transparent url(moduleHeader.gif) no-repeat center center;
+    background: transparent url(vista/moduleHeader.gif) no-repeat center center;
     height: 34px;
     line-height: 34px;
     padding: 0 5px;
@@ -87,7 +87,7 @@ body {
     padding:0 2px;
     margin: -2px 0 0 0;
     width: 311px;
-    background: transparent url(moduleFooter.gif) no-repeat center center;
+    background: transparent url(vista/moduleFooter.gif) no-repeat center center;
 }
 
 #wrapper .title {
