@@ -100,8 +100,9 @@ class WidgetController extends Zend_Controller_Action
     {
         $compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
         $options = array(
-            'uwaId' => $this->getRequest()->getParam('uwaId'),
-            'platform' => $this->getRequest()->getParam('platform')
+            'uwaId'     => $this->getRequest()->getParam('uwaId'),
+            'platform'  => $this->getRequest()->getParam('platform'),
+            'className' => $this->getRequest()->getParam('className'),
         );
         $compiler->setOptions($options);
         $content = $compiler->renderJs();
@@ -266,7 +267,8 @@ class WidgetController extends Zend_Controller_Action
         $compiler->setOptions($options);
         $content = $compiler->getFileContent();
         $this->getResponse()
-            ->setHeader('Pragma', 'public')
+            ->setHeader('Pragma', 'no-cache')
+            ->setHeader('Cache-Control', 'no-cache')
             ->setHeader('Content-Type', $compiler->getFileMimeType())
             ->setHeader('Content-Disposition', 'attachment; filename="' . $compiler->getFileName() . '"')
             ->appendBody($content);

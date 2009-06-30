@@ -2,17 +2,17 @@
 /**
  * Copyright Netvibes 2006-2009.
  * This file is part of Exposition PHP Lib.
- * 
+ *
  * Exposition PHP Lib is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Exposition PHP Lib is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with Exposition PHP Lib.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -50,7 +50,7 @@ abstract class Compiler
      * @var string
      */
     protected $_platform;
-        
+
     /**
      * JavaScript core libraries.
      *
@@ -116,7 +116,7 @@ abstract class Compiler
     {
         $this->_environment = $environment;
     }
-    
+
     /**
      * Retrieves the list of the stylesheets used in a widget.
      *
@@ -210,18 +210,23 @@ abstract class Compiler
 
         // Widget script
         $jsBaseUrl = Zend_Registry::get('widgetEndpoint')  . '/js';
+        $urlOptions = array();
         if (isset($this->options['uwaId'])) {
-            $widgetJs = $jsBaseUrl . '/' . urlencode($this->options['uwaId']);
-            if (isset($options['platform'])) {
-                $widgetJs .= '?platform=' . $options['platform'];
-            }
+            $jsBaseUrl = $jsBaseUrl . '/' . urlencode($this->options['uwaId']);
         } else {
-            $widgetJs = $jsBaseUrl . '?uwaUrl=' . urlencode($this->_widget->getUrl());
-            if (isset($options['platform'])) {
-                $widgetJs .= '&platform=' . $options['platform'];
-            }
+            $urlOptions['uwaUrl'] = $this->_widget->getUrl();
         }
-        $javascripts[] = $widgetJs;
+
+        // Allowed Scripts Options
+        if (isset($options['platform'])) {
+            $urlOptions['platform'] = $options['platform'];
+        }
+
+        if (isset($options['className'])) {
+            $urlOptions['className'] = $options['className'];
+        }
+
+        $javascripts[] = $jsBaseUrl . (!empty($urlOptions) ? '?' . http_build_query($urlOptions) : '');
 
         // Merge with external scripts
         return array_merge($javascripts, $this->_widget->getExternalScripts());
@@ -233,12 +238,12 @@ abstract class Compiler
      * @return string
      */
     protected function _getHtmlHeader()
-    {   
+    {
         $icon = $this->_widget->getIcon();
         if (empty($icon)) {
             $icon = 'http://' . NV_STATIC . '/modules/uwa/icon.png';
         }
-        
+
         $html  = '<div class="moduleHeaderContainer">' . "\n";
         $html .= '  <div class="moduleHeader" id="moduleHeader">' . "\n";
         $html .= '    <a id="editLink" class="edit" style="display:none" href="javascript:void(0)">Edit</a>' . "\n";
@@ -277,14 +282,14 @@ abstract class Compiler
      * Retrieves a script containing NV_* constants
      *
      * @return string
-     */    
+     */
     protected function _getJavascriptConstants()
     {
         $html  = '<script type="text/javascript">' . "\n";
         $html .= "var NV_HOST = '" . NV_HOST . "', NV_PATH = 'http://" . NV_HOST . "/', NV_STATIC = 'http://" . NV_STATIC . "', " . "\n";
         $html .= "NV_MODULES = '". NV_MODULES ."', NV_AVATARS = '". NV_AVATARS ."';" . "\n";
         $html .= '</script>';
-        
+
         return $html;
     }
 
