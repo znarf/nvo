@@ -119,21 +119,24 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
         $l[] = '    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
         $l[] = '    <link rel="icon" href="' . $icon . '" type="image/x-icon" />';
 
-        /* @todo reverve ingenering */
-        //$l[] = '    <script type="text/javascript" src="http://www.netvibes.com/js/UWA/load.js.php?env=Vista"></script>';
-        //$l[] = '    <script type="text/javascript" src="http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()) . '"></script>';
-
+        /*
+        // require Vista_Mootools !!!
         $javascripts = $this->_getJavascripts(array(
             'platform'     => $this->_platform,
             'className'    => 'CompiledModule'
         ));
+        */
+
+        $javascripts = array(
+            //'http://www.netvibes.com/js/UWA/load.js.php?env=Vista',
+            //'http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()),
+
+            Zend_Registry::get('uwaJsDir') . 'UWA_Vista_Mootools.js?v=' . Zend_Registry::get('jsVersion'),
+            Zend_Registry::get('widgetEndpoint')  . '/js?uwaUrl=' . urlencode($this->_widget->getUrl()) . '&platform=vista&className=CompiledModule',
+        );
 
         foreach ($javascripts as $script) {
-            $l[] = "<script type='text/javascript' src='" . htmlspecialchars($script) . "' charset='utf-8'/>";
-        }
-
-        foreach ($this->_getStylesheets() as $stylesheet) {
-            $l[] = '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($stylesheet) . '"/>';
+            $l[] = '<script type="text/javascript" src="' . $script . '" charset="utf-8"></script>';
         }
 
         $l[] = '    <script type="text/javascript" src="js/VistaModule.js"></script>';
@@ -141,6 +144,10 @@ final class Compiler_Desktop_Vista extends Compiler_Desktop
         $l[] = '    <script type="text/javascript">';
         $l[] = '        var vistaModule = new VistaModule(' . ($vistaModule ? 'true' : 'false')  . ');';
         $l[] = '    </script>';
+
+        foreach ($this->_getStylesheets() as $stylesheet) {
+            $l[] = '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($stylesheet) . '"/>';
+        }
 
         $l[] = '</head>';
         $l[] = '<body onload="vistaModule.load()">';
