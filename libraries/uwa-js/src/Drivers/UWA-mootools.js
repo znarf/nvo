@@ -21,15 +21,6 @@ License:
 Script: Driver UWA MooTools
 */
 
-UWA.log = function(message) {
-    if (window.console && typeof(console.log) == "function") console.log(message); // firebug, safari
-    else if (window.opera && typeof(opera.postError) == "function") opera.postError(message);
-    //else if (window.widget) window.alert(message); // dashboard
-    else {
-        //window.alert(JSON.encode(message));
-    }
-}
-
 UWA.Class = Class;
 
 UWA.Form = {
