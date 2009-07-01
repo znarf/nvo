@@ -21,6 +21,15 @@ License:
 Script: Driver UWA MooTools
 */
 
+UWA.log = function(message) {
+    if (window.console && typeof(console.log) == "function") console.log(message); // firebug, safari
+    else if (window.opera && typeof(opera.postError) == "function") opera.postError(message);
+    //else if (window.widget) window.alert(message); // dashboard
+    else {
+        //window.alert(JSON.encode(message));
+    }
+}
+
 UWA.Class = Class;
 
 UWA.Form = {
@@ -106,8 +115,17 @@ UWA.extend(UWA.Element, {
 
   setAttributes: function(properties) {
      return this.setProperties(properties);
-  }
+  },
 
+  getElementsByClassName: function (className) {
+     return this.getElements("." + className);
+  }
+});
+
+Native.implement([Element, Document], {
+    getElementsByClassName: function (className) {
+        return this.getElements("." + className);
+    }
 });
 
 if (typeof UWA.Json == "undefined") UWA.Json = {};
@@ -130,17 +148,18 @@ UWA.Class = UWA.extend(Class, {
 });
 
 UWA.merge(Element, {
-  hasClassName: function(el, className) { return $(el).hasClassName(className) },
-  addClassName: function(el, className) { return $(el).addClassName(className) },
-  removeClassName: function(el, className) { return $(el).removeClassName(className) },
+  hasClassName: function(el, className) { return $(el).hasClass(className) },
+  addClassName: function(el, className) { return $(el).addClass(className) },
+  removeClassName: function(el, className) { return $(el).removeClass(className) },
   getDimensions: function(el) { return $(el).getDimensions() },
-  hide: function(el) { return $(el).hide() },
-  show: function(el) { return $(el).show() }
+  hide: function(el) { return el.style.display = "none"; },
+  show: function(el) { return el.style.display = ""; },
+  getElementsByClassName: function (el, className) { return el.getElements("." + className); }
 });
 
 UWA.merge(Event, {
   element: function(event) {
-    return event.target;
+    return event.target || new Event(event).target;
   },
   findElement: function(event, tagName) {
     var element = event.target || new Event(event).target;
@@ -155,3 +174,4 @@ Function.implement({
     return this.create({'bind': bind, 'event': true, 'arguments': args});
   }
 });
+

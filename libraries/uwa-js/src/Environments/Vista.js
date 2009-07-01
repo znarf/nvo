@@ -41,11 +41,11 @@ Object.extend(UWA.Environment.prototype,
             var wrapper = document.createElement("div");
             wrapper.setAttribute("id", "wrapper");
             wrapper.className = "docked";
-            wrapper.appendChild(D);
+            wrapper.appendChild(header);
             document.getElementById("vistaContent").appendChild(wrapper);
 
             this.html.body = document.createElement("div");
-            this.html.header = D;
+            this.html.header = header;
             this.html.edit = document.createElement("div");
             this.html.title = document.getElementById("moduleTitle");
             this.html.icon = document.getElementById("moduleIcon")
