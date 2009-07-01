@@ -63,17 +63,34 @@ img{
     -ms-interpolation-mode: bicubic;
 }
 table {
-    padding: 0;
-    margin: 0;
+	padding:0;
+	margin:0;
+	border:0;
+	border-collapse:collapse;
+	font-size: 11px;
 }
 ul {
     padding-left: 5px;
 }
-li {
-    list-style-type: none;
-    background: transparent url(base/img/bullet.png) no-repeat left 0.5ex;
-    margin-bottom: 2px;
-    padding-left: 10px;
+
+ul li {
+	background: url(base/img/bullet.png) no-repeat;
+	background-position: 0 5px;
+	margin-bottom: 2px;
+	padding-left: 10px;
+	list-style-type: none;
+}
+
+ol {
+	padding-left: 30px;
+}
+
+ol li {
+	padding-left: 0px;
+}
+
+h1, h2, h3, h4, p, ul, ol {
+	margin:0.25em 0;
 }
 
 /* rules imported from http://www.netvibes.com/themes/garlic/screen.css */
