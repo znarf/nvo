@@ -34,11 +34,11 @@ Bootstrap::prepare();
 Bootstrap::$registry->set('tmpDir', $tmpDir);
 Bootstrap::setCache('File', array('cache_dir' => $tmpDir));
 
-Bootstrap::$registry->set('proxyEndpoint', 'http://' . $host . $basePath . '/../proxy');
+Bootstrap::$registry->set('proxyEndpoint', 'http://' . $host .'/proxy');
 Bootstrap::$registry->set('widgetEndpoint', 'http://' . $host . $basePath);
 
-Bootstrap::$registry->set('uwaCssDir', 'http://' . $host . $basePath . '/../css/');
-Bootstrap::$registry->set('uwaJsDir', 'http://' . $host . $basePath . '/../js/c/');
+Bootstrap::$registry->set('uwaCssDir', 'http://' . $host . '/css/');
+Bootstrap::$registry->set('uwaJsDir', 'http://' . $host . '/js/c/');
 Bootstrap::$registry->set('useMergedCss', false);
 
 Bootstrap::$registry->set('uwaRessourcesDir', dirname(__FILE__) . '/../ressources/');
