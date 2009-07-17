@@ -99,8 +99,9 @@ export:
 		echo "Export directory already exists." ; \
 	else \
 		mkdir -p $(STAGE)/dist ; \
-		$(SVN) export $(UWA_JS_SRC) $(STAGE)/src ; \
-		$(SVN) export $(UWA_JS_LIB) $(STAGE)/lib ; \
+        mkdir -p $(STAGE)/src ; \
+		#$(SVN) export $(UWA_JS_SRC) $(STAGE)/src ; \
+		#$(SVN) export $(UWA_JS_LIB) $(STAGE)/lib ; \
 		cp $(COPYING) $(STAGE) ; \
 		cp $(COPYING_LESSER) $(STAGE) ; \
 	fi
@@ -125,10 +126,10 @@ mootools:
 environments:
 	@echo "Building UWA Environments..."
 	@for environment in $(ENVIRONMENTS) ; do \
-		cat $(CORE_FILES) $(UWA_JS_SRC)/Environments/$${environment}.js >> $(STAGE)/dist/UWA_$${environment}.tmp.js ; \
-		cat $(MOOTOOLS_FILES) $(UWA_JS_SRC)/Environments/$${environment}.js >> $(STAGE)/dist/UWA_$${environment}_Mootools.tmp.js ; \
-		$(YUI) $(STAGE)/dist/UWA_$${environment}.tmp.js -o $(STAGE)/dist/UWA_$${environment}.js ; \
-		$(YUI) $(STAGE)/dist/UWA_$${environment}_Mootools.tmp.js -o $(STAGE)/dist/UWA_$${environment}_Mootools.js ; \
+		cat $(CORE_FILES) $(UWA_JS_SRC)/Environments/$${environment}.js >> $(STAGE)/src/UWA_$${environment}.js ; \
+		cat $(MOOTOOLS_FILES) $(UWA_JS_SRC)/Environments/$${environment}.js >> $(STAGE)/src/UWA_$${environment}_Mootools.js ; \
+        $(YUI) $(STAGE)/src/UWA_$${environment}.js -o $(STAGE)/dist/UWA_$${environment}.js ; \
+		$(YUI) $(STAGE)/src/UWA_$${environment}_Mootools.js -o $(STAGE)/dist/UWA_$${environment}_Mootools.js ; \
 	done
 	-@rm -f $(STAGE)/dist/*.tmp.js
 	@echo "UWA Environments build complete."
