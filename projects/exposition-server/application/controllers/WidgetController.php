@@ -53,12 +53,24 @@ class WidgetController extends Zend_Controller_Action
         // UWA widget URL
         $this->uwaUrl = $this->getRequest()->getParam('uwaUrl');
 
+        // Get uwaUrl has first GET param key due live.com bug with urldecode
+		if (empty($this->uwaUrl) && $this->_getParam('action') == 'live' ) {
+
+			$matches = array();
+			$pattern = ':\?(.*[^&])(.*)?:i';
+			if(preg_match ($pattern, $_SERVER['REQUEST_URI'], $matches)) {
+				$this->uwaUrl = urldecode($matches[1]);
+			}
+		}
+
+        // Parse the UWA widget from the given URL
         if (!empty($this->uwaUrl)) {
-            // Parse the UWA widget from the given URL
+
             $parser = Parser_Factory::getParser('uwa', $this->uwaUrl, $this->_cache);
             $this->_widget = $parser->buildWidget();
+
+        // Create an empty widget
         } else {
-            // Create an empty widget
             $this->_widget = new Widget();
             $this->_widget->setBody('<p>This widget cannot be displayed.</p>');
         }
@@ -144,8 +156,6 @@ class WidgetController extends Zend_Controller_Action
 
         $compiler->setOptions($options);
 
-        Zend_Layout::getMvcInstance()->enableLayout()->setLayout('frame');
-
         $this->view->bodyClass = 'moduleIframe';
         if (isset($options['chromeColor'])) {
             $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
@@ -166,7 +176,7 @@ class WidgetController extends Zend_Controller_Action
             }
         }
 
-        $content = $compiler->getHtmlBody();
+        $content = $compiler->render();
 
         $this->getResponse()
             ->setHeader('Content-Type', 'text/html')
@@ -344,4 +354,29 @@ class WidgetController extends Zend_Controller_Action
             ->appendBody($content);
     }
 
+    /**
+     * Renders the widget for blogger as iframe linked to frame compiler
+     */
+    public function bloggerAction()
+    {
+        $icon = $this->_widget->getIcon();
+        if (empty($icon)) {
+            $icon = 'http://' . NV_STATIC . '/modules/uwa/icon.png';
+        }
+
+        $widgetContent = '<iframe frameborder="0" width="220" height="250" src="' . Zend_Registry::get('widgetEndpoint') . '/frame?uwaUrl=' . urlencode($this->_widget->getUrl()) . '"></iframe>';
+
+        $bloggerParams = array(
+            'widget.title'      => $this->_widget->getTitle(),
+            'widget.content'    => $widgetContent,
+            'widget.template'   => '&lt;data:content/&gt;',
+            'infoUrl'           => $this->_widget->getUrl(),
+            'logoUrl'           => $icon,
+        );
+
+        $this->getResponse()
+            ->setHeader('Pragma', 'no-cache')
+            ->setHeader('Cache-Control', 'no-cache')
+            ->setHeader('Location', 'http://www.blogger.com/add-widget?' . http_build_query($bloggerParams));
+    }
 }

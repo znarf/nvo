@@ -24,6 +24,8 @@ Live.com Gadgets documentation can be found there:
   - http://dev.live.com/gadgets/sdk/docs/apiref.htm
 */
 
+UWA.Data.useJsonRequest = true;
+
 // register the gadget namespace
 registerNamespace("Netvibes.UWA");
 
@@ -177,65 +179,3 @@ UWA.extend(UWA.Environment.prototype, {
   }
 
 } );
-
-UWA.Data.request = function(url, request) {
-
-  /* NOTE:
-      request.method is not handled
-      request.postBody & request.parameters are not handled
-      request.cache is not handled
-  */
-
-  if (typeof request.authentication == 'object') {
-    request.proxy = 'ajax';
-  }
-
-  if (UWA.proxies[request.proxy]) {
-    if (request.proxy == 'feed') {
-      url = UWA.proxies[request.proxy] + '?url=' + encodeURIComponent(url) + "&rss=1";
-    } else if (typeof request.authentication == 'object') {
-      url = UWA.proxies[request.proxy] + '?url=' + encodeURIComponent(url);
-      var auth = request.authentication;
-      if (auth.type) {
-        url += '&auth=' + auth.type;
-      }
-      if (auth.username) {
-        url += '&username=' + encodeURIComponent(auth.username);
-      }
-      if (auth.password) {
-        url += '&password=' + encodeURIComponent(auth.password);
-      }
-    }
-  }
-
-  switch (request.type) {
-    case 'feed':
-    case 'json':
-      var callback = function(response) {
-        try {
-          eval("var j = " + response.responseText);
-          if (typeof request.onComplete == "function") request.onComplete(j);
-        } catch(e) {
-          UWA.log(e);
-        }
-      }
-      break;
-    case 'text':
-      var callback = function(response) {
-        if (typeof request.onComplete == 'function') {
-          request.onComplete(response.responseText);
-        }
-      }
-      break;
-    case 'xml':
-      var callback = function(response) {
-        if (typeof request.onComplete == 'function') {
-          request.onComplete(response.responseXML);
-        }
-      }
-      break;
-  }
-
-  Web.Network.createRequest(Web.Network.Type.XML, url, {proxy:"generic"}, callback).execute();
-
-}
