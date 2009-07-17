@@ -118,3 +118,16 @@ a {
     border: none;
 }
 
+.moduleStatus
+{
+    text-align:center;
+}
+
+.moduleStatus .share {
+    left:10px;
+    position:absolute;
+}
+
+.moduleStatus .powered {
+}
+
