@@ -62,8 +62,8 @@ class ProxyController extends Zend_Controller_Action
     public function feedAction()
     {
         $url = $this->getUrl();
-        //$url = 'http://' . NV_HOST . '/proxy/feedProxy.php?url=' . urlencode($url);
 
+        // set default options
         $proxyOptions = array(
             'type'      => 'feed',
             'cachetime' => 1200
@@ -84,7 +84,7 @@ class ProxyController extends Zend_Controller_Action
     public function ajaxAction()
     {
         if (!$this->getRequest()->isXmlHttpRequest()) {
-            //throw new Exception('This proxy can only be used by performing an Ajax call');
+            throw new Exception('This proxy can only be used by performing an Ajax call');
         }
 
         $proxyOptions = array();

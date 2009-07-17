@@ -18,4 +18,5 @@ projects/exposition-server/tmp/
 
 # build
 libraries/uwa-js/build/
-
+projects/exposition-server/public/js/*.js
+projects/exposition-server/public/js/c/*.js

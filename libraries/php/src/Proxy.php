@@ -239,10 +239,12 @@ class Proxy
         }
 
         $mimeType = $this->_mimeTypes[$this->_type];
-        //header("Content-Type: $mimeType");
+        header("Content-Type: $mimeType");
 
         if ($this->_object) {
             echo self::getJsonResponse($body, $this->_type, $this->_object);
+        } else if ($this->_type == 'feed') {
+            echo self::feedToJson($body);
         } else {
             echo $body;
         }
@@ -354,13 +356,18 @@ class Proxy
             'type' 			=> 'atom',
             'version' 		=> 'atom10',
             'nvFeed' 		=> '1',
-            'htmlUrl' 		=> $feed->link(),
+            'htmlUrl' 		=> $feed->link('alternate'),
             'title' 		=> $feed->title(),
-            'lang' 			=> $feed->language(),
             'content' 		=> $feed->description(),
             'items' 		=> array(),
-            'date' 			=> $feed->pubDate(),
-            'last-parsed' 	=> '',
+            'date' 			=> $feed->update(),
+            'author'        => $feed->author->name() . ' (' . $feed->author->email() . ')',
+            'author_detail' => (object) array(
+                'name'  => $feed->author->name(),
+                'email' => $feed->author->email(),
+            ),
+            'icon'          => $feed->logo(),
+            'last-parsed' 	=> time(),
         );
 
         foreach ($feed as $entryId => $entry) {
@@ -371,9 +378,10 @@ class Proxy
                 'title' 		=> $entry->title(),
                 'link' 			=> $entry->link['href'],
                 'content' 		=> $entry->content(),
-                'date'			=> $entry->pubDate(),
-                'enclosures' 	=> array(),
+                'date'			=> 'Jul 17, 2009 16:02:35 GMT',
+                'date'			=> date('M d, Y H:i:s', strtotime($entry->updated())) . ' GMT',
             );
+
 
             $arrayOutput->items[] = $item;
         }
