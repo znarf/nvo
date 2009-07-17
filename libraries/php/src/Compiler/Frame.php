@@ -2,17 +2,17 @@
 /**
  * Copyright Netvibes 2006-2009.
  * This file is part of Exposition PHP Lib.
- * 
+ *
  * Exposition PHP Lib is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Exposition PHP Lib is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with Exposition PHP Lib.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -38,7 +38,7 @@ class Compiler_Frame extends Compiler
      * @var string
      */
     protected $_stylesheet = 'uwa-iframe.css';
-    
+
     /**
      * Main rendering function.
      *
@@ -55,15 +55,28 @@ class Compiler_Frame extends Compiler
         $l[] = '<head>';
         $l[] = '<title>' . $this->_widget->getTitle() . '</title>';
         $l[] = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
+
         foreach ($this->getStylesheets() as $stylesheet) {
             $l[] = '<link rel="stylesheet" type="text/css" href="' . $stylesheet . '"/>';
         }
+
+        $l[] = '<script type="text/javascript">';
+        $l[] = '//<![CDATA[';
+        $l[] = 'window.onerror = function(msg, url, linenumber){';
+        $l[] = '    if (typeof console != \'undefined\' && console.log){';
+        $l[] = '        console.log("JS error: \'" + msg + "\'\ in " + url + " (line " + linenumber + ")");';
+        $l[] = '    }';
+        $l[] = '    return true;';
+        $l[] = '}';
+        $l[] = '//]]>';
+        $l[] = '</script>';
+
         $l[] = '</head>';
 
         $className = 'moduleIframe';
         if (isset($this->options['chromeColor'])) {
             $className .= ' ' .  $this->options['chromeColor'] . '-module';
-        }  
+        }
         $l[] = '<body class="' . $className . '">';
 
         $l[] = $this->getHtmlBody();
@@ -73,7 +86,7 @@ class Compiler_Frame extends Compiler
 
         return implode("\n", $l);
     }
-    
+
     public function getHtmlBody()
     {
         $l = array();
