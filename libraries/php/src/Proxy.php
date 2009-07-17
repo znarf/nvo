@@ -32,6 +32,13 @@ class Proxy
     const USER_AGENT = 'Netvibes Exposition Proxy';
 
     /**
+     * Default Mine Type.
+     *
+     * @var string
+     */
+    const DEFAULT_MINE_TYPE = 'text';
+
+    /**
      * Response body.
      *
      * @var string
@@ -101,13 +108,6 @@ class Proxy
     );
 
     /**
-     * Default Mine Type.
-     *
-     * @var string
-     */
-    const DEFAULT_MINE_TYPE = 'text';
-
-    /**
      * Cache key.
      *
      * @var string
@@ -143,13 +143,13 @@ class Proxy
         $this->_url = $url;
         $this->_key = 'ajax_' . md5($this->_url);
 
-        foreach ($options as $name => $value) {
+		foreach ($options as $name => $value) {
             if ($name == 'type') {
                 $this->_type = $value;
             } else if ($name == 'cachetime') {
                 $this->_cachetime = $value;
             } else  if ($name == 'object') {
-                $this->_object = $value;
+                $this->_object =  preg_replace('/[^a-z0-9]/i', '', $value);
             }
         }
 
@@ -227,8 +227,9 @@ class Proxy
     public function sendResponse()
     {
         $body = $this->getBody();
+
         // experimental, encode utf8 automatically
-        if (!$this->isUtf8Encoded($body)) {
+        if (!self::isUtf8Encoded($body)) {
             $body = utf8_encode($body);
         }
 
@@ -238,13 +239,42 @@ class Proxy
         }
 
         $mimeType = $this->_mimeTypes[$this->_type];
-        header("Content-Type: $mimeType");
+        //header("Content-Type: $mimeType");
 
         if ($this->_object) {
-            echo $this->_object . ' = "'  . addslashes($body) . '";';
+            echo self::getJsonResponse($body, $this->_type, $this->_object);
         } else {
             echo $body;
         }
+    }
+
+    /**
+     * Return String as Javascript Object in function of type of proxy
+     *
+     * @param string $string
+     * @param string $type
+     * @return string javascript var code
+     */
+    public static function getJsonResponse($string, $type, $objectName)
+    {
+		switch ($type) {
+            case 'feed':
+				$objectCleanValue = self::feedToJson($string);
+                break;
+
+			case 'json':
+                $objectCleanValue = $string;
+                break;
+
+            case 'xml':
+            case 'html':
+            default:
+				$objectCleanValue = self::stringToJson($string);
+                break;
+        }
+
+		// @todo security requirement ? try catch js ?
+        return $objectName . '=' . $objectCleanValue . ';';
     }
 
     /**
@@ -276,5 +306,111 @@ class Proxy
     public function getCache()
     {
         return $this->_cache;
+    }
+
+    /**
+     * Format string as Javascript Object value
+     *
+     * @param string $string simple string
+     * @return string json var value part
+     */
+	public static function stringToJson($string)
+	{
+		return '"' . str_replace("\n", '\n', addslashes($string)) . '"';
+	}
+
+    /**
+     * Format Feed as Javascript Object value
+     *
+     * @param string $xmlStringContents XML feed
+     * @return string json var value part
+     */
+    public static function feedToJson($xmlStringContents)
+    {
+        try {
+
+            $feed = Zend_Feed::importString($xmlStringContents);
+            $feedType = strtolower(str_replace('Zend_Feed_', '', get_class($feed)));
+            $feedToJsonCallback = $feedType . 'FeedToJson';
+
+			if (!method_exists(__CLASS__, $feedToJsonCallback)) {
+				throw new Proxy_Exception(sprintf('Missing feed format to Json callback function "%s" in class "%s".', $feedToJsonCallback, __CLASS__));
+			}
+
+            $jsonOutput = self::$feedToJsonCallback($feed);
+
+        } catch (Proxy_Exception $e) {
+
+			// @todo error response 500/404 or objectb error ?
+
+        }
+
+		return $jsonOutput;
+    }
+
+    protected static function atomFeedToJson(Zend_Feed_Abstract $feed)
+    {
+        $arrayOutput = (object) array(
+            'type' 			=> 'atom',
+            'version' 		=> 'atom10',
+            'nvFeed' 		=> '1',
+            'htmlUrl' 		=> $feed->link(),
+            'title' 		=> $feed->title(),
+            'lang' 			=> $feed->language(),
+            'content' 		=> $feed->description(),
+            'items' 		=> array(),
+            'date' 			=> $feed->pubDate(),
+            'last-parsed' 	=> '',
+        );
+
+        foreach ($feed as $entryId => $entry) {
+
+            $item = (object) array(
+                'id'            => $entryId,
+                'id_old'        => $entryId,
+                'title' 		=> $entry->title(),
+                'link' 			=> $entry->link['href'],
+                'content' 		=> $entry->content(),
+                'date'			=> $entry->pubDate(),
+                'enclosures' 	=> array(),
+            );
+
+            $arrayOutput->items[] = $item;
+        }
+
+        return Zend_Json::encode($arrayOutput);
+    }
+
+    protected static function rssFeedToJson(Zend_Feed_Abstract $feed)
+    {
+        $arrayOutput = (object) array(
+            'type' 			=> 'rss',
+            'version' 		=> 'rss20',
+            'nvFeed' 		=> '1',
+            'htmlUrl' 		=> $feed->link(),
+            'title' 		=> $feed->title(),
+            'lang' 			=> $feed->language(),
+            'content' 		=> $feed->description(),
+            'items' 		=> array(),
+            'date' 			=> $feed->pubDate(),
+            'last-parsed' 	=> '',
+        );
+
+        foreach ($feed as $entryId => $entry) {
+
+            $item = (object) array(
+                'id'            => $entryId,
+                'id_old'        => $entryId,
+                'title' 		=> $entry->title(),
+                'link' 			=> $entry->link['href'],
+                'content' 		=> $entry->description(),
+                'date'			=> $entry->pubDate(),
+                'enclosures' 	=> array(),
+            );
+
+            $arrayOutput->items[] = $item;
+        }
+
+        return Zend_Json::encode($arrayOutput);
     }
 }

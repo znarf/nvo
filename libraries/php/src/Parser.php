@@ -2,17 +2,17 @@
 /**
  * Copyright Netvibes 2006-2009.
  * This file is part of Exposition PHP Lib.
- * 
+ *
  * Exposition PHP Lib is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Exposition PHP Lib is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with Exposition PHP Lib.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,7 +35,7 @@ abstract class Parser
      * @var string
      */
     protected $_url;
-    
+
     /**
      * The widget to build.
      *
@@ -79,7 +79,7 @@ abstract class Parser
 
     /**
      * Widget builder.
-     * 
+     *
      * @return Widget The widget instance built from the skeleton parsing
      */
     public function buildWidget()
@@ -95,12 +95,12 @@ abstract class Parser
             $this->parseWidget();
         } catch (Zend_Http_Exception $e) {
             $this->_handleHttpErrors($e);
-        } catch (XmlException $e) {
+        } catch (Parser_Exception $e) {
             $this->_handleXmlErrors($e);
         }
         return $this->_widget;
     }
-    
+
     /**
      * Widget parser
      */
@@ -145,8 +145,7 @@ abstract class Parser
             $this->_xml = @new SimpleXMLElement($this->_content);
         } catch (Exception $e) {
             if (empty($options) || !isset($options['throwException']) || $options['throwException'] === true) {
-                require_once 'Exceptions.php';
-                throw new XmlException($e);
+                throw new Parser_Exception($e);
             }
             return false;
         }
