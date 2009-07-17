@@ -62,9 +62,19 @@ class ProxyController extends Zend_Controller_Action
     public function feedAction()
     {
         $url = $this->getUrl();
-        $url = 'http://' . NV_HOST . '/proxy/feedProxy.php?url=' . urlencode($url);
+        //$url = 'http://' . NV_HOST . '/proxy/feedProxy.php?url=' . urlencode($url);
 
-        $proxy = new Proxy($url, array('type' => 'json', 'cachetime' => 1200));
+        $proxyOptions = array(
+            'type'      => 'feed',
+            'cachetime' => 1200
+        );
+
+        // add object option is isset
+        if (isset($_GET['object'])) {
+            $proxyOptions['object'] = $_GET['object'];
+        }
+
+        $proxy = new Proxy($url, $proxyOptions);
         $proxy->sendResponse();
     }
 
