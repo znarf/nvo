@@ -157,6 +157,11 @@ class Compiler_Frame extends Compiler
             $l[] = sprintf("Environment.ifproxyUrl = %s;", Zend_Json::encode($this->options['ifproxyUrl']));
         }
 
+
+        if (isset($this->options['forceJsonRequest'])) {
+            $l[] = "UWA.Data.useJsonRequest = true;";
+        }
+
         $l[] = "Environment.launchModule();";
 
         return implode("\n", $l);

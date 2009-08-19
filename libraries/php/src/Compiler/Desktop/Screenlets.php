@@ -98,9 +98,10 @@ final class Compiler_Desktop_Screenlets extends Compiler_Desktop
         $compiler = Compiler_Factory::getCompiler($this->_platform, $this->_widget);
 
         $options = array(
-            'displayHeader' => 1,
-            'displayStatus' => 1,
-            'properties'    => array(
+            'displayHeader'         => true,
+            'displayStatus'         => true,
+            'forceJsonRequest'      => true,
+            'properties'            => array(
                 'id' => time(),
             ),
         );
