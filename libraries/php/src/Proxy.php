@@ -143,7 +143,7 @@ class Proxy
         $this->_url = $url;
         $this->_key = 'ajax_' . md5($this->_url);
 
-		foreach ($options as $name => $value) {
+        foreach ($options as $name => $value) {
             if ($name == 'type') {
                 $this->_type = $value;
             } else if ($name == 'cachetime') {
@@ -259,23 +259,23 @@ class Proxy
      */
     public static function getJsonResponse($string, $type, $objectName)
     {
-		switch ($type) {
+        switch ($type) {
             case 'feed':
-				$objectCleanValue = self::feedToJson($string);
+                $objectCleanValue = self::feedToJson($string);
                 break;
 
-			case 'json':
+            case 'json':
                 $objectCleanValue = $string;
                 break;
 
             case 'xml':
             case 'html':
             default:
-				$objectCleanValue = self::stringToJson($string);
+                $objectCleanValue = self::stringToJson($string);
                 break;
         }
 
-		// @todo security requirement ? try catch js ?
+        // @todo security requirement ? try catch js ?
         return $objectName . '=' . $objectCleanValue . ';';
     }
 
@@ -316,10 +316,10 @@ class Proxy
      * @param string $string simple string
      * @return string json var value part
      */
-	public static function stringToJson($string)
-	{
-		return '"' . str_replace("\n", '\n', addslashes($string)) . '"';
-	}
+    public static function stringToJson($string)
+    {
+        return '"' . str_replace("\n", '\n', addslashes($string)) . '"';
+    }
 
     /**
      * Format Feed as Javascript Object value
@@ -335,19 +335,19 @@ class Proxy
             $feedType = strtolower(str_replace('Zend_Feed_', '', get_class($feed)));
             $feedToJsonCallback = $feedType . 'FeedToJson';
 
-			if (!method_exists(__CLASS__, $feedToJsonCallback)) {
-				throw new Proxy_Exception(sprintf('Missing feed format to Json callback function "%s" in class "%s".', $feedToJsonCallback, __CLASS__));
-			}
+            if (!method_exists(__CLASS__, $feedToJsonCallback)) {
+                throw new Proxy_Exception(sprintf('Missing feed format to Json callback function "%s" in class "%s".', $feedToJsonCallback, __CLASS__));
+            }
 
             $jsonOutput = self::$feedToJsonCallback($feed);
 
         } catch (Proxy_Exception $e) {
 
-			// @todo error response 500/404 or objectb error ?
+            // @todo error response 500/404 or objectb error ?
 
         }
 
-		return $jsonOutput;
+        return $jsonOutput;
     }
 
     protected static function atomFeedToJson(Zend_Feed_Abstract $feed)
@@ -415,6 +415,13 @@ class Proxy
                 'date'			=> $entry->pubDate(),
                 'enclosures' 	=> array(),
             );
+
+            if (mb_strlen($entry->enclosure['type']) > 0) {
+                $item->enclosures[] = (object) array(
+                    'type'  => $entry->enclosure['type'],
+                    'url'   => $entry->enclosure['url'],
+                );
+            }
 
             $arrayOutput->items[] = $item;
         }
