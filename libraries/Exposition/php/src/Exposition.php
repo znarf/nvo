@@ -23,46 +23,104 @@
  */
 class Exposition
 {
-    public static function load()
+    /**
+     *
+     */
+    protected static $_defaultConfig = array(
+
+        'inlineWidgets' => false,
+
+        'compiler'  => array(
+            'tmpPath'   => '/tmp/',
+            'cache'     => array(),
+        ),
+
+        'endpoint'  => array(
+            'proxy'     => 'http://nvmodules.netvibes.com/proxy',
+            'widget'    => 'http://nvmodules.netvibes.com/proxy',
+            'js'        => 'http://cdn.netvibes.com/js/c',
+            'css'       => 'http://cdn.netvibes.com//themes/exposition-blueberry/',
+        ),
+
+        'js'    => array(
+            'version'       => 'preview3',
+            'compressed'    => true,
+        ),
+
+        'css'   => array(
+            'version'       => 'preview3',
+            'compressed'    => true,
+        ),
+
+    );
+
+    /**
+     *
+     */
+    protected static $_config = array();
+
+    /**
+     * Set config of current bean instance
+     *
+     * @param void $config can be an array, an Zend_Config instance of a filename
+     * @param void $environment config environment value (e.g production, staging, development,...)
+     *
+     * @return object Zend_Config instance
+     */
+    public function setConfig($config, $environment = null)
     {
-        // Netvibes constants
-        $constants = array(
-            'EXPOSITION' => dirname(__FILE__),
-            'LIB'        => dirname(__FILE__) . '/..',
-            'NV_HOST'    => 'www.netvibes.com',
-            'NV_STATIC'  => 'cdn.netvibes.com',
-            'NV_MODULES' => 'nvmodules.netvibes.com',
-            'NV_AVATARS' => 'avatars.netvibes.com',
-            'NV_REST'    => 'rest.netvibes.com',
-            'NV_ECO'     => 'eco.netvibes.com'
-        );
-        foreach ($constants as $name => $value) {
-            if (false === defined($name)) {
-                define($name, $value);
-                if ($name == 'EXPOSITION' || $name == 'LIB') {
-                    set_include_path($value . PATH_SEPARATOR . get_include_path());
-                }
-            }
+        if (is_string($config)) {
+            $config = $this->_loadConfigFromFile($config, $environment);
+        } elseif ($config instanceof Zend_Config) {
+            $config = $config->toArray();
+        } else if (!is_array($config)) {
+            throw new Exposition_Exception('Invalid config provided; must be location of config file, a config object, or an array');
         }
 
-        // Exposition Registry Values
-        $registryDefaultValues = array(
-            'jsVersion'       => 'preview3',
-            'cssVersion'      => 'preview3',
-            'useCompressedJs' => true,
-            'useMergedCss'    => true,
-            'inlineWidgets'   => false,
-            'uwaJsDir'        => 'http://' . NV_STATIC  . '/js/c/',
-            'uwaCssDir'       => 'http://' . NV_STATIC  . '/themes/exposition-blueberry/',
-            'uwaImgDir'       => 'http://' . NV_STATIC  . '/img/',
-            'proxyEndpoint'   => 'http://' . NV_MODULES . '/proxy',
-            'widgetEndpoint'  => 'http://' . NV_MODULES . '/widget',
-            'tmpDir'          => '/tmp/'
-        );
-        foreach ($registryDefaultValues as $key => $value) {
-            if (!Zend_Registry::isRegistered($key)) {
-                Zend_Registry::set($key, $value);
-            }
+        // merge with default and set has current
+        self::$_config = array_merge(self::$_defaultConfig, $config);
+
+        return self::$_config;
+    }
+
+    /**
+     * Load config from file
+     *
+     * @param void $file config file path
+     * @param void $environment config environment value (e.g production, staging, development,...)
+     *
+     * @return object Zend_Config instance
+     */
+    protected function _loadConfigFromFile($file, $environment)
+    {
+        $suffix = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+        switch ($suffix) {
+            case 'ini':
+                $config = new Zend_Config_Ini($file, $environment);
+                break;
+
+            case 'xml':
+                $config = new Zend_Config_Xml($file, $environment);
+                break;
+
+            case 'php':
+            case 'inc':
+                $config = include $file;
+                if (!is_array($config)) {
+                    throw new Exposition_Exception('Invalid configuration file provided; PHP file does not return array value');
+                }
+                break;
+
+            default:
+                throw new Exposition_Exception('Invalid configuration file provided; unknown config type');
         }
+
+        return $config->toArray();;
+    }
+
+    public static function getConfig($key, $value)
+    {
     }
 }
+

@@ -20,7 +20,7 @@
 
 require_once 'Zend/Controller/Action.php';
 
-require_once 'Proxy.php';
+require_once 'Exposition/Proxy.php';
 
 /**
  * Proxy controller.
