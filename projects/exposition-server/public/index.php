@@ -18,22 +18,58 @@
  */
 
 //---------------------------------------------------------------------------
-// Config and bootstrapping
+// Define usefull paths
 
-require_once dirname(__FILE__) . '/../config/config.php';
-require_once APPLICATION_PATH . '/Bootstrap.php';
+define('BASE_PATH', realpath(dirname(__FILE__) . '/..'));
+define('APPLICATION_PATH', BASE_PATH . '/application');
+define('CONFIG_PATH', APPLICATION_PATH . '/configs');
+define('LIBRARY_PATH', BASE_PATH . '/../../libraries');
+define('ZF_PATH', LIBRARY_PATH . '/ZendFramework');
+
+//---------------------------------------------------------------------------
+// External variable env
+
+define('BASE_URL', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : trim(`hostname -f`)));
+define('BASE_URL_SCHEME', ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://'));
+define('MAIN_URL', BASE_URL_SCHEME . BASE_URL);
+
+//---------------------------------------------------------------------------
+// Debug options
+
+define('DEBUG_REMOTE_TOKEN', 'debug_me');
+define('DEBUG_ENABLE', (isset($_POST[DEBUG_REMOTE_TOKEN]) || isset($_GET[DEBUG_REMOTE_TOKEN]) || isset($_COOKIE[DEBUG_REMOTE_TOKEN]) ? true : false));
+define('DEBUG', true);
+
+//---------------------------------------------------------------------------
+// Application options
+
+define('APPLICATION_ENV', 'production');
+define('APPLICATION_CONFIG', CONFIG_PATH . '/application.ini');
+
+//---------------------------------------------------------------------------
+// file inclusion & autoload for ZendFramework
+
+set_include_path( ZF_PATH . '/library' . PATH_SEPARATOR . get_include_path());
 
 //---------------------------------------------------------------------------
 // Start Zend Loader and check Zend Framework availability
 
 if(!@include_once('Zend/Loader/Autoloader.php')) {
-    trigger_error(sprintf('Unable to load Zend Framework "Zend/Loader/Autoloader.php" file with LIBRARY_ZENDFRAMEWORK_PATH as value "%s".', LIBRARY_ZENDFRAMEWORK_PATH), E_USER_ERROR);
+    trigger_error(sprintf('Unable to load Zend Framework "Zend/Loader/Autoloader.php" file with ZF_PATH as value "%s".', ZF_PATH), E_USER_ERROR);
 }
 
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
 $autoloader->suppressNotFoundWarnings(true);
 
+// Initialize Application Configuration and Environment
+//---------------------------------------------------------------------------
+
+$application = new Zend_Application(APPLICATION_ENV, APPLICATION_CONFIG);
+$application->bootstrap();
+$application->run();
+
+/*
 // Server host and base path
 //---------------------------------------------------------------------------
 
@@ -47,3 +83,4 @@ Bootstrap::$registry->set('uwaCssDir', MAIN_URL . '/css/');
 Bootstrap::$registry->set('uwaJsDir', MAIN_URL . '/js/c/');
 Bootstrap::$registry->set('uwaRessourcesDir', LIBRARY_EXPOSITION_PATH . '/ressources');
 Bootstrap::run();
+*/
