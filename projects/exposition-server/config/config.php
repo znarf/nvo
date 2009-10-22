@@ -2,47 +2,64 @@
 /**
  * Copyright Netvibes 2006-2009.
  * This file is part of Exposition PHP Server.
- * 
+ *
  * Exposition PHP Server is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Exposition PHP Server is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
  */
 
+//---------------------------------------------------------------------------
+// Set PHP Errors Reporting
 
-/**
- * Configuration file.
- */
-
-// Be strict or be dead
 error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 'on');
 
-// Active debugging output ?
-if (false === defined('DEBUG')) {
-    define('DEBUG', false);
-}
+//---------------------------------------------------------------------------
+// Locale settings
 
-define('APPLICATION', dirname(__FILE__) . '/../application');
+ini_set('mbstring.internal_encoding', 'utf-8');
+ini_set('mbstring.script_encoding', 'utf-8');
+date_default_timezone_set('Europe/Paris');
 
-if (is_dir(dirname(__FILE__) . '/../lib')) {
-    // Standalone Exposition Server
-    define('EXPOSITION', dirname(__FILE__) . '/../lib/Exposition');
-    define('LIB', dirname(__FILE__) . '/../lib');
-} else if (is_dir(dirname(__FILE__) . '/../../../libraries')) {
-    // SVN repository
-    define('EXPOSITION', dirname(__FILE__) . '/../../../libraries/php/src');
-    define('LIB', dirname(__FILE__) . '/../../../libraries/php/lib');
-} else {
-    throw new Exception('The PHP librairies could not be found.');
-}
+//---------------------------------------------------------------------------
+// Define usefull paths
 
-// Include Path
-set_include_path(APPLICATION . PATH_SEPARATOR . EXPOSITION . PATH_SEPARATOR . LIB . PATH_SEPARATOR . get_include_path());
+define('BASE_PATH', realpath(dirname(__FILE__) . '/..'));
+define('INCLUDE_PATH', realpath(dirname(__FILE__)));
+
+define('APPLICATION_PATH', BASE_PATH . '/application');
+define('LIBRARY_PATH', BASE_PATH . '/../../libraries');
+define('LIBRARY_EXPOSITION_PATH', LIBRARY_PATH . '/Exposition/php/src');
+define('LIBRARY_ZENDFRAMEWORK_PATH', LIBRARY_PATH . '/ZendFramework/library');
+
+//---------------------------------------------------------------------------
+// Debug options
+
+define('DEBUG_REMOTE_TOKEN', 'debug_me');
+define('DEBUG_ENABLE', (isset($_POST[DEBUG_REMOTE_TOKEN]) || isset($_GET[DEBUG_REMOTE_TOKEN]) || isset($_COOKIE[DEBUG_REMOTE_TOKEN]) ? true : false));
+define('DEBUG', DEBUG_ENABLE);
+
+//---------------------------------------------------------------------------
+// file inclusion & autoload
+
+set_include_path(
+
+    // frameworks
+    LIBRARY_ZENDFRAMEWORK_PATH . PATH_SEPARATOR .
+    LIBRARY_EXPOSITION_PATH .  PATH_SEPARATOR .
+
+    // load others lib
+    LIBRARY_PATH . PATH_SEPARATOR .
+
+    get_include_path()
+);
+

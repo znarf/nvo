@@ -21,8 +21,8 @@
 require_once 'Zend/Controller/Action.php';
 require_once 'Zend/Json.php';
 
-require_once 'Parser/Factory.php';
-require_once 'Compiler/Factory.php';
+require_once 'Exposition/Parser/Factory.php';
+require_once 'Exposition/Compiler/Factory.php';
 
 /**
  * Widget controller.
@@ -54,19 +54,19 @@ class WidgetController extends Zend_Controller_Action
         $this->uwaUrl = $this->getRequest()->getParam('uwaUrl');
 
         // Get uwaUrl has first GET param key due live.com bug with urldecode
-		if (empty($this->uwaUrl) && $this->_getParam('action') == 'live' ) {
+        if (empty($this->uwaUrl)) {
 
-			$matches = array();
-			$pattern = ':\?(.*[^&])(.*)?:i';
-			if(preg_match ($pattern, $_SERVER['REQUEST_URI'], $matches)) {
-				$this->uwaUrl = urldecode($matches[1]);
-			}
-		}
+            $matches = array();
+            $pattern = ':\?(.*[^&])(.*)?:i';
+            if(preg_match ($pattern, $_SERVER['REQUEST_URI'], $matches)) {
+                $this->uwaUrl = urldecode($matches[1]);
+            }
+        }
 
         // Parse the UWA widget from the given URL
         if (!empty($this->uwaUrl)) {
 
-            $parser = Parser_Factory::getParser('uwa', $this->uwaUrl, $this->_cache);
+            $parser = Exposition_Parser_Factory::getParser('uwa', $this->uwaUrl, $this->_cache);
             $this->_widget = $parser->buildWidget();
 
         // Create an empty widget
@@ -84,7 +84,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function uwaAction()
     {
-        $compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('uwa', $this->_widget);
         $content = $compiler->render();
         $this->getResponse()
             ->setHeader('Content-Type', 'application/xhtml+xml; charset=utf-8')
@@ -97,7 +97,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function cssAction()
     {
-        $compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('uwa', $this->_widget);
         $content = $compiler->renderCss();
         $this->getResponse()
             ->setHeader('Content-Type', 'text/css; charset=utf-8')
@@ -110,7 +110,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function jsAction()
     {
-        $compiler = Compiler_Factory::getCompiler('uwa', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('uwa', $this->_widget);
         $options = array(
             'uwaId'     => $this->getRequest()->getParam('uwaId'),
             'platform'  => $this->getRequest()->getParam('platform'),
@@ -130,7 +130,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function gspecAction()
     {
-        $compiler = Compiler_Factory::getCompiler('google', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('google', $this->_widget);
         $options = array( 'type' => isset($_GET['type']) ? $_GET['type'] : 'url' );
         $compiler->setOptions($options);
         $content = $compiler->render();
@@ -145,7 +145,8 @@ class WidgetController extends Zend_Controller_Action
      */
     public function frameAction()
     {
-        $compiler = Compiler_Factory::getCompiler('frame', $this->_widget);
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('frame', $this->_widget);
 
         if ($this->getRequest()->has('synd') && $this->getRequest()->has('libs')) {
             $compiler->setEnvironment('Frame_Google');
@@ -160,6 +161,8 @@ class WidgetController extends Zend_Controller_Action
         if (isset($options['chromeColor'])) {
             $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
         }
+
+
 
         $this->view->headTitle( $this->_widget->getTitle() );
 
@@ -252,7 +255,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function dashboardAction()
     {
-        $compiler = Compiler_Factory::getCompiler('Dashboard', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('Dashboard', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
@@ -270,7 +273,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function screenletsAction()
     {
-        $compiler = Compiler_Factory::getCompiler('Screenlets', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('Screenlets', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
@@ -289,7 +292,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function operaAction()
     {
-        $compiler = Compiler_Factory::getCompiler('Opera', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('Opera', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
@@ -308,7 +311,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function jilAction()
     {
-        $compiler = Compiler_Factory::getCompiler('Jil', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('Jil', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
@@ -327,7 +330,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function vistaAction()
     {
-        $compiler = Compiler_Factory::getCompiler('Vista', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('Vista', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
@@ -346,7 +349,7 @@ class WidgetController extends Zend_Controller_Action
      */
     public function liveAction()
     {
-        $compiler = Compiler_Factory::getCompiler('Live', $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler('Live', $this->_widget);
         $content = $compiler->render();
         $this->getResponse()
             ->setHeader('Content-Type', 'text/xml; charset=utf-8')

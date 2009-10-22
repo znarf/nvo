@@ -17,6 +17,23 @@
  * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
  */
 
+//---------------------------------------------------------------------------
+// Config and bootstrapping
+require_once dirname(__FILE__) . '/../config/config.php';
+require_once APPLICATION_PATH . '/Bootstrap.php';
+
+//---------------------------------------------------------------------------
+// Start Zend Loader and check Zend Framework availability
+
+if(!@include_once('Zend/Loader/Autoloader.php')) {
+    trigger_error(sprintf('Unable to load Zend Framework "Zend/Loader/Autoloader.php" file with LIBRARY_ZENDFRAMEWORK_PATH as value "%s".', LIBRARY_ZENDFRAMEWORK_PATH), E_USER_ERROR);
+}
+
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->setFallbackAutoloader(true);
+$autoloader->suppressNotFoundWarnings(true);
+
+
 // Server host and base path
 $host = $_SERVER['HTTP_HOST'];
 $dirname = dirname($_SERVER['SCRIPT_NAME']);
@@ -25,9 +42,7 @@ $basePath = $dirname == '/' ? '' : $dirname;
 // Temporary directory
 $tmpDir = dirname(__FILE__) . '/../tmp/';
 
-// Config and bootstrapping
-require_once dirname(__FILE__) . '/../config/config.php';
-require_once 'Bootstrap.php';
+
 
 Bootstrap::prepare();
 
