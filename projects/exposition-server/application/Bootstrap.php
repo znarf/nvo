@@ -23,5 +23,10 @@
  */
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-
+    /**
+     * Init Exposition class
+     */
+    protected function _initExposition()
+    {
+    }
 }
