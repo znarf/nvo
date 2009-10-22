@@ -19,6 +19,7 @@
 
 //---------------------------------------------------------------------------
 // Config and bootstrapping
+
 require_once dirname(__FILE__) . '/../config/config.php';
 require_once APPLICATION_PATH . '/Bootstrap.php';
 
@@ -33,29 +34,16 @@ $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
 $autoloader->suppressNotFoundWarnings(true);
 
-
 // Server host and base path
-$host = $_SERVER['HTTP_HOST'];
-$dirname = dirname($_SERVER['SCRIPT_NAME']);
-$basePath = $dirname == '/' ? '' : $dirname;
-
-// Temporary directory
-$tmpDir = dirname(__FILE__) . '/../tmp/';
-
-
+//---------------------------------------------------------------------------
 
 Bootstrap::prepare();
-
-Bootstrap::$registry->set('tmpDir', $tmpDir);
-Bootstrap::setCache('File', array('cache_dir' => $tmpDir));
-
-Bootstrap::$registry->set('proxyEndpoint', 'http://' . $host .'/proxy');
-Bootstrap::$registry->set('widgetEndpoint', 'http://' . $host . $basePath);
-
-Bootstrap::$registry->set('uwaCssDir', 'http://' . $host . '/css/');
-Bootstrap::$registry->set('uwaJsDir', 'http://' . $host . '/js/c/');
+Bootstrap::$registry->set('tmpDir', FILE_CACHE_PATH);
+Bootstrap::setCache('File', array('cache_dir' => FILE_CACHE_PATH));
+Bootstrap::$registry->set('proxyEndpoint', MAIN_URL . '/proxy');
+Bootstrap::$registry->set('widgetEndpoint', MAIN_URL . '/widget');
 Bootstrap::$registry->set('useMergedCss', false);
-
-Bootstrap::$registry->set('uwaRessourcesDir', dirname(__FILE__) . '/../ressources/');
-
+Bootstrap::$registry->set('uwaCssDir', MAIN_URL . '/css/');
+Bootstrap::$registry->set('uwaJsDir', MAIN_URL . '/js/c/');
+Bootstrap::$registry->set('uwaRessourcesDir', LIBRARY_EXPOSITION_PATH . '/ressources');
 Bootstrap::run();

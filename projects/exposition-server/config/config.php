@@ -34,19 +34,26 @@ date_default_timezone_set('Europe/Paris');
 // Define usefull paths
 
 define('BASE_PATH', realpath(dirname(__FILE__) . '/..'));
-define('INCLUDE_PATH', realpath(dirname(__FILE__)));
 
 define('APPLICATION_PATH', BASE_PATH . '/application');
+define('FILE_CACHE_PATH', BASE_PATH . '/tmp');
 define('LIBRARY_PATH', BASE_PATH . '/../../libraries');
-define('LIBRARY_EXPOSITION_PATH', LIBRARY_PATH . '/Exposition/php/src');
-define('LIBRARY_ZENDFRAMEWORK_PATH', LIBRARY_PATH . '/ZendFramework/library');
+define('LIBRARY_EXPOSITION_PATH', LIBRARY_PATH . '/Exposition');
+define('LIBRARY_ZENDFRAMEWORK_PATH', LIBRARY_PATH . '/ZendFramework');
+
+//---------------------------------------------------------------------------
+// External variable env
+
+define('BASE_URL', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : trim(`hostname -f`)));
+define('BASE_URL_SCHEME', ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://'));
+define('MAIN_URL', BASE_URL_SCHEME . BASE_URL);
 
 //---------------------------------------------------------------------------
 // Debug options
 
 define('DEBUG_REMOTE_TOKEN', 'debug_me');
 define('DEBUG_ENABLE', (isset($_POST[DEBUG_REMOTE_TOKEN]) || isset($_GET[DEBUG_REMOTE_TOKEN]) || isset($_COOKIE[DEBUG_REMOTE_TOKEN]) ? true : false));
-define('DEBUG', DEBUG_ENABLE);
+define('DEBUG', true);
 
 //---------------------------------------------------------------------------
 // file inclusion & autoload
@@ -54,8 +61,8 @@ define('DEBUG', DEBUG_ENABLE);
 set_include_path(
 
     // frameworks
-    LIBRARY_ZENDFRAMEWORK_PATH . PATH_SEPARATOR .
-    LIBRARY_EXPOSITION_PATH .  PATH_SEPARATOR .
+    LIBRARY_ZENDFRAMEWORK_PATH . '/library' . PATH_SEPARATOR .
+    LIBRARY_EXPOSITION_PATH . '/php/src' .  PATH_SEPARATOR .
 
     // load others lib
     LIBRARY_PATH . PATH_SEPARATOR .
