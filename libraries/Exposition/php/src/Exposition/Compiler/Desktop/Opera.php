@@ -18,7 +18,7 @@
  */
 
 
-require_once 'Compiler/Desktop/W3c.php';
+require_once 'Exposition/Compiler/Desktop/W3c.php';
 
 /**
  * Opera Widgets Compiler.

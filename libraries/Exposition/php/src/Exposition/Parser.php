@@ -18,8 +18,8 @@
  */
 
 
-require_once 'Fetcher.php';
-require_once 'Widget.php';
+require_once 'Exposition/Fetcher.php';
+require_once 'Exposition/Widget.php';
 
 require_once 'Zend/Cache.php';
 require_once 'Zend/Registry.php';

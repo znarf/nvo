@@ -18,8 +18,8 @@
  */
 
 
-require_once 'Parser/Factory.php';
-require_once 'Widget.php';
+require_once 'Exposition/Parser/Factory.php';
+require_once 'Exposition/Widget.php';
 
 require_once 'Zend/Json.php';
 

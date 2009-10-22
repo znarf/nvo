@@ -18,7 +18,7 @@
  */
 
 
-require_once 'Compiler.php';
+require_once 'Exposition/Compiler.php';
 require_once 'Zend/Http/Client.php';
 
 /**

@@ -18,7 +18,7 @@
  */
 
 
-require_once 'Compiler/Desktop.php';
+require_once 'Exposition/Compiler/Desktop.php';
 
 /**
  * Gnome Screenlets Widgets Compiler.

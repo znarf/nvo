@@ -18,7 +18,7 @@
  */
 
 
-require_once 'Compiler.php';
+require_once 'Exposition/Compiler.php';
 
 /**
  * Google Compiler to render a widget as a Google Gadget specification

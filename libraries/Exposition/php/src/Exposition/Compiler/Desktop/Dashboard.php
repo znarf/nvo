@@ -18,7 +18,7 @@
  */
 
 
-require_once 'Compiler/Desktop/W3c.php';
+require_once 'Exposition/Compiler/Desktop/W3c.php';
 
 /**
  * Apple Dashboard Widgets Compiler.

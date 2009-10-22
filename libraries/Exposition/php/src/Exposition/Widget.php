@@ -323,7 +323,8 @@ class Exposition_Widget
      */
     public function getCompressedScript()
     {
-        require_once 'jsmin.php';
+        require_once 'JSMin.php';
+
         return trim(JSMin::minify($this->_script));
     }
 
@@ -427,3 +428,4 @@ class Exposition_Widget
         return $this->_richIcon;
     }
 }
+

@@ -18,7 +18,7 @@
  */
 
 
-require_once 'Compiler.php';
+require_once 'Exposition/Compiler.php';
 
 /**
  * Live Compiler to render widget as a Live.com XML manifest.
