@@ -1,0 +1,10 @@
+<package>
+  <id>Exposition</id>
+  <name>Exposition</name>
+  <version>0.3</version>
+  <type>application</type>
+  <deploy>
+      <origin>modules</origin>
+      <destination path="shared">./modules/</destination>
+  </deploy>
+</package>
