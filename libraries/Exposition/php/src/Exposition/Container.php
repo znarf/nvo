@@ -111,12 +111,14 @@ class Exposition_Container
     public function getCoreLibraries()
     {
         $libraries = array();
-        $useCompressedJs = Zend_Registry::get('useCompressedJs');
-        if ($useCompressedJs) {
-            $libraries[] = Zend_Registry::get('uwaJsDir') . 'UWA_Core.js';
+        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
+        $jsCompressed = Exposition_Load::getConfig('js', 'compressed');
+
+        if ($jsCompressed) {
+            $libraries[] = $jsEndPoint . '/UWA_Core.js';
         } else {
             foreach ($this->_coreLibraries as $library) {
-                $libraries[] = Zend_Registry::get('uwaJsDir') . $library;
+                $libraries[] = $jsEndPoint . '/' . $library;
             }
         }
         return $libraries;

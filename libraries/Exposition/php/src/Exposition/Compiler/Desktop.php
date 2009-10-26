@@ -50,7 +50,8 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
         parent::__construct($parser);
 
         // Temporary file path to build the archive
-        $tmpFile = Zend_Registry::get('tmpDir') . 'compile' . time() . rand(1, 1000) . '.zip';
+        $tmpPath = Exposition_Load::getConfig('compiler', 'tmpPath');
+        $tmpFile = $tmpPath . '/compile' . time() . rand(1, 1000) . '.zip';
 
         $this->archiveclass = Exposition_Archive::newArchive($this->archiveFormat, $tmpFile);
     }

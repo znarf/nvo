@@ -251,18 +251,26 @@ class Exposition_Parser_Uwa extends Exposition_Parser
     {
         $script = $this->_widget->getScript();
         $libraries = array();
+
+        $useCompressedJs = Exposition_Load::getConfig('js', 'compressed');
+        $useVersionJs = Exposition_Load::getConfig('js', 'version');
+
         foreach ($this->knownLibraries as $string => $src) {
+
             if (stripos($script, $string)) {
-                $useCompressedJs = Zend_Registry::get('useCompressedJs');
+
                 if ($useCompressedJs) {
+                    $matches = array();
                     preg_match("/^(UWA|App)\/([^\/]+)\/([^\/]+).js$/", $src, $matches);
                     $type = $matches[2];
                     $name = $matches[3];
+
                     $library = 'http://' . NV_STATIC . '/js/c/UWA_' . $type . '_' . $name . '.js';
                 } else {
                     $library = 'http://' . NV_STATIC . '/js/' . $src;
                 }
-                $libraries[] = $library . '?v=' . Zend_Registry::get('jsVersion');
+
+                $libraries[] = $library . '?v=' . $useVersionJs;
 
             }
         }

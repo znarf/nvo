@@ -125,9 +125,10 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
     {
         $l = array();
 
+        $proxyEndpoint = Exposition_Load::getConfig('endpoint', 'proxy');
         $proxies = array(
-            'ajax' => Zend_Registry::get('proxyEndpoint') . '/ajax',
-            'feed' => Zend_Registry::get('proxyEndpoint') . '/feed'
+            'ajax' => $proxyEndpoint . '/ajax',
+            'feed' => $proxyEndpoint . '/feed'
         );
 
         $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));

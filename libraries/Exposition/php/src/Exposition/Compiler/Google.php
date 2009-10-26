@@ -61,8 +61,9 @@ class Exposition_Compiler_Google extends Exposition_Compiler
 
         $metas = $this->_widget->getMetas();
 
-        $defaultScreenshot = Zend_Registry::get('uwaImgDir') . 'uwa-screenshot.png';
-        $defaultThumbnail  = Zend_Registry::get('uwaImgDir') . 'uwa-thumbnail.png';
+        $ressourcePath = Exposition_Load::getConfig('compiler', 'ressourcePath');
+        $defaultScreenshot = $ressourcePath . '/uwa-screenshot.png';
+        $defaultThumbnail  = $ressourcePath . '/uwa-thumbnail.png';
 
         $googleMetas = array(
             'title'        => $this->_widget->getTitle(),
@@ -127,7 +128,8 @@ class Exposition_Compiler_Google extends Exposition_Compiler
 
         } else if ($this->options['type'] == 'url') {
 
-            $url = Zend_Registry::get('widgetEndpoint') . '/frame?platform=igoogle&uwaUrl=' . urlencode($this->_widget->getUrl());
+            $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
+            $url = $widgetEndPoint . '/frame?platform=igoogle&uwaUrl=' . urlencode($this->_widget->getUrl());
 
             $l[] = '<Content type="url" href="' . htmlspecialchars($url) . '"></Content>';
 
@@ -142,9 +144,10 @@ class Exposition_Compiler_Google extends Exposition_Compiler
     {
         $l = array();
 
+        $proxyEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
         $proxies = array(
-            'ajax' => Zend_Registry::get('proxyEndpoint') . '/ajax',
-            'feed' => Zend_Registry::get('proxyEndpoint') . '/feed'
+            'ajax' => $proxyEndPoint . '/ajax',
+            'feed' => $proxyEndPoint . '/feed'
         );
 
         $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));

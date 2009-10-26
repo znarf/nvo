@@ -28,5 +28,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initExposition()
     {
+        $expositionConfig = $this->getOption('exposition');
+        Exposition_Load::setConfig($expositionConfig);
     }
 }

@@ -83,49 +83,48 @@ class ProxyController extends Zend_Controller_Action
      */
     public function ajaxAction()
     {
-	if (!$this->getRequest()->isXmlHttpRequest()) {
-	    //throw new Exception('This proxy can only be used by performing an Ajax call');
-	}
+        if (!$this->getRequest()->isXmlHttpRequest()) {
+            //throw new Exception('This proxy can only be used by performing an Ajax call');
+        }
 
-	$proxyOptions = array();
+        $proxyOptions = array();
 
-	$proxyOptions['type'] = isset($_GET['type']) ? $_GET['type'] : 'text';
+        $proxyOptions['type'] = isset($_GET['type']) ? $_GET['type'] : 'text';
 
-	if ($this->getRequest()->isPost()) {
-	    $proxyOptions['cachetime'] = 0;
-	} else if (isset($_GET['cache']) && settype($_GET['cache'], 'integer')) {
-	    $proxyOptions['cachetime'] = $_GET['cache'];
-	} else {
-	    $proxyOptions['cachetime'] = 60;
-	}
+        if ($this->getRequest()->isPost()) {
+            $proxyOptions['cachetime'] = 0;
+        } else if (isset($_GET['cache']) && settype($_GET['cache'], 'integer')) {
+            $proxyOptions['cachetime'] = $_GET['cache'];
+        } else {
+            $proxyOptions['cachetime'] = 60;
+        }
 
-	// add object if json
-	if (isset($_GET['object'])) {
-	    $proxyOptions['object'] = $_GET['object'];
-	}
+        // add object if json
+        if (isset($_GET['object'])) {
+            $proxyOptions['object'] = $_GET['object'];
+        }
 
-	$proxy = new Proxy($this->getUrl(), $proxyOptions);
+        $proxy = new Exposition_Proxy($this->getUrl(), $proxyOptions);
 
-	$httpOptions = array(
-	    'method'  => $_SERVER['REQUEST_METHOD'],
-	    'auth'    => $this->getAuth(),
-	    'headers' => array(
-		'Accept-language' => $this->getLang(),
-		'Accept'          => $_SERVER['HTTP_ACCEPT']
-	    )
-	);
+        $httpOptions = array(
+            'method'            => $_SERVER['REQUEST_METHOD'],
+            'auth'              => $this->getAuth(),
+            'headers'           => array(
+            'Accept-language'   => $this->getLang(),
+            'Accept'            => $_SERVER['HTTP_ACCEPT']
+        ));
 
-	$postParameters = $this->getRequest()->getPost();
-	$postBody = $this->getRequest()->getRawBody();
+        $postParameters = $this->getRequest()->getPost();
+        $postBody = $this->getRequest()->getRawBody();
 
-	if (count($postParameters) > 0) {
-	    $httpOptions['parameterPost'] = $postParameters;
-	} else if ( !empty($postBody) ) {
-	    $httpOptions['rawData'] = $postBody;
-	}
+        if (count($postParameters) > 0) {
+            $httpOptions['parameterPost'] = $postParameters;
+        } else if ( !empty($postBody) ) {
+            $httpOptions['rawData'] = $postBody;
+        }
 
-	$proxy->setHttpClientOptions($httpOptions);
-	$proxy->sendResponse();
+        $proxy->setHttpClientOptions($httpOptions);
+        $proxy->sendResponse();
     }
 
     /**
@@ -135,11 +134,14 @@ class ProxyController extends Zend_Controller_Action
      */
     public function getAuth()
     {
-	if (isset($_REQUEST['auth'], $_REQUEST['username'], $_REQUEST['password'])) {
-	    $this->_auth = array('username' => $_REQUEST['username'],
-				 'password' => $_REQUEST['password']);
-	}
-	return $this->_auth;
+        if (isset($_REQUEST['auth'], $_REQUEST['username'], $_REQUEST['password'])) {
+            $this->_auth = array(
+                'username' => $_REQUEST['username'],
+                'password' => $_REQUEST['password'],
+            );
+        }
+
+        return $this->_auth;
     }
 
     /**
@@ -149,11 +151,12 @@ class ProxyController extends Zend_Controller_Action
      */
     public function getUrl()
     {
-	// Fix some invalid URLs
-	$url = trim($_GET['url']);
-	$url = str_replace(' ', '%20', $url);
-	$url = str_replace('|', '%7C', $url);
-	return $url;
+        // Fix some invalid URLs
+        $url = trim($_GET['url']);
+        $url = str_replace(' ', '%20', $url);
+        $url = str_replace('|', '%7C', $url);
+
+        return $url;
     }
 
     /**
@@ -163,6 +166,6 @@ class ProxyController extends Zend_Controller_Action
      */
     public function getLang()
     {
-	return $this->_lang;
+        return $this->_lang;
     }
 }

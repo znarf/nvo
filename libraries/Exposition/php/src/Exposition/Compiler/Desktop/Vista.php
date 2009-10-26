@@ -84,12 +84,12 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
     protected function buildArchive()
     {
         // Add the widget skeleton to the archive
-        $ressourcesDir = Zend_Registry::get('uwaRessourcesDir');
-        if (!is_readable($ressourcesDir)) {
+        $ressourcePath = Exposition_Load::getConfig('compiler', 'ressourcePath');
+        if (!is_readable($ressourcePath)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
 
-        $this->addDirToArchive($ressourcesDir . 'vista');
+        $this->addDirToArchive($ressourcePath . '/vista');
 
         // Replace the default icon if a rich icon is given
         $richIcon = $this->_widget->getRichIcon();
@@ -127,12 +127,15 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
         ));
         */
 
+        $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
+        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
+
         $javascripts = array(
             //'http://www.netvibes.com/js/UWA/load.js.php?env=Vista',
             //'http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()),
 
-            Zend_Registry::get('uwaJsDir') . 'UWA_Vista_Mootools.js?v=' . Zend_Registry::get('jsVersion'),
-            Zend_Registry::get('widgetEndpoint')  . '/js?uwaUrl=' . urlencode($this->_widget->getUrl()) . '&platform=vista&className=CompiledModule',
+            $jsEndPoint . 'UWA_Vista_Mootools.js?v=' . Zend_Registry::get('jsVersion'),
+            $widgetEndPoint  . '/js?uwaUrl=' . urlencode($this->_widget->getUrl()) . '&platform=vista&className=CompiledModule',
         );
 
         foreach ($javascripts as $script) {

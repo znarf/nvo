@@ -77,11 +77,11 @@ final class Exposition_Compiler_Desktop_Opera extends Exposition_Compiler_Deskto
     protected function buildArchive()
     {
         // Add the widget skeleton to the archive
-        $ressourcesDir = Zend_Registry::get('uwaRessourcesDir');
-        if (!is_readable($ressourcesDir)) {
+        $ressourcePath = Exposition_Load::getConfig('compiler', 'ressourcePath');
+        if (!is_readable($ressourcePath)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
-        $this->addDirToZip($ressourcesDir . 'opera');
+        $this->addDirToZip($ressourcePath . 'opera');
 
         // Replace the default icon if a rich icon is given
         $richIcon = $this->_widget->getRichIcon();

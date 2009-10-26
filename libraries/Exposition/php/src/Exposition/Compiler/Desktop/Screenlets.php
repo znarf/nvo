@@ -74,11 +74,11 @@ final class Exposition_Compiler_Desktop_Screenlets extends Exposition_Compiler_D
         $dirname = preg_replace('/[^a-z0-9:;,?.()[]{}=@ _-]/i', '', $identifier) . '/';
 
         // Add the widget skeleton to the archive
-        $ressourcesDir = Zend_Registry::get('uwaRessourcesDir');
-        if (!is_readable($ressourcesDir)) {
+        $ressourcePath = Exposition_Load::getConfig('compiler', 'ressourcePath');
+        if (!is_readable($ressourcePath)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
-        $this->addDirToArchive($ressourcesDir . 'screenlets', $dirname);
+        $this->addDirToArchive($ressourcePath . 'screenlets', $dirname);
 
         // Replace the default icon if a rich icon is given
         $richIcon = $this->_widget->getRichIcon();

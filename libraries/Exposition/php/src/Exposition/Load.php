@@ -21,7 +21,7 @@
 /**
  * Exposition Loader.
  */
-class Exposition
+class Exposition_Load
 {
     /**
      *
@@ -31,15 +31,17 @@ class Exposition
         'inlineWidgets' => false,
 
         'compiler'  => array(
-            'tmpPath'   => '/tmp/',
+            'ressourcePath'   => '/tmp',
+            'tmpPath'   => '/tmp',
             'cache'     => array(),
         ),
 
         'endpoint'  => array(
             'proxy'     => 'http://nvmodules.netvibes.com/proxy',
-            'widget'    => 'http://nvmodules.netvibes.com/proxy',
+            'widget'    => 'http://nvmodules.netvibes.com/widget',
             'js'        => 'http://cdn.netvibes.com/js/c',
-            'css'       => 'http://cdn.netvibes.com//themes/exposition-blueberry/',
+            'css'       => 'http://www.netvibes.com/themes/uwa/',
+            'static'    => 'http://cdn.netvibes.com/img/',
         ),
 
         'js'    => array(
@@ -67,7 +69,7 @@ class Exposition
      *
      * @return object Zend_Config instance
      */
-    public function setConfig($config, $environment = null)
+    public function setConfig($config = array(), $environment = null)
     {
         if (is_string($config)) {
             $config = $this->_loadConfigFromFile($config, $environment);
@@ -81,6 +83,11 @@ class Exposition
         self::$_config = array_merge(self::$_defaultConfig, $config);
 
         return self::$_config;
+    }
+
+    public function hasConfigLoaded()
+    {
+        return !empty(self::$_config);
     }
 
     /**
@@ -119,8 +126,32 @@ class Exposition
         return $config->toArray();;
     }
 
-    public static function getConfig($key, $value)
+
+    public static function getConfig($key)
     {
+        // load default config if no config loaded
+        if (!self::hasConfigLoaded()) {
+            self::setConfig();
+        }
+
+        $args = func_get_args();
+
+
+        $config = self::$_config;
+        foreach ($args as $arg) {
+            $config = self::_getConfig($arg, $config);
+        }
+
+        return $config;
+    }
+
+    public static function _getConfig($key, $config)
+    {
+        if (!isset($config[$key])) {
+            throw new Exposition_Exception(sprintf('Unable to load config value for key "%s" in Exposition_Load class', $key));
+        }
+
+        return $config[$key];
     }
 }
 

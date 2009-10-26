@@ -104,9 +104,10 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
     {
         $l = array();
 
+        $proxyEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
         $proxies = array(
-            'ajax' => Zend_Registry::get('proxyEndpoint') . '/ajax',
-            'feed' => Zend_Registry::get('proxyEndpoint') . '/feed'
+            'ajax' => $proxyEndPoint . '/ajax',
+            'feed' => $proxyEndPoint . '/feed'
         );
 
         $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));

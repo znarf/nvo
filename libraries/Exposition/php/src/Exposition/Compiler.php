@@ -124,24 +124,32 @@ abstract class Exposition_Compiler
      */
     protected function _getStylesheets()
     {
-        $stylesheets = array();
+        $cssEndPoint = Exposition_Load::getConfig('endpoint', 'css');
+        $cssCompressed = Exposition_Load::getConfig('css', 'compressed');
+        $cssVersion = Exposition_Load::getConfig('css', 'version');
+        $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
 
-        // Netvibes stylesheets
-        $NVstylesheets = array(Zend_Registry::get('uwaCssDir') . $this->_stylesheet);
+        $defaultStylesheets = array($cssEndPoint . '/'  . $this->_stylesheet);
         if (isset($_GET['NVthemeUrl'])) {
-            $NVstylesheets[] = 'http://' . NV_STATIC . $_GET['NVthemeUrl'];
+            $defaultStylesheets[] = 'http://' . NV_STATIC . $_GET['NVthemeUrl'];
         }
-        foreach ($NVstylesheets as $stylesheet) {
-            if (Zend_Registry::get('useMergedCss')) {
-                $stylesheet = str_replace('.css', '.css.m.css', $stylesheet);
+
+        $stylesheets = array();
+        foreach ($defaultStylesheets as $defaultStylesheet) {
+
+            if ($cssVersion) {
+                $cssEndPoint = str_replace('.css', '.css.m.css', $defaultStylesheet);
             }
-            $stylesheets[] = $stylesheet . '?v=' . Zend_Registry::get('cssVersion');
+
+            $stylesheets[] = $defaultStylesheet . '?v=' . $cssVersion;
         }
 
         // Widget style
         $style = $this->_widget->getStyle();
-        if ( !empty($style) ) {
-            $cssBaseUrl = Zend_Registry::get('widgetEndpoint') . '/css';
+        if (!empty($style)) {
+
+            $cssBaseUrl = $widgetEndPoint . '/css';
+
             if (isset($this->options['uwaId'])) {
                 $stylesheets[] = $cssBaseUrl . '/' . urlencode($this->options['uwaId']);
             } else {
@@ -165,33 +173,35 @@ abstract class Exposition_Compiler
 
         $coreLibraryName = $this->_widget->getCoreLibrary();
 
-        $version = Zend_Registry::get('jsVersion');
+        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
+        $jsCompressed = Exposition_Load::getConfig('js', 'compressed');
+        $jsVersion = Exposition_Load::getConfig('js', 'version');
 
-        if (Zend_Registry::get('useCompressedJs')) {
+        if ($jsCompressed) {
+
             switch ($coreLibraryName) {
                 case 'uwa':
-                    $javascripts[] = Zend_Registry::get('uwaJsDir') .
-                        'UWA_' . ucfirst($this->_environment) . '.js?v=' . $version;
+                    $javascripts[] = $jsEndPoint . 'UWA_' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
                     break;
                 case 'uwa-mootools':
-                    $javascripts[] = Zend_Registry::get('uwaJsDir') .
-                        'UWA_' . ucfirst($this->_environment) . '_Mootools.js?v=' . $version;
+                    $javascripts[] = $jsEndPoint . 'UWA_' . ucfirst($this->_environment) . '_Mootools.js?v=' . $jsVersion;
                     break;
                 default:
                     throw new Exception('CoreLibrary name not known.');
-
             }
+
         } else {
+
             if (empty($this->_coreLibraries[$coreLibraryName])) {
                 throw new Exposition_Exception('CoreLibrary name not known.');
             }
+
             foreach ($this->_coreLibraries[$coreLibraryName] as $js) {
-                $javascripts[] = Zend_Registry::get('uwaJsDir') .
-                    $js . '?v=' . $version;
+                $javascripts[] = $jsEndPoint . $js . '?v=' . $jsVersion;
             }
+
             if (isset($this->_environment)) {
-                $javascripts[] = Zend_Registry::get('uwaJsDir') .
-                    'Environments/' . ucfirst($this->_environment) . '.js?v=' . $version;
+                $javascripts[] = $jsEndPoint . 'Environments/' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
             }
         }
 
@@ -209,7 +219,9 @@ abstract class Exposition_Compiler
         $javascripts = $this->_getCoreLibraries();
 
         // Widget script
-        $jsBaseUrl = Zend_Registry::get('widgetEndpoint')  . '/js';
+        $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
+        $jsBaseUrl = $widgetEndPoint . '/js';
+
         $urlOptions = array();
         if (isset($this->options['uwaId'])) {
             $jsBaseUrl = $jsBaseUrl . '/' . urlencode($this->options['uwaId']);
@@ -266,11 +278,13 @@ abstract class Exposition_Compiler
      */
     protected function _getHtmlStatus()
     {
+        $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+
         $shareUrl = 'http://' . NV_ECO . '/share/?url=' . str_replace('.', '%2E', urlencode($this->_widget->getUrl()));
 
         $html  = '<div id="moduleStatus" class="moduleStatus">' . "\n";
         $html .= '<a href="' . $shareUrl . '" title="Share this widget" class="share" target="_blank">';
-        $html .= '<img src="'. Zend_Registry::get('uwaImgDir') .'share.png" alt="Share this widget"/>';
+        $html .= '<img src="'. $staticEndPoint .'/share.png" alt="Share this widget"/>';
         $html .= '</a>' . "\n";
         $html .= '<a href="http://www.netvibes.com/" class="powered" target="_blank">powered by netvibes</a>' . "\n";
         $html .= '</div>';
