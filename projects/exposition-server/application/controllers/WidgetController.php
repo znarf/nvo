@@ -359,7 +359,7 @@ class WidgetController extends Zend_Controller_Action
         );
 
         $ignoredParams = array(
-            'id',
+            'uwaId',
             'header',
             'status',
             'uwaUrl',

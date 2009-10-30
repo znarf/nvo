@@ -37,11 +37,19 @@ class Exposition_Load
         ),
 
         'endpoint'  => array(
+
+            // Exposition endpoints
             'proxy'     => 'http://nvmodules.netvibes.com/proxy',
             'widget'    => 'http://nvmodules.netvibes.com/widget',
             'js'        => 'http://cdn.netvibes.com/js/c',
             'css'       => 'http://www.netvibes.com/themes/uwa/',
             'static'    => 'http://cdn.netvibes.com/img/',
+
+            // Netvibes endpoints
+            'nvRest'    => 'http://rest.netvibes.com',
+            'nvModule'  => 'http://nvmodules.netvibes.com',
+            'nvAvatar'  => 'http://avatars.netvibes.com',
+            'nvEco'     => 'http://eco.netvibes.com',
         ),
 
         'js'    => array(
@@ -53,7 +61,6 @@ class Exposition_Load
             'version'       => 'preview3',
             'compressed'    => true,
         ),
-
     );
 
     /**

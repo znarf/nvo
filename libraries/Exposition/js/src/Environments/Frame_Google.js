@@ -65,16 +65,19 @@ UWA.extend(UWA.Environment.prototype, {
   handleResize: function() {
     // Calculate total widget height by adding widget body/header/status height
     // note: document.body.offsetHeight is wrong in IE6 as it always return the full windows/iframe height
-    var height = parseInt(this.html['body'].offsetHeight);
-    height += (this.html['header']) ? this.html['header'].offsetHeight : 0;
-    height += (this.html['status']) ? this.html['status'].offsetHeight : 0;
+    var height = parseInt(this.html.body.offsetHeight);
+      height += (this.html.header) ? this.html.header.offsetHeight : 0;
+      height += (this.html.status) ? this.html.status.offsetHeight : 0;
+
     if (height > 0 && height != this.prevHeight) {
       var delay = (height > 100 || height > this.prevHeight) ? 0 : 2500;
-      this.log('resize iframe to '+ height + 'px with ' + delay + 'ms delay');
-      this.setDelayed('resizeFrameHeight', function() {
-        if (window._IG_AdjustIFrameHeight) _IG_AdjustIFrameHeight();
-      }, delay, false);
+      this.setDelayed("resizeFrameHeight", function () {
+        if (window._IG_AdjustIFrameHeight) {
+          _IG_AdjustIFrameHeight(height)
+        }
+      }, delay, false)
     }
+
     this.prevHeight = height;
   },
 

@@ -183,10 +183,10 @@ abstract class Exposition_Compiler
 
             switch ($coreLibraryName) {
                 case 'uwa':
-                    $javascripts[] = $jsEndPoint . 'UWA_' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
+                    $javascripts[] = $jsEndPoint . '/UWA_' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
                     break;
                 case 'uwa-mootools':
-                    $javascripts[] = $jsEndPoint . 'UWA_' . ucfirst($this->_environment) . '_Mootools.js?v=' . $jsVersion;
+                    $javascripts[] = $jsEndPoint . '/UWA_' . ucfirst($this->_environment) . '_Mootools.js?v=' . $jsVersion;
                     break;
                 default:
                     throw new Exception('CoreLibrary name not known.');
@@ -203,7 +203,7 @@ abstract class Exposition_Compiler
             }
 
             if (isset($this->_environment)) {
-                $javascripts[] = $jsEndPoint . 'Environments/' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
+                $javascripts[] = $jsEndPoint . '/Environments/' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
             }
         }
 

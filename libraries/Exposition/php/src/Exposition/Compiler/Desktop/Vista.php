@@ -134,7 +134,7 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
             //'http://www.netvibes.com/js/UWA/load.js.php?env=Vista',
             //'http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()),
 
-            $jsEndPoint . 'UWA_Vista_Mootools.js?v=' . Zend_Registry::get('jsVersion'),
+            $jsEndPoint . '/UWA_Vista_Mootools.js?v=' . Zend_Registry::get('jsVersion'),
             $widgetEndPoint  . '/js?uwaUrl=' . urlencode($this->_widget->getUrl()) . '&platform=vista&className=CompiledModule',
         );
 
