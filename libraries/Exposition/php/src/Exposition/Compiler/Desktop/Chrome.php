@@ -107,6 +107,8 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
 
     protected function _getJsonManifest()
     {
+        // se details on http://code.google.com/chrome/extensions/getstarted.html
+
         $title = $this->_widget->getTitle();
         $metas = $this->_widget->getMetas();
 
