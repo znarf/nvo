@@ -29,15 +29,15 @@ class Exposition_Compiler_Factory
      * @var array
     */
     protected static $_compilers = array(
-        'Uwa'        => 'Compiler_Uwa',
-        'Frame'      => 'Compiler_Frame',
-        'Google'     => 'Compiler_Google',
-        'Live'       => 'Compiler_Live',
-        'Opera'      => 'Compiler_Desktop_Opera',
-        'Dashboard'  => 'Compiler_Desktop_Dashboard',
-        'Screenlets' => 'Compiler_Desktop_Screenlets',
-        'Jil'        => 'Compiler_Desktop_Jil',
-        'Vista'      => 'Compiler_Desktop_Vista',
+        'Uwa'        => 'Exposition_Compiler_Uwa',
+        'Frame'      => 'Exposition_Compiler_Frame',
+        'Google'     => 'Exposition_Compiler_Google',
+        'Live'       => 'Exposition_Compiler_Live',
+        'Opera'      => 'Exposition_Compiler_Desktop_Opera',
+        'Dashboard'  => 'Exposition_Compiler_Desktop_Dashboard',
+        'Screenlets' => 'Exposition_Compiler_Desktop_Screenlets',
+        'Jil'        => 'Exposition_Compiler_Desktop_Jil',
+        'Vista'      => 'Exposition_Compiler_Desktop_Vista',
 
     );
 
@@ -48,7 +48,7 @@ class Exposition_Compiler_Factory
      * @param  Widget  $widget
      * @return Compiler A compiler for the selected platform
      */
-    public static function getCompiler($environment, Exposition_Widget $widget)
+    public static function getCompiler($environment, Exposition_Widget $widget, array $options = array())
     {
         if (isset(self::$_compilers[$environment])) {
             $class = self::$_compilers[$environment];
@@ -57,7 +57,7 @@ class Exposition_Compiler_Factory
         }
 
         try {
-            return new $class($widget);
+            return new $class($widget, $options);
         } catch(Exception $e) {
             throw new Exposition_Exception('Unsupported platform : ' . $environment);
         }

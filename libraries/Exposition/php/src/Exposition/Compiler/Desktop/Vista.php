@@ -246,3 +246,4 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
         return $this->_mimeType;
     }
 }
+

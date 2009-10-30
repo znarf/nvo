@@ -335,7 +335,8 @@ abstract class Exposition_Archive_Abstract
     public function getArchiveContent()
     {
         if (!$this->_options['inmemory']) {
-            throw new Exposition_Archive_Exception('Can only use getArchiveContent() if archive is in memory. Redirect to file otherwise, it is faster.');
+            return file_get_contents($this->_options['path']);
+            //throw new Exposition_Archive_Exception('Can only use getArchiveContent() if archive is in memory. Redirect to file otherwise, it is faster.');
         }
 
         return $this->_archive;

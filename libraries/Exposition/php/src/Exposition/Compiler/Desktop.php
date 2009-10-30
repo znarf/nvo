@@ -49,11 +49,22 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
     {
         parent::__construct($parser);
 
-        // Temporary file path to build the archive
-        $tmpPath = Exposition_Load::getConfig('compiler', 'tmpPath');
-        $tmpFile = $tmpPath . '/compile' . time() . rand(1, 1000) . '.zip';
 
-        $this->archiveclass = Exposition_Archive::newArchive($this->archiveFormat, $tmpFile);
+    }
+
+    public function getArchive()
+    {
+        static $archive;
+
+        // Temporary file path to build the archive
+        if (!isset($archive)) {
+             $tmpPath = Exposition_Load::getConfig('compiler', 'tmpPath');
+             $tmpFile = $tmpPath . '/compile' . time() . rand(1, 1000) . '.zip';
+
+            $archive = Exposition_Archive::newArchive($this->archiveFormat, $tmpFile);
+        }
+
+        return $archive;
     }
 
     /**
@@ -67,9 +78,9 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
         $this->buildArchive();
 
         // Archive closing
-        $this->archiveClass->createArchive();
+        $this->getArchive()->createArchive();
 
-        return $this->archiveClass->getArchiveContent();
+        return $this->getArchive()->getArchiveContent();
     }
 
     /**
@@ -138,7 +149,7 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
      */
     protected function addFileFromStringToArchive($EntryName, $contents)
     {
-        return $this->archiveClass->addFileFromString($EntryName, $contents);
+        return $this->getArchive()->addFileFromString($EntryName, $contents);
     }
 
     /**
@@ -149,7 +160,7 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
      */
     protected function addDirToArchive($directory, $root = '')
     {
-        return $this->archiveClass->addFiles($directory, $root);
+        return $this->getArchive()->addFiles($directory, $root);
     }
 
     /**
@@ -161,7 +172,7 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
      */
     protected function addFileToArchive($path, $EntryName)
     {
-        return $this->archiveClass->addFile($path, $EntryName);
+        return $this->getArchive()->addFile($path, $EntryName);
     }
 
     /**

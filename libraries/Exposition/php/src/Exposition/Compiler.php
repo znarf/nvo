@@ -70,9 +70,11 @@ abstract class Exposition_Compiler
      *
      * @param Widget $widget
      */
-    public function __construct($widget)
+    public function __construct($widget, array $options = array())
     {
         $this->_widget = $widget;
+
+        $this->setOptions($options);
 
         $baseLibraries = array(
             'String.js',

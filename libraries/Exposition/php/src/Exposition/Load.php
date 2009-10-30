@@ -32,8 +32,8 @@ class Exposition_Load
 
         'compiler'  => array(
             'ressourcePath'   => '/tmp',
-            'tmpPath'   => '/tmp',
-            'cache'     => array(),
+            'tmpPath'         => '/tmp',
+            'cache'           => array(),
         ),
 
         'endpoint'  => array(
@@ -145,10 +145,11 @@ class Exposition_Load
         return $config;
     }
 
-    public static function _getConfig($key, $config)
+    private static function _getConfig($key, $config)
     {
         if (!isset($config[$key])) {
             throw new Exposition_Exception(sprintf('Unable to load config value for key "%s" in Exposition_Load class', $key));
+
         }
 
         return $config[$key];

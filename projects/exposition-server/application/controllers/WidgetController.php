@@ -32,9 +32,16 @@ class WidgetController extends Zend_Controller_Action
     /**
      * Widget.
      *
-     * @var Widget
+     * @var Exposition_Widget
      */
     private $_widget = null;
+
+    /**
+     * uwaUrl.
+     *
+     * @var string
+     */
+    private $_uwaUrl = null;
 
     /**
      * Either to use the parsing cache.
@@ -48,35 +55,47 @@ class WidgetController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $this->_cache = empty($_GET['nocache']) ? true : false;
+        // Flush cache of parsor
+        $this->_cache = $this->getRequest()->getParam('nocache', false);
 
-        // UWA widget URL
-        $this->uwaUrl = $this->getRequest()->getParam('uwaUrl');
+        try {
+            $this->_uwaUrl = $this->_getUwaUrlParam();
 
-        // Get uwaUrl has first GET param key due live.com bug with urldecode
-        if (empty($this->uwaUrl)) {
-
-            $matches = array();
-            $pattern = ':\?(.*[^&])(.*)?:i';
-            if(preg_match ($pattern, $_SERVER['REQUEST_URI'], $matches)) {
-                $this->uwaUrl = urldecode($matches[1]);
-            }
-        }
-
-        // Parse the UWA widget from the given URL
-        if (!empty($this->uwaUrl)) {
-
-            $parser = Exposition_Parser_Factory::getParser('uwa', $this->uwaUrl, $this->_cache);
+            // Parse the UWA widget from the given URL
+            $parser = Exposition_Parser_Factory::getParser('uwa', $this->_uwaUrl, $this->_cache);
             $this->_widget = $parser->buildWidget();
 
-        // Create an empty widget
-        } else {
+        } catch (Exception $e) {
+
+            // Create an empty widget
             $this->_widget = new Widget();
             $this->_widget->setBody('<p>This widget cannot be displayed.</p>');
         }
 
         // Prevent default rendering
         $this->_helper->viewRenderer->setNoRender(true);
+    }
+
+    private function _getUwaUrlParam()
+    {
+        // UWA widget URL
+        $uwaUrl = $this->getRequest()->getParam('uwaUrl');
+
+        // Get uwaUrl has first GET param key due live.com bug with urldecode
+        if (empty($uwaUrl)) {
+
+            $matches = array();
+            $pattern = ':\?(.*[^&])(.*)?:i';
+            if(preg_match ($pattern, $_SERVER['REQUEST_URI'], $matches)) {
+                $uwaUrl = urldecode($matches[1]);
+            }
+        }
+
+        if (empty($uwaUrl)) {
+            throw new Exception('Unable to get uwaUrl param');
+        }
+
+        return $uwaUrl;
     }
 
     /**
@@ -86,6 +105,8 @@ class WidgetController extends Zend_Controller_Action
     {
         $compiler = Exposition_Compiler_Factory::getCompiler('uwa', $this->_widget);
         $content = $compiler->render();
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Content-Type', 'application/xhtml+xml; charset=utf-8')
             ->setHeader('Cache-Control', 'max-age=300')
@@ -99,6 +120,8 @@ class WidgetController extends Zend_Controller_Action
     {
         $compiler = Exposition_Compiler_Factory::getCompiler('uwa', $this->_widget);
         $content = $compiler->renderCss();
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Content-Type', 'text/css; charset=utf-8')
             ->setHeader('Cache-Control', 'max-age=300')
@@ -110,127 +133,20 @@ class WidgetController extends Zend_Controller_Action
      */
     public function jsAction()
     {
-        $compiler = Exposition_Compiler_Factory::getCompiler('uwa', $this->_widget);
         $options = array(
             'uwaId'     => $this->getRequest()->getParam('uwaId'),
             'platform'  => $this->getRequest()->getParam('platform'),
             'className' => $this->getRequest()->getParam('className'),
         );
-        $compiler->setOptions($options);
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('uwa', $this->_widget, $options);
         $content = $compiler->renderJs();
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Content-Type', 'text/javascript; charset=utf-8')
             ->setHeader('Cache-Control', 'max-age=300')
             ->appendBody($content);
-    }
-
-    /**
-     * Renders the widget as a Google Gadget specification
-     * http://code.google.com/apis/gadgets/docs/dev_guide.html
-     */
-    public function gspecAction()
-    {
-        $compiler = Exposition_Compiler_Factory::getCompiler('google', $this->_widget);
-        $options = array( 'type' => isset($_GET['type']) ? $_GET['type'] : 'url' );
-        $compiler->setOptions($options);
-        $content = $compiler->render();
-        $this->getResponse()
-            ->setHeader('Content-Type', 'text/xml; charset=utf-8')
-            ->setHeader('Cache-Control', 'max-age=300')
-            ->appendBody($content);
-    }
-
-    /**
-     * Renders the widget within an iframe.
-     */
-    public function frameAction()
-    {
-
-        $compiler = Exposition_Compiler_Factory::getCompiler('frame', $this->_widget);
-
-        if ($this->getRequest()->has('synd') && $this->getRequest()->has('libs')) {
-            $compiler->setEnvironment('Frame_Google');
-            $options = $this->_getFrameOptionsGoogle();
-        } else {
-            $options = $this->_getFrameOptions();
-        }
-
-        $compiler->setOptions($options);
-
-        $this->view->bodyClass = 'moduleIframe';
-        if (isset($options['chromeColor'])) {
-            $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
-        }
-
-
-
-        $this->view->headTitle( $this->_widget->getTitle() );
-
-        foreach ($compiler->getStylesheets() as $stylesheet) {
-            $this->view->headLink()->appendStylesheet($stylesheet, 'screen');
-        }
-
-        if ($this->getRequest()->has('libs')) {
-            $libraries = split(',', $this->getRequest()->getParam('libs'));
-            foreach ($libraries as $script) {
-                if (preg_match('@^[a-z0-9/._-]+$@i', $script) && !preg_match('@([.][.])|([.]/)|(//)@', $script)) {
-                    $this->view->headScript()->appendFile("http://www.google.com/ig/f/$script");
-                }
-            }
-        }
-
-        $content = $compiler->render();
-
-        $this->getResponse()
-            ->setHeader('Content-Type', 'text/html')
-            ->appendBody($content);
-    }
-
-    private function _getFrameOptions()
-    {
-        $options = array( 'data' => array(), 'properties' => array() );
-
-        $ignoredParams = array('id', 'uwaUrl', 'ifproxyUrl', 'header', 'status');
-        foreach ($_GET as $name => $value) {
-            if (!in_array($name, $ignoredParams) && substr($name, 0, 2) != 'NV') {
-                // Fix a problem when displaying the default webnote of netvibes for example
-                $value = stripslashes($value);
-                $options['data'][$name] = $value;
-            }
-        }
-
-        foreach (array('NVlang', 'NVlocale', 'NVdir') as $pname) {
-            if (isset($_GET[$pname])) {
-                $name = substr($pname, 2);
-                $options['properties'][$name] = $_GET[$pname];
-            }
-        }
-
-        $options['properties']['id'] = $this->getRequest()->getParam('id');
-
-        $options['displayHeader'] = $this->getRequest()->getParam('header', '0');
-        $options['displayStatus'] = $this->getRequest()->getParam('status', '1');
-        $options['ifproxyUrl']    = $this->getRequest()->getParam('ifproxyUrl');
-        $options['chromeColor']   = $this->getRequest()->getParam('chromeColor');
-
-        return $options;
-    }
-
-    private function _getFrameOptionsGoogle()
-    {
-        $options = array( 'data' => array(), 'displayStatus' => 1 );
-        foreach ($_GET as $name => $value) {
-            if (substr($name, 0, 4) == 'upt_') {
-                continue;
-            }
-            if (substr($name, 0, 3) == 'up_') {
-                $name = substr($name, 3);
-                // Fix a problem when displaying the default webnote of netvibes for example
-                $value = stripslashes($value);
-                $options['data'][$name] = $value;
-            }
-        }
-        return $options;
     }
 
     /**
@@ -244,7 +160,10 @@ class WidgetController extends Zend_Controller_Action
             'metas'         => $this->_widget->getMetas(),
             'preferences'   => $this->_widget->getPreferencesArray()
         );
+
         $content = Zend_Json::encode($object);
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Content-Type', 'application/json')
             ->appendBody($content);
@@ -255,12 +174,14 @@ class WidgetController extends Zend_Controller_Action
      */
     public function dashboardAction()
     {
-        $compiler = Exposition_Compiler_Factory::getCompiler('Dashboard', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
-        $compiler->setOptions($options);
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('Dashboard', $this->_widget, $options);
         $content = $compiler->getFileContent();
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Pragma', 'public')
             ->setHeader('Content-Type', $compiler->getFileMimeType())
@@ -273,12 +194,14 @@ class WidgetController extends Zend_Controller_Action
      */
     public function screenletsAction()
     {
-        $compiler = Exposition_Compiler_Factory::getCompiler('Screenlets', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
-        $compiler->setOptions($options);
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('Screenlets', $this->_widget, $options);
         $content = $compiler->getFileContent();
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Pragma', 'no-cache')
             ->setHeader('Cache-Control', 'no-cache')
@@ -292,12 +215,14 @@ class WidgetController extends Zend_Controller_Action
      */
     public function operaAction()
     {
-        $compiler = Exposition_Compiler_Factory::getCompiler('Opera', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
-        $compiler->setOptions($options);
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('Opera', $this->_widget, $options);
         $content = $compiler->getFileContent();
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Pragma', 'no-cache')
             ->setHeader('Cache-Control', 'no-cache')
@@ -311,12 +236,14 @@ class WidgetController extends Zend_Controller_Action
      */
     public function jilAction()
     {
-        $compiler = Exposition_Compiler_Factory::getCompiler('Jil', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
-        $compiler->setOptions($options);
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('Jil', $this->_widget, $options);
         $content = $compiler->getFileContent();
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Pragma', 'no-cache')
             ->setHeader('Cache-Control', 'no-cache')
@@ -330,12 +257,14 @@ class WidgetController extends Zend_Controller_Action
      */
     public function vistaAction()
     {
-        $compiler = Exposition_Compiler_Factory::getCompiler('Vista', $this->_widget);
         $options = array(
             'appendBody' => $this->getRequest()->getUserParam('appendBody')
         );
-        $compiler->setOptions($options);
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('Vista', $this->_widget, $options);
         $content = $compiler->getFileContent();
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Pragma', 'no-cache')
             ->setHeader('Cache-Control', 'no-cache')
@@ -351,6 +280,8 @@ class WidgetController extends Zend_Controller_Action
     {
         $compiler = Exposition_Compiler_Factory::getCompiler('Live', $this->_widget);
         $content = $compiler->render();
+
+        // Configure output
         $this->getResponse()
             ->setHeader('Content-Type', 'text/xml; charset=utf-8')
             ->setHeader('Cache-Control', 'max-age=300')
@@ -362,24 +293,173 @@ class WidgetController extends Zend_Controller_Action
      */
     public function bloggerAction()
     {
-        $icon = $this->_widget->getIcon();
-        if (empty($icon)) {
-            $icon = 'http://' . NV_STATIC . '/modules/uwa/icon.png';
-        }
-
-        $widgetContent = '<iframe frameborder="0" width="220" height="250" src="' . Zend_Registry::get('widgetEndpoint') . '/frame?uwaUrl=' . urlencode($this->_widget->getUrl()) . '"></iframe>';
-
-        $bloggerParams = array(
-            'widget.title'      => $this->_widget->getTitle(),
-            'widget.content'    => $widgetContent,
-            'widget.template'   => '&lt;data:content/&gt;',
-            'infoUrl'           => $this->_widget->getUrl(),
-            'logoUrl'           => $icon,
-        );
+        $compiler = Exposition_Compiler_Factory::getCompiler('Blogger', $this->_widget);
+        $url = $compiler->renderUrl();
 
         $this->getResponse()
             ->setHeader('Pragma', 'no-cache')
             ->setHeader('Cache-Control', 'no-cache')
-            ->setHeader('Location', 'http://www.blogger.com/add-widget?' . http_build_query($bloggerParams));
+            ->setHeader('Location', $url);
+    }
+
+    //
+    // Frame Actions
+    //
+
+    /**
+     * Renders the widget within an iframe.
+     */
+    public function frameAction()
+    {
+        if ($this->getRequest()->has('synd') && $this->getRequest()->has('libs')) {
+            $this->_forward('googleframe');
+        } else {
+            $this->_forward('simpleframe');
+        }
+    }
+
+    /**
+     * Renders the widget within an iframe.
+     */
+    public function simpleframeAction()
+    {
+        $options = $this->_getSimpleFrameOptions();
+        $compiler = Exposition_Compiler_Factory::getCompiler('frame', $this->_widget, $options);
+        $content = $compiler->render();
+
+        // configure view
+        $this->view->headTitle($this->_widget->getTitle());
+        foreach ($compiler->getStylesheets() as $stylesheet) {
+            $this->view->headLink()->appendStylesheet($stylesheet, 'screen');
+        }
+
+        // set color and design
+        $this->view->bodyClass = 'moduleIframe';
+        if (isset($options['chromeColor'])) {
+            $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
+        }
+
+        // Configure output
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/html')
+            ->appendBody($content);
+    }
+
+    private function _getSimpleFrameOptions()
+    {
+        $options = array(
+            'displayHeader' => $this->getRequest()->getParam('header', 0),
+            'displayStatus' => $this->getRequest()->getParam('status', 1),
+            'ifproxyUrl'    => $this->getRequest()->getParam('ifproxyUrl'),
+            'chromeColor'   => $this->getRequest()->getParam('chromeColor'),
+            'data'          => array(),
+            'properties'    => array(
+                'id'            => $this->getRequest()->getParam('id', md5($this->_uwaUrl)),
+            )
+        );
+
+        $ignoredParams = array(
+            'id',
+            'header',
+            'status',
+            'uwaUrl',
+            'ifproxyUrl',
+            'chromeColor',
+        );
+
+        foreach ($_GET as $name => $value) {
+            if (!in_array($name, $ignoredParams)) {
+                $value = stripslashes($value);
+                $options['data'][$name] = $value;
+            }
+        }
+
+        return $options;
+    }
+
+    //
+    // Google Actions
+    //
+
+    /**
+     * Renders the widget within an iframe.
+     */
+    public function googleframeAction()
+    {
+        $options = $this->_getFrameOptionsGoogle();
+        $compiler = Exposition_Compiler_Factory::getCompiler('frame', $this->_widget, $options);
+        $compiler->setEnvironment('Frame_Google');
+        $content = $compiler->render();
+
+        // configure view
+        $this->view->headTitle($this->_widget->getTitle());
+        foreach ($compiler->getStylesheets() as $stylesheet) {
+            $this->view->headLink()->appendStylesheet($stylesheet, 'screen');
+        }
+
+        // set color and design
+        $this->view->bodyClass = 'moduleIframe';
+        if (isset($options['chromeColor'])) {
+            $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
+        }
+
+        // add google lib
+        if ($this->getRequest()->has('libs')) {
+            $libraries = split(',', $this->getRequest()->getParam('libs'));
+            foreach ($libraries as $script) {
+                if (preg_match('@^[a-z0-9/._-]+$@i', $script) && !preg_match('@([.][.])|([.]/)|(//)@', $script)) {
+                    $this->view->headScript()->appendFile("http://www.google.com/ig/f/$script");
+                }
+            }
+        }
+
+        // Configure output
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/html')
+            ->appendBody($content);
+    }
+
+    /**
+     * Renders the widget as a Google Gadget specification
+     * http://code.google.com/apis/gadgets/docs/dev_guide.html
+     */
+    public function gspecAction()
+    {
+        $options = array(
+            'type' => (isset($_GET['type']) ? $_GET['type'] : 'url'),
+        );
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('google', $this->_widget, $options);
+        $content = $compiler->render();
+
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/xml; charset=utf-8')
+            ->setHeader('Cache-Control', 'max-age=300')
+            ->appendBody($content);
+    }
+
+    private function _getFrameOptionsGoogle()
+    {
+        $options = array(
+            'data'          => array(),
+            'displayStatus' => $this->getRequest()->getParam('status', '1')
+        );
+
+        foreach ($_GET as $name => $value) {
+
+            if (substr($name, 0, 4) == 'upt_') {
+                continue;
+            }
+
+            // Fix a problem when displaying the default webnote of netvibes for example
+            if (substr($name, 0, 3) == 'up_') {
+                $name = substr($name, 3);
+                $value = stripslashes($value);
+                $options['data'][$name] = $value;
+            }
+        }
+
+        return $options;
     }
 }
+

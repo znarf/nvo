@@ -69,7 +69,6 @@ final class Exposition_Compiler_Desktop_Screenlets extends Exposition_Compiler_D
 
     protected function buildArchive()
     {
-
         $identifier = $this->getNormalizedTitle();
         $dirname = preg_replace('/[^a-z0-9:;,?.()[]{}=@ _-]/i', '', $identifier) . '/';
 
@@ -78,7 +77,8 @@ final class Exposition_Compiler_Desktop_Screenlets extends Exposition_Compiler_D
         if (!is_readable($ressourcePath)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
-        $this->addDirToArchive($ressourcePath . 'screenlets', $dirname);
+
+        $this->addDirToArchive($ressourcePath . '/screenlets', $dirname);
 
         // Replace the default icon if a rich icon is given
         $richIcon = $this->_widget->getRichIcon();
@@ -95,7 +95,7 @@ final class Exposition_Compiler_Desktop_Screenlets extends Exposition_Compiler_D
 
     protected function getHtml()
     {
-        $compiler = Compiler_Factory::getCompiler($this->_platform, $this->_widget);
+        $compiler = Exposition_Compiler_Factory::getCompiler($this->_platform, $this->_widget);
 
         $options = array(
             'displayHeader'         => true,
@@ -206,7 +206,7 @@ except:
     else: print "You need Gtkmozembed to run this Screenlet, please install \"python-gnome2-extras\" package."
 #########WORKARROUND FOR GTKOZEMBED BUG BY WHISE################
 
-class Exposition_{widgetClassName}Screenlet (screenlets.Screenlet):
+class {widgetClassName}Screenlet (screenlets.Screenlet):
 
     """{widgetDescription}"""
 
