@@ -21,9 +21,9 @@
 require_once 'Exposition/Compiler/Desktop.php';
 
 /**
- * Jil Widgets Compiler.
+ * Chrome Widgets Compiler.
  */
-final class Exposition_Compiler_Desktop_Jil extends Exposition_Compiler_Desktop
+final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Desktop
 {
     /**
      * Archive Format of the widget.
@@ -58,7 +58,7 @@ final class Exposition_Compiler_Desktop_Jil extends Exposition_Compiler_Desktop
      *
      * @var string
      */
-    protected $_extension = 'wgt';
+    protected $_extension = 'crx';
 
     /**
      * Mime Type.
@@ -75,17 +75,12 @@ final class Exposition_Compiler_Desktop_Jil extends Exposition_Compiler_Desktop
             throw new Exception('UWA ressources directory is not readable.');
         }
 
-        $this->addDirToArchive($ressourcePath . 'jil');
+        $this->addDirToArchive($ressourcePath . 'Chrome');
 
-        // Replace the default icon if a rich icon is given
-        $richIcon = $this->_widget->getRichIcon();
-        if (!empty($richIcon) && preg_match('/\\.png$/i', $richIcon)) {
-            $this->addDistantFileToArchive($richIcon, 'Icon.png');
-        }
-
+        $this->addFileFromStringToArchive('widget.js', '');
         $this->addFileFromStringToArchive('widget.html', $this->getHtml());
-
-        $this->addFileFromStringToArchive('config.xml', $this->_getXmlManifest());
+        $this->addFileFromStringToArchive('widget_toolstrips.html', $this->getToolstripsHtml());
+        $this->addFileFromStringToArchive('manifest.json', $this->_getJsonManifest());
     }
 
     protected function getHtml()
@@ -105,32 +100,44 @@ final class Exposition_Compiler_Desktop_Jil extends Exposition_Compiler_Desktop
         return $compiler->render();
     }
 
-    protected function _getXmlManifest()
+    protected function getToolstripsHtml()
+    {
+        return '';
+    }
+
+    protected function _getJsonManifest()
     {
         $title = $this->_widget->getTitle();
         $metas = $this->_widget->getMetas();
 
-        $l = array();
+        $manifest = array(
+            'name'              => $title,
+            'icon'              => 'Icon.png',
+            'description'       => $metas['description'],
+            'version'           => (isset($metas['version']) ? $metas['version'] : '1.0'),
 
-        $l[] = '<?xml version="1.0" encoding="utf-8" ?>';
 
-        $l[] = '<widget xmlns="http://www.jil.org/ns/widgets" id="dcc7c6bb-ba4d-4de9-8ce6-3cc2cc3b5bba" width="' . $this->_width . '" height="' . $this->_height . '" version="1.0.Beta">';
+            'content_scripts'   => array(array(
+                'js'        => array(
+                    'widget.js',
+                ),
+                'matches'   => array(
+                    'http://*/*',
+                )),
+            ),
 
-        $l[] = '<name>' . htmlspecialchars($title) . '</name>';
+            'toolstrips'        => array(
+                'widget_toolstrips.html',
+            ),
 
-        if (isset($metas['description'])) {
-            $l[] = '<description>' . htmlspecialchars($metas['description']) . '</description>';
-        }
+            'background_page'   => 'widget.html',
 
-        $l[] = '<license href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution License</license>';
-        $l[] = '<update href="http://www.jil.org/widgets/" period="2"/>';
-        $l[] = '<icon src="Icon.png">';
-        $l[] = '<content src="widget.html"/>';
-        $l[] = '<billing required="false"/>';
+            'permissions'       => array(
+                'http://*/*'
+            ),
+        );
 
-        $l[] = '</widget>';
-
-        return implode("\n", $l);
+        return Zend_Json::encode($manifest);
     }
 
     public function getFileName()

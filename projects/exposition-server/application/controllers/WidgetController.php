@@ -232,6 +232,27 @@ class WidgetController extends Zend_Controller_Action
     }
 
     /**
+     * Renders the widget as an Chrome package.
+     */
+    public function chromeAction()
+    {
+        $options = array(
+            'appendBody' => $this->getRequest()->getUserParam('appendBody')
+        );
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('Chrome', $this->_widget, $options);
+        $content = $compiler->getFileContent();
+
+        // Configure output
+        $this->getResponse()
+            ->setHeader('Pragma', 'no-cache')
+            ->setHeader('Cache-Control', 'no-cache')
+            ->setHeader('Content-Type', $compiler->getFileMimeType())
+            ->setHeader('Content-Disposition', 'filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
+    }
+
+    /**
      * Renders the widget as an JIL package.
      */
     public function jilAction()

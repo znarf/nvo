@@ -40,18 +40,6 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
      */
     protected $archiveClass;
 
-    /**
-     * Constructor.
-     *
-     * @param string  $url
-     */
-    public function __construct($parser)
-    {
-        parent::__construct($parser);
-
-
-    }
-
     public function getArchive()
     {
         static $archive;

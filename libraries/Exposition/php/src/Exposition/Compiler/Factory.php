@@ -33,6 +33,7 @@ class Exposition_Compiler_Factory
         'Frame'      => 'Exposition_Compiler_Frame',
         'Google'     => 'Exposition_Compiler_Google',
         'Live'       => 'Exposition_Compiler_Live',
+        'Chrome'     => 'Exposition_Compiler_Desktop_Chrome',
         'Opera'      => 'Exposition_Compiler_Desktop_Opera',
         'Dashboard'  => 'Exposition_Compiler_Desktop_Dashboard',
         'Screenlets' => 'Exposition_Compiler_Desktop_Screenlets',
