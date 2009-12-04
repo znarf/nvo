@@ -10,5 +10,5 @@ or just the Exposition Server Widget:
 
     phpunit --configuration phpunit.xml --group Exposition_Server_Widget
 
-By default, coverage reports and TestDox are generated in the ../data/logs/phpunitreport/
+By default, coverage reports and TestDox are generated in the ../data/log/phpunitreport/
 subdirectory.

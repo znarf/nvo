@@ -1,2 +1,4 @@
 doc/html/*
 doc/latex/*
+data/log/*
+data/cache/*
