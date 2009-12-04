@@ -1,0 +1,118 @@
+<VirtualHost *>
+
+    # To Enable SSL :
+    # <VirtualHost *:443>
+    # SSLEngine On
+
+    # DNS
+    ServerName uwa.service.localhost
+
+    # Some default value
+    #AddDefaultCharset utf-8
+    AddType text/x-component .htc
+    RewriteEngine On
+
+    # DocumentRoot && Locations
+    DocumentRoot /var/www/Exposition/projects/exposition-server/public
+
+    <Location />
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    # Directories
+    <Directory /var/www/Exposition/projects/exposition-server/public>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ### PHP settings
+    <IfModule mod_php5.c>
+        php_value date.timezone "Europe/Paris"
+        php_value upload_max_filesize 25000000
+        php_value zlib.output_compression 1
+        php_value zlib.output_compression_level 9
+        #php_value session.save_path "3;/tmp/sessions/"
+    </IfModule>
+
+    # Php xdebug config
+    # php_value xdebug.auto_trace 1
+    # php_value xdebug.collect_params 1
+    # php_value xdebug.collect_return 1
+    # php_value xdebug.remote_enable 1
+    # php_value xdebug.profiler_enable 1
+    # php_value xdebug.profiler_append 1
+
+    ### Mod rewrite configuration
+    <IfModule mod_rewrite.c>
+
+        # Zend framework RewriteCond
+        RewriteCond /var/www/Exposition/projects/exposition-server/public%{REQUEST_FILENAME} !-f
+        RewriteCond /var/www/Exposition/projects/exposition-server/public%{REQUEST_FILENAME} !-d
+        RewriteCond %{REQUEST_URI} !^/admin/.*
+        RewriteRule ^(.*) /index.php [L]
+    </IfModule>
+
+    ### Output compression
+    <IfModule mod_deflate.c>
+
+        ## Always compress html content
+        AddOutputFilterByType DEFLATE text/html
+
+        ## Set output filter on these file extensions
+        <FilesMatch "\.(js|css|txt|xml|json)$">
+            SetOutputFilter DEFLATE
+        </FilesMatch>
+
+        ## Netscape 4.x has some problems...
+        BrowserMatch ^Mozilla/4 gzip-only-text/html
+
+        ## Netscape 4.06-4.08 have some more problems
+        BrowserMatch ^Mozilla/4\.0[678] no-gzip
+
+        ## MSIE masquerades as Netscape, but it is fine
+        ## BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+        ## NOTE: Due to a bug in mod_setenvif up to Apache 2.0.48
+        ## the above regex won't work. You can use the following
+        ## workaround to get the desired effect:
+        BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+
+        ## Make sure proxies don't deliver the wrong content
+        <IfModule mod_headers.c>
+            Header append Vary User-Agent env=!dont-vary
+        </IfModule>
+    </IfModule>
+
+    ### Browser Caching
+
+    ## any Expires Directives go here
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresDefault A3600
+        ExpiresByType application/javascript         "access plus 1 month"
+        ExpiresByType application/shockwave-flash    "access plus 1 month"
+        ExpiresByType text/css                       "access plus 1 month"
+        ExpiresByType image/x-icon                   "access plus 1 month"
+        ExpiresByType image/gif                      "access plus 1 month"
+        ExpiresByType image/png                      "access plus 1 month"
+        ExpiresByType image/jpeg                     "access plus 1 month"
+        ExpiresByType text/plain                     "access plus 1 month"
+        ExpiresByType video/x-flv                    "access plus 1 month"
+    </IfModule>
+
+    ## any Header directives go here
+    <IfModule mod_headers.c>
+        ## Safely cache for 1 hour
+        <FilesMatch "\.(ico|png|gif|jpg|jpeg|js|css)$">
+            Header set Cache-Control "max-age=3600, private, proxy-revalidate"
+        </FilesMatch>
+    </IfModule>
+
+    ### Disable E-Tags
+    FileETag none
+
+</VirtualHost>
