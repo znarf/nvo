@@ -75,8 +75,9 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
             throw new Exception('UWA ressources directory is not readable.');
         }
 
-        $this->addDirToArchive($ressourcePath . 'Chrome');
+        $this->addDirToArchive($ressourcePath . '/chrome');
 
+        // add archive files
         $this->addFileFromStringToArchive('widget.js', '');
         $this->addFileFromStringToArchive('widget.html', $this->getHtml());
         $this->addFileFromStringToArchive('widget_toolstrips.html', $this->getToolstripsHtml());
@@ -108,6 +109,7 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
     protected function _getJsonManifest()
     {
         // se details on http://code.google.com/chrome/extensions/getstarted.html
+        // http://gist.github.com/142422 crx scripts
 
         $title = $this->_widget->getTitle();
         $metas = $this->_widget->getMetas();
@@ -162,3 +164,4 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
         return $this->_mimeType;
     }
 }
+

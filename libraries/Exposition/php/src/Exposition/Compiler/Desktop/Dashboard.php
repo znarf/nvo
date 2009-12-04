@@ -77,7 +77,7 @@ final class Exposition_Compiler_Desktop_Dashboard extends Exposition_Compiler_De
         if (!is_readable($ressourcePath)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
-        $this->addDirToZip($ressourcePath . 'dashboard', $dirname);
+        $this->addDirToZip($ressourcePath . '/dashboard', $dirname);
 
         // Replace the default icon if a rich icon is given
         $richIcon = $this->_widget->getRichIcon();

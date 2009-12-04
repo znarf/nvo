@@ -144,7 +144,7 @@ class Exposition_Compiler_Google extends Exposition_Compiler
     {
         $l = array();
 
-        $proxyEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
+        $proxyEndPoint = Exposition_Load::getConfig('endpoint', 'proxy');
         $proxies = array(
             'ajax' => $proxyEndPoint . '/ajax',
             'feed' => $proxyEndPoint . '/feed'

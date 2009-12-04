@@ -104,7 +104,7 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
     {
         $l = array();
 
-        $proxyEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
+        $proxyEndPoint = Exposition_Load::getConfig('endpoint', 'proxy');
         $proxies = array(
             'ajax' => $proxyEndPoint . '/ajax',
             'feed' => $proxyEndPoint . '/feed'

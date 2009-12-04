@@ -21,9 +21,9 @@
 require_once 'Exposition/Compiler/Desktop.php';
 
 /**
- * Jil Widgets Compiler.
+ * Chrome Widgets Compiler.
  */
-final class Exposition_Compiler_Desktop_Jil extends Exposition_Compiler_Desktop
+final class Exposition_Compiler_Desktop_FireFox extends Exposition_Compiler_Desktop
 {
     /**
      * Archive Format of the widget.
@@ -58,14 +58,14 @@ final class Exposition_Compiler_Desktop_Jil extends Exposition_Compiler_Desktop
      *
      * @var string
      */
-    protected $_extension = 'wgt';
+    protected $_extension = 'xpi';
 
     /**
      * Mime Type.
      *
      * @var string
      */
-    protected $_mimeType = 'application/x-binary';
+    protected $_mimeType = 'application/x-xpinstall';
 
     protected function buildArchive()
     {
@@ -75,62 +75,17 @@ final class Exposition_Compiler_Desktop_Jil extends Exposition_Compiler_Desktop
             throw new Exception('UWA ressources directory is not readable.');
         }
 
-        $this->addDirToArchive($ressourcePath . '/jil');
+        $this->addDirToArchive($ressourcePath . '/firefox');
 
-        // Replace the default icon if a rich icon is given
-        $richIcon = $this->_widget->getRichIcon();
-        if (!empty($richIcon) && preg_match('/\\.png$/i', $richIcon)) {
-            $this->addDistantFileToArchive($richIcon, 'Icon.png');
-        }
-
-        $this->addFileFromStringToArchive('widget.html', $this->getHtml());
-
-        $this->addFileFromStringToArchive('config.xml', $this->_getXmlManifest());
-    }
-
-    protected function getHtml()
-    {
-        $compiler = Exposition_Compiler_Factory::getCompiler($this->_platform, $this->_widget);
-
-        $options = array(
-            'displayHeader' => 1,
-            'displayStatus' => 1,
-            'properties'    => array(
-                'id' => time(),
-            ),
-        );
-
-        $compiler->setOptions($options);
-
-        return $compiler->render();
-    }
-
-    protected function _getXmlManifest()
-    {
-        $title = $this->_widget->getTitle();
-        $metas = $this->_widget->getMetas();
-
-        $l = array();
-
-        $l[] = '<?xml version="1.0" encoding="utf-8" ?>';
-
-        $l[] = '<widget xmlns="http://www.jil.org/ns/widgets" id="dcc7c6bb-ba4d-4de9-8ce6-3cc2cc3b5bba" width="' . $this->_width . '" height="' . $this->_height . '" version="1.0.Beta">';
-
-        $l[] = '<name>' . htmlspecialchars($title) . '</name>';
-
-        if (isset($metas['description'])) {
-            $l[] = '<description>' . htmlspecialchars($metas['description']) . '</description>';
-        }
-
-        $l[] = '<license href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution License</license>';
-        $l[] = '<update href="http://www.jil.org/widgets/" period="2"/>';
-        $l[] = '<icon src="Icon.png">';
-        $l[] = '<content src="widget.html"/>';
-        $l[] = '<billing required="false"/>';
-
-        $l[] = '</widget>';
-
-        return implode("\n", $l);
+        // add archive files
+        /*
+            Files:
+            /chrome/content
+            /chrome/locale
+            /chrome/skin
+            /install.rdf
+            /chrome.manifest
+        */
     }
 
     public function getFileName()
@@ -153,3 +108,4 @@ final class Exposition_Compiler_Desktop_Jil extends Exposition_Compiler_Desktop
         return $this->_mimeType;
     }
 }
+

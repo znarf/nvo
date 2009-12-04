@@ -81,7 +81,7 @@ final class Exposition_Compiler_Desktop_Opera extends Exposition_Compiler_Deskto
         if (!is_readable($ressourcePath)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
-        $this->addDirToZip($ressourcePath . 'opera');
+        $this->addDirToZip($ressourcePath . '/opera');
 
         // Replace the default icon if a rich icon is given
         $richIcon = $this->_widget->getRichIcon();
