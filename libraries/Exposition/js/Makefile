@@ -32,12 +32,12 @@ SVN = svn
 ZIP = zip
 TAR = tar
 
-ROOT = ./../..
-UWA_JS = $(ROOT)/libraries/uwa-js
+ROOT = ./../../..
+UWA_JS = .
 UWA_JS_SRC = $(UWA_JS)/src
 UWA_JS_LIB = $(UWA_JS)/lib
 UWA_JS_BIN = $(UWA_JS)/bin
-BUILD = $(UWA_JS)/build
+BUILD = $(ROOT)/build
 COPYING = $(ROOT)/COPYING
 COPYING_LESSER = $(ROOT)/COPYING.LESSER
 
@@ -45,7 +45,7 @@ YUI_VERSION = 2.3.5
 YUI = java -jar $(UWA_JS_BIN)/yuicompressor-$(YUI_VERSION).jar --charset UTF-8
 
 NAME = uwa-js-runtime
-VERSION = preview3
+VERSION = preview4
 STAGE = $(BUILD)/$(NAME)
 ZIP_NAME = $(NAME)-$(VERSION).zip
 TAR_NAME = $(NAME)-$(VERSION).tar.gz
@@ -89,23 +89,8 @@ ENVIRONMENTS = \
 UWA_CORE = $(STAGE)/dist/UWA_Core.js
 UWA_MOOTOOLS = $(STAGE)/dist/UWA_Mootools.js
 
-all: export dist zip tar
+all: dist zip tar
 	@echo "UWA JavaScript Runtime build complete."
-
-export:
-	@echo "Exporting files from SVN..."
-	@mkdir -p $(BUILD)
-	@if [ -d "$(STAGE)" ] ; then \
-		echo "Export directory already exists." ; \
-	else \
-		mkdir -p $(STAGE)/dist ; \
-        mkdir -p $(STAGE)/src ; \
-		#$(SVN) export $(UWA_JS_SRC) $(STAGE)/src ; \
-		#$(SVN) export $(UWA_JS_LIB) $(STAGE)/lib ; \
-		cp $(COPYING) $(STAGE) ; \
-		cp $(COPYING_LESSER) $(STAGE) ; \
-	fi
-	@echo "SVN export complete."
 
 dist: core mootools environments controls
 
