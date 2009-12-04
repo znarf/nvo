@@ -68,7 +68,7 @@ class WidgetController extends Zend_Controller_Action
         } catch (Exception $e) {
 
             // Create an empty widget
-            $this->_widget = new Widget();
+            $this->_widget = new Exposition_Widget();
             $this->_widget->setBody('<p>This widget cannot be displayed.</p>');
         }
 
