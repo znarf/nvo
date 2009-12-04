@@ -61,7 +61,6 @@ TAR_NAME = $(PROJECT_NAME)-$(PROJECT_VERSION).tar.gz
 
 
 # Files Finder
-FIND_PHP_LOCALE_FILES = find $(ROOT)/app $(PROJECT_LIB_PATH)/MyProject $(PROJECT_LIB_PATH)/BaseZF -type f -iname '*.php' -o -iname '*.phtml'
 FIND_PHP_SRC_FULL = find $(ROOT) -type f -iname '*.php' -o -iname '*.phtml'
 FIND_PHP_SRC = find $(ROOT) -type f -iname '*.php' -o -iname '*.phtml' \
 	! -path '$(ROOT)/.*'
@@ -78,7 +77,7 @@ FIND_CLEAN_FILES = find $(ROOT) -type f \
 # Update Env
 all: clean syntax
 	@echo "----------------"
-	@echo "Exposition-php-server build complete."
+	@echo $(PROJECT_NAME) " build complete."
 	@echo ""
 
 # Generate the doc

@@ -7,7 +7,7 @@
     syntaxCheck="true"
     bootstrap="./TestHelper.php">
 
-    <testsuite name="Exposition Server Test Suite">
+    <testsuite name="Exposition PHP Server Test Suite">
         <directory>./</directory>
     </testsuite>
 
