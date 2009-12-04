@@ -1,77 +1,171 @@
 #
 # Copyright Netvibes 2006-2009.
 # This file is part of Exposition PHP Server.
-# 
+#
 # Exposition PHP Server is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # Exposition PHP Server is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public License
 # along with Exposition PHP Server.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Targets:
-#  - all: export the application and the needed libraries, produce a ZIP and a TAR archive.
-#  - export: export the application and the needed libraries.
-#  - zip: produce a ZIP archive.
-#  - tar: produce a TAR archive.
-#  - clean: remove the staged files.
 #
+# Targets:
+#  - doc
+#  - syntax                     Check syntax of PHP files
+#  - test                       Exec unitTest
+#  - php-qa                     Exec PHP Quality reports
+#  - php-phpcpd                 Exec PHP Quality Duplicate source report
+#  - php-phpcs                  Exec PHP Quality syntax report
+#  - php-phploc                 Exec PHP Quality stats report
+#  - php-phpunit                Exec PHP unitTest
+#  - php-phpunit-report         Exec PHP unitTest with coverage report
+#  - php-syntax                 Check syntax of PHP files
+#  - php-syntax-commit          Check syntax of non commited PHP file
+#  - clean                      Remove the staged files
+#
+# @todo export zip tar build
 
-SVN = svn
+# Binary
 ZIP = zip
 TAR = tar
+PHP = php
+PHPUNIT = phpunit
+PHPCS = phpcs
+PHPLOC = phploc
+PHPCPD = phpcpd
+DOXYGEN = doxygen
 
-ROOT = ./../..
-EXPOSITION_PHP_SRC = $(ROOT)/libraries/php/src
-EXPOSITION_PHP_LIB = $(ROOT)/libraries/php/lib
-EXPOSITION_PHP_SERVER = $(ROOT)/projects/exposition-server
-BUILD = $(EXPOSITION_PHP_SERVER)/build
-COPYING = $(ROOT)/COPYING
-COPYING_LESSER = $(ROOT)/COPYING.LESSER
+# Project ID
+PROJECT_NAME = exposition-php-server
+PROJECT_VERSION = preview4
 
-NAME = exposition-php-server
-VERSION = preview3
-STAGE = $(BUILD)/$(NAME)
-ZIP_NAME = $(NAME)-$(VERSION).zip
-TAR_NAME = $(NAME)-$(VERSION).tar.gz
+# Path
+ROOT = .
+PROJECT_DOC_PATH = $(ROOT)/doc
+PROJECT_TEST_PATH = $(ROOT)/tests
+PROJECT_DATA_PATH = $(ROOT)/data
+PROJECT_TMP_PATH = $(PROJECT_DATA_PATH)/tmp
+PROJECT_LOG_PATH = $(PROJECT_DATA_PATH)/logs
+PROJECT_BUILD_PATH = $(ROOT)/../../build/$(PROJECT_NAME)
 
-all: export zip tar
-	@echo "Exposition PHP Server build complete."
+# Build
+ZIP_NAME = $(PROJECT_NAME)-$(PROJECT_VERSION).zip
+TAR_NAME = $(PROJECT_NAME)-$(PROJECT_VERSION).tar.gz
 
-export:
-	@echo "Exporting files from SVN..."
-	@mkdir -p $(BUILD)
-	@if [ -d "$(STAGE)" ] ; then \
-		echo "Export directory already exists." ; \
-	else \
-		$(SVN) export $(EXPOSITION_PHP_SERVER) $(STAGE) ; \
-		$(SVN) export $(EXPOSITION_PHP_LIB) $(STAGE)/lib ; \
-		$(SVN) export $(EXPOSITION_PHP_SRC) $(STAGE)/lib/Exposition ; \
-		cp $(COPYING) $(STAGE) ; \
-		cp $(COPYING_LESSER) $(STAGE) ; \
-		rm -f $(STAGE)/Makefile ; \
-	fi
-	@echo "SVN export complete."
 
-zip:
-	@echo "Creating the ZIP archive..."
-	@(cd $(BUILD) && $(ZIP) -rq $(ZIP_NAME) $(NAME))
-	@echo "ZIP archive done."
+# Files Finder
+FIND_PHP_LOCALE_FILES = find $(ROOT)/app $(PROJECT_LIB_PATH)/MyProject $(PROJECT_LIB_PATH)/BaseZF -type f -iname '*.php' -o -iname '*.phtml'
+FIND_PHP_SRC_FULL = find $(ROOT) -type f -iname '*.php' -o -iname '*.phtml'
+FIND_PHP_SRC = find $(ROOT) -type f -iname '*.php' -o -iname '*.phtml' \
+	! -path '$(ROOT)/.*'
 
-tar:
-	@echo "Creating the TAR archive..."
-	@(cd $(BUILD) && $(TAR) -czf $(TAR_NAME) $(NAME))
-	@echo "TAR archive done."
+FIND_CLEAN_FILES = find $(ROOT) -type f \
+	-iname '*.DS_Store' \
+	-o -iname '*~' \
+	-o -iname '*.~*' \
+	-o -iname '*.bak' \
+	-o -iname '*.marks' \
+	-o -iname '*.thumb' \
+	-o -iname '*Thumbs.db'
 
+# Update Env
+all: clean syntax
+	@echo "----------------"
+	@echo "Exposition-php-server build complete."
+	@echo ""
+
+# Generate the doc
+doc:
+	@echo "----------------"
+	@echo "Generate doxygen doc :"
+	@$(DOXYGEN) $(PROJECT_DOC_PATH)/doxygen.cnf > $(PROJECT_LOG_PATH)/doc.log
+	@echo "done"
+#
+# Alias
+#
+syntax:	php-syntax
+test:	php-phpunit
+
+#
+# PHP
+#
+
+# Check syntax of PHP files
+php-syntax:
+	@echo "----------------"
+	@echo "Check PHP syntax on all php files:"
+	@list=`$(FIND_PHP_SRC_FULL)`; \
+	for i in $$list;do \
+		$(PHP) -l $$i | grep -v "No syntax errors";\
+	done
+	@echo "done"
+
+# Check syntax of non commited PHP files
+php-syntax-commit:
+	@echo "----------------"
+	@echo "Check PHP syntax on all php files updated:"
+	@list=`git-diff --name-only | grep '.ph' | tr '\n' ' '`; \
+	for i in $$list;do \
+		$(PHP) -l $$i | grep -v "No syntax errors";\
+	done
+	@echo "done"
+
+# Exec PHP unitTest
+php-phpunit:
+	@echo "----------------"
+	@echo "Exec PHPUnits test:"
+	@cd $(PROJECT_TEST_PATH) && $(PHPUNIT) --configuration phpunit.xml
+	@echo "done"
+
+# Exec PHP unitTest with coverage report
+php-phpunit-report:
+	@echo "----------------"
+	@echo "Exec PHPUnits test coverage report:"
+	@cd $(PROJECT_TEST_PATH) && $(PHPUNIT) --configuration phpunit-report.xml
+	@echo "done"
+
+# Exec PHP Quality reports
+php-qa: php-phploc php-phpcs php-phpcpd
+
+# Exec PHP Quality stats report
+php-phploc:
+	@echo "----------------"
+	@echo "Exec PHP Code Stats report:"
+	@$(PHPLOC) $(ROOT) > $(PROJECT_LOG_PATH)/php-loc.log
+	@echo "done (output: $(PROJECT_LOG_PATH)/php-loc.log)"
+
+# Exec PHP Quality syntax report
+php-phpcs:
+	@echo "----------------"
+	@echo "Exec PHP CodeSniffer report:"
+	@$(PHPCS) --standard=PEAR --extensions=php --report=full \
+	--ignore=$(ROOT)/lib/ZFDebug/*,$(ROOT)/lib/geshi*,$(ROOT)/public/debug/*,$(ROOT)/lib/Spyc.php,$(ROOT)/lib/SphinxClient.php \
+	-n $(ROOT) > $(PROJECT_LOG_PATH)/php-cs.log;
+	@echo "done (output: $(PROJECT_LOG_PATH)/php-cs.log)"
+
+# Exec PHP Quality Duplicate source report
+php-phpcpd:
+	@echo "----------------"
+	@echo "Exec PHP Code Duplicate report:"
+	@$(PHPCPD) $(ROOT) > $(PROJECT_LOG_PATH)/php-cpd.log
+	@echo "done (output: $(PROJECT_LOG_PATH)/php-cpd.log)"
+
+# Remove the staged files
 clean:
-	@echo "Cleaning the build directory..."
-	-@rm -rf $(STAGE)
-	-@rm -f $(BUILD)/$(NAME)*.zip
-	-@rm -f $(BUILD)/$(NAME)*.tar.gz
-	@echo "Staged files and archives removed."
+	@echo "----------------"
+	@echo "Cleaning useless files:"
+	@list=`$(FIND_CLEAN_FILES)`; \
+	for i in $$list;do \
+		echo "Removed $$i"; \
+		rm -f $$i; \
+	done
+	@echo "done"
+
+.PHONY: doc clean
