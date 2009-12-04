@@ -69,18 +69,3 @@ $application = new Zend_Application(APPLICATION_ENV, APPLICATION_CONFIG);
 $application->bootstrap();
 $application->run();
 
-/*
-// Server host and base path
-//---------------------------------------------------------------------------
-
-Bootstrap::prepare();
-Bootstrap::$registry->set('tmpDir', FILE_CACHE_PATH);
-Bootstrap::setCache('File', array('cache_dir' => FILE_CACHE_PATH));
-Bootstrap::$registry->set('proxyEndpoint', MAIN_URL . '/proxy');
-Bootstrap::$registry->set('widgetEndpoint', MAIN_URL . '/widget');
-Bootstrap::$registry->set('useMergedCss', false);
-Bootstrap::$registry->set('uwaCssDir', MAIN_URL . '/css/');
-Bootstrap::$registry->set('uwaJsDir', MAIN_URL . '/js/c/');
-Bootstrap::$registry->set('uwaRessourcesDir', LIBRARY_EXPOSITION_PATH . '/ressources');
-Bootstrap::run();
-*/
