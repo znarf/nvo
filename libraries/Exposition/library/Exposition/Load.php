@@ -92,7 +92,7 @@ class Exposition_Load
         return self::$_config;
     }
 
-    public function hasConfigLoaded()
+    public static function hasConfigLoaded()
     {
         return !empty(self::$_config);
     }
