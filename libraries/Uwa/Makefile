@@ -32,7 +32,7 @@ SVN = svn
 ZIP = zip
 TAR = tar
 
-ROOT = ./../../..
+ROOT = ./../..
 UWA_JS = .
 UWA_JS_SRC = $(UWA_JS)/src
 UWA_JS_LIB = $(UWA_JS)/lib
@@ -96,6 +96,8 @@ dist: core mootools environments controls
 
 core:
 	@echo "Building UWA Core..."
+	@mkdir $(STAGE)/src -p
+	@mkdir $(STAGE)/dist -p
 	@cat $(CORE_FILES) >> $(UWA_CORE).tmp.js
 	@$(YUI) $(UWA_CORE).tmp.js -o $(UWA_CORE)
 	-@rm -f $(UWA_CORE).tmp.js
