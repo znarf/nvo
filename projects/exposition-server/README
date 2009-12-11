@@ -13,19 +13,36 @@ iframes.
 INSTALL
 -------
 
-1. You need a local web server and PHP 5.2 available. Mac OS and most Linux 
-   distributions now come with Apache and PHP, but you can set up your own 
+1. You need a local web server and PHP 5.2 available. Mac OS and most Linux
+   distributions now come with Apache and PHP, but you can set up your own
    environment. If you are a Windows user, you may download a all-in-one package
    like EasyPHP or WAMP5.
 
-2. To set up the Exposition widget server, copy the files from your archive to 
+2. To set up the Exposition widget server, copy the files from your archive to
    your web root. You can also create a virtual host linking to the root of the
    Exposition package.
 
-3. Test the Exposition widget server at the following URL:
-   http://<host>/public/widget/frame?uwaUrl=<uwa-widget-url>
+3. This application requires that you either have Zend Framework on your
+   include_path, or that you will be symlinking your Zend Framework library
+   into the library directory. If you do not yet have Zend Framework, you
+   can get it from one of the following sources:
+
+      * Official Release:
+        http://framework.zend.com/dowload/latest
+
+      * Using Subversion; use either the current trunk or the 1.9.2 release branch:
+        svn co http://framework.zend.com/svn/framework/standard/trunk/library/Zend
+        svn co http://framework.zend.com/svn/framework/standard/branches/release-1.9.2/library/Zend
+
+      * Using Git; use either the current trunk or the 1.9.2 release branch:
+        git clone http://tjohns.net/git/zf.git
+        git fetch
+        git checkout --track -b release-1.9.2 origin/tags/release-1.9.2
+
+4. Test the Exposition widget server at the following URL:
+   http://<host>/widget/frame?uwaUrl=<uwa-widget-url>
    For example, the URL to render a RSS Reader widget within in iframe is:
-   http://<host>/public/widget/frame?uwaUrl=http%3A%2F%2Fwww.netvibes.com%2Fapi%2Fuwa%2Fexamples%2Frssreader.html
+   http://<host>/widget/frame?uwaUrl=http%3A%2F%2Fwww.netvibes.com%2Fapi%2Fuwa%2Fexamples%2Frssreader.html
 
 If you cannot see the widget, make sure that your web server is configured
 to read .htaccess files and that URL rewriting is enabled.
@@ -36,14 +53,14 @@ USAGE
 
 Below is the list of the available features of the Exposition widget server.
 
-1. Widget: http://<host>/public/widget/<action>?uwaUrl=<uwa-widget-url>,
+1. Widget: http://<host>/widget/<action>?uwaUrl=<uwa-widget-url>,
    where <action> can be one of the following:
     - uwa:   renders a widget in standalone mode with XML well-formedness
     - frame: renders a widget for iframe display
     - js:    renders the JavaScript controller of a widget
     - css:   renders the CSS styles of a widget
 
-2. Proxy: http://<host>/public/proxy/<action>?url=<url>&type=<type>
+2. Proxy: http://<host>/proxy/<action>?url=<url>&type=<type>
    where <action> can be one of the following:
     - ajax:  handles Ajax calls, where <type> can be either 'text', 'xml', or 'json'
     - feed:  handles Ajax calls for feeds and returns a JSON output
