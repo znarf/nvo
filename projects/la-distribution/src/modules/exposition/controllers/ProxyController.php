@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright Netvibes 2006-2009.
- * This file is part of Exposition PHP Server.
+ * This file is part of Exposition La-Distribution Package.
  *
  * Exposition PHP Server is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,13 +17,14 @@
  * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'Zend/Controller/Action.php';
 
-require_once 'Exposition/Proxy.php';
+require_once 'Exposition/Controller/Proxy.php';
 
 /**
- * Exposition Proxy controller.
+ * Proxy controller.
  */
-class Exposition_ProxyController extends Zend_Controller_Action
+class ProxyController extends Exposition_Controller_Proxy
 {
+
 }
+

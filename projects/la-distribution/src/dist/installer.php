@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright Netvibes 2006-2009.
- * This file is part of Exposition PHP Server.
+ * This file is part of Exposition La-Distribution Package.
  *
  * Exposition PHP Server is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,15 +18,7 @@
  */
 
 
-require_once 'Zend/Controller/Action.php';
-require_once 'Zend/Json.php';
-
-require_once 'Exposition/Parser/Factory.php';
-require_once 'Exposition/Compiler/Factory.php';
-
-/**
- * Exposition Widget controller.
- */
-class Exposition_WidgetController extends Zend_Controller_Action
+class Ld_Installer_Exposition extends Ld_Installer
 {
+
 }
