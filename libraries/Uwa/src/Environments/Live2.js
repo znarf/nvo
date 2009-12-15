@@ -93,7 +93,7 @@ UWA.extend(UWA.Environment.prototype, {
         '<img alt="Share this widget" src="' + UWA_STATIC + '/share.png"/>' +
       '</a>' +
       '<a class="powered" target="_blank" href="http://netvibes.org/">' +
-        _("Powered by Uwa") +
+        _("Powered by UWA") +
       '</a>' +
       '<a id="editLink" class="configure" href="javascript:void(0)">' +
         _("Edit") +
