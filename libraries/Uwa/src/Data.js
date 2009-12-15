@@ -327,7 +327,7 @@ UWA.Data = {
     if (typeof request.cache != 'undefined') {
       url += '&cache=' + request.cache;
     }
-    if (typeof e.forceUpdate != "undefined") {
+    if (typeof request.forceUpdate != "undefined") {
       url += "&forceUpdate=" + request.forceUpdate;
     }
     if(UWA.Client.Engine.ie) {

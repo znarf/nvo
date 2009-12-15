@@ -43,6 +43,7 @@ class Exposition_Parser_Uwa extends Exposition_Parser
      * and therefore should be directly linked on Netvibes servers
      */
     public $knownLibraries = array(
+        /*
         'UWA.Controls.Pager'       => 'UWA/Controls/Pager.js',
         'UWA.Controls.TabView'     => 'UWA/Controls/TabView.js',
         'UWA.Controls.ToolTip'     => 'UWA/Controls/ToolTip.js',
@@ -54,6 +55,7 @@ class Exposition_Parser_Uwa extends Exposition_Parser
         'UWA.Services.FeedHistory' => 'UWA/Services/FeedHistory.js',
         'UWA.Controls.MultiPage'   => 'App/Controls/MultiPage.js',
         'UWA.Controls.Timeline'    => 'App/Controls/Timeline.js'
+        */
     );
 
     /**
@@ -186,17 +188,33 @@ class Exposition_Parser_Uwa extends Exposition_Parser
         if (empty($this->_xml)) {
             return array();
         }
-        $ignore = array(
-                "/js/UWA/load.js.php",
-                "/js/c/UWA_Standalone.js",
-                "/js/c/UWA_Standalone_Mootools.js");
+
+        $ignoredScripts = array(
+            "load.js.php",
+            "UWA_Standalone.js",
+            "UWA_Standalone_Mootools.js"
+        );
+
         $libraries = array();
         foreach ($this->_xml->head->script as $script) {
             $src = (string) $script['src'];
             if (!empty($src)) {
+
                 $url = parse_url($src);
-                if( !empty($url['host']) && !in_array($url['path'], $ignore) ) {
-                    $libraries[] = $src;
+                if( !empty($url['host'])) {
+
+                    $ignored = false;
+                    foreach ($ignoredScripts as $ignoredScript) {
+                        $ignored = strstr($url['path'], $ignoredScript);
+
+                        if ($ignored) {
+                            break;
+                        }
+                    }
+
+                    if (!$ignored) {
+                        $libraries[] = $src;
+                    }
                 }
             }
         }
