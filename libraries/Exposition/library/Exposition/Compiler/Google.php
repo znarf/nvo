@@ -61,9 +61,9 @@ class Exposition_Compiler_Google extends Exposition_Compiler
 
         $metas = $this->_widget->getMetas();
 
-        $ressourcePath = Exposition_Load::getConfig('compiler', 'ressourcePath');
-        $defaultScreenshot = $ressourcePath . '/uwa-screenshot.png';
-        $defaultThumbnail  = $ressourcePath . '/uwa-thumbnail.png';
+        $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+        $defaultScreenshot = $staticEndPoint . '/uwa-screenshot.png';
+        $defaultThumbnail  = $staticEndPoint . '/uwa-thumbnail.png';
 
         $googleMetas = array(
             'title'        => $this->_widget->getTitle(),
