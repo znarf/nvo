@@ -292,7 +292,7 @@ abstract class Exposition_Compiler
         $html .= '<a href="' . $shareUrl . '" title="Share this widget" class="share" target="_blank">';
         $html .= '<img src="'. $staticEndPoint .'/share.png" alt="Share this widget"/>';
         $html .= '</a>' . "\n";
-        $html .= '<a href="http://dev.netvibes.org/" class="powered" target="_blank">Powered by uwa</a>' . "\n";
+        $html .= '<a href="http://netvibes.org/" class="powered" target="_blank">Powered by UWA</a>' . "\n";
         $html .= '</div>';
 
         return $html;
@@ -325,7 +325,7 @@ abstract class Exposition_Compiler
         );
 
         $html = '<script type="text/javascript">' . "\n"
-              . "var " . implode("\n, ", $vars) . "\n"
+              . "var " . implode(", \n    ", $vars) . "\n"
               . '</script>';
 
         return $html;
