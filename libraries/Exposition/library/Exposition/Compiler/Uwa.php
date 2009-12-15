@@ -52,17 +52,17 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         }
 
         $l[] = '<link rel="stylesheet" type="text/css"'.
-            ' href="http://' . NV_HOST . '/themes/uwa/style.css"/>';
+            ' href="http://' . UWA_HOST . '/themes/uwa/style.css"/>';
 
         $coreLibrary = $this->_widget->getCoreLibrary();
         $externalScripts = $this->_widget->getExternalScripts();
 
         if (empty($externalScripts) ) {
-            $library = 'http://' . NV_HOST . '/js/UWA/load.js.php?env=Standalone';
+            $library = 'http://' . UWA_HOST . '/js/UWA/load.js.php?env=Standalone';
         } else if ($coreLibrary == 'uwa') {
-            $library = 'http://' . NV_HOST . '/js/c/UWA_Standalone.js';
+            $library = 'http://' . UWA_HOST . '/js/c/UWA_Standalone.js';
         } else if ($coreLibrary == 'uwa-mootools') {
-            $library = 'http://' . NV_HOST . '/js/c/UWA_Standalone_Mootools.js';
+            $library = 'http://' . UWA_HOST . '/js/c/UWA_Standalone_Mootools.js';
         }
 
         $l[] = '<script type="text/javascript" src="' . $library .'"></script>';
@@ -200,7 +200,8 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
 
         $icon = $this->_widget->getIcon();
         if (empty($icon)) {
-            $icon = 'http://' . NV_STATIC . '/modules/uwa/icon.png';
+            $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+            $icon = 'http://' . $staticEndPoint . '/icon.png';
         }
 
         // build skeleton var

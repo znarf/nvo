@@ -68,9 +68,11 @@ class Netvibes
      */
     public function __construct($apiKey)
     {
+        $nvRestEndPoint = Exposition_Load::getConfig('endpoint', 'nvRest');
+
         $this->apiKey = $apiKey;
-        $this->baseUrl = 'http://' . NV_REST;
-        $this->basePath = defined('NV_REST_PATH') ? NV_REST_PATH : '';
+        $this->baseUrl = $nvRestEndPoint;
+        $this->basePath = '';
         $this->_rest = new Zend_Rest_Client($this->baseUrl);
 
         $registry = Zend_Registry::getInstance();

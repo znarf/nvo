@@ -41,9 +41,9 @@ class Exposition_Load
             // Exposition endpoints
             'proxy'     => 'http://nvmodules.netvibes.com/proxy',
             'widget'    => 'http://nvmodules.netvibes.com/widget',
-            'js'        => 'http://cdn.netvibes.com/js/c',
-            'css'       => 'http://www.netvibes.com/themes/uwa/',
-            'static'    => 'http://cdn.netvibes.com/img/',
+            'js'        => 'http://cdn.netvibes.com/js',
+            'css'       => 'http://www.netvibes.com/themes/uwa',
+            'static'    => 'http://cdn.netvibes.com/img',
 
             // Netvibes endpoints
             'nvRest'    => 'http://rest.netvibes.com',

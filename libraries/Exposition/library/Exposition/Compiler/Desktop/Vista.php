@@ -108,7 +108,8 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
     {
         $icon = $this->_widget->getIcon();
         if (empty($icon)) {
-            $icon = 'http://' . NV_STATIC . '/modules/uwa/icon.png';
+            $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+            $icon = 'http://' . $staticEndPoint . '/icon.png';
         }
 
         $l = array();
@@ -119,24 +120,24 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
         $l[] = '    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
         $l[] = '    <link rel="icon" href="' . $icon . '" type="image/x-icon" />';
 
-        /*
+
+/*
+        $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
+        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
+        $jsVersion = Exposition_Load::getConfig('endpoint', 'proxy');
+
+        $javascripts = array(
+            'http://www.netvibes.com/js/UWA/load.js.php?env=Vista',
+            //$jsEndPoint . '/UWA_Vista_Mootools.js?v=' . $jsVersion,
+            $widgetEndPoint  . '/js?uwaUrl=' . urlencode($this->_widget->getUrl()) . '&platform=vista&className=CompiledModule',
+        );
+*/
+
         // require Vista_Mootools !!!
         $javascripts = $this->_getJavascripts(array(
             'platform'     => $this->_platform,
             'className'    => 'CompiledModule'
         ));
-        */
-
-        $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
-        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
-
-        $javascripts = array(
-            //'http://www.netvibes.com/js/UWA/load.js.php?env=Vista',
-            //'http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()),
-
-            $jsEndPoint . '/UWA_Vista_Mootools.js?v=' . Zend_Registry::get('jsVersion'),
-            $widgetEndPoint  . '/js?uwaUrl=' . urlencode($this->_widget->getUrl()) . '&platform=vista&className=CompiledModule',
-        );
 
         foreach ($javascripts as $script) {
             $l[] = '<script type="text/javascript" src="' . $script . '" charset="utf-8"></script>';

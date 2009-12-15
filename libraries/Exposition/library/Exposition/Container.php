@@ -327,8 +327,8 @@ class Exposition_Container
     {
         $iframeUrl = $widgetDescriptor->getIframeUrl();
         $parseIframeUrl = parse_url($iframeUrl);
-        if (empty($iframeUrl) || $parseIframeUrl['host'] != NV_MODULES) {
-            $iframeUrl  = 'http://' . NV_MODULES . '/widget/frame?uwaUrl=' . urlencode($widgetDescriptor->getUrl());
+        if (empty($iframeUrl) || $parseIframeUrl['host'] != UWA_MODULES) {
+            $iframeUrl  = 'http://' . UWA_MODULES . '/widget/frame?uwaUrl=' . urlencode($widgetDescriptor->getUrl());
             $iframeUrl .= '&id=' . $widgetDescriptor->getId();
         } else {
             $iframeUrl .= '?id=' . $widgetDescriptor->getId();
@@ -359,7 +359,7 @@ class Exposition_Container
     {
         $origin = $widgetDescriptor->getSkeletonOrigin();
         if (Zend_Registry::get('inlineWidgets')) {
-            return ($origin == NV_HOST || $origin == 'www.netvibes.com');
+            return ($origin == UWA_HOST || $origin == 'www.netvibes.com');
         }
         return false;
     }

@@ -111,7 +111,7 @@ final class Exposition_Compiler_Desktop_Opera extends Exposition_Compiler_Deskto
 
         if (isset($this->options['uwaId'])) {
             $l[] = '<id>';
-            $l[] = '<host>' . NV_MODULES . '</host>';
+            $l[] = '<host>' . UWA_MODULES . '</host>';
             $l[] = '<name>' . $this->options['uwaId'] . '</name>';
             $l[] = '<revised>' . date('Y-m') . '</revised>';
             $l[] = '</id>';

@@ -127,6 +127,21 @@ class Exposition_Controller_Proxy extends Zend_Controller_Action
         $proxy->sendResponse();
     }
 
+    public function favIconAction()
+    {
+        //@todo
+    }
+
+    public function xmlAction()
+    {
+        //@todo
+    }
+
+    public function apiAction()
+    {
+        //@todo
+    }
+
     /**
      * Returns the authentication username and password.
      *

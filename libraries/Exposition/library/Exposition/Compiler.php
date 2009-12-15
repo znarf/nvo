@@ -133,7 +133,9 @@ abstract class Exposition_Compiler
 
         $defaultStylesheets = array($cssEndPoint . '/'  . $this->_stylesheet);
         if (isset($_GET['NVthemeUrl'])) {
-            $defaultStylesheets[] = 'http://' . NV_STATIC . $_GET['NVthemeUrl'];
+
+            $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+            $defaultStylesheets[] = 'http://' . $staticEndPoint . $_GET['NVthemeUrl'];
         }
 
         $stylesheets = array();
@@ -255,7 +257,8 @@ abstract class Exposition_Compiler
     {
         $icon = $this->_widget->getIcon();
         if (empty($icon)) {
-            $icon = 'http://' . NV_STATIC . '/modules/uwa/icon.png';
+            $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+            $icon = 'http://' . $staticEndPoint . '/icon.png';
         }
 
         $html  = '<div class="moduleHeaderContainer">' . "\n";
@@ -281,30 +284,49 @@ abstract class Exposition_Compiler
     protected function _getHtmlStatus()
     {
         $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+        $nvEcoEndPoint = Exposition_Load::getConfig('endpoint', 'nvEco');
 
-        $shareUrl = 'http://' . NV_ECO . '/share/?url=' . str_replace('.', '%2E', urlencode($this->_widget->getUrl()));
+        $shareUrl = $nvEcoEndPoint . '/share/?url=' . str_replace('.', '%2E', urlencode($this->_widget->getUrl()));
 
         $html  = '<div id="moduleStatus" class="moduleStatus">' . "\n";
         $html .= '<a href="' . $shareUrl . '" title="Share this widget" class="share" target="_blank">';
         $html .= '<img src="'. $staticEndPoint .'/share.png" alt="Share this widget"/>';
         $html .= '</a>' . "\n";
-        $html .= '<a href="http://www.netvibes.com/" class="powered" target="_blank">powered by netvibes</a>' . "\n";
+        $html .= '<a href="http://dev.netvibes.org/" class="powered" target="_blank">Powered by uwa</a>' . "\n";
         $html .= '</div>';
 
         return $html;
     }
 
     /**
-     * Retrieves a script containing NV_* constants
+     * Retrieves a script containing UWA_* constants
      *
      * @return string
      */
     protected function _getJavascriptConstants()
     {
-        $html  = '<script type="text/javascript">' . "\n";
-        $html .= "var NV_HOST = '" . NV_HOST . "', NV_PATH = 'http://" . NV_HOST . "/', NV_STATIC = 'http://" . NV_STATIC . "', " . "\n";
-        $html .= "NV_MODULES = '". NV_MODULES ."', NV_AVATARS = '". NV_AVATARS ."';" . "\n";
-        $html .= '</script>';
+        // Exposition Server
+        $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
+        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
+        $cssEndPoint = Exposition_Load::getConfig('endpoint', 'css');
+        $proxyEndPoint = Exposition_Load::getConfig('endpoint', 'proxy');
+        $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+
+        // Netvibes
+        $nvAvatarEndPoint = Exposition_Load::getConfig('endpoint', 'nvAvatar');
+        $nvEcoEndPoint = Exposition_Load::getConfig('endpoint', 'nvEco');
+
+        $vars = array(
+            "UWA_WIDGET = '" . $widgetEndPoint . "'",
+            "UWA_JS = '" . $jsEndPoint . "'",
+            "UWA_CSS = '" . $cssEndPoint . "'",
+            "UWA_PROXY = '" . $proxyEndPoint . "'",
+            "UWA_STATIC = '" . $staticEndPoint . "'",
+        );
+
+        $html = '<script type="text/javascript">' . "\n"
+              . "var " . implode("\n, ", $vars) . "\n"
+              . '</script>';
 
         return $html;
     }
@@ -313,3 +335,4 @@ abstract class Exposition_Compiler
 
     abstract public function render();
 }
+
