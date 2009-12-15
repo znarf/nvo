@@ -17,22 +17,22 @@ License:
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* NV Globals */
+/* UWA Globals */
 
-if (typeof window.NV_HOST == "undefined") {
-  NV_HOST = 'www.netvibes.com';
+if (typeof window.UWA_WIDGET == "undefined") {
+    UWA_WIDGET = 'http://nvmodules.netvibes.com/widget';
 }
-if (typeof window.NV_MODULES == "undefined") {
-  NV_MODULES = 'nvmodules.netvibes.com';
+if (typeof window.UWA_JS == "undefined") {
+  UWA_JS = 'http://nvmodules.netvibes.com/js';
 }
-if (typeof window.NV_AVATARS == "undefined") {
-  NV_AVATARS = 'avatars.netvibes.com';
+if (typeof window.UWA_CSS == "undefined") {
+  UWA_CSS = 'http://nvmodules.netvibes.com/js/css';
 }
-if (typeof window.NV_STATIC == "undefined") {
-  NV_STATIC = 'http://' + NV_HOST;
+if (typeof window.UWA_PROXY == "undefined") {
+  UWA_PROXY = 'http://www.netvibes.com/ajaxProxy.php';
 }
-if (typeof window.NV_PATH == "undefined") {
-  NV_PATH = 'http://' + NV_HOST + '/';
+if (typeof window.UWA_STATIC == "undefined") {
+  UWA_STATIC = 'http://www.netvibes.com/img';
 }
 
 if (typeof UWA == "undefined") var UWA = {};

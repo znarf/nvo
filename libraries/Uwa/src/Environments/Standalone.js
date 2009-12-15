@@ -70,9 +70,8 @@ UWA.extend(UWA.Environment.prototype, {
 
       if( typeof UWA.widgetTrueURL == 'undefined' ) UWA.widgetTrueURL = document.location.href;
 
-      addto.innerHTML =  '<a style="border:0" title="Add this module to Netvibes" href="' + NV_PATH + 'subscribe.php?module=UWA&amp;moduleUrl=' + encodeURIComponent(UWA.widgetTrueURL) + '"><img alt="Add to Netvibes" src="' + NV_PATH + 'img/uwa-netvibes.png" /></a>';
-
-      addto.innerHTML +=  '<br /> <br /><a style="border:0" title="Add this module to Google Homepage" href="http://www.google.com/ig/add?moduleurl=' + encodeURIComponent(NV_PATH + 'api/uwa/compile/google.php?moduleUrl=' +  encodeURIComponent(UWA.widgetTrueURL) ) + '"><img alt="Add to Google Homepage" src="' + NV_PATH + 'img/uwa-google.png" /></a>';
+      addto.innerHTML =  '<a style="border:0" title="Add this module to Netvibes" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=' + encodeURIComponent(UWA.widgetTrueURL) + '"><img alt="Add to Netvibes" src="' + UWA_STATIC + '/uwa-netvibes.png" /></a>';
+      addto.innerHTML +=  '<br /> <br /><a style="border:0" title="Add this module to Google Homepage" href="http://www.google.com/ig/add&amp;moduleurl=' + encodeURIComponent(UWA_WIDGET + '/gspec?uwaUrl=' +  encodeURIComponent(UWA.widgetTrueURL) ) + '"><img alt="Add to Google Homepage" src="' + UWA_STATIC + '/uwa-google.png" /></a>';
 
       document.body.appendChild(addto);
 

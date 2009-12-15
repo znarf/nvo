@@ -101,8 +101,8 @@ UWA.extend(UWA.Environment.prototype, {
 
   setIcon: function(icon) {
     if (this.widget.elements['icon']) {
-        url = 'http://' + NV_HOST + '/proxy/favIcon.php?url=' + encodeURIComponent(icon);
-        this.widget.elements['icon'].setHTML('<img width="16" height="16" src="' + url + '" />');
+        url = UWA.proxies['icon'] + '?url=' + encodeURIComponent(icon);
+        this.widget.elements['icon'].setHTML('<img width="16" height="16" src="' + icon + '" />');
     } else {
         this.sendRemote('setIcon', false, icon);
     }

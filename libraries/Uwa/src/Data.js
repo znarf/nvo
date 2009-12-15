@@ -32,16 +32,20 @@ Credits:
 
 if (typeof UWA.proxies == "undefined") {
 
-  UWA.proxies = {
-    'api'  : NV_PATH + 'proxy/api2Proxy.php',
-    'rss'  : NV_PATH + 'proxy/xmlProxy.php',
-    'ajax' : NV_PATH + 'proxy/ajaxProxy.php',
-    'feed' : NV_PATH + 'proxy/feedProxy.php',
-    'xml'  : NV_PATH + 'data/xml/'
+  if (typeof window.NV_HOST == "undefined") {
+    NV_HOST = 'www.netvibes.com';
   }
 
+  UWA.proxies = {
+    'api'  : 'http://' + NV_HOST + '/proxy/api2Proxy.php',
+    'rss'  : 'http://' + NV_HOST + '/proxy/xmlProxy.php',
+    'ajax' : 'http://' + NV_HOST + '/proxy/ajaxProxy.php',
+    'feed' : 'http://' + NV_HOST + '/proxy/feedProxy.php',
+    'xml'  : 'http://' + NV_HOST + '/data/xml/',
+    'icon' : 'http://' + NV_HOST + '/proxy/favIcon.php',
+    'xml'  : 'http://' + NV_HOST + '/data/xml/'
+  }
 }
-
 
 if (typeof UWA.Json == "undefined") UWA.Json = {};
 

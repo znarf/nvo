@@ -90,10 +90,10 @@ UWA.extend(UWA.Environment.prototype, {
     this.html['status'] = UWA.createElement('div').addClassName('moduleStatus').inject(this.liveObject.body);
     this.html['status'].setHTML(
       '<a class="share" target="_blank" href="javascript:void(0)">' +
-        '<img alt="Share this widget" src="' + NV_STATIC + '/img/share.png"/>' +
+        '<img alt="Share this widget" src="' + UWA_STATIC + '/share.png"/>' +
       '</a>' +
-      '<a class="powered" target="_blank" href="http://www.netvibes.com/">' +
-        _("powered by netvibes") +
+      '<a class="powered" target="_blank" href="http://netvibes.org/">' +
+        _("Powered by Uwa") +
       '</a>' +
       '<a id="editLink" class="configure" href="javascript:void(0)">' +
         _("Edit") +
