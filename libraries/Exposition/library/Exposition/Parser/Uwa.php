@@ -254,6 +254,7 @@ class Exposition_Parser_Uwa extends Exposition_Parser
 
         $useCompressedJs = Exposition_Load::getConfig('js', 'compressed');
         $useVersionJs = Exposition_Load::getConfig('js', 'version');
+        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
 
         foreach ($this->knownLibraries as $string => $src) {
 
@@ -265,9 +266,9 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                     $type = $matches[2];
                     $name = $matches[3];
 
-                    $library = 'http://' . NV_STATIC . '/js/c/UWA_' . $type . '_' . $name . '.js';
+                    $library = $jsEndPoint . '/c/UWA_' . $type . '_' . $name . '.js';
                 } else {
-                    $library = 'http://' . NV_STATIC . '/js/' . $src;
+                    $library = $jsEndPoint . '/' . $src;
                 }
 
                 $libraries[] = $library . '?v=' . $useVersionJs;
