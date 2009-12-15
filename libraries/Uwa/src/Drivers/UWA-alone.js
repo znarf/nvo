@@ -193,21 +193,41 @@ UWA.merge(UWA.Element, {
 // Function extensions
 UWA.merge(Function.prototype, {
 
-  bind: function() {
-    if (arguments.length < 2 && arguments[0] === undefined) return this;
-    var __method = this, args = $A(arguments), object = args.shift();
-    return function() {
-      return __method.apply(object, args.concat($A(arguments)));
+  create : function (object)
+  {
+    var __method = this;
+    object = object || {};
+    return function (object)
+    {
+      var args = object.arguments;
+      args = (typeof args !== "undefined") ? UWA.Utils.splat(args) : $A(arguments).slice((object.event) ? 1 : 0);
+      if (object.event) {
+        args = [object || window.event].concat(args);
+      }
+
+      var event = function ()
+      {
+        return __method.apply(object.bind || null, args);
+      };
+      return event();
     }
   },
 
-  bindAsEventListener: function() {
-    var __method = this, args = $A(arguments), object = args.shift();
-    return function(event) {
-      return __method.apply(object, [event || window.event].concat(args));
-    }
-  }
+  bind : function (callback, args)
+  {
+    return this.create(
+    {
+      bind : callback, "arguments" : args
+    });
+  },
 
+  bindAsEventListener : function (callback, args)
+  {
+    return this.create(
+    {
+      bind : callback, event : true, "arguments" : args
+    });
+  }
 });
 
 // JSON Interface

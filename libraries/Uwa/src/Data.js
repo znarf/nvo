@@ -327,9 +327,11 @@ UWA.Data = {
     if (typeof request.cache != 'undefined') {
       url += '&cache=' + request.cache;
     }
-
+    if (typeof e.forceUpdate != "undefined") {
+      url += "&forceUpdate=" + request.forceUpdate;
+    }
     if(UWA.Client.Engine.ie) {
-        url += '&rnd='+ Math.random();
+        url += ((url.indexOf("?") > -1) ? "&" : "?") + "rnd=" + Math.random();
     }
 
     var callbacks = {

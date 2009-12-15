@@ -329,10 +329,29 @@ UWA.merge(UWA.Element, {
   */
 
   inject: function(el, where) {
-    if (typeof where != 'undefined') {
-      UWA.log('warning: el.inject. 2nd argument not supported. ' + where);
+    var where = where || "bottom";
+    if (where != "top" && where != "bottom" && where != "after")
+    {
+        UWA.log('warning: el.inject. Only "bottom", "top" or "after" are supported. ' + a);
+        where = "bottom"
     }
-    return el.appendChild(this);
+
+    if (where == "bottom") {
+      return el.appendChild(this)
+    } else {
+      if (where == "top") {
+        return insertBefore(this, el.firstChild)
+      } else {
+       if (where == "after") {
+          var parent = el.parentNode;
+          if (parent.lastchild == el) {
+            return parent.appendChild(this)
+          } else {
+            return parent.insertBefore(el, el.nextSibling);
+          }
+        }
+      }
+    }
   },
 
   /* Group: Events manipulation methods */

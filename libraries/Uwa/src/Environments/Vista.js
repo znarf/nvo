@@ -146,7 +146,8 @@ Object.extend(UWA.Environment.prototype,
     {
         if (this.module.elements.icon)
         {
-            this.module.elements.icon.innerHTML = '<img width="16" height="16" src="' + UWA_PROXY + '/proxy/favIcon?url="' + encodeURIComponent(name) + '" />';
+	    url = UWA.proxies['icon'] + "?url=" + encodeURIComponent(this.module.elements.icon);
+            this.module.elements.icon.innerHTML = '<img width="16" height="16" src="' + url + '" />';
         }
     }
 });

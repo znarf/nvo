@@ -77,7 +77,18 @@ UWA.Utils = {
     } else { // w3c
       $(cssId).appendChild( document.createTextNode(content) );
     }
+  },
 
+  isArray : function (array)
+  {
+    return !(array.constructor.toString().indexOf("Array") ==- 1);
+  },
+
+  splat : function (array)
+  {
+    if (!array) {
+      return []
+    }
+    return UWA.Utils.isArray(array) ? array : [array];
   }
-
-}
+};

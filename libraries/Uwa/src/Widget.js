@@ -152,6 +152,9 @@ UWA.Widget = function() {
   /* new - internal or advanced use only */
   this.theme = null;
 
+  /* new - internal or advanced use only */
+  this.userId = null;
+
   if(this.initialize) this.initialize();
 
 }
@@ -279,6 +282,7 @@ UWA.Widget.prototype = {
     if (this.environment.setIcon) {
       this.environment.setIcon(url, search);
     } else if(this.elements['icon']) {
+      url = UWA.proxies['icon'] + "?url=" + encodeURIComponent(url);
       this.elements['icon'].setHTML('<img width="16" height="16" src="' + url + '" />');
     }
   },
@@ -486,9 +490,13 @@ UWA.Widget.prototype = {
     this.elements['edit'].show();
     if(this.elements['editLink']) this.elements['editLink'].setHTML( _("Close Edit") );
   },
-
+  onCloseEdit: function ()
+  {
+    this.callback("onHideEdit")
+  },
   /* internal or advanced use only - not documented */
   getInfos: function() {
+    var content = "";
     if(this.metas['author']) {
       if(this.metas['website']) {
         var content = 'Widget by <strong><a href="' + this.metas['website'] + '" rel="author">' + this.metas['author'] + '</a></strong>';
@@ -498,9 +506,8 @@ UWA.Widget.prototype = {
       if(this.metas['version']) {
         content += ' - version <strong>' + this.metas['version'] + '</strong>';
       }
-      return this.createElement('p').setStyle({'padding': '10px', 'textAlign': 'right'}).setHTML(content);
     }
-    return false;
+    return this.createElement('p').setStyle({'padding': '10px', 'textAlign': 'right'}).setHTML(content);
   },
 
   /* to document */

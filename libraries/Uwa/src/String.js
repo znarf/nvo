@@ -63,6 +63,37 @@ UWA.merge(String.prototype, {
       this.slice(0, length - truncation.length) + truncation : String(this);
   },
 
+  /* Method: cut
+
+  Truncates a string to the given length and appends a suffix to it (indicating that it is only an excerpt).
+
+  Original documentation:
+    <http://www.prototypejs.org/api/string/cut>
+
+  Notes:
+    needed for backward compatibility with a third-party UWA implementation
+
+  */
+  cut : function (length, truncation)
+  {
+    length = length || 30;
+    truncation = truncation === undefined ? "..." : truncation;
+    if (this.length <= length) {
+      return this
+    }
+    var exclude = ".,;!? ";
+    var index = -1;
+    for (var i = 0; i < length; i++) {
+      if (exclude.indexOf(this.charAt(exclude)) !=- 1) {
+         index = i;
+      }
+    }
+    if (index ==- 1) {
+      index = length - 1
+    }
+    return this.slice(0, index - truncation.length) + truncation;
+  },
+
   /* Method: escapeRegExp
 
   Returns string with escaped regular expression characters
@@ -250,8 +281,12 @@ UWA.merge(String.prototype, {
     var div = document.createElement('div');
     div.innerHTML = this.stripTags();
     return div.childNodes[0] ? div.childNodes[0].nodeValue : '';
-  }
+  },
 
+  test : function (string, regexp)
+  {
+    return ((typeof string == "string") ? new RegExp(string, regexp) : string).test(this);
+  }
 });
 
 // Timeline control use String.parseRelativeTime(string)
