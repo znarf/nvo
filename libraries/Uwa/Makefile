@@ -92,7 +92,7 @@ UWA_MOOTOOLS = $(STAGE)/dist/UWA_Mootools.js
 all: dist zip tar
 	@echo "UWA JavaScript Runtime build complete."
 
-dist: core mootools environments controls
+dist: clean core mootools environments controls
 
 core:
 	@echo "Building UWA Core..."
@@ -113,9 +113,11 @@ mootools:
 environments:
 	@echo "Building UWA Environments..."
 	@for environment in $(ENVIRONMENTS) ; do \
+        echo " - $${environment}"; \
 		cat $(CORE_FILES) $(UWA_JS_SRC)/Environments/$${environment}.js >> $(STAGE)/src/UWA_$${environment}.js ; \
-		cat $(MOOTOOLS_FILES) $(UWA_JS_SRC)/Environments/$${environment}.js >> $(STAGE)/src/UWA_$${environment}_Mootools.js ; \
         $(YUI) $(STAGE)/src/UWA_$${environment}.js -o $(STAGE)/dist/UWA_$${environment}.js ; \
+        echo " - $${environment}_Mootools"; \
+		cat $(MOOTOOLS_FILES) $(UWA_JS_SRC)/Environments/$${environment}.js >> $(STAGE)/src/UWA_$${environment}_Mootools.js ; \
 		$(YUI) $(STAGE)/src/UWA_$${environment}_Mootools.js -o $(STAGE)/dist/UWA_$${environment}_Mootools.js ; \
 	done
 	-@rm -f $(STAGE)/dist/*.tmp.js
@@ -124,6 +126,7 @@ environments:
 controls:
 	@echo "Building UWA Controls..."
 	@for control in $(CONTROLS) ; do \
+        echo " - $(CONTROLS)"; \
 		$(YUI) $(UWA_JS_SRC)/Controls/$${control}.js -o $(STAGE)/dist/UWA_Controls_$${control}.js ; \
 	done
 	@echo "UWA Controls build complete."
