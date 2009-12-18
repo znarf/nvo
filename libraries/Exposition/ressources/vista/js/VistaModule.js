@@ -1,4 +1,23 @@
 /*
+License:
+    Copyright Netvibes 2006-2009.
+    This file is part of UWA JS Runtime.
+
+    UWA JS Runtime is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    UWA JS Runtime is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
     widgetLoaded : a true UWA widget is in use
 */
 VistaModule = function( inFlyout )
@@ -113,17 +132,7 @@ VistaModule.prototype =
         }
 
         //Proxies must have full urls
-        //if NV_PATH contains a relative url, we make them full
-        if( NV_PATH.substr( 0, 7 ) != 'http://' )
-        {
-            UWA.proxies = {
-                'api'  : 'http://' + NV_HOST + UWA.proxies['api'],
-                'rss'  : 'http://' + NV_HOST + UWA.proxies['rss'],
-                'ajax' : 'http://' + NV_HOST + UWA.proxies['ajax'],
-                'feed' : 'http://' + NV_HOST + UWA.proxies['feed'],
-                'xml'  : 'http://' + NV_HOST + UWA.proxies['xml']
-            }
-        }
+
         //create the environment (customised for vista in load.js)
         this.environment = new UWA.Environment();
 
