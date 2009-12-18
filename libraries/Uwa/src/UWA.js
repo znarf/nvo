@@ -19,21 +19,26 @@ License:
 
 /* UWA Globals */
 
-if (typeof window.UWA_WIDGET == "undefined") {
-    UWA_WIDGET = 'http://nvmodules.netvibes.com/widget';
+if (typeof UWA_WIDGET == "undefined") {
+  UWA_WIDGET = 'http://nvmodules.netvibes.com/widget';
 }
-if (typeof window.UWA_JS == "undefined") {
+if (typeof UWA_JS == "undefined") {
   UWA_JS = 'http://nvmodules.netvibes.com/js';
 }
-if (typeof window.UWA_CSS == "undefined") {
-  UWA_CSS = 'http://nvmodules.netvibes.com/js/css';
+if (typeof UWA_CSS == "undefined") {
+  UWA_CSS = 'http://nvmodules.netvibes.com/css';
 }
-if (typeof window.UWA_PROXY == "undefined") {
-  UWA_PROXY = 'http://www.netvibes.com/ajaxProxy.php';
+if (typeof UWA_PROXY == "undefined") {
+  UWA_PROXY = 'http://www.netvibes.com';
 }
-if (typeof window.UWA_STATIC == "undefined") {
+if (typeof UWA_STATIC == "undefined") {
   UWA_STATIC = 'http://www.netvibes.com/img';
 }
+
+// compatibility mode
+var NV_HOST = 'www.netvibes.com';
+var NV_STATIC = 'http://cdn.netvibes.com';
+var NV_MODULES = 'nvmodules.netvibes.com';
 
 if (typeof UWA == "undefined") var UWA = {};
 if (typeof UWA.Widgets == "undefined") UWA.Widgets = {};

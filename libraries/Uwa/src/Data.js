@@ -30,20 +30,30 @@ Credits:
   For details, see the Prototype web site: http://www.prototypejs.org/
 */
 
+
 if (typeof UWA.proxies == "undefined") {
 
-  if (typeof window.NV_HOST == "undefined") {
-    NV_HOST = 'www.netvibes.com';
-  }
+  // compatibility mode for netvibes UWA servers
+  if (UWA_PROXY == "http://www.netvibes.com") {
+    UWA.proxies = {
+      'api'  : UWA_PROXY + '/proxy/api2Proxy.php',
+      'rss'  : UWA_PROXY + '/proxy/xmlProxy.php',
+      'ajax' : UWA_PROXY + '/proxy/ajaxProxy.php',
+      'feed' : UWA_PROXY + '/proxy/feedProxy.php',
+      'icon' : UWA_PROXY + '/proxy/favIcon.php',
+      'xml'  : UWA_PROXY + '/data/xml/',
+    }
 
-  UWA.proxies = {
-    'api'  : 'http://' + NV_HOST + '/proxy/api2Proxy.php',
-    'rss'  : 'http://' + NV_HOST + '/proxy/xmlProxy.php',
-    'ajax' : 'http://' + NV_HOST + '/proxy/ajaxProxy.php',
-    'feed' : 'http://' + NV_HOST + '/proxy/feedProxy.php',
-    'xml'  : 'http://' + NV_HOST + '/data/xml/',
-    'icon' : 'http://' + NV_HOST + '/proxy/favIcon.php',
-    'xml'  : 'http://' + NV_HOST + '/data/xml/'
+  // Exposition Server standart proxy path
+  } else {
+    UWA.proxies = {
+      'ajax' : UWA_PROXY + '/ajax',
+      'feed' : UWA_PROXY + '/feed',
+      'rss'  : UWA_PROXY + '/feed',
+      'api'  : UWA_PROXY + '/api',
+      'icon' : UWA_PROXY + '/favIcon',
+      'xml'  : UWA_PROXY + '/xml',
+    };
   }
 }
 
