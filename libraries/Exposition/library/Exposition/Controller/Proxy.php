@@ -74,7 +74,29 @@ class Exposition_Controller_Proxy extends Zend_Controller_Action
             $proxyOptions['object'] = $_GET['object'];
         }
 
-        $proxy = new Proxy($url, $proxyOptions);
+        $proxy = new Exposition_Proxy($url, $proxyOptions);
+        $proxy->sendResponse();
+    }
+
+    /**
+     * Handles the xml action.
+     */
+    public function xmlAction()
+    {
+        $url = $this->getUrl();
+
+        // set default options
+        $proxyOptions = array(
+            'type'      => 'xml',
+            'cachetime' => 1200
+        );
+
+        // add object option is isset
+        if (isset($_GET['object'])) {
+            $proxyOptions['object'] = $_GET['object'];
+        }
+
+        $proxy = new Exposition_Proxy($url, $proxyOptions);
         $proxy->sendResponse();
     }
 
@@ -128,11 +150,6 @@ class Exposition_Controller_Proxy extends Zend_Controller_Action
     }
 
     public function favIconAction()
-    {
-        //@todo
-    }
-
-    public function xmlAction()
     {
         //@todo
     }
