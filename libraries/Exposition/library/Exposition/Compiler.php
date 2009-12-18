@@ -182,6 +182,10 @@ abstract class Exposition_Compiler
         $jsVersion = Exposition_Load::getConfig('js', 'version');
 
         if ($jsCompressed) {
+            $jsEndPoint = $jsEndPoint . '/c';
+        }
+
+        if ($jsCompressed) {
 
             switch ($coreLibraryName) {
                 case 'uwa':
@@ -201,7 +205,7 @@ abstract class Exposition_Compiler
             }
 
             foreach ($this->_coreLibraries[$coreLibraryName] as $js) {
-                $javascripts[] = $jsEndPoint . $js . '?v=' . $jsVersion;
+                $javascripts[] = $jsEndPoint . '/' . $js . '?v=' . $jsVersion;
             }
 
             if (isset($this->_environment)) {
@@ -223,17 +227,15 @@ abstract class Exposition_Compiler
         $javascripts = $this->_getCoreLibraries();
 
         // Widget script
+        $useCompressedJs = Exposition_Load::getConfig('js', 'compressed');
         $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
-        $jsBaseUrl = $widgetEndPoint . '/js';
 
         $urlOptions = array();
-        if (isset($this->options['uwaId'])) {
-            $jsBaseUrl = $jsBaseUrl . '/' . urlencode($this->options['uwaId']);
-        } else {
-            $urlOptions['uwaUrl'] = $this->_widget->getUrl();
-        }
 
         // Allowed Scripts Options
+
+        $urlOptions['uwaUrl'] = $this->_widget->getUrl();
+
         if (isset($options['platform'])) {
             $urlOptions['platform'] = $options['platform'];
         }
@@ -242,7 +244,7 @@ abstract class Exposition_Compiler
             $urlOptions['className'] = $options['className'];
         }
 
-        $javascripts[] = $jsBaseUrl . (!empty($urlOptions) ? '?' . http_build_query($urlOptions) : '');
+        $javascripts[] = $widgetEndPoint . '/js' . (!empty($urlOptions) ? '?' . http_build_query($urlOptions) : '');
 
         // Merge with external scripts
         return array_merge($javascripts, $this->_widget->getExternalScripts());
