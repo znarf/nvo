@@ -68,13 +68,15 @@ CORE_FILES = \
 	$(BASE_FILES)
 
 MOOTOOLS_FILES = \
-	$(UWA_JS_LIB)/mootools.js \
+	$(UWA_JS_LIB)/mootools-1.2.4-core-nc.js \
+	$(UWA_JS_LIB)/mootools-1.2.4.2-more.js \
 	$(UWA_JS_SRC)/UWA.js \
 	$(UWA_JS_SRC)/Drivers/UWA-mootools.js \
 	$(BASE_FILES)
 
 CONTROLS = \
-	PrefsForm
+	PrefsForm \
+	TabView
 
 ENVIRONMENTS = \
 	Frame \
@@ -113,10 +115,10 @@ mootools:
 environments:
 	@echo "Building UWA Environments..."
 	@for environment in $(ENVIRONMENTS) ; do \
-        echo " - $${environment}"; \
+		echo " - $${environment}"; \
 		cat $(CORE_FILES) $(UWA_JS_SRC)/Environments/$${environment}.js >> $(STAGE)/src/UWA_$${environment}.js ; \
-        $(YUI) $(STAGE)/src/UWA_$${environment}.js -o $(STAGE)/dist/UWA_$${environment}.js ; \
-        echo " - $${environment}_Mootools"; \
+		$(YUI) $(STAGE)/src/UWA_$${environment}.js -o $(STAGE)/dist/UWA_$${environment}.js ; \
+		echo " - $${environment}_Mootools"; \
 		cat $(MOOTOOLS_FILES) $(UWA_JS_SRC)/Environments/$${environment}.js >> $(STAGE)/src/UWA_$${environment}_Mootools.js ; \
 		$(YUI) $(STAGE)/src/UWA_$${environment}_Mootools.js -o $(STAGE)/dist/UWA_$${environment}_Mootools.js ; \
 	done
@@ -126,7 +128,8 @@ environments:
 controls:
 	@echo "Building UWA Controls..."
 	@for control in $(CONTROLS) ; do \
-        echo " - $(CONTROLS)"; \
+		echo " - $${control}"; \
+		cat $(UWA_JS_SRC)/Controls/$${control}.js >> $(STAGE)/src/UWA_Controls_$${control}.js ; \
 		$(YUI) $(UWA_JS_SRC)/Controls/$${control}.js -o $(STAGE)/dist/UWA_Controls_$${control}.js ; \
 	done
 	@echo "UWA Controls build complete."

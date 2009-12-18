@@ -21,6 +21,10 @@ License:
 Script: Driver UWA MooTools
 */
 
+Object.extend = $extend;
+Object.clone = $merge;
+Object.toQueryString = Hash.toQueryString;
+
 UWA.Class = Class;
 
 UWA.Form = {
