@@ -37,7 +37,7 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
      *
      * @var string
      */
-    protected $_environment = 'Vista';
+    protected $_environment = 'Vista_Mootools';
 
     /**
      * Stylesheet.
@@ -119,19 +119,6 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
         $l[] = '    <title>' . $this->_widget->getTitle() . '</title>';
         $l[] = '    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
         $l[] = '    <link rel="icon" href="' . $icon . '" type="image/x-icon" />';
-
-
-/*
-        $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
-        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
-        $jsVersion = Exposition_Load::getConfig('endpoint', 'proxy');
-
-        $javascripts = array(
-            'http://www.netvibes.com/js/UWA/load.js.php?env=Vista',
-            //$jsEndPoint . '/UWA_Vista_Mootools.js?v=' . $jsVersion,
-            $widgetEndPoint  . '/js?uwaUrl=' . urlencode($this->_widget->getUrl()) . '&platform=vista&className=CompiledModule',
-        );
-*/
 
         // require Vista_Mootools !!!
         $javascripts = $this->_getJavascripts(array(
