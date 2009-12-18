@@ -29,7 +29,7 @@ class Exposition_Proxy
     /**
      * HTTP Request User Agent.
      */
-    const USER_AGENT = 'Netvibes Exposition Proxy';
+    const USER_AGENT = 'Exposition PHP Lib Proxy';
 
     /**
      * Default Mine Type.
@@ -350,6 +350,9 @@ class Exposition_Proxy
         return $jsonOutput;
     }
 
+    /**
+     * Build Json response from atom feed
+     */
     protected static function atomFeedToJson(Zend_Feed_Abstract $feed)
     {
         $arrayOutput = (object) array(
@@ -389,6 +392,9 @@ class Exposition_Proxy
         return Zend_Json::encode($arrayOutput);
     }
 
+    /**
+     * Build Json response from rss feed
+     */
     protected static function rssFeedToJson(Zend_Feed_Abstract $feed)
     {
         $arrayOutput = (object) array(
