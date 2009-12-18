@@ -43,9 +43,9 @@ class Exposition_Parser_Uwa extends Exposition_Parser
      * and therefore should be directly linked on Netvibes servers
      */
     public $knownLibraries = array(
+        'UWA.Controls.TabView'     => 'UWA/Controls/TabView.js',
         /*
         'UWA.Controls.Pager'       => 'UWA/Controls/Pager.js',
-        'UWA.Controls.TabView'     => 'UWA/Controls/TabView.js',
         'UWA.Controls.ToolTip'     => 'UWA/Controls/ToolTip.js',
         'UWA.Controls.SearchForm'  => 'UWA/Controls/SearchForm.js',
         'UWA.Controls.FlashPlayer' => 'App/Controls/FlashPlayer.js',
@@ -59,11 +59,23 @@ class Exposition_Parser_Uwa extends Exposition_Parser
     );
 
     /**
+     * Known UWA Standalone
+     *  value: the library relative path/name
+     */
+    public $ignoredLibraries = array(
+        'load.js.php',
+        'UWA_Standalone.js',
+        'UWA_Standalone_Mootools.js',
+    );
+
+    /**
      * Parses the widget title.
      */
     public function parseTitle()
     {
         $this->_widget->setTitle((string) $this->_xml->head->title);
+
+        return $this;
     }
 
     /**
@@ -79,8 +91,12 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                 $metas[$name] = $content;
             }
         }
+
         asort($metas);
+
         $this->_widget->setMetadata($metas);
+
+        return $this;
     }
 
     /**
@@ -91,19 +107,23 @@ class Exposition_Parser_Uwa extends Exposition_Parser
         $widget = $this->_xml->head->children('http://www.netvibes.com/ns/');
         if ($widget) {
             foreach ($widget->children() as $preferenceXml) {
+
                 $attributes = $preferenceXml->attributes();
                 if (isset($attributes['inline'])) {
                     return; // inline verbotten
                 }
+
                 $preference = new Exposition_Widget_Preference((string) $attributes['type']);
                 $preference->setName((string) $attributes['name']);
                 $preference->setLabel((string) $attributes['label']);
                 if (isset($attributes['defaultValue'])) {
                     $preference->setDefaultValue((string) $attributes['defaultValue']);
                 }
+
                 if (isset($attributes['onchange'])) {
                     $preference->setOnchangeCallback((string) $attributes['onchange']);
                 }
+
                 foreach ($preferenceXml->option as $option) {
                     if (empty($option['label'])) {
                         $preference->addListOption((string) $option['value']);
@@ -111,12 +131,16 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                         $preference->addListOption((string) $option['value'], (string) $option['label']);
                     }
                 }
+
                 if ($preference->getType() == 'range') {
                     $preference->setRangeOptions((string) $attributes['step'], (string) $attributes['min'], (string) $attributes['max']);
                 }
+
                 $this->_widget->addPreference($preference->getName(), $preference);
             }
         }
+
+        return $this;
     }
 
     /**
@@ -137,6 +161,8 @@ class Exposition_Parser_Uwa extends Exposition_Parser
         $css = str_replace("}", "}\n", $css);
 
         $this->_widget->setStyle($css);
+
+        return $this;
     }
 
     /**
@@ -150,7 +176,8 @@ class Exposition_Parser_Uwa extends Exposition_Parser
             "/css/uwa-standalone.css",
             "/themes/uwa/style.css",
             "/api/0.3/style.css",
-            "/api/0.2/style.css");
+            "/api/0.2/style.css"
+        );
 
         $stylesheets = array();
         foreach ($this->_xml->head->link as $link) {
@@ -162,7 +189,10 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                 }
             }
         }
+
         $this->_widget->setExternalStylesheets($stylesheets);
+
+        return $this;
     }
 
     /**
@@ -176,7 +206,10 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                 $js .= (string) $script;
             }
         }
+
         $this->_widget->setScript($js);
+
+        return $this;
     }
 
     /**
@@ -189,37 +222,57 @@ class Exposition_Parser_Uwa extends Exposition_Parser
             return array();
         }
 
-        $ignoredScripts = array(
-            "load.js.php",
-            "UWA_Standalone.js",
-            "UWA_Standalone_Mootools.js"
-        );
-
         $libraries = array();
+        $knownLibraries = array_map(array(get_class($this), '_getNormalScriptPath'), $this->knownLibraries);
+        $knownLibrariesCompressed = array_map(array(get_class($this), '_getCompressedScriptPath'), $this->knownLibraries);
+
+
         foreach ($this->_xml->head->script as $script) {
-            $src = (string) $script['src'];
-            if (!empty($src)) {
 
-                $url = parse_url($src);
-                if( !empty($url['host'])) {
+           if (
+               // exclude ignored library
+               self::_matchScriptPathFromScriptsNames($script, $this->ignoredLibraries)
 
-                    $ignored = false;
-                    foreach ($ignoredScripts as $ignoredScript) {
-                        $ignored = strstr($url['path'], $ignoredScript);
-
-                        if ($ignored) {
-                            break;
-                        }
-                    }
-
-                    if (!$ignored) {
-                        $libraries[] = $src;
-                    }
-                }
-            }
+               // exclude known Libraries with normal and compressed name
+               && self::_matchScriptPathFromScriptsNames($script, $knownLibraries)
+               && self::_matchScriptPathFromScriptsNames($script, $knownLibrariesCompressed)
+           ) {
+                $libraries[] = $script['src'];
+           }
         }
+
         $libraries = array_unique(array_merge($libraries, $this->getDetectedLibraries()));
         $this->_widget->setExternalScripts($libraries);
+
+        return $this;
+    }
+
+    /**
+     *
+     */
+    protected static function _matchScriptPathFromScriptsNames(SimpleXMLElement $script, $scriptsNames)
+    {
+        $scriptSrc = (string) $script['src'];
+
+        // exclude empty script src
+        if (empty($scriptSrc)) {
+            return false;
+        }
+
+        $scriptUrlParts = parse_url($scriptSrc);
+
+        // exclude external try to load internal
+        if (empty($scriptUrlParts['host'])) {
+            return false;
+        }
+
+        foreach ($scriptsNames as $$scriptName => $scriptPath) {
+            if (strstr($scriptUrlParts['path'], $scriptPath) !== false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -252,12 +305,15 @@ class Exposition_Parser_Uwa extends Exposition_Parser
             'new PeriodicalExecuter' => 'uwa-mootools',
             'UWA.Controls.Timeline'  => 'uwa-mootools'
         );
+
         foreach ($detect as $string => $name) {
             if (stripos($script, $string)) {
                 $this->_widget->setCoreLibrary($name);
                 return;
             }
         }
+
+        return $this;
     }
 
     /**
@@ -279,21 +335,32 @@ class Exposition_Parser_Uwa extends Exposition_Parser
             if (stripos($script, $string)) {
 
                 if ($useCompressedJs) {
-                    $matches = array();
-                    preg_match("/^(UWA|App)\/([^\/]+)\/([^\/]+).js$/", $src, $matches);
-                    $type = $matches[2];
-                    $name = $matches[3];
-
-                    $library = $jsEndPoint . '/c/UWA_' . $type . '_' . $name . '.js';
+                    $library = $jsEndPoint . self::_getCompressedScriptPath($src);
                 } else {
-                    $library = $jsEndPoint . '/' . $src;
+                    $library = $jsEndPoint . self::_getNonCompressedScriptPath($src);
                 }
 
                 $libraries[] = $library . '?v=' . $useVersionJs;
 
             }
         }
+
         return $libraries;
+    }
+
+    protected static function _getCompressedScriptPath($scriptPath)
+    {
+        $matches = array();
+        preg_match("/^(UWA|App)\/([^\/]+)\/([^\/]+).js$/", $scriptPath, $matches);
+        $type = $matches[2];
+        $name = $matches[3];
+
+        return '/c/UWA_' . $type . '_' . $name . '.js';
+    }
+
+    protected static function _getNormalScriptPath($scriptPath)
+    {
+        return '/' . str_replace(array('UWA'), array(''), $scriptPath);
     }
 
     /**
@@ -311,8 +378,11 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                 $string = str_replace(']]>', '', $string);
                 $html .= $string;
             }
+
             $this->_widget->setBody($html);
         }
+
+        return $this;
     }
 
     /**
@@ -326,6 +396,8 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                 return;
             }
         }
+
+        return $this;
     }
 
     /**
@@ -339,6 +411,8 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                 return;
             }
         }
+
+        return $this;
     }
 
     /**
@@ -372,6 +446,7 @@ class Exposition_Parser_Uwa extends Exposition_Parser
         $body = $this->_content;
 
         // replace all '&' not followed by 'amp;' by '&amp;' in body
+        $matches = array();
         $bodyTag = preg_match("/<body>(.*)<\/body>/Uis", $body, $matches);
         if (isset($matches[1])) {
             $bodyTag = $matches[1];
@@ -380,6 +455,7 @@ class Exposition_Parser_Uwa extends Exposition_Parser
         }
 
         // replace htmlentities in the preferences tag if necessary
+        $matches = array();
         $prefTag = preg_match("/<widget:preferences>(.*)<\/widget:preferences>/Uis", $body, $matches);
         if (isset($matches[1])) {
             $prefTag = $matches[1];
