@@ -237,7 +237,7 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                && self::_matchScriptPathFromScriptsNames($script, $knownLibraries)
                && self::_matchScriptPathFromScriptsNames($script, $knownLibrariesCompressed)
            ) {
-                $libraries[] = $script['src'];
+                $libraries[] = (string) $script['src'];
            }
         }
 
