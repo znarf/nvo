@@ -57,6 +57,23 @@ abstract class Exposition_Compiler
      * @var array
      */
     protected $_coreLibraries;
+    
+     /**
+     * JavaScript base Uwa libraries.
+     *
+     * @var array
+     */
+    protected $_baseLibraries = array(
+        'lib/UWA/String.js',
+        'lib/UWA/Array.js',
+        'lib/UWA/Element.js',
+        'lib/UWA/Data.js',
+        'lib/UWA/Environment.js',
+        'lib/UWA/Widget.js',
+        'lib/UWA/Utils.js',
+        'lib/UWA/Utils/Client.js',
+        'lib/UWA/Controls/PrefsForm.js'
+    );
 
     /**
      * Compiler options.
@@ -76,23 +93,18 @@ abstract class Exposition_Compiler
 
         $this->setOptions($options);
 
-        $baseLibraries = array(
-            'String.js',
-            'Array.js',
-            'Element.js',
-            'Data.js',
-            'Environment.js',
-            'Widget.js',
-            'Utils.js',
-            'Utils/Client.js',
-            'Controls/PrefsForm.js'
-        );
+        $this->_coreLibraries['uwa'] = array_merge(array(
+            'lib/UWA/UWA.js', 
+            'lib/UWA/Drivers/UWA-alone.js', 
+            'lib/UWA/Drivers/UWA-legacy.js',
+        ), $this->_baseLibraries);
 
-        $this->_coreLibraries['uwa'] = array_merge(
-            array('UWA.js', 'Drivers/UWA-alone.js', 'Drivers/UWA-legacy.js'), $baseLibraries);
-
-        $this->_coreLibraries['uwa-mootools'] = array_merge(
-            array('../lib/mootools.js', 'UWA.js', 'Drivers/UWA-mootools.js'), $baseLibraries);
+        $this->_coreLibraries['uwa-mootools'] = array_merge(array(
+            'lib/mootools-core.js', 
+            'lib/mootools-more.js', 
+            'lib/UWA/UWA.js', 
+            'lib/UWA/Drivers/UWA-mootools.js'
+        ), $this->_baseLibraries);
     }
 
     /**
@@ -199,7 +211,7 @@ abstract class Exposition_Compiler
             }
 
         } else {
-
+        	
             if (empty($this->_coreLibraries[$coreLibraryName])) {
                 throw new Exposition_Exception('CoreLibrary name not known.');
             }
@@ -209,9 +221,9 @@ abstract class Exposition_Compiler
             }
 
             if (isset($this->_environment)) {
-                $javascripts[] = $jsEndPoint . '/Environments/' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
+                $javascripts[] = $jsEndPoint . '/lib/UWA/Environments/' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
             }
-        }
+        }              
 
         return $javascripts;
     }
