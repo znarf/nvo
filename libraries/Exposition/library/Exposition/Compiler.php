@@ -257,7 +257,7 @@ abstract class Exposition_Compiler
         }
 
         $javascripts[] = $widgetEndPoint . '/js' . (!empty($urlOptions) ? '?' . http_build_query($urlOptions) : '');
-
+        
         // Merge with external scripts
         return array_merge($javascripts, $this->_widget->getExternalScripts());
     }

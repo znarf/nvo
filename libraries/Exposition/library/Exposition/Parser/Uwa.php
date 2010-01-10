@@ -43,7 +43,7 @@ class Exposition_Parser_Uwa extends Exposition_Parser
      * and therefore should be directly linked on Netvibes servers
      */
     public $knownLibraries = array(
-        'UWA.Controls.TabView'     => 'lib/UWA/Controls/TabView.js',
+        'UWA.Controls.TabView'     => 'UWA/Controls/TabView.js',
         /*
         'UWA.Controls.Pager'       => 'UWA/Controls/Pager.js',
         'UWA.Controls.ToolTip'     => 'UWA/Controls/ToolTip.js',
@@ -365,7 +365,7 @@ class Exposition_Parser_Uwa extends Exposition_Parser
         $type = $matches[2];
         $name = $matches[3];
 
-        return '/UWA/' . $type . '/' . $name . '.js';
+        return '/lib/UWA/' . $type . '/' . $name . '.js';
     }
 
     /**
