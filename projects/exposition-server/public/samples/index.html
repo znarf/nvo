@@ -7,16 +7,8 @@
     <meta name="apiVersion" content="1.2" />
     <meta name="debugMode" content="true" />
     <link href="/css/uwa-standalone.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="/img/icon.png" rel="favicon" type="image/x-icon" />
-    <script type="text/javascript">
-    var UWA_WIDGET = 'http://uwa.service.japanim.fr/widget',
-        UWA_JS = 'http://uwa.service.japanim.fr/js',
-        UWA_CSS = 'http://uwa.service.japanim.fr/css',
-        UWA_PROXY = 'http://uwa.service.japanim.fr/proxy',
-        UWA_STATIC = 'http://uwa.service.japanim.fr/img'
-    </script>
-    <script type="text/javascript" src="/js/UWA_Standalone.js"></script>
-    <script type="text/javascript" src="http://cdn.netvibes.com/js/c/UWA_Controls_TabView.js?v=preview3"></script>
+    <script type="text/javascript" src="/js/c/UWA_Standalone.js?v=preview3"></script>
+    <script type="text/javascript" src="/js/c/UWA_Controls_TabView.js?v=preview3"></script>
     <title>My Sample Widget</title>
     <widget:preferences>
         <preference name="my_text" type="text" label="My text pref" defaultValue="" />
@@ -27,126 +19,132 @@
     </widget:preferences>
     <script type="text/javascript">
 
-    // update widget elements
-    widget.setTitle('Test Title update');
-    widget.setIcon("http://cdn.netvibes.com/modules/uwa/icon.png");
-    widget.setUnreadCount(1);
-    widget.setSearchResultCount(2);
-
-    var TabViewSample = {};
-
-    widget.onLoad = function() {
-
-      // init tab system
-      if (typeof(TabViewSample.tabs) == "undefined") {
-
-
-          var tabs = new UWA.Controls.TabView();
-
-          TabViewSample.tabs = tabs;
-
-          // Create tab items
-          tabs.addTab("tab1", {text: "UWA Links", customInfo: "custom"});
-          tabs.addTab("tab2", {text: "Grid Data"});
-          tabs.addTab("tab3", {text: "E-Mail List"});
-          tabs.addTab("tab4", {text: "Rich list "});
-          tabs.addTab("tab5", {text: "Thumbs list"});
-          tabs.addTab("tab6", {text: "Json"});
-          tabs.addTab("tab7", {text: "Ajax"});
-          tabs.addTab("tab8", {text: "Prefs"});
-          tabs.addTab("tab9", {text: "Export"});
-
-          // Put some content in tabs
-          tabs.setContent("tab1", $('hello-content').innerHTML);
-          tabs.setContent("tab2", $('griddata-content').innerHTML);
-          tabs.setContent("tab3", $('emaillist-content').innerHTML);
-          tabs.setContent("tab4", $('richlist-content').innerHTML);
-          tabs.setContent("tab5", $('thumbist-content').innerHTML);
-          tabs.setContent("tab6", $('json-content').innerHTML);
-          tabs.setContent("tab7", $('ajax-content').innerHTML);
-          tabs.setContent("tab8", $('prefs-content').innerHTML);
-          tabs.setContent("tab9", $('export-content').innerHTML);
-
-          // Register to activeTabChange event
-          tabs.observe('activeTabChange', TabViewSample.onActiveTabChanged);
-
-      } else {
-          var tabs = TabViewSample.tabs;
-      }
-
-      // Restore saved active tab
-      var activeTab = widget.getValue('activeTab');
-
-      if (activeTab) {
-
-          if (TabViewSample.tabs.selectedTab) {
-              tabs.reload();
-          } else {
-              tabs.selectTab(activeTab);
-          }
-
-      } else {
-          tabs.selectTab('tab1');
-      }
-
-      widget.setBody(TabViewSample.tabs.tabSet);
-      widget.onResize();
-    }
-
-    TabViewSample.onActiveTabChanged = function(name, data) {
-
-        var tabs = TabViewSample.tabs;
-
-        // Save active tab
-        widget.setValue("activeTab", name);
-
-        if (name == 'tab6') {
-
-            var onCompleteJson = function(json) {
-                tabs.setContent(name, 'json date is:' + json.date);
-            }
-
-            UWA.Data.request('http://basezf.japanim.fr/example/uwa/jsoncallback', {
-                method: 'get',
-                type: 'json',
-                proxy: 'ajax',
-                onComplete: onCompleteJson.bind(this)
-            });
-
-        } else if (name == 'tab7') {
-
-            var onCompleteAjax = function(html) {
-                tabs.setContent(name, html);
-            }
-
-            UWA.Data.request('http://basezf.japanim.fr/example/uwa/ajaxcallback', {
-                method: 'get',
-                type: 'html',
-                proxy: 'ajax',
-                onComplete: onCompleteAjax.bind(this)
-            });
-        } else if (name == 'tab8') {
-
-            html = '<h1>Preference values</h1>'
-            + '<ul style="padding: 5px;">'
-                + '<li>my_text: ' + widget.getValue('my_text') + "</li>"
-                + '<li>my_text: ' + widget.getValue('pass') + "</li>"
-                + '<li>my_checkbox: ' + widget.getValue('my_checkbox') + "</li>"
-                + '<li>my_range: ' + widget.getValue('my_range') + "</li>"
-                + '</ul>'
-
-            tabs.setContent(name, html);
-        }
-
-        widget.onResize();
-    }
-
-    var resized = 0;
-    var OriginalTitle = widget.getTitle();
-
-    widget.onResize = function() {
-        widget.setTitle(OriginalTitle + '(resized:' + resized++ + ')' );
-    }
+        var UWA_WIDGET = 'http://uwa.service.japanim.fr/widget',
+        UWA_JS = 'http://uwa.service.japanim.fr/js',
+        UWA_CSS = 'http://uwa.service.japanim.fr/css',
+        UWA_PROXY = 'http://uwa.service.japanim.fr/proxy',
+        UWA_STATIC = 'http://uwa.service.japanim.fr/img'
+        
+	    // update widget elements
+	    widget.setTitle('Test Title update');
+	    widget.setIcon("http://cdn.netvibes.com/modules/uwa/icon.png");
+	    widget.setUnreadCount(1);
+	    widget.setSearchResultCount(2);
+	
+	    var TabViewSample = {};
+	
+	    widget.onLoad = function() {
+	
+	      // init tab system
+	      if (typeof(TabViewSample.tabs) == "undefined") {
+	
+	
+		  var tabs = new UWA.Controls.TabView();
+	
+		  TabViewSample.tabs = tabs;
+	
+		  // Create tab items
+		  tabs.addTab("tab1", {text: "UWA Links", customInfo: "custom"});
+		  tabs.addTab("tab2", {text: "Grid Data"});
+		  tabs.addTab("tab3", {text: "E-Mail List"});
+		  tabs.addTab("tab4", {text: "Rich list "});
+		  tabs.addTab("tab5", {text: "Thumbs list"});
+		  tabs.addTab("tab6", {text: "Json"});
+		  tabs.addTab("tab7", {text: "Ajax"});
+		  tabs.addTab("tab8", {text: "Prefs"});
+		  tabs.addTab("tab9", {text: "Export"});
+	
+		  // Put some content in tabs
+		  tabs.setContent("tab1", $('hello-content').innerHTML);
+		  tabs.setContent("tab2", $('griddata-content').innerHTML);
+		  tabs.setContent("tab3", $('emaillist-content').innerHTML);
+		  tabs.setContent("tab4", $('richlist-content').innerHTML);
+		  tabs.setContent("tab5", $('thumbist-content').innerHTML);
+		  tabs.setContent("tab6", $('json-content').innerHTML);
+		  tabs.setContent("tab7", $('ajax-content').innerHTML);
+		  tabs.setContent("tab8", $('prefs-content').innerHTML);
+		  tabs.setContent("tab9", $('export-content').innerHTML);
+	
+		  // Register to activeTabChange event
+		  tabs.observe('activeTabChange', TabViewSample.onActiveTabChanged);
+	
+	      } else {
+		  var tabs = TabViewSample.tabs;
+	      }
+	
+	      // Restore saved active tab
+	      var activeTab = widget.getValue('activeTab');
+	
+	      if (activeTab) {
+	
+		  if (TabViewSample.tabs.selectedTab) {
+		      tabs.reload();
+		  } else {
+		      tabs.selectTab(activeTab);
+		  }
+	
+	      } else {
+		  tabs.selectTab('tab1');
+	      }
+	
+	      widget.setBody(TabViewSample.tabs.tabSet);
+	      widget.onResize();
+	    }
+	
+	    TabViewSample.onActiveTabChanged = function(name, data) {
+	
+		var tabs = TabViewSample.tabs;
+	
+		// Save active tab
+		widget.setValue("activeTab", name);
+	
+		if (name == 'tab6') {
+	
+		    var onCompleteJson = function(json) {
+			tabs.setContent(name, 'json date is:' + json.date);
+		    }
+	
+		    UWA.Data.request('http://basezf.japanim.fr/example/uwa/jsoncallback', {
+			method: 'get',
+			type: 'json',
+			proxy: 'ajax',
+			onComplete: onCompleteJson.bind(this)
+		    });
+	
+		} else if (name == 'tab7') {
+	
+		    var onCompleteAjax = function(html) {
+			tabs.setContent(name, html);
+		    }
+	
+		    UWA.Data.request('http://basezf.japanim.fr/example/uwa/ajaxcallback', {
+			method: 'get',
+			type: 'html',
+			proxy: 'ajax',
+			onComplete: onCompleteAjax.bind(this)
+		    });
+		} else if (name == 'tab8') {
+	
+		    html = '<h1>Preference values</h1>'
+		    + '<ul style="padding: 5px;">'
+			+ '<li>my_text: ' + widget.getValue('my_text') + "</li>"
+			+ '<li>my_text: ' + widget.getValue('pass') + "</li>"
+			+ '<li>my_checkbox: ' + widget.getValue('my_checkbox') + "</li>"
+			+ '<li>my_range: ' + widget.getValue('my_range') + "</li>"
+			+ '</ul>'
+	
+		    tabs.setContent(name, html);
+		}
+	
+		widget.onResize();
+	    }
+	
+	    var resized = 0;
+	    var OriginalTitle = widget.getTitle();
+	
+	    widget.onResize = function() {
+		widget.setTitle(OriginalTitle + '(resized:' + resized++ + ')' );
+	    }
 
     </script>
     </head>
