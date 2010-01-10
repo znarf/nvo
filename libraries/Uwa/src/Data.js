@@ -30,7 +30,6 @@ Credits:
   For details, see the Prototype web site: http://www.prototypejs.org/
 */
 
-
 if (typeof UWA.proxies == "undefined") {
 
   // compatibility mode for netvibes UWA servers
@@ -41,9 +40,8 @@ if (typeof UWA.proxies == "undefined") {
       'ajax' : UWA_PROXY + '/proxy/ajaxProxy.php',
       'feed' : UWA_PROXY + '/proxy/feedProxy.php',
       'icon' : UWA_PROXY + '/proxy/favIcon.php',
-      'xml'  : UWA_PROXY + '/data/xml/',
-    }
-
+      'xml'  : UWA_PROXY + '/data/xml/'
+    };
   // Exposition Server standart proxy path
   } else {
     UWA.proxies = {
@@ -52,7 +50,7 @@ if (typeof UWA.proxies == "undefined") {
       'rss'  : UWA_PROXY + '/feed',
       'api'  : UWA_PROXY + '/api',
       'icon' : UWA_PROXY + '/favIcon',
-      'xml'  : UWA_PROXY + '/xml',
+      'xml'  : UWA_PROXY + '/xml'
     };
   }
 }
