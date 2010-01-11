@@ -24,25 +24,24 @@
         UWA_CSS = 'http://uwa.service.japanim.fr/css',
         UWA_PROXY = 'http://uwa.service.japanim.fr/proxy',
         UWA_STATIC = 'http://uwa.service.japanim.fr/img'
-        
+
 	    // update widget elements
 	    widget.setTitle('Test Title update');
 	    widget.setIcon("http://cdn.netvibes.com/modules/uwa/icon.png");
 	    widget.setUnreadCount(1);
 	    widget.setSearchResultCount(2);
-	
+
 	    var TabViewSample = {};
-	
+
 	    widget.onLoad = function() {
-	
+
 	      // init tab system
 	      if (typeof(TabViewSample.tabs) == "undefined") {
-	
-	
+
 		  var tabs = new UWA.Controls.TabView();
-	
+
 		  TabViewSample.tabs = tabs;
-	
+
 		  // Create tab items
 		  tabs.addTab("tab1", {text: "UWA Links", customInfo: "custom"});
 		  tabs.addTab("tab2", {text: "Grid Data"});
@@ -53,7 +52,7 @@
 		  tabs.addTab("tab7", {text: "Ajax"});
 		  tabs.addTab("tab8", {text: "Prefs"});
 		  tabs.addTab("tab9", {text: "Export"});
-	
+
 		  // Put some content in tabs
 		  tabs.setContent("tab1", $('hello-content').innerHTML);
 		  tabs.setContent("tab2", $('griddata-content').innerHTML);
@@ -64,87 +63,88 @@
 		  tabs.setContent("tab7", $('ajax-content').innerHTML);
 		  tabs.setContent("tab8", $('prefs-content').innerHTML);
 		  tabs.setContent("tab9", $('export-content').innerHTML);
-	
+
 		  // Register to activeTabChange event
 		  tabs.observe('activeTabChange', TabViewSample.onActiveTabChanged);
-	
+
 	      } else {
-		  var tabs = TabViewSample.tabs;
+            var tabs = TabViewSample.tabs;
 	      }
-	
+
 	      // Restore saved active tab
 	      var activeTab = widget.getValue('activeTab');
-	
+
 	      if (activeTab) {
-	
-		  if (TabViewSample.tabs.selectedTab) {
-		      tabs.reload();
-		  } else {
-		      tabs.selectTab(activeTab);
-		  }
-	
+
+		    if (TabViewSample.tabs.selectedTab) {
+		        tabs.reload();
+		    } else {
+		        tabs.selectTab(activeTab);
+		    }
+
 	      } else {
-		  tabs.selectTab('tab1');
+		    tabs.selectTab('tab1');
 	      }
-	
+
 	      widget.setBody(TabViewSample.tabs.tabSet);
 	      widget.onResize();
 	    }
-	
+
 	    TabViewSample.onActiveTabChanged = function(name, data) {
-	
-		var tabs = TabViewSample.tabs;
-	
-		// Save active tab
-		widget.setValue("activeTab", name);
-	
-		if (name == 'tab6') {
-	
-		    var onCompleteJson = function(json) {
-			tabs.setContent(name, 'json date is:' + json.date);
-		    }
-	
-		    UWA.Data.request('http://basezf.japanim.fr/example/uwa/jsoncallback', {
-			method: 'get',
-			type: 'json',
-			proxy: 'ajax',
-			onComplete: onCompleteJson.bind(this)
-		    });
-	
-		} else if (name == 'tab7') {
-	
-		    var onCompleteAjax = function(html) {
-			tabs.setContent(name, html);
-		    }
-	
-		    UWA.Data.request('http://basezf.japanim.fr/example/uwa/ajaxcallback', {
-			method: 'get',
-			type: 'html',
-			proxy: 'ajax',
-			onComplete: onCompleteAjax.bind(this)
-		    });
-		} else if (name == 'tab8') {
-	
-		    html = '<h1>Preference values</h1>'
-		    + '<ul style="padding: 5px;">'
-			+ '<li>my_text: ' + widget.getValue('my_text') + "</li>"
-			+ '<li>my_text: ' + widget.getValue('pass') + "</li>"
-			+ '<li>my_checkbox: ' + widget.getValue('my_checkbox') + "</li>"
-			+ '<li>my_range: ' + widget.getValue('my_range') + "</li>"
-			+ '</ul>'
-	
-		    tabs.setContent(name, html);
-		}
-	
-		widget.onResize();
+
+          var tabs = TabViewSample.tabs;
+
+          // Save active tab
+          widget.setValue("activeTab", name);
+
+          if (name == 'tab6') {
+
+              var onCompleteJson = function(json) {
+                tabs.setContent(name, 'json date is:' + json.date);
+              }
+
+              UWA.Data.request('http://basezf.japanim.fr/example/uwa/jsoncallback', {
+                method: 'get',
+                type: 'json',
+                proxy: 'ajax',
+                onComplete: onCompleteJson.bind(this)
+              });
+
+          } else if (name == 'tab7') {
+
+              var onCompleteAjax = function(html) {
+                tabs.setContent(name, html);
+              }
+
+              UWA.Data.request('http://basezf.japanim.fr/example/uwa/ajaxcallback', {
+                method: 'get',
+                type: 'html',
+                proxy: 'ajax',
+                onComplete: onCompleteAjax.bind(this)
+              });
+
+          } else if (name == 'tab8') {
+
+              var html = '<h1>Preference values</h1>'
+              + '<ul style="padding: 5px;">'
+              + '<li>my_text: ' + widget.getValue('my_text') + "</li>"
+              + '<li>my_text: ' + widget.getValue('pass') + "</li>"
+              + '<li>my_checkbox: ' + widget.getValue('my_checkbox') + "</li>"
+              + '<li>my_range: ' + widget.getValue('my_range') + "</li>"
+              + '</ul>'
+
+              tabs.setContent(name, html);
+          }
+
+          widget.onResize();
 	    }
-	
+
 	    var resized = 0;
 	    var OriginalTitle = widget.getTitle();
-	
+
 	    widget.onResize = function() {
-		widget.setTitle(OriginalTitle + '(resized:' + resized++ + ')' );
-	    }
+		  widget.setTitle(OriginalTitle + '(resized:' + resized++ + ')' );
+        }
 
     </script>
     </head>
@@ -333,21 +333,21 @@
 
                 <h2>Stable</h2>
                 <ul>
-                    <li><a target="_blank" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa">Netvibes</a></li>
+                    <li><a target="_blank" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Netvibes</a></li>
 
                     <li><a target="_blank" href="http://www.google.com/ig/add?moduleurl=http%3A%2F%2Fuwa.service.japanim.fr%2Fwidget%2Fgspec%3FuwaUrl%3Dhttp%253A%252F%252Fbasezf.japanim.fr%252Fexample%252Fuwa">iGoogle</a></li>
-                    <li><a target="_blank" href="/widget/dashboard?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa">Dashboard</a></li>
-                    <li><a target="_blank" href="/widget/screenlets?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa">Screenlets</a></li>
-                    <li><a target="_blank" href="/widget/blogger?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa">Blogger</a></li>
+                    <li><a target="_blank" href="/widget/dashboard?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Dashboard</a></li>
+                    <li><a target="_blank" href="/widget/screenlets?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Screenlets</a></li>
+                    <li><a target="_blank" href="/widget/blogger?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Blogger</a></li>
                     <li><a target="_blank" href="http://my.live.com/?s=1&amp;add=http%3A%2F%2Fuwa.service.japanim.fr%2Fwidget%2Flive%3Fhttp%253A%252F%252Fbasezf.japanim.fr%252Fexample%252Fuwa%253F">Live</a></li>
-                    <li><a target="_blank" href="/widget/opera?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa">Opera</a></li>
+                    <li><a target="_blank" href="/widget/opera?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Opera</a></li>
 
                     <li>
-                        <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa&amp;id=54bcd7bc3469f1ccb12f1da055ac3986">Iframe</a>
+                        <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F&amp;id=54bcd7bc3469f1ccb12f1da055ac3986">Iframe</a>
                         (
-                            <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1">with header</a>
-                            - <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;chromeColor=orange">with header color</a>
-                            - <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;status=0">without status</a>
+                            <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1">with header</a>
+                            - <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;chromeColor=orange">with header color</a>
+                            - <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;status=0">without status</a>
 
                         )
                     </li>
@@ -355,10 +355,10 @@
 
                 <h2>Unstable</h2>
                 <ul>
-                    <li><a target="_blank" href="/widget/chrome?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa">Google Chrome</a> (Work in progress)</li>
-                    <li><a target="_blank" href="/widget/jil?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa">Jil/Ophone</a> (Work in progress)</li>
+                    <li><a target="_blank" href="/widget/chrome?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Google Chrome</a> (Work in progress)</li>
+                    <li><a target="_blank" href="/widget/jil?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Jil/Ophone</a> (Work in progress)</li>
 
-                    <li><a target="_blank" href="/widget/vista?uwaUrl=http%3A%2F%2Fbasezf.japanim.fr%2Fexample%2Fuwa">Windows Vista/SEVEN</a> (Work in progress)</li>
+                    <li><a target="_blank" href="/widget/vista?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Windows Vista/SEVEN</a> (Work in progress)</li>
                 </ul>
             </div>
         </div>
