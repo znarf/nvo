@@ -51,6 +51,7 @@ Object.extend(UWA.Environment.prototype,
             this.html.icon = document.getElementById("moduleIcon")
 
         } else {
+
             var header = document.createElement("div");
             header.setAttribute("id", "moduleHeader");
             header.className = "moduleHeader";
@@ -73,7 +74,7 @@ Object.extend(UWA.Environment.prototype,
             var contentWrapper = document.createElement("div");
             contentWrapper.setAttribute("id", "contentWrapper");
 
-            this.html.body = contentWrapper.appendChild(header);
+            this.html.body = contentWrapper.appendChild(content);
             this.html.header = wrapper.appendChild(header);
             this.html.edit = document.createElement("div");
 
@@ -94,16 +95,21 @@ Object.extend(UWA.Environment.prototype,
         }
         this.module.body = this.module.elements.body;
         var value = this.module.$("header").getElementsByClassName("edit")[0];
-        value.onclick = (function ()
-        {
-            if (this.$("edit").style.display == "none") {
-                this.callback("onEdit")
-            }
-            else {
-                this.callback("endEdit")
-            }
-            return false;
-        }).bindAsEventListener(this.module);
+
+        if (typeof(value) != "undefined") {
+
+            value.onclick = (function ()
+            {
+                if (this.$("edit").style.display == "none") {
+                    this.callback("onEdit")
+                }
+                else {
+                    this.callback("endEdit")
+                }
+                return false;
+            }).bindAsEventListener(this.module);
+        }
+
         var name = document.getElementsByTagName("preference");
         if (name) {
             this.module.setPreferencesXML(name)
@@ -146,7 +152,7 @@ Object.extend(UWA.Environment.prototype,
     {
         if (this.module.elements.icon)
         {
-            url = UWA.proxies['icon'] + "?url=" + encodeURIComponent(this.module.elements.icon);
+            var url = UWA.proxies['icon'] + "?url=" + encodeURIComponent(this.module.elements.icon);
             this.module.elements.icon.innerHTML = '<img width="16" height="16" src="' + url + '" />';
         }
     }
