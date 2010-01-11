@@ -20,23 +20,27 @@ License:
 /*
     You can use this class to debug gadget in firefox or other browser...
 */
-var System = {
-    Gadget: {
-        docked: false,
-        TransitionType: {
-        },
 
-        Settings: {
-            read: function() {
-            },
-            write: function() {
-            }
-        },
+if (typeof(System) == "undefined") {
 
-        endTransition: function() {
-        },
-
-        beginTransition: function() {
-        }
-    }
+	var System = {
+	    Gadget: {
+		docked: false,
+		TransitionType: {
+		},
+	
+		Settings: {
+		    read: function() {
+		    },
+		    write: function() {
+		    }
+		},
+	
+		endTransition: function() {
+		},
+	
+		beginTransition: function() {
+		}
+	    }
+	}
 }

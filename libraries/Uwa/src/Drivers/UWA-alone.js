@@ -22,7 +22,7 @@ Script: Driver UWA Alone
 */
 
 // Shortcut for getElementById AND extend element
-$ = function(el) {
+var $ = function(el) {
   if (typeof el == 'string') {
     el = document.getElementById(el);
   }
@@ -210,7 +210,7 @@ UWA.merge(Function.prototype, {
      };
      return event();
     }
-  },   
+  },
 
   bind : function (callback, args)
   {

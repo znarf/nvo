@@ -20,19 +20,19 @@ License:
 /* UWA Globals */
 
 if (typeof UWA_WIDGET == "undefined") {
-  UWA_WIDGET = 'http://nvmodules.netvibes.com/widget';
+  var UWA_WIDGET = 'http://nvmodules.netvibes.com/widget';
 }
 if (typeof UWA_JS == "undefined") {
-  UWA_JS = 'http://nvmodules.netvibes.com/js';
+  var UWA_JS = 'http://nvmodules.netvibes.com/js';
 }
 if (typeof UWA_CSS == "undefined") {
-  UWA_CSS = 'http://nvmodules.netvibes.com/css';
+  var UWA_CSS = 'http://nvmodules.netvibes.com/css';
 }
 if (typeof UWA_PROXY == "undefined") {
-  UWA_PROXY = 'http://www.netvibes.com';
+  var UWA_PROXY = 'http://www.netvibes.com';
 }
 if (typeof UWA_STATIC == "undefined") {
-  UWA_STATIC = 'http://www.netvibes.com/img';
+  var UWA_STATIC = 'http://www.netvibes.com/img';
 }
 
 // compatibility mode
@@ -57,7 +57,7 @@ UWA.Controls = Netvibes.UI;
 if (Netvibes.DLA) UWA.Controls.SearchForm = Netvibes.DLA.SearchForm;
 
 if (typeof _ == "undefined") {
-  _ = function(s) {
+  var _ = function(s) {
     return s
   };
 }

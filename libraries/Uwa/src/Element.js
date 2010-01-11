@@ -289,6 +289,9 @@ UWA.merge(UWA.Element, {
   setStyle: function(style) {
     if (typeof style == 'string') {
       style = style.camelCase();
+      if (style == "float") {
+        style = (UWA.Client.Engine.ie) ? "styleFloat" : "cssFloat"
+      }
       this.style[style] = arguments[1];
     } else if (typeof style == 'object') {
       return this.setStyles(style);

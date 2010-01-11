@@ -37,7 +37,7 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
      *
      * @var string
      */
-    protected $_environment = 'Vista_Mootools';
+    protected $_environment = 'Vista';
 
     /**
      * Stylesheet.
@@ -83,6 +83,9 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
 
     protected function buildArchive()
     {
+    	// Uwa need Motools
+    	$this->_widget->setCoreLibrary('uwa-mootools');
+    	    
         // Add the widget skeleton to the archive
         $ressourcePath = Exposition_Load::getConfig('compiler', 'ressourcePath');
         if (!is_readable($ressourcePath)) {
@@ -125,11 +128,20 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
             'platform'     => $this->_platform,
             'className'    => 'CompiledModule'
         ));
-
+        
+        // for debug only
+        /*
+        $javascripts = array(
+            'http://www.netvibes.com/js/UWA/load.js.php?env=Vista',
+            'http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()),
+        );
+        */
+        
         foreach ($javascripts as $script) {
             $l[] = '<script type="text/javascript" src="' . $script . '" charset="utf-8"></script>';
         }
 
+        $l[] = '    <script type="text/javascript" src="js/System.js"></script>';
         $l[] = '    <script type="text/javascript" src="js/VistaModule.js"></script>';
         $l[] = '    <script type="text/javascript" src="js/PrefsForm.js"></script>';
         $l[] = '    <script type="text/javascript">';

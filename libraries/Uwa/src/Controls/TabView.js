@@ -27,6 +27,7 @@ UWA.Controls.TabView.prototype =
       autohideDropdowns : true, classTabSet : "nv-tabSet", classTabList : "nv-tabList", classTabContent : "nv-tabContent",
       softPadding : false, orientation : "top", dataKey : "text", extendedAction : false, allowReload : false
     };
+
     Object.extend(this.options, A || {})
   },
 
@@ -44,10 +45,12 @@ UWA.Controls.TabView.prototype =
     this.tabSet.className = this.options.classTabSet;
     this.tabList = document.createElement("ul");
     this.tabList.className = this.options.classTabList + " autoclear";
+
     this.tabList.style.padding = "0";
     if (/^(top|bottom|left|right)$/.test(this.options.orientation)) {
       Element.addClassName(this.tabList, this.options.orientation)
     }
+
     this.tabSet.appendChild(this.tabList)
   },
 
@@ -56,23 +59,25 @@ UWA.Controls.TabView.prototype =
     if (typeof K == "undefined") {
       K = {}
     }
+
     var G = document.createElement("a");
     G.href = "javascript:void(0)";
     G.target = "_blank";
     G.style.whiteSpace = "nowrap";
+
     G.onclick = function ()
     {
       return false;
     };
+
     if (A.length)
     {
+
       if (A[0].image) {
         var I = document.createElement("img");
         I.src = A[0].image;
         G.appendChild(I)
-      }
-      else
-      {
+      } else {
         if (A[0].picto)
         {
           var C = document.createElement("img");
@@ -80,9 +85,7 @@ UWA.Controls.TabView.prototype =
           C.style.marginRight = "4px";
           C.style.marginBottom = "-2px";
           G.appendChild(C)
-        }
-        else
-        {
+        } else {
           if (A[0].icon)
           {
             var F = document.createElement("img");
@@ -113,16 +116,12 @@ UWA.Controls.TabView.prototype =
       D.appendChild(H);
       G.appendChild(D);
       D.onmousedown = this.eventDropDown.bindAsEventListener(this)
-    }
-    else
-    {
+    } else {
       if (A.image) {
         var I = document.createElement("img");
         I.src = A.image;
         G.appendChild(I)
-      }
-      else
-      {
+      } else {
         if (A.picto)
         {
           var C = document.createElement("img");
@@ -130,9 +129,7 @@ UWA.Controls.TabView.prototype =
           C.style.marginRight = "4px";
           C.style.marginBottom = "-2px";
           G.appendChild(C)
-        }
-        else
-        {
+        } else {
           if (A.icon)
           {
             var F = document.createElement("img");
@@ -152,6 +149,7 @@ UWA.Controls.TabView.prototype =
     }
     return (G);
   },
+
   appendTo : function (A)
   {
     if (!this.tabSet) {
@@ -166,6 +164,7 @@ UWA.Controls.TabView.prototype =
       widget.callback("onUpdateBody")
     }
   },
+
   addTab : function (D, C, B)
   {
     if (!this.tabSet) {
@@ -179,9 +178,7 @@ UWA.Controls.TabView.prototype =
     A.setAttribute("name", D);
     if (C.disabled) {
       Element.addClassName(A, "disabled")
-    }
-    else
-    {
+    } else {
       A.onclick = this.eventTabClicked.bindAsEventListener(this);
       if (B.staticText) {
         A.setAttribute("static", "static")
@@ -194,11 +191,13 @@ UWA.Controls.TabView.prototype =
     this.dataItems[D] = C;
     return A;
   },
+
   removeTab : function (A)
   {
     var B = this.getTab(A);
     Element.remove(B)
   },
+
   setTab : function (C, B, A)
   {
     var D = this.getTab(C);
@@ -206,11 +205,13 @@ UWA.Controls.TabView.prototype =
     D.setHTML("");
     D.appendChild(this._createTabItem(D, this.dataItems[C], A))
   },
+
   addExternalLink : function (B, A)
   {
     var C = this.getTab(B);
     C.firstChild.setAttribute("href", A)
   },
+
   eventTabClicked : function (B)
   {
     if (Event.element(B).className == "placeHolder") {
@@ -222,12 +223,14 @@ UWA.Controls.TabView.prototype =
     }
     return false;
   },
+
   eventExtendedActionClicked : function (A)
   {
     this.hidePopupMenu();
     this._notify("extendedActionClicked");
     return false;
   },
+
   enableTab : function (B, A)
   {
     var C = this.getTab(B);
@@ -238,22 +241,28 @@ UWA.Controls.TabView.prototype =
       Element.addClassName(C, "disabled")
     }
   },
+
   selectTab : function (E, I)
   {
     if (typeof E == "number" || typeof E == "string") {
       E = this.getTab(E)
     }
+
     var A = E.getAttribute("name");
     if (this.selectedTab && (this.selectedTab.getAttribute("name") == A) && I == undefined && !this.options.allowReload) {
       return
     }
+
     var G = this.tabList.getElementsByTagName("li");
+
     for (var D = 0, H; H = G[D]; D++)
     {
       Element.removeClassName(H, "selected");
+
       if (this.popupMenu) {
         this.hidePopupMenu()
       }
+
       if (this.options.autohideDropdowns)
       {
         var C = $(H).getElementsByClassName("dropdown");
@@ -264,6 +273,7 @@ UWA.Controls.TabView.prototype =
       }
     }
     Element.addClassName(E, "selected");
+
     if (this.options.autohideDropdowns)
     {
       var C = $(E).getElementsByClassName("dropdown");
@@ -272,6 +282,7 @@ UWA.Controls.TabView.prototype =
         Element.show(J)
       })
     }
+
     for (var D = 0, F; F = this.contentArray[D]; D++)
     {
       if (Browser.isSafari && Browser.version < 3 && F.getElementsByTagName("iframe").length == 1 && F.getElementsByTagName("iframe")[0].style.width == "100%")
@@ -279,9 +290,7 @@ UWA.Controls.TabView.prototype =
         if (A == F.getAttribute("name")) {
           F.style.visibility = "visible";
           F.style.position = "static"
-        }
-        else
-        {
+        } else {
           var B = F.getElementsByTagName("iframe")[0];
           F.style.width = B.contentWindow.innerWidth + "px";
           F.style.visibility = "hidden";
@@ -289,12 +298,10 @@ UWA.Controls.TabView.prototype =
           F.style.left = "0px";
           F.style.top = "0px";
         }
-      }
-      else {
+      } else {
         if (A == F.getAttribute("name")) {
           Element.show(F)
-        }
-        else {
+        } else {
           Element.hide(F)
         }
       }
@@ -306,26 +313,32 @@ UWA.Controls.TabView.prototype =
     }
     this._notify("activeTabChange")
   },
+
   hide : function ()
   {
     Element.hide(this.tabSet)
   },
+
   show : function ()
   {
     Element.show(this.tabSet)
   },
+
   hideTabList : function ()
   {
     Element.hide(this.tabList)
   },
+
   showTabList : function ()
   {
     Element.show(this.tabList)
   },
+
   reload : function ()
   {
     this._notify("activeTabChange")
   },
+
   eventDropDown : function (B)
   {
     var A = Event.findElement(B, "LI");
@@ -351,6 +364,7 @@ UWA.Controls.TabView.prototype =
     Event.stop(B);
     return false;
   },
+
   getTabContent : function (B)
   {
     var D = (typeof B == "number") ? "index" : "name";
@@ -360,6 +374,7 @@ UWA.Controls.TabView.prototype =
       }
     }
   },
+
   setContent : function (A, C)
   {
     var B = this.getTabContent(A);
@@ -377,6 +392,7 @@ UWA.Controls.TabView.prototype =
       widget.callback("onUpdateBody")
     }
   },
+
   getTab : function (B)
   {
     if (typeof B == "string" || typeof B == "number")
@@ -393,6 +409,7 @@ UWA.Controls.TabView.prototype =
     }
     return B;
   },
+
   observe : function (B, A)
   {
     if (!this.observers) {
@@ -400,6 +417,7 @@ UWA.Controls.TabView.prototype =
     }
     this.observers.push([B, A]);
   },
+
   _notify : function (D)
   {
     if (!this.observers) {
@@ -425,6 +443,7 @@ UWA.Controls.TabView.prototype =
       }
     })
   },
+
   _showPopupMenu : function (R)
   {
     this.tabItem = R;
@@ -449,9 +468,7 @@ UWA.Controls.TabView.prototype =
           I.style.marginRight = "4px";
           I.style.marginBottom = "-2px";
           S.appendChild(I)
-        }
-        else
-        {
+        } else {
           if (P.icon)
           {
             var N = document.createElement("img");
@@ -534,6 +551,7 @@ UWA.Controls.TabView.prototype =
       widget.callback("onUpdateBody");
     }
   },
+
   eventPopupMenuClicked : function (F)
   {
     var D = Event.findElement(F, "A");
@@ -566,6 +584,7 @@ UWA.Controls.TabView.prototype =
     Event.stop(F);
     return false;
   },
+
   selectKey : function (D, F, A)
   {
     var H = this.getTab(D);
@@ -589,6 +608,7 @@ UWA.Controls.TabView.prototype =
       }
     }
   },
+
   hidePopupMenu : function (A)
   {
     if (!this.popupMenu || (A && Event.element(A).tagName == "A")) {
@@ -606,6 +626,7 @@ UWA.Controls.TabView.prototype =
       widget.callback("onUpdateBody")
     }
   },
+
   createTabContent : function (B, A)
   {
     var C = document.createElement("div");
@@ -628,10 +649,12 @@ UWA.Controls.TabView.prototype =
     this.contentArray.push(C);
     C.setAttribute("tabIndex", this.contentArray.length - 1)
   },
+
   destroy : function ()
   {
     $(document.body).removeEvent("mousedown", this.bindedHidePopupMenu)
   },
+
   _getElementCumulativeOffset : function (B)
   {
     var A = 0, C = 0;
