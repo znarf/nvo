@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:widget="http://www.netvibes.com/ns/">
+
+  <head>
+    <meta name="author" content="Exposition Libraries" />
+    <meta name="description" content="Displays latest post from a feed" />
+    <meta name="apiVersion" content="1.2" />
+    <meta name="debugMode" content="true" />
+
+    <link rel="stylesheet" type="text/css"
+      href="/css/uwa-standalone.css" />
+
+    <script type="text/javascript"
+      src="/js/c/UWA_Standalone.js?v=preview3"></script>
+
+    <title>Latest blog post</title>
+    <link rel="icon" type="image/png" href="http://uwa.service.japanim.fr/img/icon.png" />
+
+    <widget:preferences>
+      <preference type="text" name="theFeed" label="RSS/Atom feed to use"
+        defaultValue="http://blog.netvibes.com/rss.php" />
+    </widget:preferences>
+
+    <script type="text/javascript">
+      var DisplayLatestBlogPost = {};
+      DisplayLatestBlogPost.display = function(feed) {
+        var latestPost = feed.items[0];
+
+        widget.setTitle('<a href="'+feed.htmlUrl+'">'+feed.title+'</a>');
+
+        var contentHtml = '';
+        contentHtml += '<h2><a href="' + latestPost.link + '">' + latestPost.title + '</a></h2>';
+        contentHtml += 'Posted on ' + latestPost.date + '<br />';
+        contentHtml += latestPost.content;
+        contentHtml += '<em>Read all the previous posts by ' +
+                    + '<a href="' + feed.htmlUrl + '">visiting the blog</a>!</em>'
+        widget.setBody(contentHtml);
+      }
+
+      widget.onLoad = function() {
+        UWA.Data.getFeed( widget.getValue('theFeed'), DisplayLatestBlogPost.display );
+      }
+    </script>
+
+  </head>
+  <body>
+    <p>Loading...</p>
+  </body>
+</html>
+
