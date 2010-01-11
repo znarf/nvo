@@ -132,17 +132,38 @@ UWA.extend(UWA.Environment.prototype, {
 
     getData: function(name) {
       widget.log('getData:' + name);
-      if(window.Cookie) return Cookie.read('uwa-' + name);
+
+      if(typeof(document.cookie) != "undefined") {
+        var name = 'uwa-' + name;
+        var index = document.cookie.indexOf(name);
+        if ( index != -1) {
+          var nStart = (document.cookie.indexOf("=", index) + 1);
+          var nEnd = document.cookie.indexOf(";", index);
+          if (nEnd == -1) {
+            var nEnd = document.cookie.length;
+          }
+          return unescape(document.cookie.substring(nStart, nEnd));
+        }
+      }
     },
 
     setData: function(name, value) {
       widget.log('setData:' + name + ':' + value);
-      if(window.Cookie) return Cookie.write('uwa-' + name, value);
+      if (typeof(document.cookie) != "undefined") { // Valid cookie ?
+        var name = 'uwa-' + name;
+        var expires = 3600 * 60 * 24; // 24 days by default
+        var expires_date = new Date( new Date().getTime() + (expires) );
+        var cookieData = name + "=" + escape(value) +
+          ((expires) ? "; expires=" + expires_date.toGMTString() : "");
+          document.cookie = cookieData;
+          return true;
+      }
+      return false;
     },
 
     deleteData: function(name) {
       widget.log('deleteData:' + name);
-      if(window.Cookie) return Cookie.dispose('uwa-' + name);
+      return this.setData(name, null);
     },
 
     addStar: function() {
