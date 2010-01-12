@@ -34,9 +34,9 @@ UWA.extend(UWA.Environment.prototype, {
       moduleHeader.setAttribute('id','moduleHeader');
       moduleHeader.className = 'moduleHeader';
       moduleHeader.innerHTML =
-          '<div class="edit"><a href="#">Edit</a></div>' +
-          '<div class="refresh"><img src="http://www.netvibes.com/api/0.3/refresh.gif" /></div>' +
-          '<div class="ico" id="moduleIcon" style="padding-left:3px"></div>' +
+          '<div class="edit"><a href="#edit">'+ _('Edit') + '</a></div>' +
+          '<div class="refresh"><a href="#refresh">'+ _('Refresh') + '</a></div>' +
+          '<div class="ico" id="moduleIcon"></div>' +
           '<div id="moduleTitle" class="title">' + document.title + '</div>';
 
       // creating module content
@@ -70,8 +70,11 @@ UWA.extend(UWA.Environment.prototype, {
 
       if( typeof UWA.widgetTrueURL == 'undefined' ) UWA.widgetTrueURL = document.location.href;
 
-      addto.innerHTML =  '<a style="border:0" title="Add this module to Netvibes" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=' + encodeURIComponent(UWA.widgetTrueURL) + '"><img alt="Add to Netvibes" src="' + UWA_STATIC + '/uwa-netvibes.png" /></a>';
-      addto.innerHTML +=  '<br /> <br /><a style="border:0" title="Add this module to Google Homepage" href="http://www.google.com/ig/add&amp;moduleurl=' + encodeURIComponent(UWA_WIDGET + '/gspec?uwaUrl=' +  encodeURIComponent(UWA.widgetTrueURL) ) + '"><img alt="Add to Google Homepage" src="' + UWA_STATIC + '/uwa-google.png" /></a>';
+
+      addto.innerHTML =  '<ul>'
+      addto.innerHTML +=  '<li><a title="'+ _('Add this module to Netvibes') + '" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=' + encodeURIComponent(UWA.widgetTrueURL) + '"><img src="' + UWA_STATIC + '/uwa-netvibes.png" /></a></li>';
+      addto.innerHTML +=  '<li><a style="border:0" title="'+ _('Add this module to Google Homepage') + '" href="http://www.google.com/ig/add&amp;moduleurl=' + encodeURIComponent(UWA_WIDGET + '/gspec?uwaUrl=' +  encodeURIComponent(UWA.widgetTrueURL) ) + '"><img src="' + UWA_STATIC + '/uwa-google.png" /></a></li>';
+      addto.innerHTML +=  '<ul>';
 
       document.body.appendChild(addto);
 
