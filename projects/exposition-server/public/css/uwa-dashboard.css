@@ -16,18 +16,18 @@
  * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* netvibes base stylesheets */
+/* uwa base stylesheets */
 
-@import "http://www.netvibes.com/themes/base/nv-core.css";
-@import "http://www.netvibes.com/themes/base/nv-typo.css";
-@import "http://www.netvibes.com/themes/base/nv-module.css";
-@import "http://www.netvibes.com/themes/base/nv-icons.css";
+@import "base/uwa-core.css";
+@import "base/uwa-typo.css";
+@import "base/uwa-module.css";
+@import "base/uwa-icons.css";
 
 /* to have a nicer look & feel, we import parts of the netvibes garlic theme */
 
-@import "http://www.netvibes.com/themes/garlic/nv-core.css";
-@import "http://www.netvibes.com/themes/garlic/nv-module.css";
-@import "http://www.netvibes.com/themes/garlic/nv-icons.css";
+@import "themes/garlic/uwa-core.css";
+@import "themes/garlic/uwa-module.css";
+@import "themes/garlic/uwa-icons.css";
 
 /* base layout */
 
@@ -127,7 +127,7 @@ body {
     content: "";
 }
 
-/* rules imported from http://www.netvibes.com/themes/base/screen.css */
+/* rules imported from /css/themes/base/screen.css */
 
 a:link, a:visited{
     color: #333;
@@ -153,7 +153,7 @@ li {
     padding-left: 10px;
 }
 
-/* rules imported from http://www.netvibes.com/themes/garlic/screen.css */
+/* rules imported from /css/themes/garlic/screen.css */
 
 a {
     text-decoration: none;

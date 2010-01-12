@@ -1,0 +1,30 @@
+.actions-window-close{
+	width: 20px;
+	background: transparent url(img/icons/actions.png) no-repeat 0 -160px;
+}
+.actions-view-refresh{
+	width: 16px;
+	background: transparent url(img/icons/actions.png) no-repeat 0 -192px;
+}
+.actions-view-options{
+	width: 16px;
+	background: transparent url(img/icons/actions.png) no-repeat 0 -64px;
+}
+
+.actions-window-collapse {
+	background: transparent url(img/icons/actions.png) no-repeat -3px -130px;
+}
+.moduleHeader .actions-window-expand {
+	background: transparent url(img/icons/actions.png) no-repeat 0 -245px;
+}
+.actions-window-expand {
+	background: transparent url(img/icons/actions.png) no-repeat -3px -100px;
+}
+.moduleHeader .actions-window-collapse {
+	background: transparent url(img/icons/actions.png) no-repeat 0 -265px;
+}
+
+.moduleHeader img.actions-view-editModule,
+.moduleHeader img.actions-view-shareModule {
+    background-image: url(img/icons/actions.png);
+}

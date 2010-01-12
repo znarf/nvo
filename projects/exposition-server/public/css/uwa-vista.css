@@ -16,18 +16,17 @@
  * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* netvibes base stylesheets */
+/* uwa base stylesheets */
 
-@import "http://www.netvibes.com/themes/base/nv-core.css";
-@import "http://www.netvibes.com/themes/base/nv-typo.css";
-@import "http://www.netvibes.com/themes/base/nv-module.css";
-@import "http://www.netvibes.com/themes/base/nv-icons.css";
+@import "base/uwa-core.css";
+@import "base/uwa-typo.css";
+@import "base/uwa-extras.css";
+@import "base/uwa-icons.css";
 
 /* to have a nicer look & feel, we import parts of the netvibes garlic theme */
 
-@import "http://www.netvibes.com/themes/garlic/nv-core.css";
-@import "http://www.netvibes.com/themes/garlic/nv-module.css";
-@import "http://www.netvibes.com/themes/garlic/nv-icons.css";
+@import "themes/garlic/uwa-core.css";
+@import "themes/garlic/uwa-icons.css";
 
 /* base layout */
 

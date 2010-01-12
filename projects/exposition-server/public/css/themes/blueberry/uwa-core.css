@@ -1,0 +1,101 @@
+/**
+ * Copyright Netvibes 2006-2009.
+ * This file is part of Exposition PHP Server.
+ *
+ * Exposition PHP Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Exposition PHP Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.module, .moduleEdit{
+	background: none;
+	margin: 6px !important;
+	border: 0;
+	padding: 6px !important;
+}
+
+.moduleHeader .title,
+.moduleHeader .title a,
+.moduleHeader .title a:hover,
+.moduleHeader .title em,
+.moduleHeader .title em a{
+    color: #fff;
+}
+
+.moduleHeader{
+	color: #fff;
+}
+
+.moduleHeader .hover{
+	color: #fff;
+}
+.moduleHeader .unread {
+    color:#FFFFFF;
+    opacity: 0.99;
+    filter:alpha(opacity=99);
+}
+
+.moduleHeader .edit a,
+.moduleHeader a.edit,
+.moduleHeader .refresh a,
+.moduleHeader a.refresh{
+    color: #fff !important;
+    font-size:12px;
+    text-decoration: underline;
+}
+
+.moduleHeader .edit a:hover,
+.moduleHeader a.edit:hover,
+.moduleHeader .refresh a:hover,
+.moduleHeader a.refresh:hover{
+    color: #fff !important;
+}
+
+.editContent{
+    background: #F5F5F5 url(img/editcontent.png) repeat-x center top;
+    border: 0;
+    border-bottom: 1px solid #DDD;
+}
+
+.moduleHeader,
+.white-module .moduleHeader{
+    background: #5d5d5d url(img/moduleheader.png) repeat-x top center;
+    padding: 4px 0;
+    border: 1px solid #494949;
+}
+
+/* blue */
+.blue-module .moduleHeader{
+    background: #0fceda url(img/moduleheader-blue.png) repeat-x top center;
+    border: 1px solid #11b8ca;
+}
+/* yellow */
+.yellow-module .moduleHeader{
+    background: #fcbe13 url(img/moduleheader-yellow.png) repeat-x top center;
+    border: 1px solid #faa014;
+}
+/* green */
+.green-module .moduleHeader{
+    background: #c3df00 url(img/moduleheader-green.png) repeat-x top center;
+    border: 1px solid #b4d600;
+}
+/* red */
+.red-module .moduleHeader{
+    background: #eb470d url(img/moduleheader-red.png) repeat-x top center;
+    border: 1px solid #e23511;
+}
+/* orange */
+.orange-module .moduleHeader{
+    background: #e81c70 url(img/moduleheader-orange.png) repeat-x top center;
+    border: 1px solid #de184e;
+}
+

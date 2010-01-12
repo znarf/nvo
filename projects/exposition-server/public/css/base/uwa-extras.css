@@ -1,0 +1,324 @@
+/* Odd/Even */
+.odd, .rtl .odd{
+    background: transparent;
+}
+.even, .rtl .even{
+    background: #F6F9FF;
+}
+.borderless-module .even, .rtl .borderless-module .even{
+    background: transparent;
+}
+
+/* nv-core */
+* html .moduleContent .item{
+    height: 1%; /* IE6 */
+}
+
+/* Rich list , Rich list with thumbs , Product list */
+.nv-richList,
+.nv-thumbnailedList,
+.nv-productList{
+    margin: 0;
+    padding: 0;
+}
+    .nv-thumbnailedList .item,
+    .nv-richList .item,
+    .nv-productList .item{
+        margin: 0;
+        padding: 5px;
+        border-bottom: 1px solid #D6E3F2;
+
+    }
+    .nv-productList .item{
+        padding: 0 5px;
+    }
+    .item:after{
+        content: "."; display: block; height: 0; clear: both; visibility: hidden;
+    }
+    .nv-thumbnailedList .item h3, .nv-thumbnailedList .item h3 a,
+    .nv-richList .item h3, .nv-richList .item h3 a,
+    .nv-productList .price{
+        color: #F60;
+        font: bold 1em Tahoma, Verdana, Arial, Helvetica, "Bitstream Vera Sans", sans-serif;
+    }
+    .nv-thumbnailedList .item h3 a,
+    .nv-richList .item h3 a{
+        cursor: pointer;
+    }
+
+.nv-thumbnailedList .item .thumbnail,
+.nv-productList .item img.thumbnail{
+    float: left;
+    margin-right: 5px;
+}
+.nv-thumbnailedList .item img.thumbnail{
+    width: 92px;
+}
+.nv-productList .item img.thumbnail{
+    width: 50px;
+}
+.nv-thumbnailedList .item h3,
+.nv-thumbnailedList .item .description{
+    text-align: left;
+}
+.nv-thumbnailedList .has-thumbnail h3,
+.nv-thumbnailedList .has-thumbnail .description{
+    margin-left: 97px;
+    margin-right: 0;
+}
+.rtl .nv-thumbnailedList .item h3,
+.rtl .nv-thumbnailedList .item .description{
+    text-align: right;
+}
+.rtl .nv-thumbnailedList .has-thumbnail h3,
+.rtl .nv-thumbnailedList .has-thumbnail .description{
+    margin-left: 0;
+    margin-right: 97px;
+}
+.nv-productList .item .description{
+    margin: 0 0 0 55px;
+    padding: 5px 0;
+    line-height: 1em;
+}
+
+.nv-thumbnailedList .read,
+.nv-thumbnailedList .read h3, .nv-thumbnailedList .read h3 a{
+    color: #999999;
+}
+
+.rssItemList .read img,
+.nv-feedList .read img,
+.nv-thumbnailedList .read img{
+    opacity: .5;
+    filter: alpha(opacity=50);
+}
+
+.rssItemList .time-infos,
+.nv-feedList .time-infos,
+.nv-thumbnailedList .time-infos{
+    color: #AAA;
+}
+
+/* Search list */
+.nv-searchList .item h3,
+.nv-searchList .item h3 a{
+    color: #00C;
+}
+.nv-searchList .item h3 a:visited{
+    color: #551A8B;
+}
+.nv-searchList .item p a{
+    color: green;
+}
+
+/* Product list */
+.nv-productList .offer{
+    float: right;
+    color: #36C;
+}
+.nv-productList .price,
+.nv-productList .product,
+.nv-productList .merchant{
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+.nv-productList .merchant{
+    color: #36C;
+}
+
+*:first-child+html .moduleContent .item{
+    display: inline-block;
+}
+*:first-child+html .moduleContent .item{
+    display: block;
+}
+
+/* Pager */
+.nv-pager .loading a.loading-next {
+    background: url(/img/ajax-loader-black.gif) right no-repeat;
+}
+.nv-pager .loading a, .nv-pager .loading a:hover {
+    color:#ccc;
+}
+
+.nv-pager{
+    text-align: center;
+    padding: 1ex 0 0 0;
+    clear: both;
+}
+.nv-pager:after{
+    content: "."; display: block; height: 0; clear: both; visibility: hidden;
+}
+*:first-child+html .nv-pager{
+    display: inline-block; /* IE7 */
+}
+*:first-child+html .nv-pager{
+    display: block; /* IE7 */
+}
+* html .nv-pager{
+    height: 1%; /* IE6 */
+}
+    .nv-pager a.prev{
+        float: left;
+        padding-left: 20px;
+        background: url(img/previous.gif) no-repeat left center;
+        border: 0;
+        cursor: pointer;
+
+    }
+    .rtl .nv-pager a.prev{
+        float: right;
+        padding-left: 0px;
+        padding-right: 20px;
+        background: url(img/next.gif) no-repeat right center;
+        border: 0;
+        cursor: pointer;
+
+    }
+    .nv-pager a.next{
+        float: right;
+        padding-right: 20px;
+        background: url(img/next.gif) no-repeat right center;
+    }
+    .rtl .nv-pager a.next{
+        float: left;
+        padding-right: 0px;
+        padding-left: 20px;
+        background: url(img/previous.gif) no-repeat left center;
+    }
+    .nv-pager a.back,
+    .nv-pager .numericpages{
+        display: block;
+        width: 50%;
+        margin: 0 auto;
+        border: 0;
+    }
+    .nv-pager .numericpages a{
+        border: 1px solid #EEE;
+    }
+
+    .nv-pager .numericpages a.selected{
+        color: #F60;
+    }
+
+/* Tabs */
+ul.nv-tabList {
+    margin: 0;
+    padding: 4px 0;
+    line-height: 24px;
+}
+    ul.nv-tabList li {
+        float: left;
+        list-style: none;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+    }
+    .rtl ul.nv-tabList li {
+        float: right;
+    }
+    ul.nv-tabList li a {
+        display: block;
+        float: left;
+        height: 14px;
+        line-height: 14px;
+
+        padding: 4px 6px 4px 6px;
+        margin: 0 2px 0 0;
+        border: 1px solid #EFF5FF;
+        border-right: 1px solid #D3E2F4;
+        border-bottom: 0;
+        font-weight: bold;
+        background: #FFF;
+        color: #888;
+        outline: 0;
+    }
+    ul.nv-tabList li.dropped a,
+    ul.nv-tabList li.dropped a:hover,
+    ul.nv-tabList li.selected a {
+        background: #EFF5FF;
+        color: #333;
+    }
+    ul.nv-tabList li.dropped a {
+        border-top: 1px solid #D3E2F4;
+        border-left: 1px solid #D3E2F4;
+    }
+    ul.nv-tabList li span.dropdown {
+        margin-left: 4px;
+        background: transparent url(img/menudown.png) no-repeat;
+    }
+    .rtl ul.nv-tabList li span.dropdown {
+        margin-right: 4px;
+        background: transparent url(img/menudown-rtl.png) no-repeat 100% 50%;
+    }
+    ul.nv-tabList li a:hover{
+        background: #F1F1F1;
+    }
+
+.nv-tabContent{
+    clear: both;
+    border: 1px solid #D3E2F4;
+    background: #FFF;
+    padding: 10px;
+    outline: none;
+    overflow: hidden;
+}
+
+/* Datagrid */
+table.nv-datagrid{
+    width: 99%;
+    margin: 0 auto;
+    border-collapse: separate;
+}
+    table.nv-datagrid th{
+        font-weight: bold;
+        background: #EFF5FF;
+        border-bottom: 1px solid #C1D8FF;
+        padding: 3px;
+    }
+    table.nv-datagrid td{
+        border: 1px solid #efefef;
+        padding: 3px;
+        margin: 0;
+    }
+    table.nv-datagrid tfoot td{
+        border-top: 1px solid #DDD;
+    }
+
+/* E-mail entries */
+dl.nv-emailList dt {
+    color: #333;
+    margin: 0;
+}
+dl.nv-emailList dt a{
+    display: block;
+    background: transparent;
+    border-bottom: 1px solid #FFF;
+}
+dl.nv-emailList dt a:hover{
+    background: #FFFFE0;
+    border-bottom: 1px solid #DCDC87;
+}
+dl.nv-emailList .read .sender
+{
+    font-weight: normal;
+}
+dl.nv-emailList .unread .sender{
+    font-weight: bold;
+}
+dl.nv-emailList dd {
+    margin: 0;
+    border-bottom: 1px solid #DDE8F5;
+    margin-bottom: 4px;
+}
+dl.nv-emailList dd p {
+    color: #549B3F;
+    padding: 2px 2px 0 6px;
+    margin: 5px 5px 5px 8px;
+    border-left: 4px solid #DFEBFF;
+}
+
+.countable {
+    display: block;
+}

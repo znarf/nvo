@@ -1,0 +1,103 @@
+.actions-window-close{
+	width: 20px;
+	background: transparent url(img/icons/actions.png) no-repeat 0 -160px;
+}
+.actions-view-refresh{
+	width: 16px;
+	background: transparent url(img/icons/actions.png) no-repeat 0 -192px;
+}
+.actions-view-options{
+	width: 16px;
+	background: transparent url(img/icons/actions.png) no-repeat 0 -64px;
+}
+.actions-window-collapse {
+	background: transparent url(img/icons/actions.png) no-repeat -3px -130px;
+}
+.actions-window-expand {
+	background: transparent url(img/icons/actions.png) no-repeat -3px -100px;
+}
+.actions-tab-options {
+	background:transparent url(img/icons/actions.png) no-repeat scroll 0pt -224px;
+    opacity: 0.70;
+    filter:alpha(opacity=70);
+}
+/* ICONS HEADER*/
+.moduleHeader .actions-window-expand {
+	background: transparent url(img/icons/actions.png) no-repeat 0 -245px;
+}
+.moduleHeader .actions-window-collapse {
+	background: transparent url(img/icons/actions.png) no-repeat 0 -265px;
+}
+.moduleHeader .actions-window-close{
+	width: 20px;
+	background: transparent url(img/icons/actions.png) no-repeat 0 -286px;
+}
+
+.moduleHeader img.actions-view-editModule,
+.moduleHeader img.actions-view-shareModule {
+    background-image: url(img/icons/actions.png);
+}
+
+.moduleHeader .actions-view-options{
+	width: 16px;
+	background: transparent url(img/icons/actions-color.png) no-repeat 0pt -129px;
+}
+
+/* ICONS COLOR*/
+.white-module .moduleHeader .actions-view-sendModule {
+	background:transparent url(img/icons/actions-color.png) no-repeat scroll 0pt -2px;
+	width:16px;
+}
+
+.blue-module .moduleHeader .actions-view-sendModule {
+	background:transparent url(img/icons/actions-color.png) no-repeat scroll 0pt -107px;
+	width:16px;
+}
+
+.yellow-module .moduleHeader .actions-view-sendModule {
+	background:transparent url(img/icons/actions-color.png) no-repeat scroll 0pt -65px;
+	width:16px;
+}
+
+.green-module .moduleHeader .actions-view-sendModule {
+	background:transparent url(img/icons/actions-color.png) no-repeat scroll 0pt -44px;
+	width:16px;
+}
+
+.red-module .moduleHeader .actions-view-sendModule {
+	background:transparent url(img/icons/actions-color.png) no-repeat scroll 0pt -86px;
+	width:16px;
+}
+
+.orange-module .moduleHeader .actions-view-sendModule {
+	background:transparent url(img/icons/actions-color.png) no-repeat scroll 0pt -23px;
+	width:16px;
+}
+
+.white-module .moduleHeader .actions-view-options{
+	width: 16px;
+	background: transparent url(img/icons/actions-color.png) no-repeat 0 -129px;
+}
+
+.blue-module .moduleHeader .actions-view-options{
+	width: 16px;
+	background: transparent url(img/icons/actions-color.png) no-repeat 0 -213px;
+}
+
+.yellow-module .moduleHeader .actions-view-options{
+	width: 16px;
+	background: transparent url(img/icons/actions-color.png) no-repeat 0 -192px;
+}
+.green-module .moduleHeader .actions-view-options{
+	width: 16px;
+	background: transparent url(img/icons/actions-color.png) no-repeat 0 -171px;
+}
+
+.red-module .moduleHeader .actions-view-options{
+	width: 16px;
+	background: transparent url(img/icons/actions-color.png) no-repeat 0 -234px;
+}
+.orange-module .actions-view-options{
+	width: 16px;
+	background: transparent url(img/icons/actions-color.png) no-repeat 0 -150px;
+}

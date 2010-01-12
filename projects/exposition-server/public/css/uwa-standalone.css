@@ -16,18 +16,18 @@
  * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* netvibes base stylesheets */
+/* uwa base stylesheets */
 
-@import "http://www.netvibes.com/themes/base/nv-core.css";
-@import "http://www.netvibes.com/themes/base/nv-typo.css";
-@import "http://www.netvibes.com/themes/base/nv-module.css";
-@import "http://www.netvibes.com/themes/base/nv-icons.css";
+@import "base/uwa-core.css";
+@import "base/uwa-typo.css";
+@import "base/uwa-extras.css";
+@import "base/uwa-icons.css";
 
 /* to have a nicer look & feel, we import parts of the netvibes garlic theme */
 
-@import "http://www.netvibes.com/themes/garlic/nv-core.css";
-@import "http://www.netvibes.com/themes/garlic/nv-module.css";
-@import "http://www.netvibes.com/themes/garlic/nv-icons.css";
+@import "themes/garlic/uwa-core.css";
+@import "themes/garlic/uwa-icons.css";
+
 
 /* base layout */
 
@@ -50,18 +50,19 @@ body {
     text-align:left;
 }
 
-/* rules imported from http://www.netvibes.com/themes/base/screen.css */
-
 a:link, a:visited{
     color: #333;
 }
+
 a:hover{
     color: #F60;
 }
+
 img{
     border: 0;
     -ms-interpolation-mode: bicubic;
 }
+
 table {
 	padding:0;
 	margin:0;
@@ -69,6 +70,7 @@ table {
 	border-collapse:collapse;
 	font-size: 11px;
 }
+
 ul {
     padding-left: 5px;
 }
@@ -93,7 +95,7 @@ h1, h2, h3, h4, p, ul, ol {
 	margin:0.25em 0;
 }
 
-/* rules imported from http://www.netvibes.com/themes/garlic/screen.css */
+/* rules imported from /css/themes/garlic/screen.css */
 
 a {
     text-decoration: none;
@@ -105,15 +107,15 @@ a {
     cursor:inherit;
 }
 
+.moduleHeader .ico {
+    padding: 2px 5px 0 3px !important;
+}
+
 /* tune the editContent */
 
 .editContent {
     display:block;
     margin-bottom:0;
-}
-
-#moduleIcon {
-    padding: 2px 5px 0 3px !important;
 }
 
 /* Wrapper */
@@ -131,10 +133,18 @@ body {
 	text-align:left;
 }
 
-/* Add to button */
-
-#addto {
+#addto
+{
+    width: 33%;
+	margin:0 auto 0;
 	text-align:center;
-	margin:25px auto;
+}
+
+#addto li
+{
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    padding: 5px;
 }
 

@@ -1,0 +1,69 @@
+/**
+ * Copyright Netvibes 2006-2009.
+ * This file is part of Exposition PHP Server.
+ *
+ * Exposition PHP Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Exposition PHP Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.module, .moduleEdit{
+	background: transparent url(img/white30.png);
+	margin: 10px;
+	border: 0;
+	padding: 6px;
+}
+
+.module .moduleFrame,
+.moduleEdit .moduleFrame{
+    border: 1px solid #86abe4;
+    background: #FFF;
+}
+
+.moduleHeader .title,
+.moduleHeader .title a{
+    color: #005a7c;
+}
+
+.editContent{
+    background: #F5F5F5 url(img/editcontent.png) repeat-x center top;
+    border: 0;
+    border-bottom: 1px solid #DDD;
+}
+
+/* white, default */
+.moduleHeader,
+.white-module .moduleHeader{
+    background: #f4f4f4 url(img/moduleheader.png) repeat-x center center;
+    padding: 3px 0;
+}
+/* blue */
+.blue-module .moduleHeader{
+    background: transparent url(img/moduleheader-blue.png) repeat-x center center;
+}
+/* yellow */
+.yellow-module .moduleHeader{
+    background: transparent url(img/moduleheader-yellow.png) repeat-x center center;
+}
+/* green */
+.green-module .moduleHeader{
+    background: transparent url(img/moduleheader-green.png) repeat-x center center;
+}
+/* red */
+.red-module .moduleHeader{
+    background: transparent url(img/moduleheader-red.png) repeat-x center center;
+}
+/* orange */
+.orange-module .moduleHeader{
+    background: transparent url(img/moduleheader-orange.png) repeat-x center center;
+}
+

@@ -1,0 +1,243 @@
+/**
+ * Copyright Netvibes 2006-2009.
+ * This file is part of Exposition PHP Server.
+ *
+ * Exposition PHP Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Exposition PHP Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+Module tree:
+<div class="[module|moduleEdit]">
+	<div class="moduleFrame [white-module|yellow-module|green-module|red-module|blue-module|orange-module]">
+		<div class="moduleHeaderContainer">
+			<div class="moduleHeader [white|yellow|green|red|blue|orange]">
+		<div class="editContent">
+		<div class="moduleContent">
+*/
+
+
+/* Module
+*******************************************************************************/
+
+* html .module{
+	zoom: 1;
+}
+
+.module{
+	border: 3px solid #ECECEC;
+	position: relative; /* To enable setOpacity on module */
+}
+
+.module a{
+	/* IE only: prevent long url to break layout */
+	word-wrap: break-word;
+}
+
+img.clear {
+    vertical-align: middle;
+}
+
+
+/* Module header
+*******************************************************************************/
+
+.moduleHeader{
+    cursor: move;
+    background: #EFF5FF;
+    height: 1.8em;
+    min-height: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.moduleEdit label{
+    font-weight: normal;
+    margin-right: 7px;
+    border: 3px solid #E1E9F4;
+    cursor: pointer;
+}
+
+.moduleEdit  input{
+    font-size: 1em;
+    font-family: Tahoma, Verdana;
+}
+
+.formTable tr{
+    height: 23px;
+}
+
+.moduleEdit input.password{}
+.moduleEdit input.radio{}
+.moduleEdit input.checkbox{}
+.moduleEdit input.submit{}
+.moduleEdit input.reset{}
+.moduleEdit input.button{}
+.moduleEdit input.file{}
+.moduleEdit input.image{}
+.moduleEdit textarea{}
+.moduleEdit select{
+    font-size: 1em;
+    font-family: Tahoma, Verdana;
+    padding:2px;
+}
+html>body select {
+    /* Moz : Fixes select box padding (arrow) */
+    padding:0;
+}
+
+* html select.hidden{
+    /* IE6 : fixes <select> over popup menu */
+    visibility: hidden;
+}
+
+.moduleEdit option{
+    padding-left: 5px;
+}
+
+.white{background: #FFF;}
+.yellow{background: #FFFFE0;}
+.green{background: #EEFFE0;}
+.red{background: #FFE0E1;}
+.blue{background: #EFF5FF;}
+.orange{background: #FEE8BD;}
+
+.moduleHeader .showHide{
+    width: 0;
+    height: 16px;
+    cursor: pointer;
+    float: left;
+    padding: 2px 2px 0 2px;
+    border-bottom: none;
+}
+
+* html .moduleHeader .ico{
+    margin-left:-15px;
+}
+
+.moduleHeader .ico{
+    padding-top: 2px;
+    padding-left:3px;
+    float: left;
+    border-bottom: none;
+}
+
+.moduleHeader .title{
+    font-weight: bold;
+    padding-left: 4px;
+    font-size: 1em;
+    display: inline;
+    font-family: inherit;
+    line-height: 1.8em;
+    color: #00368F;
+}
+
+* html .moduleHeader .title a{
+    position: relative;
+    left: 5px;
+}
+
+.moduleHeader .title a{
+    color: #00368F;
+}
+
+.moduleHeader .title a:hover{
+    color: #F60;
+}
+
+.moduleHeader .title  em,
+.moduleHeader .title  em a{
+    font-style: normal;
+    color: #36C;
+}
+
+.moduleHeader .refresh {
+    padding-left:3px;
+}
+
+
+/* Module header : elements
+*******************************************************************************/
+
+.moduleHeader .hover span,
+.moduleHeader .hover a.iconText,
+.moduleHeader .hover img.icon  {
+    filter:alpha(opacity=100);
+    opacity: 1.0;
+}
+
+.moduleHeader .share,
+.moduleHeader .edit,
+.moduleHeader .refresh {
+    float: right;
+}
+
+.moduleHeader .share,
+.moduleHeader .edit,
+.moduleHeader .refresh {
+    margin: 2px 5px 0 5px;
+    cursor: pointer;
+}
+
+.moduleHeader .icon {
+    margin-right: 0;
+    margin-left: 3px;
+}
+
+.moduleHeader .share a,
+.moduleHeader a.share,
+.moduleHeader .edit a,
+.moduleHeader a.edit,
+.moduleHeader .refresh a,
+.moduleHeader a.refresh {
+    color: #858585;
+    text-decoration: underline;
+    border-bottom: none;
+}
+
+.moduleHeader .share a:hover,
+.moduleHeader a.share:hover,
+.moduleHeader .edit a:hover,
+.moduleHeader a.edit:hover,
+.moduleHeader .refresh a:hover,
+.moduleHeader a.refresh:hover {
+    color: #F60;
+}
+
+
+/* Module content
+*******************************************************************************/
+.moduleContent{
+    clear: both;
+    padding: 7px;
+    background: #FFF;
+}
+
+.editContent{
+    display: none;
+    margin: 0 0 2px 0;
+    clear:both;
+    background: #EFF5FF;
+    padding: 10px 0 10px 10px;
+    border-bottom: 1px solid #B9D0ED;
+    border-top: 1px solid #D3E2F4;
+}
+
+.editContent .optionContent{
+    padding: 10px 0 10px 10px;
+}
+
+
+
+
+
