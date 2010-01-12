@@ -1,4 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?php
+/**
+ * Copyright Netvibes 2006-2009.
+ * This file is part of Exposition PHP Server.
+ *
+ * Exposition PHP Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Exposition PHP Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+//---------------------------------------------------------------------------
+// Define usefull paths for current Exposition PHP Server testing.
+
+define('BASE_URL', $_SERVER['HTTP_HOST']);
+define('BASE_URL_SCHEME', ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://'));
+define('MAIN_URL', BASE_URL_SCHEME . BASE_URL);
+
+echo '<?xml version="1.0" encoding="utf-8"?>';
+
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -32,78 +60,78 @@
 
     <script type="text/javascript">
 
-        var UWA_WIDGET = 'http://uwa.service.japanim.fr/widget',
-        UWA_JS = 'http://uwa.service.japanim.fr/js',
-        UWA_CSS = 'http://uwa.service.japanim.fr/css',
-        UWA_PROXY = 'http://uwa.service.japanim.fr/proxy',
-        UWA_STATIC = 'http://uwa.service.japanim.fr/img'
+      var UWA_WIDGET = '<?php echo BASE_URL; ?>/widget',
+        UWA_JS = '<?php echo MAIN_URL; ?>/js',
+        UWA_CSS = '<?php echo MAIN_URL; ?>/css',
+        UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
+        UWA_STATIC = '<?php echo MAIN_URL; ?>/img'
 
-	    // update widget elements
-	    widget.setTitle('Test Title update');
-	    widget.setIcon("http://cdn.netvibes.com/modules/uwa/icon.png");
-	    widget.setUnreadCount(1);
-	    widget.setSearchResultCount(2);
+        // update widget elements
+        widget.setTitle('Test Title update');
+        widget.setIcon("http://cdn.netvibes.com/modules/uwa/icon.png");
+        widget.setUnreadCount(1);
+        widget.setSearchResultCount(2);
 
-	    var TabViewSample = {};
+        var TabViewSample = {};
 
-	    widget.onLoad = function() {
+        widget.onLoad = function() {
 
-	      // init tab system
-	      if (typeof(TabViewSample.tabs) == "undefined") {
+          // init tab system
+          if (typeof(TabViewSample.tabs) == "undefined") {
 
-		  var tabs = new UWA.Controls.TabView();
+          var tabs = new UWA.Controls.TabView();
 
-		  TabViewSample.tabs = tabs;
+          TabViewSample.tabs = tabs;
 
-		  // Create tab items
-		  tabs.addTab("tab1", {text: "UWA Links", customInfo: "custom"});
-		  tabs.addTab("tab2", {text: "Grid Data"});
-		  tabs.addTab("tab3", {text: "E-Mail List"});
-		  tabs.addTab("tab4", {text: "Rich list "});
-		  tabs.addTab("tab5", {text: "Thumbs list"});
-		  tabs.addTab("tab6", {text: "Json"});
-		  tabs.addTab("tab7", {text: "Ajax"});
-		  tabs.addTab("tab8", {text: "Prefs"});
-		  tabs.addTab("tab9", {text: "Export"});
+          // Create tab items
+          tabs.addTab("tab1", {text: "UWA Links", customInfo: "custom"});
+          tabs.addTab("tab2", {text: "Grid Data"});
+          tabs.addTab("tab3", {text: "E-Mail List"});
+          tabs.addTab("tab4", {text: "Rich list "});
+          tabs.addTab("tab5", {text: "Thumbs list"});
+          tabs.addTab("tab6", {text: "Json"});
+          tabs.addTab("tab7", {text: "Ajax"});
+          tabs.addTab("tab8", {text: "Prefs"});
+          tabs.addTab("tab9", {text: "Export"});
 
-		  // Put some content in tabs
-		  tabs.setContent("tab1", $('hello-content').innerHTML);
-		  tabs.setContent("tab2", $('griddata-content').innerHTML);
-		  tabs.setContent("tab3", $('emaillist-content').innerHTML);
-		  tabs.setContent("tab4", $('richlist-content').innerHTML);
-		  tabs.setContent("tab5", $('thumbist-content').innerHTML);
-		  tabs.setContent("tab6", $('json-content').innerHTML);
-		  tabs.setContent("tab7", $('ajax-content').innerHTML);
-		  tabs.setContent("tab8", $('prefs-content').innerHTML);
-		  tabs.setContent("tab9", $('export-content').innerHTML);
+          // Put some content in tabs
+          tabs.setContent("tab1", $('hello-content').innerHTML);
+          tabs.setContent("tab2", $('griddata-content').innerHTML);
+          tabs.setContent("tab3", $('emaillist-content').innerHTML);
+          tabs.setContent("tab4", $('richlist-content').innerHTML);
+          tabs.setContent("tab5", $('thumbist-content').innerHTML);
+          tabs.setContent("tab6", $('json-content').innerHTML);
+          tabs.setContent("tab7", $('ajax-content').innerHTML);
+          tabs.setContent("tab8", $('prefs-content').innerHTML);
+          tabs.setContent("tab9", $('export-content').innerHTML);
 
-		  // Register to activeTabChange event
-		  tabs.observe('activeTabChange', TabViewSample.onActiveTabChanged);
+          // Register to activeTabChange event
+          tabs.observe('activeTabChange', TabViewSample.onActiveTabChanged);
 
-	      } else {
+          } else {
             var tabs = TabViewSample.tabs;
-	      }
+          }
 
-	      // Restore saved active tab
-	      var activeTab = widget.getValue('activeTab');
+          // Restore saved active tab
+          var activeTab = widget.getValue('activeTab');
 
-	      if (activeTab) {
+          if (activeTab) {
 
-		    if (TabViewSample.tabs.selectedTab) {
-		        tabs.reload();
-		    } else {
-		        tabs.selectTab(activeTab);
-		    }
+            if (TabViewSample.tabs.selectedTab) {
+                tabs.reload();
+            } else {
+                tabs.selectTab(activeTab);
+            }
 
-	      } else {
-		    tabs.selectTab('tab1');
-	      }
+          } else {
+            tabs.selectTab('tab1');
+          }
 
-	      widget.setBody(TabViewSample.tabs.tabSet);
-	      widget.onResize();
-	    }
+          widget.setBody(TabViewSample.tabs.tabSet);
+          widget.onResize();
+        }
 
-	    TabViewSample.onActiveTabChanged = function(name, data) {
+        TabViewSample.onActiveTabChanged = function(name, data) {
 
           var tabs = TabViewSample.tabs;
 
@@ -150,13 +178,13 @@
           }
 
           widget.onResize();
-	    }
+        }
 
-	    var resized = 0;
-	    var OriginalTitle = widget.getTitle();
+        var resized = 0;
+        var OriginalTitle = widget.getTitle();
 
-	    widget.onResize = function() {
-		  widget.setTitle(OriginalTitle + '(resized:' + resized++ + ')' );
+        widget.onResize = function() {
+          widget.setTitle(OriginalTitle + '(resized:' + resized++ + ')' );
         }
 
     </script>
