@@ -73,7 +73,7 @@ UWA.extend(UWA.Environment.prototype, {
 
       addto.innerHTML =  '<ul>'
       addto.innerHTML +=  '<li><a title="'+ _('Add this module to Netvibes') + '" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=' + encodeURIComponent(UWA.widgetTrueURL) + '"><img src="' + UWA_STATIC + '/uwa-netvibes.png" /></a></li>';
-      addto.innerHTML +=  '<li><a style="border:0" title="'+ _('Add this module to Google Homepage') + '" href="http://www.google.com/ig/add&amp;moduleurl=' + encodeURIComponent(UWA_WIDGET + '/gspec?uwaUrl=' +  encodeURIComponent(UWA.widgetTrueURL) ) + '"><img src="' + UWA_STATIC + '/uwa-google.png" /></a></li>';
+      addto.innerHTML +=  '<li><a style="border:0" title="'+ _('Add this module to Google Homepage') + '" href="http://www.google.com/ig/adde?moduleurl=' + encodeURIComponent(UWA_WIDGET + '/gspec?uwaUrl=' +  encodeURIComponent(UWA.widgetTrueURL) ) + '"><img src="' + UWA_STATIC + '/uwa-google.png" /></a></li>';
       addto.innerHTML +=  '<ul>';
 
       document.body.appendChild(addto);
