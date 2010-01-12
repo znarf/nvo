@@ -20,7 +20,7 @@ License:
 UWA.Controls.TabView = Class.create();
 UWA.Controls.TabView.prototype =
 {
-  setOptions : function (A)
+  setOptions : function (options)
   {
     this.options =
     {
@@ -28,12 +28,12 @@ UWA.Controls.TabView.prototype =
       softPadding : false, orientation : "top", dataKey : "text", extendedAction : false, allowReload : false
     };
 
-    Object.extend(this.options, A || {})
+    Object.extend(this.options, options || {})
   },
 
-  initialize : function (A)
+  initialize : function (options)
   {
-    this.setOptions(A);
+    this.setOptions(options);
     this.dataItems = {};
     this.selectedTab = null;
     this.selectedIndex = this.options.selectedIndex || 0;
@@ -192,10 +192,10 @@ UWA.Controls.TabView.prototype =
     return A;
   },
 
-  removeTab : function (A)
+  removeTab : function (tab)
   {
-    var B = this.getTab(A);
-    Element.remove(B)
+    var element = this.getTab(tab);
+    Element.remove(element)
   },
 
   setTab : function (C, B, A)
