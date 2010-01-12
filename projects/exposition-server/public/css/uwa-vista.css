@@ -118,9 +118,7 @@ body {
     border-bottom: none;
 }
 
-/*
-Docked
-*/
+/* Docked */
 
 #wrapper.docked .moduleDocked {
     margin: 0;
@@ -144,9 +142,7 @@ Docked
  text-indent: 3px;
 }
 
-/*
-Fix problem with tabList
-*/
+/* Fix problem with tabList */
 
 ul.nv-tabList li a:hover{
     border-bottom: 0;

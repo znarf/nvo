@@ -19,11 +19,11 @@
 /*
 Module tree:
 <div class="[module|moduleEdit]">
-	<div class="moduleFrame [white-module|yellow-module|green-module|red-module|blue-module|orange-module]">
-		<div class="moduleHeaderContainer">
-			<div class="moduleHeader [white|yellow|green|red|blue|orange]">
-		<div class="editContent">
-		<div class="moduleContent">
+    <div class="moduleFrame [white-module|yellow-module|green-module|red-module|blue-module|orange-module]">
+        <div class="moduleHeaderContainer">
+            <div class="moduleHeader [white|yellow|green|red|blue|orange]">
+        <div class="editContent">
+        <div class="moduleContent">
 */
 
 
@@ -31,17 +31,18 @@ Module tree:
 *******************************************************************************/
 
 * html .module{
-	zoom: 1;
+    zoom: 1;
 }
 
 .module{
-	border: 3px solid #ECECEC;
-	position: relative; /* To enable setOpacity on module */
+    border: 3px solid #ECECEC;
+    position: relative; /* To enable setOpacity on module */
+    overflow: hidden;
 }
 
 .module a{
-	/* IE only: prevent long url to break layout */
-	word-wrap: break-word;
+    /* IE only: prevent long url to break layout */
+    word-wrap: break-word;
 }
 
 img.clear {
@@ -73,7 +74,7 @@ img.clear {
     font-family: Tahoma, Verdana;
 }
 
-.formTable tr{
+.formTable tr {
     height: 23px;
 }
 

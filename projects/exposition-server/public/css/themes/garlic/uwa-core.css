@@ -46,24 +46,57 @@
     background: #f4f4f4 url(img/moduleheader.png) repeat-x center center;
     padding: 3px 0;
 }
+
 /* blue */
 .blue-module .moduleHeader{
     background: transparent url(img/moduleheader-blue.png) repeat-x center center;
 }
+
 /* yellow */
 .yellow-module .moduleHeader{
     background: transparent url(img/moduleheader-yellow.png) repeat-x center center;
 }
+
 /* green */
 .green-module .moduleHeader{
     background: transparent url(img/moduleheader-green.png) repeat-x center center;
 }
+
 /* red */
 .red-module .moduleHeader{
     background: transparent url(img/moduleheader-red.png) repeat-x center center;
 }
+
 /* orange */
 .orange-module .moduleHeader{
     background: transparent url(img/moduleheader-orange.png) repeat-x center center;
+}
+
+/* Tabs */
+ul.nv-tabList {
+}
+ul.nv-tabList li {
+}
+
+ul.nv-tabList li a {
+    border: 1px solid #DDD;
+    border-bottom: 0;
+    background: #FFF url(img/tablist.png) repeat-x center top;
+    color: #888;
+}
+
+ul.nv-tabList li.dropped a,
+ul.nv-tabList li.dropped a:hover,
+ul.nv-tabList li a:hover,
+ul.nv-tabList li.selected a {
+    border: 1px solid #DDD;
+    border-bottom: 0;
+    background: #F0F0F0 url(img/tablist-selected.png) repeat-x center top;
+    color: #333;
+}
+
+.nv-tabContent{
+    border: 1px solid #DDD;
+    background: #FFF;
 }
 

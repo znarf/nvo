@@ -57,7 +57,7 @@ body {
     border-top: 0;
 }
 
-/* rules imported from from  /css/themes/base/screen.css */
+/* rules imported from /css/themes/base/screen.css */
 
 a:link, a:visited{
     color: #333;
@@ -83,7 +83,7 @@ li {
     padding-left: 10px;
 }
 
-/* rules imported from from  /css/themes/exposition-blueberry/screen.css */
+/* rules imported from /css/themes/exposition-blueberry/screen.css */
 
 a {
     text-decoration: none;
