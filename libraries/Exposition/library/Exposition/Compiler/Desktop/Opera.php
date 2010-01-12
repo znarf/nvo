@@ -103,7 +103,7 @@ final class Exposition_Compiler_Desktop_Opera extends Exposition_Compiler_Deskto
 
         $l[] = '<?xml version="1.0" encoding="utf-8" ?>';
 
-        $l[] = '<widget xmlns="http://xmlns.opera.com/2006/widget">';
+        $l[] = '<widget network="public" xmlns="http://xmlns.opera.com/2006/widget">';
 
         $l[] = '<widgetname>' . htmlspecialchars($title) . '</widgetname>';
         $l[] = '<width>' . $this->_width . '</width>';
