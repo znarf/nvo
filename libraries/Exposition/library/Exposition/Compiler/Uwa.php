@@ -26,6 +26,13 @@ require_once 'Exposition/Compiler.php';
 class Exposition_Compiler_Uwa  extends Exposition_Compiler
 {
     /**
+     * Javascript UWA environment.
+     *
+     * @var string
+     */
+    protected $_environment = 'Standalone';
+
+    /**
      * Main rendering function.
      *
      * @return string
@@ -35,6 +42,10 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         $style = $this->_widget->getStyle();
         $script = $this->_widget->getCompressedScript();
         $preferences = $this->_widget->getPreferences();
+
+        $useCompressedJs = Exposition_Load::getConfig('js', 'compressed');
+        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
+        $cssEndPoint = Exposition_Load::getConfig('endpoint', 'css');
 
         $l = array();
 
@@ -52,17 +63,17 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         }
 
         $l[] = '<link rel="stylesheet" type="text/css"'.
-            ' href="http://' . UWA_HOST . '/themes/uwa/style.css"/>';
+            ' href="' . $cssEndPoint . '/uwa-standalone.css"/>';
 
         $coreLibrary = $this->_widget->getCoreLibrary();
         $externalScripts = $this->_widget->getExternalScripts();
 
         if (empty($externalScripts) ) {
-            $library = 'http://' . UWA_HOST . '/js/UWA/load.js.php?env=Standalone';
+            $library = $jsEndPoint . '/UWA/load.js.php?env=Standalone';
         } else if ($coreLibrary == 'uwa') {
-            $library = 'http://' . UWA_HOST . '/js/c/UWA_Standalone.js';
+            $library = $jsEndPoint. '/c/UWA_Standalone.js';
         } else if ($coreLibrary == 'uwa-mootools') {
-            $library = 'http://' . UWA_HOST . '/js/c/UWA_Standalone_Mootools.js';
+            $library = $jsEndPoint . '/c/UWA_Standalone_Mootools.js';
         }
 
         $l[] = '<script type="text/javascript" src="' . $library .'"></script>';
@@ -214,9 +225,7 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
             'style'         => $this->_widget->getStyle(),
         );
 
-
         $l[] = '    var skeleton = ' . Zend_Json::encode($skeleton);
-
         $l[] = '    for (var key in options) {';
         $l[] = '        if(key == "script" && options[key]) {';
         $l[] = '            if(skeleton.inline) {';
@@ -232,7 +241,6 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         $l[] = '            if(widget[fnName]) widget[fnName](skeleton[key]);';
         $l[] = '        }';
         $l[] = '    };';
-
         $l[] = '    Environment.launchModule()';
         $l[] = '}';
 
