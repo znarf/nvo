@@ -271,16 +271,29 @@ UWA.merge(String.prototype, {
     return htmlCode;
   },
 
-/**
- * @private Not Documented.
- * Note: needed for compatibility with various Netvibes native widget.
- *
- * @return {String} The converted string.
- */
+ /**
+  * @private Not Documented.
+  * Note: needed for compatibility with various Netvibes native widget.
+  *
+  * @return {String} The converted string.
+  */
   unescapeHTML: function() {
     var div = document.createElement('div');
     div.innerHTML = this.stripTags();
     return div.childNodes[0] ? div.childNodes[0].nodeValue : '';
+  },
+
+  /**
+   * @private Not Documented.
+   * Note: needed for compatibility with various Netvibes native widget.
+   *
+   * @return {String} The converted string.
+   */
+  escapeHTML: function() {
+    var div = document.createElement("div");
+    var content = document.createTextNode(this);
+    content.appendChild(div);
+    return content.innerHTML;
   },
 
   test : function (string, regexp)
