@@ -23,6 +23,7 @@
 define('BASE_URL', $_SERVER['HTTP_HOST']);
 define('BASE_URL_SCHEME', ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://'));
 define('MAIN_URL', BASE_URL_SCHEME . BASE_URL);
+define('WIDGET_URL', $_SERVER['SCRIPT_URI']);
 
 echo '<?xml version="1.0" encoding="utf-8"?>';
 
@@ -39,16 +40,16 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
     <meta name="debugMode" content="true" />
 
     <link rel="stylesheet" type="text/css"
-      href="/css/uwa-standalone.css" />
+      href="<?php echo MAIN_URL; ?>/css/uwa-standalone.css" />
 
     <script type="text/javascript"
-      src="/js/c/UWA_Standalone.js?v=preview3"></script>
+      src="<?php echo MAIN_URL; ?>/js/c/UWA_Standalone.js?v=preview3"></script>
 
     <script type="text/javascript"
-      src="/js/c/UWA_Controls_TabView.js?v=preview3"></script>
+      src="<?php echo MAIN_URL; ?>/js/c/UWA_Controls_TabView.js?v=preview3"></script>
 
     <title>My Sample Widget</title>
-    <link rel="icon" type="image/png" href="http://uwa.service.japanim.fr/img/icon.png" />
+    <link rel="icon" type="image/png" href="<?php echo MAIN_URL; ?>/img/icon.png" />
 
     <widget:preferences>
         <preference name="my_text" type="text" label="My text pref" defaultValue="" />
@@ -64,7 +65,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
         UWA_JS = '<?php echo MAIN_URL; ?>/js',
         UWA_CSS = '<?php echo MAIN_URL; ?>/css',
         UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
-        UWA_STATIC = '<?php echo MAIN_URL; ?>/img'
+        UWA_STATIC = '<?php echo MAIN_URL; ?>/img';
 
         // update widget elements
         widget.setTitle('Test Title update');
@@ -374,21 +375,21 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 
                 <h2>Stable</h2>
                 <ul>
-                    <li><a target="_blank" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Netvibes</a></li>
+                    <li><a target="_blank" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=<?php echo urlencode(WIDGET_URL); ?>">Netvibes</a></li>
 
-                    <li><a target="_blank" href="http://www.google.com/ig/add?moduleurl=http%3A%2F%2Fuwa.service.japanim.fr%2Fwidget%2Fgspec%3FuwaUrl%3Dhttp%253A%252F%252Fbasezf.japanim.fr%252Fexample%252Fuwa">iGoogle</a></li>
-                    <li><a target="_blank" href="/widget/dashboard?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Dashboard</a></li>
-                    <li><a target="_blank" href="/widget/screenlets?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Screenlets</a></li>
-                    <li><a target="_blank" href="/widget/blogger?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Blogger</a></li>
-                    <li><a target="_blank" href="http://my.live.com/?s=1&amp;add=http%3A%2F%2Fuwa.service.japanim.fr%2Fwidget%2Flive%3Fhttp%253A%252F%252Fbasezf.japanim.fr%252Fexample%252Fuwa%253F">Live</a></li>
-                    <li><a target="_blank" href="/widget/opera?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Opera</a></li>
+                    <li><a target="_blank" href="http://www.google.com/ig/add?moduleurl=<?php echo urlencode(MAIN_URL); ?>%2Fwidget%2Fgspec%3FuwaUrl%3D<?php echo urlencode(urlencode(WIDGET_URL)); ?>">iGoogle</a></li>
+                    <li><a target="_blank" href="/widget/dashboard?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Dashboard</a></li>
+                    <li><a target="_blank" href="/widget/screenlets?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Screenlets</a></li>
+                    <li><a target="_blank" href="/widget/blogger?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Blogger</a></li>
+                    <li><a target="_blank" href="http://my.live.com/?s=1&amp;add=<?php echo urlencode(MAIN_URL); ?>%2Fwidget%2Flive%3F<?php echo urlencode(urlencode(WIDGET_URL)); ?>">Live</a></li>
+                    <li><a target="_blank" href="/widget/opera?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Opera</a></li>
 
                     <li>
-                        <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F&amp;id=54bcd7bc3469f1ccb12f1da055ac3986">Iframe</a>
+                        <a target="_blank" href="/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;id=54bcd7bc3469f1ccb12f1da055ac3986">Iframe</a>
                         (
-                            <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1">with header</a>
-                            - <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;chromeColor=orange">with header color</a>
-                            - <a target="_blank" href="/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;status=0">without status</a>
+                            <a target="_blank" href="/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1">with header</a>
+                            - <a target="_blank" href="/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;chromeColor=orange">with header color</a>
+                            - <a target="_blank" href="/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;status=0">without status</a>
 
                         )
                     </li>
@@ -396,10 +397,10 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 
                 <h2>Unstable</h2>
                 <ul>
-                    <li><a target="_blank" href="/widget/chrome?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Google Chrome</a> (Work in progress)</li>
-                    <li><a target="_blank" href="/widget/jil?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Jil/Ophone</a> (Work in progress)</li>
+                    <li><a target="_blank" href="/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Google Chrome</a> (Work in progress)</li>
+                    <li><a target="_blank" href="/widget/jil?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Jil/Ophone</a> (Work in progress)</li>
 
-                    <li><a target="_blank" href="/widget/vista?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2F">Windows Vista/SEVEN</a> (Work in progress)</li>
+                    <li><a target="_blank" href="/widget/vista?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Windows Vista/SEVEN</a> (Work in progress)</li>
                 </ul>
             </div>
         </div>
