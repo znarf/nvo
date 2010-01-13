@@ -90,7 +90,7 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
         if (empty($uwaUrl)) {
 
             $matches = array();
-            $pattern = ':\?(.*[^&])(.*)?:i';
+            $pattern = ':\?([^&]*):i';
             if(preg_match ($pattern, $_SERVER['REQUEST_URI'], $matches)) {
                 $uwaUrl = urldecode($matches[1]);
             }
