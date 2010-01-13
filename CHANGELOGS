@@ -1,0 +1,58 @@
+Netvibes.org  preview4-alpha change logs
+
+* Exposition PHP Library
+- Migrate source from /library/php to /library/Exposition
+- Rewrite Makefile (doc, php-syntax, php-phpunit, php-qa, php-phpcs, php-phpcpd)
+- Add documentation generator (using doxygen)
+- Implement UnitTest Environments
+- Implement PHP Quality Assurance Test Environment
+- Clean PHP Class NameSpace
+- Rename Exposition Classe to Exposition_Load and remove NV_* constants in all files
+- Add Exposition_Archive to generate Widget package using more compression format
+- Add Exposition_Proxy ajax/json/feed proxy features
+- Add Exposition_Controller_Widget/Proxy to implement Exposition in your Zend MVC instance.
+- Clean PHP source code
+- Add Exposition_Compiler: Desktop_Screenlets, Desktop_Vista, Blogger
+- Add Exposition_Compiler draft: Desktop_Chrome, Desktop_Kludget, Desktop_FireFox, Desktop_Jil
+- Fix Exposition_Parser_Uwa
+- Remove Netvibes dependencies
+- A Object param proxy support for Json variable name (useful for cross-domain ajax request issue required by some Compiler)
+
+* Exposition PHP Server
+- Remove Netvibes dependencies
+- Rewrite to Zend_Framework 1.9.5 Standart MVC implementation
+- Clean and rewrite CSS layer
+- Rewrite Makefile (doc, php-syntax, php-phpunit, php-qa, php-phpcs, php-phpcpd)
+- Add documentation generator (using doxygen)
+- Rewrite public/index.php bootstrap file
+- Add sample apache.conf-dist
+- Add data/cache and data/log directory
+- Add application/configs/application.ini used to configure Exposition_Load throw into application/Bootstrap.php class
+- Fix Live widget Compiler url parsing
+- Update Controllers to use Exposition_Controller_Widget/Proxy from Exposition PHP Library
+- Add Sample widget into public/samples (w3c, tabview and controls)
+- Add missing images into public/img
+
+* UWA Javascript Library
+
+- Remove NV_* constants in all files and replace it by UWA_*
+- Check and update some constants usage (UWA_WIDGET, UWA_JS, UWA_CSS, UWA_PROXY, UWA_STATIC)
+- A MultipleFeeds Json support
+- Add useJsonRequest for force script tag ajax proxy request handle
+- Upgrade to motools-1.2.4-core
+- Upgrade to motools-1.2.4-2-more
+- Clean Driver UWA MooTools
+- Clean Makefile
+- Remove Netvibes Propotype to Mootools compatibility layer
+- Fix UWA.Environments.Standalone
+- Fix UWA.Environments.Vista
+- Import UWA.Controls.TabView
+- Clean source code
+- Fix some issue from Netvibes.org forum or know bugs
+
+* In sandbox or currently in progress
+- Add project La distribution to be able to release a Exposition package (see http://h6e.net)
+- SDK/Emulator UWA Environment from wzdapi.com
+- Better UWA Javascript Drivers layer implementation
+
+
