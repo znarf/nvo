@@ -238,7 +238,20 @@ html>body select {
     padding: 10px 0 10px 10px;
 }
 
+/* Module status
+*******************************************************************************/
 
+.moduleStatus
+{
+    text-align:center;
+}
 
+.moduleStatus .share {
+    left:10px;
+    position:absolute;
+}
+
+.moduleStatus .powered {
+}
 
 

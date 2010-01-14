@@ -102,16 +102,3 @@ a {
     margin-bottom:0;
 }
 
-.moduleStatus
-{
-    text-align:center;
-}
-
-.moduleStatus .share {
-    left:10px;
-    position:absolute;
-}
-
-.moduleStatus .powered {
-}
-

@@ -20,13 +20,12 @@
 
 @import "base/uwa-core.css";
 @import "base/uwa-typo.css";
-@import "base/uwa-module.css";
+@import "base/uwa-extras.css";
 @import "base/uwa-icons.css";
 
 /* to have a nicer look & feel, we import parts of the netvibes garlic theme */
 
 @import "themes/garlic/uwa-core.css";
-@import "themes/garlic/uwa-module.css";
 @import "themes/garlic/uwa-icons.css";
 
 /* base layout */
@@ -82,6 +81,10 @@ body {
     margin-left:1px;
     margin-right:1px;
     -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
+}
+
+#moduleStatus .share {
+    left:30px;
 }
 
 #moduleFooter {
@@ -166,7 +169,3 @@ a {
     margin-bottom:0;
 }
 
-.moduleHeader .edit {
-    margin: -5px 10px 0 0;
-    cursor: pointer;
-}
