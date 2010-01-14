@@ -85,7 +85,7 @@ UWA.extend(UWA.Environment.prototype, {
       }).setStyle(
         {'display': 'block', 'padding': '10px', 'text-align': 'right'}
       ).setHTML(
-        'Recompile this widget'
+        _('Recompile this widget')
       ).inject(editContent);
       // to handle links with window.widget.openURL
       this.callback('onUpdateBody');
