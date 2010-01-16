@@ -141,7 +141,7 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
             $l[] = '<script type="text/javascript" src="' . $script . '" charset="utf-8"></script>';
         }
 
-        $l[] = '    <script type="text/javascript" src="js/System.js"></script>';
+        $l[] = '    <!-- <script type="text/javascript" src="js/System.js"></script> -->';
         $l[] = '    <script type="text/javascript" src="js/VistaModule.js"></script>';
         $l[] = '    <script type="text/javascript" src="js/PrefsForm.js"></script>';
         $l[] = '    <script type="text/javascript">';
