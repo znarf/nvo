@@ -81,7 +81,7 @@ UWA.extend(UWA.Environment.prototype, {
 
     if (this.widget.uwaUrl) {
       var upgrade = UWA.createElement('a', {
-        href: 'http://' + UWA_WIDGET + '/dashboard/?uwaUrl=' + encodeURIComponent(this.widget.uwaUrl)
+        href: UWA_WIDGET + '/dashboard/?uwaUrl=' + encodeURIComponent(this.widget.uwaUrl)
       }).setStyle(
         {'display': 'block', 'padding': '10px', 'text-align': 'right'}
       ).setHTML(
