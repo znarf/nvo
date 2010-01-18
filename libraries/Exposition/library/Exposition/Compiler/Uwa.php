@@ -68,9 +68,7 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         $coreLibrary = $this->_widget->getCoreLibrary();
         $externalScripts = $this->_widget->getExternalScripts();
 
-        if (empty($externalScripts) ) {
-            $library = $jsEndPoint . '/UWA/load.js.php?env=Standalone';
-        } else if ($coreLibrary == 'uwa') {
+        if ($coreLibrary == 'uwa') {
             $library = $jsEndPoint. '/c/UWA_Standalone.js';
         } else if ($coreLibrary == 'uwa-mootools') {
             $library = $jsEndPoint . '/c/UWA_Standalone_Mootools.js';
