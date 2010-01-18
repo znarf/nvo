@@ -17,6 +17,7 @@ License:
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 /* UWA Globals */
 
 if (typeof UWA_WIDGET == "undefined") {
@@ -35,33 +36,6 @@ if (typeof UWA_STATIC == "undefined") {
   var UWA_STATIC = 'http://www.netvibes.com/img';
 }
 
-// compatibility mode
-var NV_HOST = 'www.netvibes.com';
-var NV_STATIC = 'http://cdn.netvibes.com';
-var NV_MODULES = 'nvmodules.netvibes.com';
-
-if (typeof UWA == "undefined") var UWA = {};
-if (typeof UWA.Widgets == "undefined") UWA.Widgets = {};
-if (typeof UWA.Scripts == "undefined") UWA.Scripts = {};
-if (typeof UWA.Controls == "undefined") UWA.Controls = {};
-if (typeof UWA.Services == "undefined") UWA.Services = {};
-if (typeof UWA.Templates == "undefined") UWA.Templates = {};
-
-UWA.version = '1.2';
-
-// Compatibility - To be removed
-if (typeof Netvibes == "undefined") var Netvibes = {};
-if (typeof Netvibes.UI == "undefined") Netvibes.UI = {};
-Netvibes.UI._idIncrement = 0;
-UWA.Controls = Netvibes.UI;
-if (Netvibes.DLA) UWA.Controls.SearchForm = Netvibes.DLA.SearchForm;
-
-if (typeof _ == "undefined") {
-  var _ = function(s) {
-    return s
-  };
-}
-
 /*
 Script: Core
 
@@ -72,25 +46,28 @@ Credits:
   Copyright (c) 2006-2007 Valerio Proietti, <http://mad4milk.net>, MIT Style License.
 */
 
-/*
-License:
-  Copyright (c) 2005-2008 Netvibes (http://www.netvibes.org/).
 
-  This file is part of Netvibes Widget Platform.
+if (typeof UWA == "undefined") {
+  var UWA = {
+    'version': '1.2.4'
+    // @todo Uwa need to include into MakeFile from src repository example from mootools:
+    //'build': '0d9113241a90b9cd5643b926795852a2026710d4'
+  };
+}
 
-  Netvibes Widget Platform is free software: you can redistribute it and/or modify
-  it under the terms of the GNU Lesser General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
+if (typeof UWA.Widgets == "undefined") UWA.Widgets = {};
+if (typeof UWA.Scripts == "undefined") UWA.Scripts = {};
+if (typeof UWA.Controls == "undefined") UWA.Controls = {};
+if (typeof UWA.Services == "undefined") UWA.Services = {};
+if (typeof UWA.Templates == "undefined") UWA.Templates = {};
 
-  Netvibes Widget Platform is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public License
-  along with Netvibes Widget Platform.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// @todo Translation of text from English to another language
+if (typeof _ == "undefined") {
+  var _ = function(s) {
+    return s
+  };
+}
 
 /* Method: extend
 
@@ -136,4 +113,54 @@ UWA.log = function(message) {
     else if (window.opera && typeof(opera.postError) == "function") opera.postError(message);
     // else if (window.widget) window.alert(message); // dashboard
     // else window.alert(message); // IE
+}
+
+/*
+License:
+  Copyright (c) 2005-2008 Netvibes (http://www.netvibes.org/).
+
+  This file is part of Netvibes Widget Platform.
+
+  Netvibes Widget Platform is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Netvibes Widget Platform is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with Netvibes Widget Platform.  If not, see <http://www.gnu.org/licenses/>.
+
+Todo:
+
+  Compatibility - To be removed:
+
+  Compatibility mode should be remove after a merge from Netvibes.net
+  from Exposition-Libraries repository preview4 branch or added to an into
+  /UWA/Evironment namespace, where they can use there constants and a dirty
+  mootools/prototype mixed scripts used and into Exposition PHP Library to add
+  Compiler for Netvibes into Copiler/Netvibes new namesapace for clean
+  implementation ot Netvibes into UWA and Exposition.
+*/
+
+if (typeof UWA_NETVIBES_COMPATIBILY == "undefined") {
+  var UWA_NETVIBES_COMPATIBILY = true;
+}
+
+if (UWA_NETVIBES_COMPATIBILY == true) {
+
+  NV_HOST = 'www.netvibes.com';
+  NV_MODULES = 'nvmodules.netvibes.com';
+  NV_AVATARS = 'avatars.netvibes.com';
+  NV_STATIC = 'http://' + NV_HOST;
+  NV_PATH = 'http://' + NV_HOST + '/';
+
+  if (typeof Netvibes == "undefined") var Netvibes = {};
+  if (typeof Netvibes.UI == "undefined") Netvibes.UI = {};
+  Netvibes.UI._idIncrement = 0;
+  UWA.Controls = Netvibes.UI;
+  if (Netvibes.DLA) UWA.Controls.SearchForm = Netvibes.DLA.SearchForm;
 }
