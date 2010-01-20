@@ -16,7 +16,7 @@
 # along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
 #
 
-<VirtualHost *>
+<VirtualHost *:80>
 
     # To Enable SSL :
     # <VirtualHost *:443>
