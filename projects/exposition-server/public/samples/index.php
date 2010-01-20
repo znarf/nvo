@@ -25,6 +25,38 @@ define('BASE_URL_SCHEME', ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on
 define('MAIN_URL', BASE_URL_SCHEME . BASE_URL);
 define('WIDGET_URL', $_SERVER['SCRIPT_URI']);
 
+
+// handle test json request
+if (isset($_GET['json'])) {
+
+    header("Content-type: application/json");
+    echo json_encode(array('date' => date('Y-m-d H:i:s')));
+    exit(0);
+
+// handle test ajax request
+} else if (isset($_GET['ajax'])) {
+
+    ?>
+    <h1>Hello from Ajax</h1>
+    <h2>Ajax Request date is <?php echo date('Y-m-d H:i:s'); ?></h2>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae rutrum
+        justo. Morbi adipiscing consequat facilisis. Proin nunc nunc, condimentum vel
+        sagittis sed, tempus eu ligula. Aliquam vitae elit erat. Proin rhoncus tempus
+        dignissim. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a diam
+        justo. Etiam blandit ligula id risus sollicitudin aliquam. Morbi in sapien dui.
+        Mauris suscipit rutrum dui, nec molestie nulla tincidunt nec. Vivamus nisi dui,
+        pulvinar eu molestie a, mattis ut lectus. Class aptent taciti sociosqu ad litora
+        torquent per conubia nostra, per inceptos himenaeos. Pellentesque habitant morbi
+        tristique senectus et netus et malesuada fames ac turpis egestas. Donec eleifend
+        elementum enim fringilla pellentesque. Suspendisse sit amet tincidunt libero.
+        Sed sollicitudin risus vel orci semper consequat. Aenean lacus tortor, imperdiet
+        id pellentesque eget, pretium vitae ipsum
+    </p>
+    <?php
+    exit(0);
+}
+
 echo '<?xml version="1.0" encoding="utf-8"?>';
 
 ?>
@@ -61,7 +93,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 
     <script type="text/javascript">
 
-      var UWA_WIDGET = '<?php echo BASE_URL; ?>/widget',
+      var UWA_WIDGET = '<?php echo MAIN_URL; ?>/widget',
         UWA_JS = '<?php echo MAIN_URL; ?>/js',
         UWA_CSS = '<?php echo MAIN_URL; ?>/css',
         UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
@@ -145,7 +177,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                 tabs.setContent(name, 'json date is:' + json.date);
               }
 
-              UWA.Data.request('http://basezf.japanim.fr/example/uwa/jsoncallback', {
+              UWA.Data.request('<?php echo MAIN_URL; ?>/samples/index.php?json=true', {
                 method: 'get',
                 type: 'json',
                 proxy: 'ajax',
@@ -158,7 +190,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                 tabs.setContent(name, html);
               }
 
-              UWA.Data.request('http://basezf.japanim.fr/example/uwa/ajaxcallback', {
+              UWA.Data.request('<?php echo MAIN_URL; ?>/samples/index.php?ajax=true', {
                 method: 'get',
                 type: 'html',
                 proxy: 'ajax',
