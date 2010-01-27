@@ -58,7 +58,7 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
      *
      * @var string
      */
-    protected $_extension = 'crx';
+    protected $_extension = 'zip';
 
     /**
      * Mime Type.
@@ -78,9 +78,7 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
         $this->addDirToArchive($ressourcePath . '/chrome');
 
         // add archive files
-        $this->addFileFromStringToArchive('widget.js', '');
         $this->addFileFromStringToArchive('widget.html', $this->getHtml());
-        $this->addFileFromStringToArchive('widget_toolstrips.html', $this->getToolstripsHtml());
         $this->addFileFromStringToArchive('manifest.json', $this->_getJsonManifest());
     }
 
@@ -119,22 +117,10 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
             'icon'              => 'Icon.png',
             'description'       => $metas['description'],
             'version'           => (isset($metas['version']) ? $metas['version'] : '1.0'),
-
-
-            'content_scripts'   => array(array(
-                'js'        => array(
-                    'widget.js',
-                ),
-                'matches'   => array(
-                    'http://*/*',
-                )),
+            'browser_action'    => array(
+                'default_icon' => 'Icon.png',
+                'popup' => 'widget.html',
             ),
-
-            'toolstrips'        => array(
-                'widget_toolstrips.html',
-            ),
-
-            'background_page'   => 'widget.html',
 
             'permissions'       => array(
                 'http://*/*'

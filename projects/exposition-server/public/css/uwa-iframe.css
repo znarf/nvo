@@ -37,6 +37,7 @@
 
 html, body.moduleIframe, #moduleContent {
     background: #FFF;
+    min-width:330px;
 }
 
 html {
@@ -49,7 +50,7 @@ body {
     margin: 0;
     text-align: left;
     color: #333;
-    height: 100%;
+    height: 100%;f
 }
 
 #moduleContent {
