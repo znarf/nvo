@@ -36,12 +36,12 @@ class Exposition_Compiler_Factory
         'Kludget'    => 'Exposition_Compiler_Desktop_Kludget',
         'Chrome'     => 'Exposition_Compiler_Desktop_Chrome',
         'FireFox'    => 'Exposition_Compiler_Desktop_FireFox',
+        'Prism'      => 'Exposition_Compiler_Desktop_Prism',
         'Opera'      => 'Exposition_Compiler_Desktop_Opera',
         'Dashboard'  => 'Exposition_Compiler_Desktop_Dashboard',
         'Screenlets' => 'Exposition_Compiler_Desktop_Screenlets',
         'Jil'        => 'Exposition_Compiler_Desktop_Jil',
         'Vista'      => 'Exposition_Compiler_Desktop_Vista',
-
     );
 
     /**

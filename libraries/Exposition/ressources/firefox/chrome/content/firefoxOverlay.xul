@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://mywidget/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://mywidget/locale/mywidget.dtd">
+<overlay id="mywidget-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="overlay.js"/>
+  <script src="firefoxOverlay.js"/>
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="mywidget-strings" src="chrome://mywidget/locale/mywidget.properties"/>
+  </stringbundleset>
+
+  <menupopup id="menu_ToolsPopup">
+    <menuitem id="mywidget-hello" label="&amp;mywidget.label;"
+              oncommand="mywidget.onMenuItemCommand(event);"/>
+  </menupopup>
+  <popup id="contentAreaContextMenu">
+    <menuitem id="context-mywidget" label="&amp;mywidgetContext.label;"
+              accesskey="&amp;mywidgetContext.accesskey;"
+              insertafter="context-stop"
+              oncommand="mywidget.onMenuItemCommand(event)"/>
+  </popup>
+
+  <hbox id="browser">
+    <vbox id="dm-sidebar-box" insertbefore="sidebar-box">
+        <sidebarheader align="center">
+            <label flex="1"/>
+            <toolbarbutton class="tabs-closebutton" tooltiptext="Close" />
+        </sidebarheader>
+        <browser src="http://uwa.service.japanim.fr/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2Findex.php&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;chromeColor=orange" width="240" id="dailyplayer-browser" flex="1" autoscroll="false"/>
+    </vbox>
+    <splitter id="dm-splitter" insertbefore="sidebar-box" />
+</hbox>
+
+</overlay>

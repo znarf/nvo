@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://mywidget/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://mywidget/locale/mywidget.dtd">
+<overlay id="mywidget-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="overlay.js"/>
+  <script src="thunderbirdOverlay.js"/>
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="mywidget-strings" src="chrome://mywidget/locale/mywidget.properties"/>
+  </stringbundleset>
+
+  <menupopup id="taskPopup">
+    <menuitem id="mywidget-hello" label="&mywidget.label;"
+              oncommand="mywidget.onMenuItemCommand(event);"/>
+  </menupopup>
+  <popup id="threadPaneContext">
+    <menuitem id="context-mywidget" label="&mywidgetContext.label;"
+              accesskey="&mywidgetContext.accesskey;"
+              oncommand="mywidget.onMenuItemCommand(event)"/>
+  </popup>
+</overlay>
