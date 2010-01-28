@@ -711,6 +711,9 @@ UWA.Widget.prototype = {
     * Nothing, but calls the method associated with the given callback name (key)
   */
   callback: function(name, args, bind) {
+
+    UWA.log('widget.callback ' + name);
+
     if (typeof bind == 'undefined') bind = this;
     try {
       if (this[name]) this[name].apply(bind, [args]);
