@@ -254,4 +254,25 @@ html>body select {
 .moduleStatus .powered {
 }
 
+.moduleStatus .configure {
+	display: block;
+	width: 20px;
+	height: 18px;
+	margin: 0;
+	position: absolute;
+	top: -1px;
+	right: 5px;
+	background-image: url(/css/base/img/options.png);
+	text-decoration: none;
+	border: none;
+}
+
+.moduleStatus {
+    background: #FFFFFF none repeat scroll 0 0;
+    border-top: 1px solid #EEEEEE;
+    clear: both;
+    padding: 5px 0;
+    position: relative;
+    text-align: center;
+}
 

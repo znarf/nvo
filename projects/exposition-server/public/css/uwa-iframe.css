@@ -25,8 +25,8 @@
 
 /* to have a nicer look & feel, we import parts of the netvibes garlic theme */
 
-@import "themes/blueberry/uwa-core.css";
-@import "themes/blueberry/uwa-icons.css";
+@import "themes/garlic/uwa-core.css";
+@import "themes/garlic/uwa-icons.css";
 
 /* base layout */
 
@@ -101,4 +101,6 @@ a {
     display:block;
     margin-bottom:0;
 }
+
+
 
