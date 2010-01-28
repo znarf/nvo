@@ -427,12 +427,17 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                     </li>
                 </ul>
 
+                <h2>Beta</h2>
+                <ul>
+                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/vista?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Windows Vista/SEVEN</a> (Work in progress)</li>
+                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Google Chrome</a> (Work in progress)</li>
+                </ul>
+
                 <h2>Unstable</h2>
                 <ul>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Google Chrome</a> (Work in progress)</li>
                     <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/jil?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Jil/Ophone</a> (Work in progress)</li>
-
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/vista?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Windows Vista/SEVEN</a> (Work in progress)</li>
+                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/firefox?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Firefox / Thunderbird</a> (Work in progress)</li>
+                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/prism?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Prism</a> (Work in progress)</li>
                 </ul>
             </div>
         </div>
