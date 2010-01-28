@@ -26,25 +26,19 @@ require_once 'Exposition/Compiler/Desktop.php';
 final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Desktop
 {
     /**
+     * Javascript UWA environment.
+     *
+     * @var string
+     */
+    protected $_environment = 'Frame';
+
+    /**
      * Archive Format of the widget.
      *
+     * @todo should be switched to 'crx'
      * @var string
      */
-    protected $archiveFormat = 'zip';
-
-    /**
-     * Width of the widget.
-     *
-     * @var string
-     */
-    protected $_width = 330;
-
-    /**
-     * Height of the widget.
-     *
-     * @var string
-     */
-    protected $_height = 370;
+    protected $_archiveFormat = 'zip';
 
     /**
      * Compiler Name.
@@ -54,11 +48,19 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
     protected $_platform = 'frame';
 
     /**
-     * Extension.
+     * Stylesheet.
      *
      * @var string
      */
-    protected $_extension = 'zip';
+    protected $_stylesheet = 'uwa-chrome.css';
+
+    /**
+     * Extension.
+     *
+     * @todo should be switched to 'crx'
+     * @var string
+     */
+    protected $_extension = 'crx';
 
     /**
      * Mime Type.
@@ -67,6 +69,9 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
      */
     protected $_mimeType = 'application/x-binary';
 
+    /**
+     * Build Desktop Archive file
+     */
     protected function buildArchive()
     {
         // Add the widget skeleton to the archive
@@ -82,28 +87,36 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
         $this->addFileFromStringToArchive('manifest.json', $this->_getJsonManifest());
     }
 
+    /**
+     * Render Frame compiler
+     *
+     * @return string HTML of widget.html file
+     */
     protected function getHtml()
     {
         $compiler = Exposition_Compiler_Factory::getCompiler($this->_platform, $this->_widget);
 
         $options = array(
-            'displayHeader' => 1,
-            'displayStatus' => 1,
-            'properties'    => array(
+            'displayHeader'         => true,
+            'displayStatus'         => true,
+            'forceJsonRequest'      => true,
+            'properties'            => array(
                 'id' => time(),
             ),
         );
 
         $compiler->setOptions($options);
 
+        $compiler->setStylesheet($this->_stylesheet);
+
         return $compiler->render();
     }
 
-    protected function getToolstripsHtml()
-    {
-        return '';
-    }
-
+    /**
+     * Get manifest.json content
+     *
+     * @return string manifest.json content for current wigdet
+     */
     protected function _getJsonManifest()
     {
         // se details on http://code.google.com/chrome/extensions/getstarted.html
@@ -130,12 +143,22 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
         return Zend_Json::encode($manifest);
     }
 
+    /**
+     * Get extensions file name
+     *
+     * @return string chrome extensions file name
+     */
     public function getFileName()
     {
-        return $this->getNormalizedTitle() . '.' . $this->_extension;
+        return $this->getWidgetName() . '.' . $this->_extension;
     }
 
-    public function getNormalizedTitle()
+    /**
+     * Get clean widget name
+     *
+     * @return string a clean widget name
+     */
+    public function getWidgetName()
     {
         $filename = preg_replace('/[^a-z0-9]/i', '', $this->_widget->getTitle());
         if (!empty($filename)) {
@@ -145,6 +168,11 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
         }
     }
 
+    /**
+     * Get widget minetype header value
+     *
+     * @return string minetype header value
+     */
     public function getFileMimeType()
     {
         return $this->_mimeType;

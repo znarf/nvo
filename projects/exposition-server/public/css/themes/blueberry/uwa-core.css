@@ -18,9 +18,7 @@
 
 .module, .moduleEdit{
 	background: none;
-	margin: 6px !important;
 	border: 0;
-	padding: 6px !important;
 }
 
 .moduleHeader .title,
