@@ -57,7 +57,7 @@ abstract class Exposition_Compiler
      * @var array
      */
     protected $_coreLibraries;
-    
+
      /**
      * JavaScript base Uwa libraries.
      *
@@ -94,15 +94,15 @@ abstract class Exposition_Compiler
         $this->setOptions($options);
 
         $this->_coreLibraries['uwa'] = array_merge(array(
-            'lib/UWA/UWA.js', 
-            'lib/UWA/Drivers/UWA-alone.js', 
+            'lib/UWA/UWA.js',
+            'lib/UWA/Drivers/UWA-alone.js',
             'lib/UWA/Drivers/UWA-legacy.js',
         ), $this->_baseLibraries);
 
         $this->_coreLibraries['uwa-mootools'] = array_merge(array(
-            'lib/mootools-core.js', 
-            'lib/mootools-more.js', 
-            'lib/UWA/UWA.js', 
+            'lib/mootools-core.js',
+            'lib/mootools-more.js',
+            'lib/UWA/UWA.js',
             'lib/UWA/Drivers/UWA-mootools.js'
         ), $this->_baseLibraries);
     }
@@ -118,6 +118,7 @@ abstract class Exposition_Compiler
         foreach ($options as $k => $v) {
             $this->options[$k] = $v;
         }
+
         return $this;
     }
 
@@ -125,10 +126,26 @@ abstract class Exposition_Compiler
      * Set the UWA javascript environment
      *
      * @param string $environment
+     * @return Compiler Object instance
      */
     public function setEnvironment($environment)
     {
         $this->_environment = $environment;
+
+        return $this;
+    }
+
+    /**
+     * Set main Stylesheet
+     *
+     * @param string $stylesheet
+     * @return Compiler Object instance
+     */
+    protected function setStylesheet($stylesheet)
+    {
+        $this->_stylesheet = $stylesheet;
+
+        return $this;
     }
 
     /**
@@ -136,7 +153,7 @@ abstract class Exposition_Compiler
      *
      * @return array
      */
-    protected function _getStylesheets()
+    public function getStylesheets()
     {
         $cssEndPoint = Exposition_Load::getConfig('endpoint', 'css');
         $cssCompressed = Exposition_Load::getConfig('css', 'compressed');
@@ -211,7 +228,7 @@ abstract class Exposition_Compiler
             }
 
         } else {
-        	
+
             if (empty($this->_coreLibraries[$coreLibraryName])) {
                 throw new Exposition_Exception('CoreLibrary name not known.');
             }
@@ -223,7 +240,7 @@ abstract class Exposition_Compiler
             if (isset($this->_environment)) {
                 $javascripts[] = $jsEndPoint . '/lib/UWA/Environments/' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
             }
-        }              
+        }
 
         return $javascripts;
     }
@@ -257,7 +274,7 @@ abstract class Exposition_Compiler
         }
 
         $javascripts[] = $widgetEndPoint . '/js' . (!empty($urlOptions) ? '?' . http_build_query($urlOptions) : '');
-        
+
         // Merge with external scripts
         return array_merge($javascripts, $this->_widget->getExternalScripts());
     }

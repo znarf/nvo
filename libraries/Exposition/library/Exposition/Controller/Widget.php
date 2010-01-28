@@ -74,7 +74,12 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
 
             // Create an empty widget
             $this->_widget = new Exposition_Widget();
-            $this->_widget->setBody('<p>This widget cannot be displayed.</p>');
+
+            if (0) {
+                $this->_widget->setBody('<p>This widget cannot be displayed.</p>');
+            } else {
+                $this->_widget->setBody(sprintf('<p>This widget cannot be displayed cause: %s.</p>', $e->getMessage()));
+            }
         }
 
         // Prevent default rendering
@@ -326,6 +331,40 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
             ->setHeader('Pragma', 'no-cache')
             ->setHeader('Cache-Control', 'no-cache')
             ->setHeader('Location', $url);
+    }
+
+    /**
+     * Renders the widget for firefox
+     */
+    public function firefoxAction()
+    {
+        $compiler = Exposition_Compiler_Factory::getCompiler('FireFox', $this->_widget);
+        $content = $compiler->getFileContent();
+
+        // Configure output
+        $this->getResponse()
+            ->setHeader('Pragma', 'no-cache')
+            ->setHeader('Cache-Control', 'no-cache')
+            ->setHeader('Content-Type', $compiler->getFileMimeType())
+            ->setHeader('Content-Disposition', 'filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
+    }
+
+    /**
+     * Renders the widget for prism
+     */
+    public function prismAction()
+    {
+        $compiler = Exposition_Compiler_Factory::getCompiler('Prism', $this->_widget);
+        $content = $compiler->getFileContent();
+
+        // Configure output
+        $this->getResponse()
+            ->setHeader('Pragma', 'no-cache')
+            ->setHeader('Cache-Control', 'no-cache')
+            ->setHeader('Content-Type', $compiler->getFileMimeType())
+            ->setHeader('Content-Disposition', 'filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
     }
 
     //

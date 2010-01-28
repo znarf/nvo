@@ -77,17 +77,17 @@ final class Exposition_Compiler_Desktop_Dashboard extends Exposition_Compiler_De
         if (!is_readable($ressourcePath)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
-        $this->addDirToZip($ressourcePath . '/dashboard', $dirname);
+        $this->addDirToArchive($ressourcePath . '/dashboard', $dirname);
 
         // Replace the default icon if a rich icon is given
         $richIcon = $this->_widget->getRichIcon();
         if (!empty($richIcon) && preg_match('/\\.png$/i', $richIcon)) {
-            $this->addDistantFileToZip($richIcon, $dirname . 'Icon.png');
+            $this->addDistantFileToArchive($richIcon, $dirname . 'Icon.png');
         }
 
-        $this->addFileFromStringToZip($dirname . 'index.html', $this->getHtml() );
+        $this->addFileFromStringToArchive($dirname . 'index.html', $this->getHtml() );
 
-        $this->addFileFromStringToZip($dirname . 'Info.plist', $this->_getXmlManifest() );
+        $this->addFileFromStringToArchive($dirname . 'Info.plist', $this->_getXmlManifest() );
     }
 
     protected function _getXmlManifest()
@@ -97,17 +97,17 @@ final class Exposition_Compiler_Desktop_Dashboard extends Exposition_Compiler_De
         $identifier = preg_replace('/[^a-z0-9]/i', '', $this->_widget->getTitle());
 
         $options = array(
-            'AllowNetworkAccess'         => true,
-            'AllowInternetPlugins'         => true,
-            'MainHTML'                     => 'index.html',
-            'Width'                     => $this->_width,
-            'Height'                     => $this->_height,
-            'CloseBoxInsetX'             => 15,
-            'CloseBoxInsetY'             => 5,
-            'CFBundleIdentifier'         => 'com.netvibes.widget.' . $identifier,
-            'CFBundleDisplayName'         => $title,
-            'CFBundleName'                 => $title,
-            'CFBundleVersion'             => isset($metas['version']) ? $metas['version'] : '1.0'
+            'AllowNetworkAccess'    => true,
+            'AllowInternetPlugins'  => true,
+            'MainHTML'              => 'index.html',
+            'Width'                 => $this->_width,
+            'Height'                => $this->_height,
+            'CloseBoxInsetX'        => 15,
+            'CloseBoxInsetY'        => 5,
+            'CFBundleIdentifier'    => 'com.uwa.widget.' . $identifier,
+            'CFBundleDisplayName'   => $title,
+            'CFBundleName'          => $title,
+            'CFBundleVersion'       => isset($metas['version']) ? $metas['version'] : '1.0'
         );
 
         $l = array();

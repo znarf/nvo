@@ -76,7 +76,7 @@ class Exposition_Compiler_Live extends Exposition_Compiler
             $l[] = '</item>';
         }
 
-        foreach ($this->_getStylesheets() as $stylesheet) {
+        foreach ($this->getStylesheets() as $stylesheet) {
             $l[] = '<item>';
             $l[] = '<link binding:type="css">' . htmlspecialchars($stylesheet) . '</link>';
             $l[] = '</item>';

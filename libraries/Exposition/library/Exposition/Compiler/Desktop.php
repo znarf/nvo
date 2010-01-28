@@ -31,7 +31,7 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
      *
      * @var string
      */
-    protected $archiveFormat = 'zip';
+    protected $_archiveFormat = 'zip';
 
     /**
      * Instance of Archive Class.
@@ -49,7 +49,7 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
              $tmpPath = Exposition_Load::getConfig('compiler', 'tmpPath');
              $tmpFile = $tmpPath . '/compile' . time() . rand(1, 1000) . '.zip';
 
-            $archive = Exposition_Archive::newArchive($this->archiveFormat, $tmpFile);
+            $archive = Exposition_Archive::newArchive($this->_archiveFormat, $tmpFile);
         }
 
         return $archive;
@@ -192,9 +192,22 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
 
     /*** ABSTRACT FUNCTIONS ***/
 
+    /**
+     * Build Desktop Archive file
+     */
     abstract protected function buildArchive();
 
+    /**
+     * Get widget file name
+     *
+     * @return string widget file name
+     */
     abstract public function getFileName();
 
+    /**
+     * Get widget minetype header value
+     *
+     * @return string minetype header value
+     */
     abstract public function getFileMimeType();
 }

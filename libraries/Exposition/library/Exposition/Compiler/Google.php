@@ -98,7 +98,7 @@ class Exposition_Compiler_Google extends Exposition_Compiler
             $l[] = '<Content type="html"><![CDATA[';
 
             $l[] = '<style type="text/css">';
-            foreach ($this->_getStylesheets() as $stylesheet) {
+            foreach ($this->getStylesheets() as $stylesheet) {
                 $l[] = '@import "' . $stylesheet . '";';
             }
             $l[] = 'body,td,div,span,p{font-family:inherit;}';

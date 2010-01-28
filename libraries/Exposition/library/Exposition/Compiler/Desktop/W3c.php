@@ -51,7 +51,7 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
         $l[] = '<title>' . $this->_widget->getTitle() . '</title>';
         $l[] = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
 
-        foreach ($this->_getStylesheets() as $stylesheet) {
+        foreach ($this->getStylesheets() as $stylesheet) {
             $l[] = '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($stylesheet) . '"/>';
         }
 
@@ -65,7 +65,7 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
         $javascripts = $this->_getJavascripts( array('platform' => $this->_platform) );
 
         foreach ($javascripts as $script) {
-            $l[] = "<script type='text/javascript' src='" . htmlspecialchars($script) . "' charset='utf-8'/>";
+            $l[] = '<script type="text/javascript" src="' . htmlspecialchars($script) . '" charset="utf-8"/></script>';
         }
 
         $l[] = '<script type="text/javascript">';
@@ -113,6 +113,8 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
         $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));
 
         $l[] = "var id = window.widget ? widget.identifier : Math.round(Math.random() * 1000);";
+        $l[] = "if (typeof Environments == 'undefined') var Environments = {};";
+        $l[] = "if (typeof Widgets == 'undefined') var Widgets = {};";
         $l[] = "Environments[id] = new UWA.Environment();";
         $l[] = "Widgets[id] = Environments[id].getModule();";
         $l[] = "UWA.script(Widgets[id]);";

@@ -39,6 +39,9 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
      */
     protected $_stylesheet = 'uwa-iframe.css';
 
+
+
+
     /**
      * Main rendering function.
      *
@@ -114,11 +117,6 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
         $l[] = '</script>';
 
         return implode("\n", $l);
-    }
-
-    public function getStylesheets()
-    {
-        return $this->_getStylesheets();
     }
 
     private function _getFrameScript()

@@ -85,7 +85,7 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
     {
     	// Uwa need Motools
     	$this->_widget->setCoreLibrary('uwa-mootools');
-    	    
+
         // Add the widget skeleton to the archive
         $ressourcePath = Exposition_Load::getConfig('compiler', 'ressourcePath');
         if (!is_readable($ressourcePath)) {
@@ -128,7 +128,7 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
             'platform'     => $this->_platform,
             'className'    => 'CompiledModule'
         ));
-        
+
         // for debug only
         /*
         $javascripts = array(
@@ -136,7 +136,7 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
             'http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()),
         );
         */
-        
+
         foreach ($javascripts as $script) {
             $l[] = '<script type="text/javascript" src="' . $script . '" charset="utf-8"></script>';
         }
@@ -148,7 +148,7 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
         $l[] = '        var vistaModule = new VistaModule(' . ($vistaModule ? 'true' : 'false')  . ');';
         $l[] = '    </script>';
 
-        foreach ($this->_getStylesheets() as $stylesheet) {
+        foreach ($this->getStylesheets() as $stylesheet) {
             $l[] = '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($stylesheet) . '"/>';
         }
 
