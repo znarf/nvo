@@ -1,0 +1,10 @@
+[Parameters]
+id=mywidget@prism.app
+name=MyWidget
+uri=http://uwa.service.japanim.fr/widget/frame?uwaUrl=http%3A%2F%2Fuwa.service.japanim.fr%2Fsamples%2Findex.php&id=54bcd7bc3469f1ccb12f1da055ac3986&header=1
+icon=webapp
+status=true
+location=false
+sidebar=false
+navigation=false
+trayicon=false
