@@ -137,7 +137,7 @@ class Exposition_Proxy
     public function __construct($url, $options = array())
     {
         if (empty($url)) {
-            throw new Exposition_Exception('No URL has been set');
+            throw new Exposition_Proxy_Exception('No URL has been set');
         }
 
         $this->_url = $url;
@@ -158,6 +158,7 @@ class Exposition_Proxy
             'timeout'      => '60',
             'maxredirects' => 5
         );
+
         $this->_client = new Zend_Http_Client($this->_url, $options);
 
         $registry = Zend_Registry::getInstance();
@@ -233,6 +234,13 @@ class Exposition_Proxy
             $body = utf8_encode($body);
         }
 
+        $response = $this->getResponse($body, $this->_type, $this->_object);
+
+        echo $response;
+    }
+
+    public function sendHeader()
+    {
         // use default minType if not valide
         if (!isset($this->_mimeTypes[$this->_type])) {
             $this->_type = self::DEFAULT_MINE_TYPE;
@@ -240,14 +248,6 @@ class Exposition_Proxy
 
         $mimeType = $this->_mimeTypes[$this->_type];
         header("Content-Type: $mimeType");
-
-        if ($this->_object) {
-            echo self::getJsonResponse($body, $this->_type, $this->_object);
-        } else if ($this->_type == 'feed') {
-            echo self::feedToJson($body);
-        } else {
-            echo $body;
-        }
     }
 
     /**
@@ -257,26 +257,38 @@ class Exposition_Proxy
      * @param string $type
      * @return string javascript var code
      */
-    public static function getJsonResponse($string, $type, $objectName)
+    public function getResponse($string, $type, $object = null)
     {
+        // use default minType if not valide
+        if (!isset($this->_mimeTypes[$this->_type])) {
+            $this->_type = self::DEFAULT_MINE_TYPE;
+        }
+
         switch ($type) {
             case 'feed':
-                $objectCleanValue = self::feedToJson($string);
+            case 'rss':
+            case 'atom':
+                $response = self::feedToJson($string);
                 break;
 
+
             case 'json':
-                $objectCleanValue = $string;
+                $response = $string;
                 break;
 
             case 'xml':
             case 'html':
             default:
-                $objectCleanValue = self::stringToJson($string);
+                $response = self::stringToJson($string);
                 break;
         }
 
         // @todo security requirement ? try catch js ?
-        return $objectName . '=' . $objectCleanValue . ';';
+        if (is_null($object)) {
+            return $response;
+        } else {
+            return $object . '=' . $response . ';';
+        }
     }
 
     /**
@@ -344,7 +356,7 @@ class Exposition_Proxy
         } catch (Proxy_Exception $e) {
 
             // @todo error response 500/404 or objectb error ?
-
+            $jsonOutput = array();
         }
 
         return $jsonOutput;
