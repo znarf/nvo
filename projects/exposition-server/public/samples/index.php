@@ -74,6 +74,17 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
     <link rel="stylesheet" type="text/css"
       href="<?php echo MAIN_URL; ?>/css/uwa-standalone.css" />
 
+    <script type="text/javascript">
+
+      // Overload UWA constant to be sure to test current server
+      var UWA_WIDGET = '<?php echo MAIN_URL; ?>/widget',
+        UWA_JS = '<?php echo MAIN_URL; ?>/js',
+        UWA_CSS = '<?php echo MAIN_URL; ?>/css',
+        UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
+        UWA_STATIC = '<?php echo MAIN_URL; ?>/img';
+        
+    </script>
+      
     <script type="text/javascript"
       src="<?php echo MAIN_URL; ?>/js/c/UWA_Standalone.js?v=preview3"></script>
 
@@ -92,12 +103,6 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
     </widget:preferences>
 
     <script type="text/javascript">
-
-      var UWA_WIDGET = '<?php echo MAIN_URL; ?>/widget',
-        UWA_JS = '<?php echo MAIN_URL; ?>/js',
-        UWA_CSS = '<?php echo MAIN_URL; ?>/css',
-        UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
-        UWA_STATIC = '<?php echo MAIN_URL; ?>/img';
 
         // update widget elements
         widget.setTitle('Test Title update');
@@ -213,12 +218,17 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
           widget.onResize();
         }
 
-        var resized = 0;
         var OriginalTitle = widget.getTitle();
 
+        var resized = 0;
         widget.onResize = function() {
-          widget.setTitle(OriginalTitle + '(resized:' + resized++ + ')' );
+            widget.setTitle(OriginalTitle + '(resized:' + resized++ + ')' );
         }
+
+        var refreshed = 0;
+        widget.onRefresh = function() {
+            widget.setTitle(OriginalTitle + '(refreshed:' + refreshed++ + ')' );
+        };
 
     </script>
     </head>
@@ -356,7 +366,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 
                 <div class="nv-thumbnailedList">
                     <div class="item even">
-                        <a href="#"><img src="http://basezf.japanim.fr/images/layouts/uwa/uwa-screenshot.png" alt="" class="thumbnail" /></a>
+                        <a href="#"><img src="<?php echo MAIN_URL; ?>/img/uwa-screenshot.png" alt="" class="thumbnail" /></a>
 
                         <h3><a href="#">Item #1</a></h3>
                         <p>
@@ -366,14 +376,14 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                     </div>
 
                     <div class="item odd">
-                        <a href="#"><img src="http://basezf.japanim.fr/images/layouts/uwa/uwa-screenshot.png" alt="" class="thumbnail" /></a>
+                        <a href="#"><img src="<?php echo MAIN_URL; ?>/img/uwa-screenshot.png" alt="" class="thumbnail" /></a>
                         <h3><a href="#">Item #2</a></h3>
 
                         <p>Short text to test flotting picture behaviour.</p>
                     </div>
 
                     <div class="item even">
-                        <a href="#"><img src="http://basezf.japanim.fr/images/layouts/uwa/uwa-screenshot.png" alt="" class="thumbnail" /></a>
+                        <a href="#"><img src="<?php echo MAIN_URL; ?>/img/uwa-screenshot.png" alt="" class="thumbnail" /></a>
                         <h3><a href="#">Item #3</a></h3>
                         <p>
                             Lorem ipsum dolor sit amet, consectetuer

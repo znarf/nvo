@@ -41,6 +41,17 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
     <link rel="stylesheet" type="text/css"
       href="/css/uwa-standalone.css" />
 
+    <script type="text/javascript">
+
+      // Overload UWA constant to be sure to test current server
+      var UWA_WIDGET = '<?php echo MAIN_URL; ?>/widget',
+        UWA_JS = '<?php echo MAIN_URL; ?>/js',
+        UWA_CSS = '<?php echo MAIN_URL; ?>/css',
+        UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
+        UWA_STATIC = '<?php echo MAIN_URL; ?>/img';
+
+    </script>
+
     <script type="text/javascript"
       src="/js/c/UWA_Standalone.js?v=preview3"></script>
 
@@ -53,12 +64,6 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
     </widget:preferences>
 
     <script type="text/javascript">
-
-      var UWA_WIDGET = '<?php echo BASE_URL; ?>/widget',
-        UWA_JS = '<?php echo MAIN_URL; ?>/js',
-        UWA_CSS = '<?php echo MAIN_URL; ?>/css',
-        UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
-        UWA_STATIC = '<?php echo MAIN_URL; ?>/img'
 
       var DisplayLatestBlogPost = {};
       DisplayLatestBlogPost.display = function(feed) {
