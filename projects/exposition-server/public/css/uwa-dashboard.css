@@ -115,11 +115,11 @@ body {
 
 .infoButton {
     position:absolute;
-    top:8px;
-    right:12px;
+    top:2px;
+    right:16px;
     height:13px;
     width:13px;
-    top:12px;
+    top:6px;
 }
 
 #editContent form, #doneButton {
