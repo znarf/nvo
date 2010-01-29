@@ -391,9 +391,8 @@ class Exposition_Proxy
                 'id'            => $entryId,
                 'id_old'        => $entryId,
                 'title' 		=> $entry->title(),
-                'link' 			=> $entry->link['href'],
+                'link' 			=> $entry->link(),
                 'content' 		=> $entry->content(),
-                'date'			=> 'Jul 17, 2009 16:02:35 GMT',
                 'date'			=> date('M d, Y H:i:s', strtotime($entry->updated())) . ' GMT',
             );
 
