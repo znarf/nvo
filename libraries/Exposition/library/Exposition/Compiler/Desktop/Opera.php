@@ -26,6 +26,13 @@ require_once 'Exposition/Compiler/Desktop/W3c.php';
 final class Exposition_Compiler_Desktop_Opera extends Exposition_Compiler_Desktop_W3c
 {
     /**
+     * Archive Format of the widget
+     *
+     * @var string
+     */
+    protected $_archiveFormat = 'zip';
+
+    /**
      * Javascript UWA environment.
      *
      * @var string

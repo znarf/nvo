@@ -26,11 +26,11 @@ require_once 'Exposition/Compiler/Desktop.php';
 final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Desktop
 {
     /**
-     * Archive Format of the widget.
+     * Archive Format of the widget (zip by default).
      *
      * @var string
      */
-    protected $archiveFormat = 'zip';
+    protected $_archiveFormat = 'zip';
 
     /**
      * Javascript UWA environment.
@@ -83,8 +83,8 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
 
     protected function buildArchive()
     {
-    	// Uwa need Motools
-    	$this->_widget->setCoreLibrary('uwa-mootools');
+        // Uwa need Motools
+        $this->_widget->setCoreLibrary('uwa-mootools');
 
         // Add the widget skeleton to the archive
         $ressourcePath = Exposition_Load::getConfig('compiler', 'ressourcePath');

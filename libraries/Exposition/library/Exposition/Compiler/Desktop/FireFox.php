@@ -26,25 +26,11 @@ require_once 'Exposition/Compiler/Desktop.php';
 final class Exposition_Compiler_Desktop_FireFox extends Exposition_Compiler_Desktop
 {
     /**
-     * Archive Format of the widget.
+     * Archive Format of the widget
      *
      * @var string
      */
-    protected $archiveFormat = 'zip';
-
-    /**
-     * Width of the widget.
-     *
-     * @var string
-     */
-    protected $_width = 330;
-
-    /**
-     * Height of the widget.
-     *
-     * @var string
-     */
-    protected $_height = 370;
+    protected $_archiveFormat = 'zip';
 
     /**
      * Compiler Name.
@@ -112,7 +98,7 @@ final class Exposition_Compiler_Desktop_FireFox extends Exposition_Compiler_Desk
             '      <Description>',
             '        <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id> <!-- thunderbird -->',
             '        <em:minVersion>1.5</em:minVersion>',
-            '        <em:maxVersion>2.0.0.*</em:maxVersion>',
+            '        <em:maxVersion>3.0.0.*</em:maxVersion>',
             '      </Description>',
             '    </em:targetApplication>',
             '  </Description>',

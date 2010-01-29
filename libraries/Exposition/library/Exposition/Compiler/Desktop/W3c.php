@@ -26,6 +26,13 @@ require_once 'Exposition/Compiler/Desktop.php';
 abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Desktop
 {
     /**
+     * Archive Format of the widget
+     *
+     * @var string
+     */
+    protected $_archiveFormat = 'zip';
+
+    /**
      * Extension.
      *
      * @var string

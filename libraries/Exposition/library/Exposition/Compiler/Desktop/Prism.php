@@ -33,20 +33,6 @@ final class Exposition_Compiler_Desktop_Prism extends Exposition_Compiler_Deskto
     protected $_archiveFormat = 'zip';
 
     /**
-     * Width of the widget.
-     *
-     * @var string
-     */
-    protected $_width = 330;
-
-    /**
-     * Height of the widget.
-     *
-     * @var string
-     */
-    protected $_height = 370;
-
-    /**
      * Compiler Name.
      *
      * @var string

@@ -57,7 +57,6 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
     /**
      * Extension.
      *
-     * @todo should be switched to 'crx'
      * @var string
      */
     protected $_extension = 'crx';

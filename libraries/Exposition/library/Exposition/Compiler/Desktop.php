@@ -27,18 +27,11 @@ require_once 'Zend/Http/Client.php';
 abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
 {
     /**
-     * Archive Format of the widget.
+     * Archive Format of the widget (zip by default).
      *
      * @var string
      */
     protected $_archiveFormat = 'zip';
-
-    /**
-     * Instance of Archive Class.
-     *
-     * @var string
-     */
-    protected $archiveClass;
 
     public function getArchive()
     {
@@ -46,8 +39,10 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
 
         // Temporary file path to build the archive
         if (!isset($archive)) {
-             $tmpPath = Exposition_Load::getConfig('compiler', 'tmpPath');
-             $tmpFile = $tmpPath . '/compile' . time() . rand(1, 1000) . '.zip';
+
+            // @todo real tmp + cache
+            $tmpPath = Exposition_Load::getConfig('compiler', 'tmpPath');
+            $tmpFile = $tmpPath . '/compile' . time() . rand(1, 1000) . '.cache';
 
             $archive = Exposition_Archive::newArchive($this->_archiveFormat, $tmpFile);
         }
@@ -56,7 +51,7 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
     }
 
     /**
-     * Retrieves the content of the ZIP archive.
+     * Retrieves the content of the archive.
      *
      * @return string
      */
