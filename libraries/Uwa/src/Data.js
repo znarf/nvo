@@ -132,7 +132,7 @@ UWA.Data = {
       return;
     }
 
-    return this.request(url, { method : 'GET', proxy: 'feed', type: 'feedf', onComplete: callback } );
+    return this.request(url, { method : 'GET', proxy: 'feed', type: 'feed', onComplete: callback } );
   },
 
 
@@ -313,7 +313,7 @@ UWA.Data = {
 
     if (UWA.proxies[request.proxy]) {
       url = UWA.proxies[request.proxy] + '?url=' + encodeURIComponent(url);
-      if (request.proxy == "feed" && request.shortFeed != false) url;
+      if (request.proxy == "feed" && request.shortFeed != false) url += "";
     } else if (request.proxy) {
       UWA.log('no proxy URL set for ' + request.proxy);
     }
