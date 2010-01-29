@@ -97,6 +97,7 @@ class Exposition_Controller_Proxy extends Zend_Controller_Action
         }
 
         $proxy = new Exposition_Proxy($url, $proxyOptions);
+        $proxy->sendHeader();
         $proxy->sendResponse();
     }
 
