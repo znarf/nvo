@@ -131,8 +131,8 @@ UWA.Data = {
       setTimeout(function() { UWA.Feeds[url] = null }, 15000);
       return;
     }
-    if (typeof UWA.feedCallbackType == "undefined") UWA.feedCallbackType = "json";
-    return this.request(url, { method : 'GET', proxy: 'feed', type: UWA.feedCallbackType, onComplete: callback } );
+
+    return this.request(url, { method : 'GET', proxy: 'feed', type: 'feed', onComplete: callback } );
   },
 
 
