@@ -86,11 +86,16 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
     <widget:preferences>
         <preference name="my_text" type="text" label="My text pref" defaultValue="" />
         <preference name="my_password" type="password" label="My password pref" defaultValue="" />
-        <preference name="my_checkbox" type="checkbox" label="My checkbox pref" defaultValue="" />
+        <preference name="my_checkbox" type="boolean" label="My checkbox pref" defaultValue="" />
         <preference name="my_hidden" type="hidden" label="" defaultValue="" />
         <preference name="my_range" type="range" label="My range pref" defaultValue="10" step="5" min="5" max="15" />
     </widget:preferences>
 
+    <style>
+    div#moduleContent
+{ background: url(http://www.gabrielizalo.com/clientes/Bancolombia/back.gif) repeat-x ; }
+
+    </style>
     <script type="text/javascript">
 
       var UWA_WIDGET = '<?php echo MAIN_URL; ?>/widget',
@@ -415,6 +420,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                     <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/blogger?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Blogger</a></li>
                     <li><a target="_blank" href="http://my.live.com/?s=1&amp;add=<?php echo urlencode(MAIN_URL); ?>%2Fwidget%2Flive%3F<?php echo urlencode(urlencode(WIDGET_URL)); ?>">Live</a></li>
                     <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/opera?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Opera</a></li>
+                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/uwa?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">UWA</a></li>
 
                     <li>
                         <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;id=54bcd7bc3469f1ccb12f1da055ac3986">Iframe</a>
