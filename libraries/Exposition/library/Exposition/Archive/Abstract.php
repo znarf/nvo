@@ -170,6 +170,19 @@ abstract class Exposition_Archive_Abstract
     {
         $this->_makeList();
 
+        $this->_initArchive();
+
+        $this->_buildArchive();
+
+        if (!$this->_options['inmemory'] && is_resource($this->_archive)) {
+            fclose($this->_archive);
+        }
+
+        return $this;
+    }
+
+    protected function _initArchive()
+    {
         if (!$this->_options['inmemory']) {
 
             $pwd = getcwd();
@@ -186,14 +199,15 @@ abstract class Exposition_Archive_Abstract
         } else {
             $this->_archive = null;
         }
+    }
 
-        $this->_buildArchive();
-
-        if (!$this->_options['inmemory'] && is_resource($this->_archive)) {
-            fclose($this->_archive);
+    protected function _resetArchiveData()
+    {
+        if (!$this->_options['inmemory']) {
+            file_put_contents($this->_options['path'], null);
+        } else {
+            $this->_archive = null;
         }
-
-        return $this;
     }
 
     /**
@@ -437,9 +451,7 @@ abstract class Exposition_Archive_Abstract
 
         } else {
 
-            $this->_archive = fopen($this->_options['path'], 'wb+');
-            $data = stream_get_contents($this->_archive, $data);
-            fclose($this->_archive);
+            $data = file_get_contents($this->_options['path']);
 
             return $data;
         }

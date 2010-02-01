@@ -38,7 +38,7 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
      * @todo should be switched to 'crx'
      * @var string
      */
-    protected $_archiveFormat = 'zip';
+    protected $_archiveFormat = 'crx';
 
     /**
      * Compiler Name.

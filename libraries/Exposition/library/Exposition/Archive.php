@@ -29,6 +29,7 @@ class Exposition_Archive
         'zip'   => 'zip',
         'tar'   => 'tar',
         'gz'    => 'gzip',
+        'crx'   => 'crx',
     );
 
     /**
