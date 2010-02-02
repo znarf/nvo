@@ -17,20 +17,17 @@
  * along with Exposition PHP Lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// se details on http://code.google.com/chrome/extensions/getstarted.html
-// http://github.com/Constellation/crxmake crx scripts
-// crx output dir: "/Users/hthetiot/Widget.crx"
-// ext dir: "/Users/hthetiot/Desktop/MySampleWidget"
-// generate pemkey to  "/Users/hthetiot/MySampleWidget.pem"
-// create zip
-// include file: "/Users/hthetiot/Desktop/MySampleWidget/widget.html"
-// include file: "/Users/hthetiot/Desktop/MySampleWidget/manifest.json"
-// include file: "/Users/hthetiot/Desktop/MySampleWidget/Icon.png"
-// create zip...done
-// zip file at "/Users/hthetiot/extension.zip"
-// sign zip
-// write crx...done at "/Users/hthetiot/Widget.crx"
-
+//
+// See details on http://code.google.com/chrome/extensions/getstarted.html
+//
+// A Ruby Implementation
+// http://github.com/Constellation/crxmake crx
+//
+// Google Chome Source code:
+// http://src.chromium.org/svn/trunk/src/base/crypto/signature_verifier_unittest.cc
+// http://src.chromium.org/viewvc/chrome/trunk/src/chrome/browser/extensions/sandboxed_extension_unpacker.cc
+//
+// Current results: Signature verification initialization failed. This is most likely caused by a public key in the wrong format (should encode algorithm).
 
 class Exposition_Archive_Crx extends Exposition_Archive_Zip
 {
@@ -40,30 +37,30 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     const MAGIC = 'Cr24';
 
     /**
-     * Current version
-     */
-    const VERSION = '2.0.2';
-
-    /**
      * This is chromium extension version
      */
     const EXT_VERSION = 2;
 
     /**
-     * CERT_PUBLIC_KEY_INFO struct
+     * The signature algorithm is specified as the following ASN.1 structure:
+     *    AlgorithmIdentifier  ::=  SEQUENCE  {
+     *        algorithm               OBJECT IDENTIFIER,
+     *        parameters              ANY DEFINED BY algorithm OPTIONAL  }
      */
-    const CERT_PUBLIC_KEY_INFO = '30 81 9F 30 0D 06 09 2A 86 48 86 F7 0D 01 01 01 05 00 03 81 8D 00';
+    const CERT_PUBLIC_KEY_INFO = '0x30 0x0d 0x06 0x09 0x2a 0x86 0x48 0x86 0xf7 0x0d 0x01 0x01 0x05 0x05 0x00';
 
     /**
-     * This is key lenght
+     * This is private key lenght
      */
     const KEY_SIZE = 1024;
 
     /**
-     * This is key lenght
+     * This is private key digest algorithm
      */
     const KEY_DIGEST_ALG = 'RSA-SHA1';
 
+
+    private $_certificate = null;
 
     private $_privateKey = null;
 
@@ -146,17 +143,28 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     {
         $csrConfig = array(
             'digest_alg'        => self::KEY_DIGEST_ALG,
+            'private_key_type'  => OPENSSL_KEYTYPE_RSA,
             'private_key_bits'  => self::KEY_SIZE,
+            'encrypt_key'       => true,
         );
 
-        // Generate new key
+        // Generate new key ressource
         $this->_privateKey = openssl_pkey_new($csrConfig);
+
+        // Build cert auto-signed
+        $dn = array();  // use defaults
+        $this->_certificate = openssl_csr_new($dn, $this->_privateKey, $csrConfig);
+        $this->_certificate = openssl_csr_sign($this->_certificate, null, $this->_privateKey, 365, $csrConfig);
+
+        // Generate public key ressource
+        //openssl_x509_export($this->_certificate, $certificateToString);
+        $this->_publicKey = openssl_pkey_get_public($this->_certificate);
 
         // Get private key has string
         openssl_pkey_export($this->_privateKey, $this->_privateKeyString);
 
-        // Get public key details has array
-        $this->_publicKeyDetails = openssl_pkey_get_details($this->_privateKey);
+        // Get public key details
+        $this->_publicKeyDetails = openssl_pkey_get_details($this->_publicKey);
 
         return $this;
     }
@@ -169,7 +177,7 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     public function setPrivateKey($privateKeyFile)
     {
         if (!is_readable($privateKeyFile)) {
-            throw new Exposition_Archive_Exception(sprintf('Unable to read Private key file on path <%>', $privateKeyFile));
+            throw new Exposition_Archive_Exception(sprintf('Unable to read Private key file on path <%s>', $privateKeyFile));
         }
 
         // read private key file
@@ -261,14 +269,14 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
      *
      * @return string binary
      */
-    protected static function _convertPemToDer($pemData) {
-
+    protected static function _convertPemToDer($pemData)
+    {
        $begin = 'KEY-----';
        $end   = '-----END';
 
-       $pemData = mb_substr($pemData, mb_strpos($pemData, $begin) + mb_strlen($begin));
-       $pemData = mb_substr($pemData, 0, mb_strpos($pemData, $end));
-       $derData = base64_decode($pemData);
+       $derData = mb_substr($pemData, mb_strpos($pemData, $begin) + mb_strlen($begin));
+       $derData = trim(mb_substr($derData, 0, mb_strpos($derData, $end)));
+       $derData = base64_decode($derData);
 
        return $derData;
     }
