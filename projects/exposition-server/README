@@ -32,7 +32,7 @@ INSTALL
 
       * Using Subversion; use either the current trunk or the 1.9.2 release branch:
         svn co http://framework.zend.com/svn/framework/standard/trunk/library/Zend
-        svn co http://framework.zend.com/svn/framework/standard/branches/release-1.9.2/library/Zend
+        svn co http://framework.zend.com/svn/framework/standard/tags/release-1.9.2/library/Zend
 
       * Using Git; use either the current trunk or the 1.9.2 release branch:
         git clone http://tjohns.net/git/zf.git
