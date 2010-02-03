@@ -91,10 +91,15 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
         <preference name="my_range" type="range" label="My range pref" defaultValue="10" step="5" min="5" max="15" />
     </widget:preferences>
 
-    <style>
-    div#moduleContent
-{ background: url(http://www.gabrielizalo.com/clientes/Bancolombia/back.gif) repeat-x ; }
+    <style type="text/css">
 
+        div#moduleContent {
+                background: url(<?php echo MAIN_URL; ?>/samples/back.gif) repeat-x ;
+        }
+
+        div#moduleContent ul.export-list li img {
+            vertical-align:middle;
+        }
     </style>
     <script type="text/javascript">
 
@@ -130,7 +135,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
           tabs.addTab("tab6", {text: "Json"});
           tabs.addTab("tab7", {text: "Ajax"});
           tabs.addTab("tab8", {text: "Prefs"});
-          tabs.addTab("tab9", {text: "Export"});
+          tabs.addTab("tab9", {text: "Export Widget"});
 
           // Put some content in tabs
           tabs.setContent("tab1", $('hello-content').innerHTML);
@@ -361,7 +366,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 
                 <div class="nv-thumbnailedList">
                     <div class="item even">
-                        <a href="#"><img src="http://basezf.japanim.fr/images/layouts/uwa/uwa-screenshot.png" alt="" class="thumbnail" /></a>
+                        <a href="#"><img src="<?php echo MAIN_URL; ?>/img/uwa-screenshot.png" alt="" class="thumbnail" /></a>
 
                         <h3><a href="#">Item #1</a></h3>
                         <p>
@@ -371,14 +376,14 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                     </div>
 
                     <div class="item odd">
-                        <a href="#"><img src="http://basezf.japanim.fr/images/layouts/uwa/uwa-screenshot.png" alt="" class="thumbnail" /></a>
+                        <a href="#"><img src="<?php echo MAIN_URL; ?>/img/uwa-screenshot.png" alt="" class="thumbnail" /></a>
                         <h3><a href="#">Item #2</a></h3>
 
                         <p>Short text to test flotting picture behaviour.</p>
                     </div>
 
                     <div class="item even">
-                        <a href="#"><img src="http://basezf.japanim.fr/images/layouts/uwa/uwa-screenshot.png" alt="" class="thumbnail" /></a>
+                        <a href="#"><img src="<?php echo MAIN_URL; ?>/img/uwa-screenshot.png" alt="" class="thumbnail" /></a>
                         <h3><a href="#">Item #3</a></h3>
                         <p>
                             Lorem ipsum dolor sit amet, consectetuer
@@ -410,40 +415,88 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 
             <div id="export-content">
 
-                <h2>Stable</h2>
-                <ul>
-                    <li><a target="_blank" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=<?php echo urlencode(WIDGET_URL); ?>">Netvibes</a></li>
+                <h2>Stable - Ready to use</h2>
 
-                    <li><a target="_blank" href="http://www.google.com/ig/add?moduleurl=<?php echo urlencode(MAIN_URL); ?>%2Fwidget%2Fgspec%3FuwaUrl%3D<?php echo urlencode(urlencode(WIDGET_URL)); ?>">iGoogle</a></li>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/dashboard?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Dashboard</a></li>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/screenlets?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Screenlets</a></li>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/blogger?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Blogger</a></li>
-                    <li><a target="_blank" href="http://my.live.com/?s=1&amp;add=<?php echo urlencode(MAIN_URL); ?>%2Fwidget%2Flive%3F<?php echo urlencode(urlencode(WIDGET_URL)); ?>">Live</a></li>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/opera?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Opera</a></li>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/uwa?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">UWA</a></li>
+                <ul class="export-list">
 
                     <li>
-                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;id=54bcd7bc3469f1ccb12f1da055ac3986">Iframe</a>
-                        (
-                            <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1">with header</a>
-                            - <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;chromeColor=orange">with header color</a>
-                            - <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;id=54bcd7bc3469f1ccb12f1da055ac3986&amp;header=1&amp;status=0">without status</a>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/netvibes.gif" alt="Netvibes" />
+                        <a target="_blank" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=<?php echo urlencode(WIDGET_URL); ?>">Netvibes</a>
+                    </li>
 
-                        )
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/google.gif" alt="iGoogle" />
+                        <a target="_blank" href="http://www.google.com/ig/add?moduleurl=<?php echo urlencode(MAIN_URL); ?>%2Fwidget%2Fgspec%3FuwaUrl%3D<?php echo urlencode(urlencode(WIDGET_URL)); ?>">iGoogle</a>
+                    </li>
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/apple.gif" alt="Dashboard" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/dashboard?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Dashboard</a>
+                    </li>
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/blogger.gif" alt="Blogger" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/blogger?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Blogger</a>
+                    </li>
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/microsoft.gif" alt="Windows Vista/Seven" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/vista?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Windows Vista/Seven</a>
+                    </li>
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/msn.gif" alt="Live" />
+                        <a target="_blank" href="http://my.live.com/?s=1&amp;add=<?php echo urlencode(MAIN_URL); ?>%2Fwidget%2Flive%3F<?php echo urlencode(urlencode(WIDGET_URL)); ?>">Live</a>
+                    </li>
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/wordpress.gif" alt="Iframe" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/frame?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&amp;header=1&amp;chromeColor=orange">Iframe</a>
+                    </li>
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/uwa.gif" alt="Uwa" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/uwa?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">UWA</a>
+                    </li>
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/other.gif" alt="Screenlets" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/screenlets?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Screenlets</a>
+                    </li>
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/other.gif" alt="Opera" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/opera?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Opera</a>
+                    </li>
+
+                </ul>
+
+                <h2>Beta - Need testing and improvements</h2>
+                <ul class="export-list">
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/chrome.gif" alt="Google Chrome" />
+                        Google Chrome:
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Packed With CRX</a> -
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&disableCrx=true">Packed With ZIP</a>
                     </li>
                 </ul>
 
-                <h2>Beta</h2>
-                <ul>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/vista?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Windows Vista/SEVEN</a> (Work in progress)</li>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Google Chrome</a> (Work in progress)</li>
-                </ul>
+                <h2>Alpha - Implementation draft</h2>
+                <ul class="export-list">
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/other.gif" alt="Firefox/Thunderbird" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/firefox?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Firefox/Thunderbird</a>
+                    </li>
 
-                <h2>Unstable</h2>
-                <ul>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/jil?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Jil/Ophone</a> (Work in progress)</li>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/firefox?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Firefox / Thunderbird</a> (Work in progress)</li>
-                    <li><a target="_blank" href="<?php echo MAIN_URL; ?>/widget/prism?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Prism</a> (Work in progress)</li>
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/other.gif" alt="Prism" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/prism?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Prism</a>
+                    </li>
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/other.gif" alt="Jil / Ophone" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/jil?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Jil/Ophone</a>
+                    </li>
                 </ul>
             </div>
         </div>
