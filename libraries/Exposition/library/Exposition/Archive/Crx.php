@@ -42,10 +42,9 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     const EXT_VERSION = 2;
 
     /**
-     * The signature algorithm is specified as the following ASN.1 structure:
-     *    AlgorithmIdentifier  ::=  SEQUENCE  {
-     *        algorithm               OBJECT IDENTIFIER,
-     *        parameters              ANY DEFINED BY algorithm OPTIONAL  }
+     * Note: this structure is an ASN.1 which encodes the algorithm used
+     * with its parameters. This is defined in PKCS #1 v2.1 (RFC 3447).
+     * It is encoding: { OID sha1WithRSAEncryption      PARAMETERS NULL }
      */
     const CERT_PUBLIC_KEY_INFO = '0x30 0x0d 0x06 0x09 0x2a 0x86 0x48 0x86 0xf7 0x0d 0x01 0x01 0x05 0x05 0x00';
 
@@ -58,7 +57,6 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
      * This is private key digest algorithm
      */
     const KEY_DIGEST_ALG = 'RSA-SHA1';
-
 
     private $_certificate = null;
 
@@ -95,13 +93,13 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
         $this->_resetArchiveData();
 
         // export public key to string with export format
-        $publicKeyToExportFormat = $this->_getPublicKeyToExportFormat();
+        $publicKeyWithAsn = $this->_exportPublicKeyWithAsn();
 
         $this->_addArchiveData(self::MAGIC);
         $this->_addArchiveData(self::_sizePack(self::EXT_VERSION));
-        $this->_addArchiveData(self::_sizePack(mb_strlen($publicKeyToExportFormat)));
+        $this->_addArchiveData(self::_sizePack(mb_strlen($publicKeyWithAsn)));
         $this->_addArchiveData(self::_sizePack(mb_strlen($this->_archiveSignature)));
-        $this->_addArchiveData($publicKeyToExportFormat);
+        $this->_addArchiveData($publicKeyWithAsn);
         $this->_addArchiveData($this->_archiveSignature);
         $this->_addArchiveData($archiveData);
 
@@ -157,7 +155,7 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
         $this->_certificate = openssl_csr_sign($this->_certificate, null, $this->_privateKey, 365, $csrConfig);
 
         // Generate public key ressource
-        //openssl_x509_export($this->_certificate, $certificateToString);
+        openssl_x509_export($this->_certificate, $certificateToString);
         $this->_publicKey = openssl_pkey_get_public($this->_certificate);
 
         // Get private key has string
@@ -211,28 +209,6 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     }
 
     /**
-     * Get public key info for CRX
-     *
-     * @return string CERT_PUBLIC_KEY_INFO struct concatenate with public key into DER format
-     */
-    protected function _getPublicKeyToExportFormat()
-    {
-        // get public key structure
-        $publicKeyStruct = explode(' ', self::CERT_PUBLIC_KEY_INFO);
-        foreach ($publicKeyStruct as $structIndex => $structValue) {
-            $publicKeyStruct[$structIndex] = pack('C*', hexdec($structValue));
-        }
-
-        $publicKeyStruct = implode('', $publicKeyStruct);
-
-        // get public key has DER format
-        $publicKeyDetails = $this->getPublicKeyDetails();
-        $publicKeyDer = self::_convertPemToDer($publicKeyDetails['key']);
-
-        return  $publicKeyStruct . $publicKeyDer;
-    }
-
-    /**
      * Retreive archive signature from current Private key
      */
     public function _signArchive()
@@ -265,20 +241,77 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     //
 
     /**
-     * Convert PEM key to DER format
+     *
+     * @return string
+     */
+    protected function _exportPublicKeyWithAsn()
+    {
+        $publicKeyAsn = $this->_getPublicKeyASN();
+        $publicKeyDer = $this->_getPublicKeyToDer();
+
+        // @todo
+        $derData = $publicKeyDer;
+        $derData = pack('H*', '020100300d06092a864886f70d010101050004' . self::_derPadding(strlen($derData))) . $derData;
+        $derData = pack('H*', '30' . self::_derPadding(strlen($derData))) . $derData;
+
+        return $derData;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function _getPublicKeyASN()
+    {
+        // get public key structure
+        $publicKeyAsn = explode(' ', self::CERT_PUBLIC_KEY_INFO);
+        foreach ($publicKeyAsn as $headerIndex => $headerValue) {
+            $publicKeyAsn[$headerIndex] = pack('C*', hexdec($headerValue));
+        }
+
+        $publicKeyAsn = implode('', $publicKeyAsn);
+
+        return $publicKeyAsn;
+    }
+
+    /**
+     * Get public key to DER format
      *
      * @return string binary
      */
-    protected static function _convertPemToDer($pemData)
+    protected function _getPublicKeyToDer()
     {
-       $begin = 'KEY-----';
-       $end   = '-----END';
+        // get public key has DER format
+        $publicKeyDetails = $this->getPublicKeyDetails();
 
-       $derData = mb_substr($pemData, mb_strpos($pemData, $begin) + mb_strlen($begin));
-       $derData = trim(mb_substr($derData, 0, mb_strpos($derData, $end)));
-       $derData = base64_decode($derData);
+        $matches = array();
+        if (!preg_match('~^-----BEGIN ([A-Z ]+)-----\s*?([A-Za-z0-9+=/\r\n]+)\s*?-----END \1-----\s*$~D', $publicKeyDetails['key'], $matches)) {
+            throw new Exposition_Archive_Exception('Invalid PEM format encountered when parsing public key');
+        }
 
-       return $derData;
+        $derData = base64_decode(str_replace(array("\r", "\n"), array('', ''), $matches[2]));
+
+	    return $derData;
+    }
+
+    /**
+     * Generate Der padding
+     *
+     * @return mixed
+     */
+    public static function _derPadding($length) {
+
+        if ($length < 128) {
+            return str_pad(dechex($length), 2, '0', STR_PAD_LEFT);
+        }
+
+        $output = dechex($length);
+
+        if (mb_strlen($output) % 2 != 0) {
+            $output = '0'. $output;
+        }
+
+        return dechex(128 + mb_strlen($output)/2) . $output;
     }
 
     /**
