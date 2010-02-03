@@ -86,7 +86,8 @@ ENVIRONMENTS = \
 	Dashboard2 \
 	Live2 \
 	Opera2 \
-	Vista
+	Vista \
+    Blog
 
 UWA_CORE = $(STAGE)/dist/UWA_Core.js
 UWA_MOOTOOLS = $(STAGE)/dist/UWA_Mootools.js
