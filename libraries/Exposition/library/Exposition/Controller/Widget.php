@@ -247,8 +247,11 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
     public function chromeAction()
     {
         $options = array(
-            'appendBody' => $this->getRequest()->getUserParam('appendBody')
+            'appendBody' => $this->getRequest()->getParam('appendBody'),
+            'disableCrx' => $this->getRequest()->getParam('disableCrx'),
+            'privateKey' => $this->getRequest()->getParam('privateKey')
         );
+
 
         $compiler = Exposition_Compiler_Factory::getCompiler('Chrome', $this->_widget, $options);
         $content = $compiler->getFileContent();
@@ -260,6 +263,11 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
             ->setHeader('Content-Type', $compiler->getFileMimeType())
             ->setHeader('Content-Disposition', 'filename="' . $compiler->getFileName() . '"')
             ->appendBody($content);
+    }
+
+    public function chromePemAction()
+    {
+        // add previous request checkiing on chromeAction
     }
 
     /**
@@ -310,7 +318,7 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
     public function liveAction()
     {
         $compiler = Exposition_Compiler_Factory::getCompiler('Live', $this->_widget);
-        $content = $compiler->render();
+        $content = $compiler->getFileContent();
 
         // Configure output
         $this->getResponse()
@@ -325,7 +333,7 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
     public function bloggerAction()
     {
         $compiler = Exposition_Compiler_Factory::getCompiler('Blogger', $this->_widget);
-        $url = $compiler->renderUrl();
+        $url = $compiler->getBloggerWidgetUrl();
 
         $this->getResponse()
             ->setHeader('Pragma', 'no-cache')

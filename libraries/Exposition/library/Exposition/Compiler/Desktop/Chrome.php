@@ -73,6 +73,20 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
      */
     protected function buildArchive()
     {
+        // Disable Crx Format
+        if (isset($this->options['disableCrx'])) {
+            $this->_archiveFormat = 'zip';
+            $this->_extension = 'zip';
+            $this->_mimeType = 'application/zip';
+
+        // else my you want provide add Private Key to Crx formatnnn
+        } else if (
+            isset($this->options['privateKey']) &&
+            mb_strlen($this->options['privateKey']) > 0
+        ) {
+            $this->getArchive()->setPrivateKey($this->_options['privateKey']);
+        }
+
         // Add the widget skeleton to the archive
         $ressourcePath = Exposition_Load::getConfig('compiler', 'ressourcePath');
         if (!is_readable($ressourcePath)) {
