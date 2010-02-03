@@ -38,13 +38,9 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
         static $archive;
 
         // Temporary file path to build the archive
+        // @todo implement cache layer
         if (!isset($archive)) {
-
-            // @todo real tmp + cache
-            $tmpPath = Exposition_Load::getConfig('compiler', 'tmpPath');
-            $tmpFile = $tmpPath . '/compile' . time() . rand(1, 1000) . '.cache';
-
-            $archive = Exposition_Archive::newArchive($this->_archiveFormat, $tmpFile);
+            $archive = Exposition_Archive::newArchive($this->_archiveFormat);
         }
 
         return $archive;
@@ -74,6 +70,7 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
         header('Pragma: public');
         header('Content-type: ' . $this->getFileMimeType());
         header('Content-Disposition: attachment; filename="' . $this->getFileName() . '"');
+
         echo $this->getFileContent();
     }
 
@@ -173,11 +170,13 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
             $urlInfo = parse_url($this->_url);
             $url = $urlInfo['scheme'] . '://' . $urlInfo['host'] . dirname( $urlInfo['path'] ) . '/' . $url;
         }
+
         if (empty($filePath) && empty($dirPath)) {
             $filePath = 'widget/' . basename($fileInfo['path']);
         } else if (!empty($dirPath)) {
             $filePath = $dirPath . basename($fileInfo['path']);
         }
+
         if ($this->addFileToArchive($url, $filePath)) {
             return $filePath;
         } else {
