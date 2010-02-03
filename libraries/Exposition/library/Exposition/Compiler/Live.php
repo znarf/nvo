@@ -51,7 +51,7 @@ class Exposition_Compiler_Live extends Exposition_Compiler
      *
      * @return string
      */
-    public function render()
+    public function getFileContent()
     {
         $metas = $this->_widget->getMetas();
         $richIcon = $this->_widget->getRichIcon();
@@ -94,4 +94,9 @@ class Exposition_Compiler_Live extends Exposition_Compiler
         return implode("\n", $l);
     }
 
+    public function render()
+    {
+        echo $this->getFileContent();
+    }
 }
+
