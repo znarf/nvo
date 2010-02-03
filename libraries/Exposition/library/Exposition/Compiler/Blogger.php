@@ -65,7 +65,7 @@ class Exposition_Compiler_Blogger extends Exposition_Compiler
         return '<iframe frameborder="0" width="' . $this->_width . '" height="' . $this->_height . '" src="' . $widgetEndpoint . '/frame?uwaUrl=' . urlencode($this->_widget->getUrl()) . '"></iframe>';
     }
 
-    public function renderUrl()
+    public function getBloggerWidgetUrl()
     {
         $bloggerParams = array(
             'widget.title'      => $this->_widget->getTitle(),
