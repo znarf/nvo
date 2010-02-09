@@ -76,7 +76,8 @@ MOOTOOLS_FILES = \
 
 CONTROLS = \
 	PrefsForm \
-	TabView
+	TabView \
+    Pager
 
 ENVIRONMENTS = \
 	Frame \

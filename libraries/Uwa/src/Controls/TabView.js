@@ -17,653 +17,649 @@ License:
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
 
-UWA.Controls.TabView = Class.create();
+UWA.Controls.TabView = function (options) {
+    this.initialize(options);
+}
+
 UWA.Controls.TabView.prototype =
 {
-  setOptions : function (options)
-  {
-    this.options =
-    {
-      autohideDropdowns : true, classTabSet : "nv-tabSet", classTabList : "nv-tabList", classTabContent : "nv-tabContent",
-      softPadding : false, orientation : "top", dataKey : "text", extendedAction : false, allowReload : false
-    };
+    initialize: function (options) {
 
-    Object.extend(this.options, options || {})
-  },
+        this.setOptions(options);
+        this.dataItems = {};
+        this.selectedTab = null;
+        this.selectedIndex = this.options.selectedIndex || 0;
+    },
 
-  initialize : function (options)
-  {
-    this.setOptions(options);
-    this.dataItems = {};
-    this.selectedTab = null;
-    this.selectedIndex = this.options.selectedIndex || 0;
-  },
+    setOptions: function (options) {
 
-  _createTabSet : function ()
-  {
-    this.tabSet = document.createElement("div");
-    this.tabSet.className = this.options.classTabSet;
-    this.tabList = document.createElement("ul");
-    this.tabList.className = this.options.classTabList + " autoclear";
+        this.options = {
+            autohideDropdowns: true,
+            classTabSet: "nv-tabSet",
+            classTabList: "nv-tabList",
+            classTabContent: "nv-tabContent",
+            softPadding: false,
+            orientation: "top",
+            dataKey: "text",
+            extendedAction: false,
+            allowReload: false
+        };
 
-    this.tabList.style.padding = "0";
-    if (/^(top|bottom|left|right)$/.test(this.options.orientation)) {
-      Element.addClassName(this.tabList, this.options.orientation)
-    }
+        Object.extend(this.options, options || {})
+    },
 
-    this.tabSet.appendChild(this.tabList)
-  },
+    _createTabSet: function () {
 
-  _createTabItem : function (J, A, K)
-  {
-    if (typeof K == "undefined") {
-      K = {}
-    }
+        this.tabSet = document.createElement("div");
+        this.tabSet.className = this.options.classTabSet;
+        this.tabList = document.createElement("ul");
+        this.tabList.className = this.options.classTabList + " autoclear";
+        this.tabList.style.padding = "0";
 
-    var G = document.createElement("a");
-    G.href = "javascript:void(0)";
-    G.target = "_blank";
-    G.style.whiteSpace = "nowrap";
-
-    G.onclick = function ()
-    {
-      return false;
-    };
-
-    if (A.length)
-    {
-
-      if (A[0].image) {
-        var I = document.createElement("img");
-        I.src = A[0].image;
-        G.appendChild(I)
-      } else {
-        if (A[0].picto)
-        {
-          var C = document.createElement("img");
-          C.src = A[0].picto;
-          C.style.marginRight = "4px";
-          C.style.marginBottom = "-2px";
-          G.appendChild(C)
-        } else {
-          if (A[0].icon)
-          {
-            var F = document.createElement("img");
-            F.src = A[0].icon;
-            F.style.marginRight = "4px";
-            F.style.marginBottom = "-2px";
-            G.appendChild(F)
-          }
+        if (/^(top|bottom|left|right)$/.test(this.options.orientation)) {
+            Element.addClassName(this.tabList, this.options.orientation)
         }
-        var B = document.createElement("span");
-        B.appendChild(document.createTextNode(K.staticText || A[0].text));
-        G.appendChild(B)
-      }
-      J.setAttribute("key", A[0][this.options.dataKey]);
-      var D = document.createElement("span");
-      D.className = "dropdown";
-      do {
-        var E = "dropdownTab-" + (++Netvibes.UI._idIncrement)
-      }
-      while ($(E));
-      D.setAttribute("id", E);
-      var H = document.createElement("img");
-      H.src = "http://" + NV_HOST + "/img/s.gif";
-      H.width = 14;
-      H.height = 14;
-      H.style.verticalAlign = "middle";
-      H.className = "placeHolder";
-      D.appendChild(H);
-      G.appendChild(D);
-      D.onmousedown = this.eventDropDown.bindAsEventListener(this)
-    } else {
-      if (A.image) {
-        var I = document.createElement("img");
-        I.src = A.image;
-        G.appendChild(I)
-      } else {
-        if (A.picto)
-        {
-          var C = document.createElement("img");
-          C.src = A.picto;
-          C.style.marginRight = "4px";
-          C.style.marginBottom = "-2px";
-          G.appendChild(C)
-        } else {
-          if (A.icon)
-          {
-            var F = document.createElement("img");
-            F.src = A.icon;
-            F.style.marginRight = "4px";
-            F.style.marginBottom = "-2px";
-            G.appendChild(F)
-          }
+
+        this.tabSet.appendChild(this.tabList)
+    },
+
+    _createTabItem: function (k, b, l) {
+        if (typeof l == "undefined") {
+            l = {}
         }
-        if (typeof A.text == "string") {
-          G.appendChild(document.createTextNode(A.text))
+        var h = document.createElement("a");
+        h.href = "javascript:void(0)";
+        h.title = b.tooltip || "";
+        h.target = "_blank";
+        h.style.whiteSpace = "nowrap";
+        h.onclick = function ()
+        {
+            return false;
+        };
+        if (b.length)
+        {
+            if (b[0].image) {
+                var j = document.createElement("img");
+                j.src = b[0].image;
+                h.appendChild(j)
+            }
+            else
+            {
+                if (b[0].picto)
+                {
+                    var d = document.createElement("img");
+                    d.src = b[0].picto;
+                    d.style.marginRight = "4px";
+                    d.style.marginBottom = "-2px";
+                    h.appendChild(d)
+                }
+                else
+                {
+                    if (b[0].icon)
+                    {
+                        var g = document.createElement("img");
+                        g.src = b[0].icon;
+                        g.style.marginRight = "4px";
+                        g.style.marginBottom = "-2px";
+                        h.appendChild(g)
+                    }
+                }
+                var c = document.createElement("span");
+                c.appendChild(document.createTextNode(l.staticText || b[0].text));
+                h.appendChild(c)
+            }
+            k.setAttribute("key", b[0][this.options.dataKey]);
+            var e = document.createElement("span");
+            e.className = "dropdown";
+            do {
+                var f = "dropdownTab-" + (++Netvibes.UI._idIncrement)
+            }
+            while ($(f));
+            e.setAttribute("id", f);
+            var i = document.createElement("img");
+            i.src = "http://" + NV_HOST + "/img/s.gif";
+            i.width = 14;
+            i.height = 14;
+            i.style.verticalAlign = "middle";
+            i.className = "placeHolder";
+            e.appendChild(i);
+            h.appendChild(e);
+            e.onmousedown = this.eventDropDown.bindAsEventListener(this)
+        }
+        else
+        {
+            if (b.image) {
+                var j = document.createElement("img");
+                j.src = b.image;
+                h.appendChild(j)
+            }
+            else
+            {
+                if (b.picto)
+                {
+                    var d = document.createElement("img");
+                    d.src = b.picto;
+                    d.style.marginRight = "4px";
+                    d.style.marginBottom = "-2px";
+                    h.appendChild(d)
+                }
+                else
+                {
+                    if (b.icon)
+                    {
+                        var g = document.createElement("img");
+                        g.src = b.icon;
+                        g.style.marginRight = "4px";
+                        g.style.marginBottom = "-2px";
+                        h.appendChild(g)
+                    }
+                }
+                if (typeof b.text == "string") {
+                    h.appendChild(document.createTextNode(b.text))
+                }
+                else {
+                    if (typeof b.text != "undefined") {
+                        h.appendChild(b.text)
+                    }
+                }
+            }
+        }
+        return (h);
+    },
+
+    appendTo: function (a) {
+
+        if (!this.tabSet) {
+            this._createTabSet()
+        }
+        if (!this.selectedTab && this.tabList.hasChildNodes()) {
+            this.selectTab(0, false)
+        }
+        $(a).appendChild(this.tabSet);
+        if (typeof widget == "object" && typeof widget.callback == "function")
+        {
+            widget.callback("onUpdateBody")
+        }
+    },
+
+    addTab: function (d, c, b) {
+
+        if (!this.tabSet) {
+            this._createTabSet()
+        }
+        if (typeof b == "undefined") {
+            b = {}
+        }
+        var a = document.createElement("li");
+        a.className = "tab " + d;
+        a.setAttribute("name", d);
+        if (c.disabled) {
+            Element.addClassName(a, "disabled")
+        }
+        else
+        {
+            a.onclick = this.eventTabClicked.bindAsEventListener(this);
+            if (b.staticText) {
+                a.setAttribute("static", "static")
+            }
+        }
+        a.appendChild(this._createTabItem(a, c, b));
+        if (this.selectedTab == null) {}
+        this.tabList.appendChild(a);
+        this.createTabContent(d);
+        this.dataItems[d] = c;
+        return a;
+    },
+
+    removeTab: function (a) {
+        var b = this.getTab(a);
+        Element.remove(b)
+    },
+
+    setTab: function (c, b, a) {
+        var d = this.getTab(c);
+        this.dataItems[c] = UWA.merge(b, this.dataItems[c]);
+        d.setHTML("");
+        d.appendChild(this._createTabItem(d, this.dataItems[c], a))
+    },
+
+    addExternalLink: function (b, a) {
+        var c = this.getTab(b);
+        c.firstChild.setAttribute("href", a)
+    },
+
+    eventTabClicked: function (b) {
+        if (Event.element(b).className == "placeHolder") {
+            return false
+        }
+        var a = Event.findElement(b, "LI");
+        if (!Element.hasClassName(a, "disabled")) {
+            this.selectTab(a)
+        }
+        return false;
+    },
+
+    eventExtendedActionClicked: function (a) {
+        this.hidePopupMenu();
+        this._notify("extendedActionClicked");
+        return false;
+    },
+
+    enableTab: function (b, a) {
+        var c = this.getTab(b);
+        if (a) {
+            Element.removeClassName(c, "disabled")
         }
         else {
-          G.appendChild(A.text)
+            Element.addClassName(c, "disabled")
         }
-      }
-    }
-    return (G);
-  },
+    },
 
-  appendTo : function (A)
-  {
-    if (!this.tabSet) {
-      this._createTabSet()
-    }
-    if (!this.selectedTab && this.tabList.hasChildNodes()) {
-      this.selectTab(0, false)
-    }
-    $(A).appendChild(this.tabSet);
-    if (typeof widget == "object" && typeof widget.callback == "function")
-    {
-      widget.callback("onUpdateBody")
-    }
-  },
-
-  addTab : function (D, C, B)
-  {
-    if (!this.tabSet) {
-      this._createTabSet()
-    }
-    if (typeof B == "undefined") {
-      B = {}
-    }
-    var A = document.createElement("li");
-    A.className = "tab " + D;
-    A.setAttribute("name", D);
-    if (C.disabled) {
-      Element.addClassName(A, "disabled")
-    } else {
-      A.onclick = this.eventTabClicked.bindAsEventListener(this);
-      if (B.staticText) {
-        A.setAttribute("static", "static")
-      }
-    }
-    A.appendChild(this._createTabItem(A, C, B));
-    if (this.selectedTab == null) {}
-    this.tabList.appendChild(A);
-    this.createTabContent(D);
-    this.dataItems[D] = C;
-    return A;
-  },
-
-  removeTab : function (tab)
-  {
-    var element = this.getTab(tab);
-    Element.remove(element)
-  },
-
-  setTab : function (C, B, A)
-  {
-    var D = this.getTab(C);
-    this.dataItems[C] = UWA.merge(B, this.dataItems[C]);
-    D.setHTML("");
-    D.appendChild(this._createTabItem(D, this.dataItems[C], A))
-  },
-
-  addExternalLink : function (B, A)
-  {
-    var C = this.getTab(B);
-    C.firstChild.setAttribute("href", A)
-  },
-
-  eventTabClicked : function (B)
-  {
-    if (Event.element(B).className == "placeHolder") {
-      return false
-    }
-    var A = Event.findElement(B, "LI");
-    if (!Element.hasClassName(A, "disabled")) {
-      this.selectTab(A)
-    }
-    return false;
-  },
-
-  eventExtendedActionClicked : function (A)
-  {
-    this.hidePopupMenu();
-    this._notify("extendedActionClicked");
-    return false;
-  },
-
-  enableTab : function (B, A)
-  {
-    var C = this.getTab(B);
-    if (A) {
-      Element.removeClassName(C, "disabled")
-    }
-    else {
-      Element.addClassName(C, "disabled")
-    }
-  },
-
-  selectTab : function (E, I)
-  {
-    if (typeof E == "number" || typeof E == "string") {
-      E = this.getTab(E)
-    }
-
-    var A = E.getAttribute("name");
-    if (this.selectedTab && (this.selectedTab.getAttribute("name") == A) && I == undefined && !this.options.allowReload) {
-      return
-    }
-
-    var G = this.tabList.getElementsByTagName("li");
-
-    for (var D = 0, H; H = G[D]; D++)
-    {
-      Element.removeClassName(H, "selected");
-
-      if (this.popupMenu) {
-        this.hidePopupMenu()
-      }
-
-      if (this.options.autohideDropdowns)
-      {
-        var C = $(H).getElementsByClassName("dropdown");
-        $A(C).each(function (J)
+    selectTab: function (e, j) {
+        if (typeof e == "number" || typeof e == "string") {
+            e = this.getTab(e)
+        }
+        var a = e.getAttribute("name");
+        if (this.selectedTab && (this.selectedTab.getAttribute("name") == a) && j == undefined && !this.options.allowReload) {
+            return
+        }
+        var g = this.tabList.getElementsByTagName("li");
+        for (var d = 0, h; h = g[d]; d++)
         {
-          Element.hide(J)
+            Element.removeClassName(h, "selected");
+            if (this.popupMenu) {
+                this.hidePopupMenu()
+            }
+            if (this.options.autohideDropdowns)
+            {
+                var c = $(h).getElementsByClassName("dropdown");
+                $A(c).each(function (i)
+                {
+                    Element.hide(i)
+                })
+            }
+        }
+        Element.addClassName(e, "selected");
+        if (this.options.autohideDropdowns)
+        {
+            var c = $(e).getElementsByClassName("dropdown");
+            $A(c).each(function (i)
+            {
+                Element.show(i)
+            })
+        }
+        for (var d = 0, f; f = this.contentArray[d]; d++)
+        {
+            if (Browser.isSafari && Browser.version < 3 && f.getElementsByTagName("iframe").length == 1 && f.getElementsByTagName("iframe")[0].style.width == "100%")
+            {
+                if (a == f.getAttribute("name")) {
+                    f.style.visibility = "visible";
+                    f.style.position = "static"
+                }
+                else
+                {
+                    var b = f.getElementsByTagName("iframe")[0];
+                    f.style.width = b.contentWindow.innerWidth + "px";
+                    f.style.visibility = "hidden";
+                    f.style.position = "absolute";
+                    f.style.left = "0px";
+                    f.style.top = "0px";
+                }
+            }
+            else {
+                if (a == f.getAttribute("name")) {
+                    Element.show(f)
+                }
+                else {
+                    Element.hide(f)
+                }
+            }
+        }
+        this.selectedTab = e;
+        this.selectedIndex = e.getAttribute("index");
+        if (j === false) {
+            return
+        }
+        this._notify("activeTabChange")
+    },
+
+    hide: function () {
+        Element.hide(this.tabSet)
+    },
+
+    show: function () {
+        Element.show(this.tabSet)
+    },
+
+    hideTabList: function () {
+        Element.hide(this.tabList)
+    },
+
+    showTabList: function () {
+        Element.show(this.tabList)
+    },
+
+    reload: function () {
+        this._notify("activeTabChange")
+    },
+
+    eventDropDown: function (b)
+    {
+        var a = Event.findElement(b, "LI");
+        this.popupMenu = $("minitabsOptions");
+        if (!this.popupMenu)
+        {
+            this.popupMenu = document.createElement("ul");
+            this.popupMenu.setAttribute("id", "minitabsOptions");
+            this.popupMenu.className = "popupMenu";
+            this.popupMenu.style.position = "absolute";
+            document.getElementsByTagName("body").item(0).appendChild(this.popupMenu);
+            Element.hide(this.popupMenu);
+            this.bindedHidePopupMenu = this.hidePopupMenu.bindAsEventListener(this);
+            $(document.body).addEvent("mousedown", this.bindedHidePopupMenu)
+        }
+        var c = $(a).getElementsByClassName("dropdown")[0];
+        if (this.popupMenu.style.display != "none" && this.popupMenu.getAttribute("dropdownId") == c.id) {
+            this.hidePopupMenu();
+            return
+        }
+        this._showPopupMenu(a);
+        this.popupMenu.setAttribute("dropdownId", c.id);
+        Event.stop(b);
+        return false;
+    },
+
+    getTabContent: function (b)
+    {
+        var d = (typeof b == "number") ? "index" : "name";
+        for (var c = 0, a = this.contentArray.length; c < a; c++) {
+            if (this.contentArray[c].getAttribute(d) == b) {
+                return this.contentArray[c];
+            }
+        }
+    },
+
+    setContent: function (a, c) {
+
+        var b = this.getTabContent(a);
+        if (b) {
+            if (typeof c == "string") {
+                b.innerHTML = c
+            }
+            else {
+                b.innerHTML = "";
+                b.appendChild(c)
+            }
+        }
+        if (typeof widget == "object" && typeof widget.callback == "function")
+        {
+            widget.callback("onUpdateBody")
+        }
+    },
+
+    getTab: function (b) {
+        if (typeof b == "string" || typeof b == "number")
+        {
+            var a = this.tabList.getElementsByTagName("li");
+            for (var c = 0, d; d = a[c]; c++) {
+                if (typeof b == "number" && b == c) {
+                    return d
+                }
+                if (b == d.getAttribute("name")) {
+                    return d;
+                }
+            }
+        }
+        return b;
+    },
+
+    observe: function (b, a) {
+        if (!this.observers) {
+            this.observers = []
+        }
+        this.observers.push([b, a]);
+    },
+
+    _notify: function (d) {
+        if (!this.observers) {
+            return
+        }
+        var c = this.selectedTab;
+        var b = this.dataItems[c.getAttribute("name")];
+        if (b.length)
+        {
+            var f = this.options.dataKey;
+            for (var e = 0, a = b.length; e < a; e++) {
+                if (b[e][f] == c.getAttribute("key")) {
+                    b = b[e];
+                    break
+                }
+            }
+        }
+        this.observers.each(function (g)
+        {
+            if (g[0] == d && typeof (g[1]) == "function")
+            {
+                g[1](c.getAttribute("name"), b)
+            }
         })
-      }
-    }
-    Element.addClassName(E, "selected");
+    },
 
-    if (this.options.autohideDropdowns)
-    {
-      var C = $(E).getElementsByClassName("dropdown");
-      $A(C).each(function (J)
-      {
-        Element.show(J)
-      })
-    }
-
-    for (var D = 0, F; F = this.contentArray[D]; D++)
-    {
-      if (Browser.isSafari && Browser.version < 3 && F.getElementsByTagName("iframe").length == 1 && F.getElementsByTagName("iframe")[0].style.width == "100%")
-      {
-        if (A == F.getAttribute("name")) {
-          F.style.visibility = "visible";
-          F.style.position = "static"
-        } else {
-          var B = F.getElementsByTagName("iframe")[0];
-          F.style.width = B.contentWindow.innerWidth + "px";
-          F.style.visibility = "hidden";
-          F.style.position = "absolute";
-          F.style.left = "0px";
-          F.style.top = "0px";
-        }
-      } else {
-        if (A == F.getAttribute("name")) {
-          Element.show(F)
-        } else {
-          Element.hide(F)
-        }
-      }
-    }
-    this.selectedTab = E;
-    this.selectedIndex = E.getAttribute("index");
-    if (I === false) {
-      return
-    }
-    this._notify("activeTabChange")
-  },
-
-  hide : function ()
-  {
-    Element.hide(this.tabSet)
-  },
-
-  show : function ()
-  {
-    Element.show(this.tabSet)
-  },
-
-  hideTabList : function ()
-  {
-    Element.hide(this.tabList)
-  },
-
-  showTabList : function ()
-  {
-    Element.show(this.tabList)
-  },
-
-  reload : function ()
-  {
-    this._notify("activeTabChange")
-  },
-
-  eventDropDown : function (B)
-  {
-    var A = Event.findElement(B, "LI");
-    this.popupMenu = $("minitabsOptions");
-    if (!this.popupMenu)
-    {
-      this.popupMenu = document.createElement("ul");
-      this.popupMenu.setAttribute("id", "minitabsOptions");
-      this.popupMenu.className = "popupMenu";
-      this.popupMenu.style.position = "absolute";
-      document.getElementsByTagName("body").item(0).appendChild(this.popupMenu);
-      Element.hide(this.popupMenu);
-      this.bindedHidePopupMenu = this.hidePopupMenu.bindAsEventListener(this);
-      $(document.body).addEvent("mousedown", this.bindedHidePopupMenu)
-    }
-    var C = $(A).getElementsByClassName("dropdown")[0];
-    if (this.popupMenu.style.display != "none" && this.popupMenu.getAttribute("dropdownId") == C.id) {
-      this.hidePopupMenu();
-      return
-    }
-    this._showPopupMenu(A);
-    this.popupMenu.setAttribute("dropdownId", C.id);
-    Event.stop(B);
-    return false;
-  },
-
-  getTabContent : function (B)
-  {
-    var D = (typeof B == "number") ? "index" : "name";
-    for (var C = 0, A = this.contentArray.length; C < A; C++) {
-      if (this.contentArray[C].getAttribute(D) == B) {
-        return this.contentArray[C];
-      }
-    }
-  },
-
-  setContent : function (A, C)
-  {
-    var B = this.getTabContent(A);
-    if (B) {
-      if (typeof C == "string") {
-        B.innerHTML = C
-      }
-      else {
-        B.innerHTML = "";
-        B.appendChild(C)
-      }
-    }
-    if (typeof widget == "object" && typeof widget.callback == "function")
-    {
-      widget.callback("onUpdateBody")
-    }
-  },
-
-  getTab : function (B)
-  {
-    if (typeof B == "string" || typeof B == "number")
-    {
-      var A = this.tabList.getElementsByTagName("li");
-      for (var C = 0, D; D = A[C]; C++) {
-        if (typeof B == "number" && B == C) {
-          return D
-        }
-        if (B == D.getAttribute("name")) {
-          return D;
-        }
-      }
-    }
-    return B;
-  },
-
-  observe : function (B, A)
-  {
-    if (!this.observers) {
-      this.observers = []
-    }
-    this.observers.push([B, A]);
-  },
-
-  _notify : function (D)
-  {
-    if (!this.observers) {
-      return
-    }
-    var C = this.selectedTab;
-    var B = this.dataItems[C.getAttribute("name")];
-    if (B.length)
-    {
-      var F = this.options.dataKey;
-      for (var E = 0, A = B.length; E < A; E++) {
-        if (B[E][F] == C.getAttribute("key")) {
-          B = B[E];
-          break
-        }
-      }
-    }
-    this.observers.each(function (G)
-    {
-      if (G[0] == D && typeof (G[1]) == "function")
-      {
-        G[1](C.getAttribute("name"), B)
-      }
-    })
-  },
-
-  _showPopupMenu : function (R)
-  {
-    this.tabItem = R;
-    var D = this._getElementCumulativeOffset(R);
-    this.popupMenu.innerHTML = "";
-    try
-    {
-      var A = R.getAttribute("name");
-      var C = this.dataItems[A];
-      var T = R.getAttribute("key");
-      for (var M = 0, P; P = C[M]; M++)
-      {
-        if (P[this.options.dataKey] == T && R.getAttribute("static") != "static") {
-          continue
-        }
-        var H = document.createElement("li");
-        var S = document.createElement("a");
-        if (P.picto)
+    _showPopupMenu: function (u) {
+        var f = this._getElementCumulativeOffset(u);
+        this.popupMenu.innerHTML = "";
+        try
         {
-          var I = document.createElement("img");
-          I.src = P.picto;
-          I.style.marginRight = "4px";
-          I.style.marginBottom = "-2px";
-          S.appendChild(I)
-        } else {
-          if (P.icon)
-          {
-            var N = document.createElement("img");
-            N.src = P.icon;
-            N.style.marginRight = "4px";
-            N.style.marginBottom = "-2px";
-            S.appendChild(N)
-          }
+            var b = u.getAttribute("name");
+            var d = this.dataItems[b];
+            var w = u.getAttribute("key");
+            for (var p = 0, s; s = d[p]; p++)
+            {
+                if (s[this.options.dataKey] == w && u.getAttribute("static") != "static") {
+                    continue
+                }
+                var k = document.createElement("li");
+                var v = document.createElement("a");
+                if (s.picto)
+                {
+                    var l = document.createElement("img");
+                    l.src = s.picto;
+                    l.style.marginRight = "4px";
+                    l.style.marginBottom = "-2px";
+                    v.appendChild(l)
+                }
+                else
+                {
+                    if (s.icon)
+                    {
+                        var q = document.createElement("img");
+                        q.src = s.icon;
+                        q.style.marginRight = "4px";
+                        q.style.marginBottom = "-2px";
+                        v.appendChild(q)
+                    }
+                }
+                v.href = (s.htmlUrl || "javascript:void(0)");
+                v.setAttribute("context", b);
+                v.appendChild(document.createTextNode(s.text));
+                v.setAttribute("key", s[this.options.dataKey]);
+                if (!this.options.extendedAction && (d.length - 1) == p) {
+                    Element.addClassName(v, "last")
+                }
+                v.onclick = this.eventPopupMenuClicked.bindAsEventListener(this);
+                k.appendChild(v);
+                this.popupMenu.appendChild(k)
+            }
+            if (this.options.extendedAction)
+            {
+                var k = document.createElement("li");
+                var v = document.createElement("a");
+                v.href = "javascript:void(0)";
+                Element.addClassName(v, "action");
+                v.setAttribute("context", b);
+                v.appendChild(document.createTextNode(this.options.extendedAction));
+                v.onclick = this.eventExtendedActionClicked.bindAsEventListener(this);
+                k.appendChild(v);
+                this.popupMenu.appendChild(k)
+            }
         }
-        S.href = (P.htmlUrl || "javascript:void(0)");
-        S.setAttribute("context", A);
-        S.appendChild(document.createTextNode(P.text));
-        S.setAttribute("key", P[this.options.dataKey]);
-        if (!this.options.extendedAction && (C.length - 1) == M) {
-          Element.addClassName(S, "last")
+        catch (r) {}
+        var h = Element.getDimensions(u);
+        var t = (typeof App != "undefined" && App.pageCustom && (App.pageCustom.themeTitle == "Coriander")) ? 0 : 1;
+        if (Browser.isSafari || Browser.isOpera) {
+            t = 0
         }
-        S.onclick = this.eventPopupMenuClicked.bindAsEventListener(this);
-        H.appendChild(S);
-        this.popupMenu.appendChild(H)
-      }
-      if (this.options.extendedAction)
-      {
-        var H = document.createElement("li");
-        var S = document.createElement("a");
-        S.href = "javascript:void(0)";
-        Element.addClassName(S, "action");
-        S.setAttribute("context", A);
-        S.appendChild(document.createTextNode(this.options.extendedAction));
-        S.onclick = this.eventExtendedActionClicked.bindAsEventListener(this);
-        H.appendChild(S);
-        this.popupMenu.appendChild(H)
-      }
-    }
-    catch (O) {}
-    var F = Element.getDimensions(R);
-    var Q = (typeof App != "undefined" && App.userCustom && (App.userCustom.themeTitle == "Coriander")) ? 0 : 1;
-    if (Browser.isSafari || Browser.isOpera) {
-      Q = 0
-    }
-    this.popupMenu.style.left = (D[0] + Q) + "px";
-    this.popupMenu.style.top = (D[1] + Q + F.height) + "px";
-    Element.show(this.popupMenu);
-    this.popupMenu.style.width = "auto";
-    var B = Element.getDimensions(this.popupMenu).width;
-    if (B < F.width) {
-      var Q = 12;
-      if (Browser.isIE) {
-        Q = 11
-      }
-      this.popupMenu.style.width = F.width - Q + "px"
-    }
-    var L = $(this.tabList).getElementsByClassName("dropped");
-    $A(L).each(function (U)
-    {
-      Element.removeClassName(U, "dropped")
-    });
-    Element.addClassName(R, "dropped");
-    if (typeof widget == "object" && typeof widget.callback == "function")
-    {
-      var P;
-      var K;
-      P = widget.body;
-      var E = 0;
-      while (P && P != document.body) {
-        E += P.offsetTop;
-        P = P.offsetParent
-      }
-      P = this.popupMenu;
-      var J = 0;
-      while (P && P != document.body) {
-        J += P.offsetTop;
-        P = P.offsetParent
-      }
-      popupDim = Element.getDimensions(this.popupMenu);
-      bodyDim = widget.body.getDimensions();
-      var G = J - E + popupDim.height;
-      if (bodyDim.height < G) {
-        widget.body.style.height = G + "px"
-      }
-      widget.callback("onUpdateBody");
-    }
-  },
-
-  eventPopupMenuClicked : function (F)
-  {
-    var D = Event.findElement(F, "A");
-    var E = D.getAttribute("context");
-    var H = this.getTab(E);
-    if (H.getAttribute("static") != "static")
-    {
-      var G = this.options.dataKey;
-      var B;
-      for (var C = 0, A = this.dataItems[E].length; C < A; C++) {
-        if (this.dataItems[E][C][G] == D.getAttribute("key")) {
-          B = this.dataItems[E][C];
-          break
+        this.popupMenu.style.left = (f[0] + t) + "px";
+        this.popupMenu.style.top = (f[1] + t + h.height) + "px";
+        Element.show(this.popupMenu);
+        this.popupMenu.style.width = "auto";
+        var c = Element.getDimensions(this.popupMenu).width;
+        if (c < h.width) {
+            var t = 12;
+            if (Browser.isIE) {
+                t = 11
+            }
+            this.popupMenu.style.width = h.width - t + "px"
         }
-      }
-      H.getElementsByTagName("span")[0].innerHTML = B.text;
-      if (B.picto) {
-        H.getElementsByTagName("img")[0].src = B.picto
-      }
-      else {
-        if (B.icon) {
-          H.getElementsByTagName("img")[0].src = B.icon;
+        var o = $(this.tabList).getElementsByClassName("dropped");
+        $A(o).each(function (a)
+        {
+            Element.removeClassName(a, "dropped")
+        });
+        Element.addClassName(u, "dropped");
+        if (typeof widget == "object" && typeof widget.callback == "function")
+        {
+            var s;
+            var n;
+            s = widget.body;
+            var g = 0;
+            while (s && s != document.body) {
+                g += s.offsetTop;
+                s = s.offsetParent
+            }
+            s = this.popupMenu;
+            var m = 0;
+            while (s && s != document.body) {
+                m += s.offsetTop;
+                s = s.offsetParent
+            }
+            popupDim = Element.getDimensions(this.popupMenu);
+            bodyDim = widget.body.getDimensions();
+            var j = m - g + popupDim.height;
+            if (bodyDim.height < j) {
+                widget.body.style.height = j + "px"
+            }
+            widget.callback("onUpdateBody");
         }
-      }
-    }
-    H.setAttribute("key", D.getAttribute("key"));
-    this._notify("activeTabChange");
-    this.selectTab(H);
-    this.hidePopupMenu();
-    Event.stop(F);
-    return false;
-  },
+    },
 
-  selectKey : function (D, F, A)
-  {
-    var H = this.getTab(D);
-    var C = null;
-    var G = this.options.dataKey;
-    for (var E = 0, B = this.dataItems[D].length; E < B; E++) {
-      if (this.dataItems[D][E][G] == F) {
-        C = this.dataItems[D][E];
-        break
-      }
-    }
-    if (C)
-    {
-      H.getElementsByTagName("span")[0].innerHTML = C.text;
-      H.setAttribute("key", F);
-      if (C.icon) {
-        H.getElementsByTagName("img")[0].src = C.icon
-      }
-      if (A == undefined || A) {
-        this.selectTab(H)
-      }
-    }
-  },
+    eventPopupMenuClicked: function (g) {
+        var d = Event.findElement(g, "A");
+        var f = d.getAttribute("context");
+        var j = this.getTab(f);
+        if (j.getAttribute("static") != "static")
+        {
+            var h = this.options.dataKey;
+            var b;
+            for (var c = 0, a = this.dataItems[f].length; c < a; c++) {
+                if (this.dataItems[f][c][h] == d.getAttribute("key")) {
+                    b = this.dataItems[f][c];
+                    break
+                }
+            }
+            j.getElementsByTagName("span")[0].innerHTML = b.text;
+            if (b.picto) {
+                j.getElementsByTagName("img")[0].src = b.picto
+            }
+            else {
+                if (b.icon) {
+                    j.getElementsByTagName("img")[0].src = b.icon;
+                }
+            }
+        }
+        j.setAttribute("key", d.getAttribute("key"));
+        this._notify("activeTabChange");
+        this.selectTab(j);
+        this.hidePopupMenu();
+        Event.stop(g);
+        return false;
+    },
 
-  hidePopupMenu : function (A)
-  {
-    if (!this.popupMenu || (A && Event.element(A).tagName == "A")) {
-      return false
-    }
-    Element.hide(this.popupMenu);
-    var B = $(this.tabList).getElementsByClassName("dropped");
-    $A(B).each(function (C)
-    {
-      Element.removeClassName(C, "dropped")
-    });
-    if (typeof widget == "object" && typeof widget.callback == "function")
-    {
-      widget.body.style.height = "";
-      widget.callback("onUpdateBody")
-    }
-  },
+    selectKey: function (d, f, a) {
+        var h = this.getTab(d);
+        var c = null;
+        var g = this.options.dataKey;
+        for (var e = 0, b = this.dataItems[d].length; e < b; e++) {
+            if (this.dataItems[d][e][g] == f) {
+                c = this.dataItems[d][e];
+                break
+            }
+        }
+        if (c)
+        {
+            h.getElementsByTagName("span")[0].innerHTML = c.text;
+            h.setAttribute("key", f);
+            if (c.icon) {
+                h.getElementsByTagName("img")[0].src = c.icon
+            }
+            if (a == undefined || a) {
+                this.selectTab(h)
+            }
+        }
+    },
 
-  createTabContent : function (B, A)
-  {
-    var C = document.createElement("div");
-    if (this.options.softPadding)
-    {
-      if (Browser.isIE) {
-        C.style.padding = "3px 3px 3px 3px"
-      }
-      else {
-        C.style.padding = "6px 3px 3px 3px";
-      }
-    }
-    C.className = this.options.classTabContent + " " + B;
-    C.setAttribute("name", B);
-    C.innerHTML = _("Loading...");
-    this.tabSet.appendChild(C);
-    if (!this.contentArray) {
-      this.contentArray = []
-    }
-    this.contentArray.push(C);
-    C.setAttribute("tabIndex", this.contentArray.length - 1)
-  },
+    hidePopupMenu: function (a) {
+        if (!this.popupMenu || (a && Event.element(a).tagName == "A")) {
+            return false
+        }
+        Element.hide(this.popupMenu);
+        var b = $(this.tabList).getElementsByClassName("dropped");
+        $A(b).each(function (c)
+        {
+            Element.removeClassName(c, "dropped")
+        });
+        if (typeof widget == "object" && typeof widget.callback == "function")
+        {
+            widget.body.style.height = "";
+            widget.callback("onUpdateBody")
+        }
+    },
 
-  destroy : function ()
-  {
-    $(document.body).removeEvent("mousedown", this.bindedHidePopupMenu)
-  },
+    createTabContent: function (b, a) {
 
-  _getElementCumulativeOffset : function (B)
-  {
-    var A = 0, C = 0;
-    do {
-      A += B.offsetTop || 0;
-      C += B.offsetLeft || 0;
-      B = B.offsetParent
+        var c = document.createElement("div");
+        if (this.options.softPadding)
+        {
+            if (Browser.isIE) {
+                c.style.padding = "3px 3px 3px 3px"
+            }
+            else {
+                c.style.padding = "6px 3px 3px 3px";
+            }
+        }
+        c.className = this.options.classTabContent + " " + b;
+        c.setAttribute("name", b);
+        c.innerHTML = _("Loading...");
+        this.tabSet.appendChild(c);
+        if (!this.contentArray) {
+            this.contentArray = []
+        }
+        this.contentArray.push(c);
+        c.setAttribute("tabIndex", this.contentArray.length - 1)
+    },
+
+    destroy: function () {
+        $(document.body).removeEvent("mousedown", this.bindedHidePopupMenu)
+    },
+
+    _getElementCumulativeOffset: function (b) {
+        var a = 0, c = 0;
+        do {
+            a += b.offsetTop || 0;
+            c += b.offsetLeft || 0;
+            b = b.offsetParent
+        }
+        while (b);
+        return [c, a];
     }
-    while (B);
-    return [C, A];
-  }
 };
