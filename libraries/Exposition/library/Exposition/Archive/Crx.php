@@ -26,8 +26,6 @@
 // Google Chome Source code:
 // http://src.chromium.org/svn/trunk/src/base/crypto/signature_verifier_unittest.cc
 // http://src.chromium.org/viewvc/chrome/trunk/src/chrome/browser/extensions/sandboxed_extension_unpacker.cc
-//
-// Current results: Signature verification initialization failed. This is most likely caused by a public key in the wrong format (should encode algorithm).
 
 class Exposition_Archive_Crx extends Exposition_Archive_Zip
 {
