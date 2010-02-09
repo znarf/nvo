@@ -36,6 +36,10 @@ class Exposition_Load
             'cache'           => array(),
         ),
 
+        'proxy'  => array(
+            'cache'           => array(),
+        ),
+
         'endpoint'  => array(
 
             // Exposition endpoints

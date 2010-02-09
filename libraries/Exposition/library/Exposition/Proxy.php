@@ -88,13 +88,6 @@ class Exposition_Proxy
     private $_object= null;
 
     /**
-     * JavaScript callback function.
-     *
-     * @var array
-     */
-    private $_callback = null;
-
-    /**
      * Mime types to be used in responses headers.
      *
      * @var array
@@ -126,7 +119,7 @@ class Exposition_Proxy
      *
      * @var integer
      */
-    private $_cachetime = 0;
+    private $_cachetime = 60;
 
     /**
      * Constructor.
@@ -141,7 +134,7 @@ class Exposition_Proxy
         }
 
         $this->_url = $url;
-        $this->_key = 'ajax_' . md5($this->_url);
+        $this->_key = 'ajax_' . sha1($this->_url);
 
         foreach ($options as $name => $value) {
             if ($name == 'type') {
@@ -160,9 +153,6 @@ class Exposition_Proxy
         );
 
         $this->_client = new Zend_Http_Client($this->_url, $options);
-
-        $registry = Zend_Registry::getInstance();
-        $this->_cache = $registry['cache'];
     }
 
     /**
@@ -200,25 +190,38 @@ class Exposition_Proxy
     public function getBody()
     {
         $cache = $this->getCache();
+
+        // get from cache
         if ($cache) {
-            $body = $cache->load($this->_key . '_body');
+            $body = $cache->load($this->_key);
         }
+
+        // get from live source
         if (empty($body)) {
+
             try {
                 $this->_response = $this->_client->request();
+
+                // Service unavailable
+                if ($this->_response->getStatus() == 503) {
+                    header('HTTP/1.1 ' . $this->_response->getStatus() . ' ' . $this->_response->getMessage());
+                    exit;
+                }
+
+                // get body has var
+                $body = $this->_response->getBody();
+
+                // save body into cache
+                if ($cache && $this->isCachable() && mb_strlen($body) < 200000) {
+                    $cache->save($body, $this->_key);
+                }
+
             } catch (Zend_Http_Client_Exception $e) {
                 error_log("Http exception via AjaxProxy on " . $this->_url);
                 return null;
             }
-            if ($this->_response->getStatus() == 503) { // Service unavailable
-                header('HTTP/1.1 ' . $this->_response->getStatus() . ' ' . $this->_response->getMessage());
-                exit;
-            }
-            $body = $this->_response->getBody();
-            if ($cache && $this->isCachable() && strlen($body) < 200000) {
-                $cache->save($body, $this->_key . '_body');
-            }
         }
+
         return $body;
     }
 
@@ -279,7 +282,7 @@ class Exposition_Proxy
             case 'xml':
             case 'html':
             default:
-                $response = self::stringToJson($string);
+                $response = $string;
                 break;
         }
 
@@ -319,6 +322,46 @@ class Exposition_Proxy
      */
     public function getCache()
     {
+        // initilize cache if null
+        if (is_null($this->_cache)) {
+
+            $proxyCache = Exposition_Load::getConfig('proxy', 'cache');
+
+            // no cache config or no cache time
+            if (empty($proxyCache) || $this->_cachetime == 0) {
+
+                $this->_cache = false;
+
+            // else use config
+            } else {
+
+                // build frontend cache options
+                $frontendOptions = array();
+                if (isset($proxyCache['frontend']) && is_array($proxyCache['frontend'])) {
+                    $frontendOptions = $proxyCache['frontend'];
+                }
+
+                // build backend cache options
+                $backendOptions = array();
+                if (isset($proxyCache['backend']) && is_array($proxyCache['backend'])) {
+                    $backendOptions = $proxyCache['backend'];
+                }
+
+                // create cache instance
+                $this->_cache = Zend_Cache::factory(
+                    'Core',
+                    $proxyCache['adapter'],
+                    $frontendOptions,
+                    $backendOptions
+                );
+
+                // set _cachetime has cache lifetime
+                $this->_cache->getBackend()->setDirectives(array(
+                    'lifetime' => $this->_cachetime,
+                ));
+            }
+        }
+
         return $this->_cache;
     }
 
@@ -446,3 +489,4 @@ class Exposition_Proxy
         return Zend_Json::encode($arrayOutput);
     }
 }
+
