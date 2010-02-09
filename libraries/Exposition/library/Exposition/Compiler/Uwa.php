@@ -87,14 +87,27 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
             }
             $l[] = '</widget:preferences>';
         }
+
         if (isset($style) && strlen($style) > 0) {
             $l[] = '<style type="text/css">'. "\n" . $style . '</style>';
         }
+
+        $proxyEndpoint = Exposition_Load::getConfig('endpoint', 'proxy');
+        $proxies = array(
+            'ajax' => $proxyEndpoint . '/ajax',
+            'feed' => $proxyEndpoint . '/feed'
+        );
+
+        $l[] = '<script type="text/javascript"><![CDATA[';
+        $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));
+        $l[] = ']]></script>';
+
         if (isset($script) && strlen($script) > 0) {
             $l[] = '<script type="text/javascript"><![CDATA[';
             $l[] = $script;
             $l[] = ']]></script>';
         }
+
         $l[] = '</head>';
         $l[] = '<body>';
         $l[] = $this->_widget->getBody();
