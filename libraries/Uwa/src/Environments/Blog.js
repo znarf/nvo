@@ -42,7 +42,7 @@ Object.extend(UWA.Environment.prototype,
     setConfiguration: function (options)
     {
 
-    }
+    },
 
     onRegisterModule: function ()
     {
