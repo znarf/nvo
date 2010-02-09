@@ -42,13 +42,6 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     const EXT_VERSION = 2;
 
     /**
-     * Note: this structure is an ASN.1 which encodes the algorithm used
-     * with its parameters. This is defined in PKCS #1 v2.1 (RFC 3447).
-     * It is encoding: { OID sha1WithRSAEncryption      PARAMETERS NULL }
-     */
-    const CERT_PUBLIC_KEY_INFO = '0x30 0x0d 0x06 0x09 0x2a 0x86 0x48 0x86 0xf7 0x0d 0x01 0x01 0x05 0x05 0x00';
-
-    /**
      * This is private key lenght
      */
     const KEY_SIZE = 1024;
@@ -56,16 +49,26 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     /**
      * This is private key digest algorithm
      */
-    const KEY_DIGEST_ALG = 'RSA-SHA1';
+    const KEY_DIGEST_ALG = 'sha1';
 
-    private $_certificate = null;
-
+    /**
+     * Private Key ressource
+     */
     private $_privateKey = null;
 
+    /**
+     * Private Key string
+     */
     private $_privateKeyString = null;
 
+    /**
+     * Public Key details
+     */
     private $_publicKeyDetails = array();
 
+    /**
+     * Archive Signature
+     */
     private $_archiveSignature = null;
 
     /**
@@ -80,6 +83,8 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
      */
     protected function _buildArchive()
     {
+        //$this->setPrivateKey('/home/hthetiot/projects/netvibes.org/tmp/test/MySampleWidget.pem');
+
         // create original zip archive
         parent::_buildArchive();
 
@@ -93,13 +98,13 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
         $this->_resetArchiveData();
 
         // export public key to string with export format
-        $publicKeyWithAsn = $this->_exportPublicKeyWithAsn();
+        $publicKeyDer = $this->_getPublicKeyToDer();
 
         $this->_addArchiveData(self::MAGIC);
         $this->_addArchiveData(self::_sizePack(self::EXT_VERSION));
-        $this->_addArchiveData(self::_sizePack(mb_strlen($publicKeyWithAsn)));
-        $this->_addArchiveData(self::_sizePack(mb_strlen($this->_archiveSignature)));
-        $this->_addArchiveData($publicKeyWithAsn);
+        $this->_addArchiveData(self::_sizePack(strlen($publicKeyDer)));
+        $this->_addArchiveData(self::_sizePack(strlen($this->_archiveSignature)));
+        $this->_addArchiveData($publicKeyDer);
         $this->_addArchiveData($this->_archiveSignature);
         $this->_addArchiveData($archiveData);
 
@@ -114,14 +119,15 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
      */
     public function _extractArchive($outputDir)
     {
-        /// @todo
+        throw new Exposition_Archive_Exception('No yet implemented');
+
         return parent::_extractArchive();
     }
 
     /**
      * Get current private key
      *
-     * @return object open_ssl ressource
+     * @return object OpenSSL private key ressource
      */
     public function getPrivateKey()
     {
@@ -133,36 +139,40 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     }
 
     /**
+     * Get OpenSSL PHP config
+     *
+     * @return array on OpenSSL config
+     */
+    static protected function _getCsrConfig()
+    {
+        return array(
+            'config'            => '/etc/ssl/openssl.cnf',
+            'digest_alg'        => self::KEY_DIGEST_ALG,
+            'x509_extensions'   => 'v3_ca',
+            'req_extensions'    => 'v3_req',
+            'private_key_bits'  => self::KEY_SIZE,
+            'private_key_type'  => OPENSSL_KEYTYPE_RSA,
+            'encrypt_key'       => true,
+        );
+    }
+
+    /**
      * Generate a new  private key and set has current private key
      *
      * @return object current archive instance
      */
     public function generatePrivateKey()
     {
-        $csrConfig = array(
-            'digest_alg'        => self::KEY_DIGEST_ALG,
-            'private_key_type'  => OPENSSL_KEYTYPE_RSA,
-            'private_key_bits'  => self::KEY_SIZE,
-            'encrypt_key'       => true,
-        );
+        $csrConfig = self::_getCsrConfig();
 
         // Generate new key ressource
         $this->_privateKey = openssl_pkey_new($csrConfig);
-
-        // Build cert auto-signed
-        $dn = array();  // use defaults
-        $this->_certificate = openssl_csr_new($dn, $this->_privateKey, $csrConfig);
-        $this->_certificate = openssl_csr_sign($this->_certificate, null, $this->_privateKey, 365, $csrConfig);
-
-        // Generate public key ressource
-        openssl_x509_export($this->_certificate, $certificateToString);
-        $this->_publicKey = openssl_pkey_get_public($this->_certificate);
 
         // Get private key has string
         openssl_pkey_export($this->_privateKey, $this->_privateKeyString);
 
         // Get public key details
-        $this->_publicKeyDetails = openssl_pkey_get_details($this->_publicKey);
+        $this->_publicKeyDetails = openssl_pkey_get_details($this->_privateKey);
 
         return $this;
     }
@@ -183,12 +193,14 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
         $privateKey = fread($fp, 8192);
         fclose($fp);
 
+        $csrConfig = self::_getCsrConfig();
+
         $this->_privateKey = openssl_get_privatekey($privateKey);
 
         // Get private key has string
         openssl_pkey_export($this->_privateKey, $this->_privateKeyString);
 
-        // Get public key details has array
+        // Get public key details
         $this->_publicKeyDetails = openssl_pkey_get_details($this->_privateKey);
 
         return $this;
@@ -197,7 +209,7 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
     /**
      * Get current public key
      *
-     * @return string  current public key
+     * @return array current public key details
      */
     public function getPublicKeyDetails()
     {
@@ -210,6 +222,8 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
 
     /**
      * Retreive archive signature from current Private key
+     *
+     * @return string archive signature
      */
     public function _signArchive()
     {
@@ -220,98 +234,39 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
         // free signature
         $this->_archiveSignature = null;
 
-        // generate
-        openssl_sign($data, $archiveSignature, $this->_privateKeyString, OPENSSL_ALGO_SHA1);
+        // generate Signature
+        openssl_sign($data, $this->_archiveSignature, $this->_privateKeyString, OPENSSL_ALGO_SHA1);
 
         // check signature
-        $valid = openssl_verify($data, $archiveSignature, $publicKeyDetails['key'], OPENSSL_ALGO_SHA1);
+        $valid = openssl_verify($data, $this->_archiveSignature, $publicKeyDetails['key'], OPENSSL_ALGO_SHA1);
 
         if($valid !== 1) {
             throw new Exposition_Archive_Exception('Unable to sign archive');
         }
 
-        // save signature
-        $this->_archiveSignature = $archiveSignature;
-
         return $this->_archiveSignature;
-    }
-
-    //
-    // Tools
-    //
-
-    /**
-     *
-     * @return string
-     */
-    protected function _exportPublicKeyWithAsn()
-    {
-        $publicKeyAsn = $this->_getPublicKeyASN();
-        $publicKeyDer = $this->_getPublicKeyToDer();
-
-        // @todo
-        $derData = $publicKeyDer;
-        $derData = pack('H*', '020100300d06092a864886f70d010101050004' . self::_derPadding(strlen($derData))) . $derData;
-        $derData = pack('H*', '30' . self::_derPadding(strlen($derData))) . $derData;
-
-        return $derData;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function _getPublicKeyASN()
-    {
-        // get public key structure
-        $publicKeyAsn = explode(' ', self::CERT_PUBLIC_KEY_INFO);
-        foreach ($publicKeyAsn as $headerIndex => $headerValue) {
-            $publicKeyAsn[$headerIndex] = pack('C*', hexdec($headerValue));
-        }
-
-        $publicKeyAsn = implode('', $publicKeyAsn);
-
-        return $publicKeyAsn;
     }
 
     /**
      * Get public key to DER format
      *
-     * @return string binary
+     * @return string binary DER public key format
      */
     protected function _getPublicKeyToDer()
     {
         // get public key has DER format
         $publicKeyDetails = $this->getPublicKeyDetails();
+        $pemData = $publicKeyDetails['key'];
 
         $matches = array();
-        if (!preg_match('~^-----BEGIN ([A-Z ]+)-----\s*?([A-Za-z0-9+=/\r\n]+)\s*?-----END \1-----\s*$~D', $publicKeyDetails['key'], $matches)) {
+        if (!preg_match('~^-----BEGIN ([A-Z ]+)-----\s*?([A-Za-z0-9+=/\r\n]+)\s*?-----END \1-----\s*$~D', $pemData, $matches)) {
             throw new Exposition_Archive_Exception('Invalid PEM format encountered when parsing public key');
         }
 
-        $derData = base64_decode(str_replace(array("\r", "\n"), array('', ''), $matches[2]));
+        $derData = str_replace(array("\r", "\n"), array('', ''), $matches[2]);
+        $derData = base64_decode($derData, true);
 
 	    return $derData;
-    }
-
-    /**
-     * Generate Der padding
-     *
-     * @return mixed
-     */
-    public static function _derPadding($length) {
-
-        if ($length < 128) {
-            return str_pad(dechex($length), 2, '0', STR_PAD_LEFT);
-        }
-
-        $output = dechex($length);
-
-        if (mb_strlen($output) % 2 != 0) {
-            $output = '0'. $output;
-        }
-
-        return dechex(128 + mb_strlen($output)/2) . $output;
     }
 
     /**
@@ -326,7 +281,7 @@ class Exposition_Archive_Crx extends Exposition_Archive_Zip
 
     public function __destruct()
     {
-        if (!is_null($this->_privateKey)) {
+        if (is_resource($this->_privateKey)) {
             openssl_free_key($this->_privateKey);
         }
     }
