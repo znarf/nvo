@@ -44,8 +44,8 @@ class Exposition_Parser_Uwa extends Exposition_Parser
      */
     public $knownLibraries = array(
         'UWA.Controls.TabView'     => 'UWA/Controls/TabView.js',
-        /*
         'UWA.Controls.Pager'       => 'UWA/Controls/Pager.js',
+        /*
         'UWA.Controls.ToolTip'     => 'UWA/Controls/ToolTip.js',
         'UWA.Controls.SearchForm'  => 'UWA/Controls/SearchForm.js',
         'UWA.Controls.FlashPlayer' => 'App/Controls/FlashPlayer.js',
