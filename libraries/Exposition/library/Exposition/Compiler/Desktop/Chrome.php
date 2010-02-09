@@ -141,7 +141,7 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
         $manifest = array(
             'name'              => $title,
             'icon'              => 'Icon.png',
-            'description'       => $metas['description'],
+            'description'       => !empty($metas['description']) ? $metas['description'] : $title,
             'version'           => (isset($metas['version']) ? $metas['version'] : '1.0'),
             'browser_action'    => array(
                 'default_icon' => 'Icon.png',
