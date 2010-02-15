@@ -17,7 +17,6 @@
  * along with Exposition PHP Lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 require_once 'Zend/Json.php';
 require_once 'Zend/Http/Client.php';
 
@@ -119,7 +118,7 @@ class Exposition_Proxy
      *
      * @var integer
      */
-    private $_cachetime = 60;
+    private $_cachetime = 0;
 
     /**
      * Constructor.
@@ -242,6 +241,9 @@ class Exposition_Proxy
         echo $response;
     }
 
+    /**
+     * Send Proxy headers
+     */
     public function sendHeader()
     {
         // use default minType if not valide
@@ -250,7 +252,9 @@ class Exposition_Proxy
         }
 
         $mimeType = $this->_mimeTypes[$this->_type];
-        header("Content-Type: $mimeType");
+        header('Content-Type:' . $mimeType);
+
+        return $this;
     }
 
     /**
@@ -267,29 +271,44 @@ class Exposition_Proxy
             $this->_type = self::DEFAULT_MINE_TYPE;
         }
 
+        // set response json type default value
+        $isJsonResponse = false;
+
+        // parse source
         switch ($type) {
             case 'feed':
             case 'rss':
             case 'atom':
+                $isJsonResponse = true;
                 $response = self::feedToJson($string);
                 break;
 
-
             case 'json':
+                $isJsonResponse = true;
                 $response = $string;
                 break;
 
             case 'xml':
             case 'html':
             default:
+                $isJsonResponse = false;
                 $response = $string;
                 break;
         }
 
-        // @todo security requirement ? try catch js ?
+        // return simple response type
         if (is_null($object)) {
+
             return $response;
+
+        // return json response type
         } else {
+
+            // force json encode on non json formated response
+            if ($isJsonResponse === false) {
+                $response =  Zend_Json::encode($response);
+            }
+
             return $object . '=' . $response . ';';
         }
     }
@@ -363,17 +382,6 @@ class Exposition_Proxy
         }
 
         return $this->_cache;
-    }
-
-    /**
-     * Format string as Javascript Object value
-     *
-     * @param string $string simple string
-     * @return string json var value part
-     */
-    public static function stringToJson($string)
-    {
-        return '"' . str_replace("\n", '\n', addslashes($string)) . '"';
     }
 
     /**
