@@ -1,0 +1,136 @@
+/**
+ * Copyright Netvibes 2006-2009.
+ * This file is part of Exposition PHP Server.
+ *
+ * Exposition PHP Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Exposition PHP Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+body {
+    background: rgb(197,204,211) url(/css/themes/iphone/img/stripes.png);
+    font-family: Helvetica;
+    margin: 0 0 0 10px;
+    padding: 0;
+    -webkit-user-select: none;
+    -webkit-text-size-adjust: none;
+}
+
+.moduleContent {
+    background: none;
+}
+
+.module, .moduleEdit {
+	background: transparent url(/css/themes/garlic/img/white30.png);
+	margin: 10px;
+	border: 0;
+	padding: 6px;
+}
+
+.module .moduleFrame,
+.moduleEdit .moduleFrame {
+    border: 1px solid #86abe4;
+
+}
+
+.moduleHeader .title,
+.moduleHeader .title a {
+    margin: auto 5px;
+    padding: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0;
+    text-align: center;
+    line-height:1em;
+}
+
+.editContent {
+    background: #F5F5F5 url(/css/themes/garlic/img/editcontent.png) repeat-x center top;
+    border: 0;
+    border-bottom: 1px solid #DDD;
+}
+
+/* white, default */
+.moduleHeader {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 10px;
+    line-height: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0;
+    text-overflow: ellipsis;
+    color: #FFFFFF;
+    background: url(/css/themes/iphone/img/iPhoneToolbar.png) #6d84a2 repeat-x;
+    border-bottom: 1px solid #2d3642;
+}
+
+.moduleHeader a:link, .moduleHeader a:visited, .moduleHeader a:hover{
+   color: #FFFFFF;
+   text-decoration: none;
+}
+
+.moduleHeader .edit,
+.moduleHeader .refresh {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    -webkit-border-image: url(/css/themes/iphone/img/iPhoneButton.png) 0 5 0 5;
+    -webkit-border-radius: 0;
+    border-width: 0 5px 0 5px;
+    padding: 0;
+    height: 28px;
+    line-height: 28px;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0;
+    text-decoration: none;
+    background: none;
+}
+
+.moduleHeader .refresh {
+    right: 60px;
+}
+
+
+/* Tabs */
+ul.nv-tabList {
+
+}
+
+ul.nv-tabList li {
+
+}
+
+ul.nv-tabList li a {
+    border: 1px solid #DDD;
+    border-bottom: 0;
+    background: #FFF url(/css/themes/garlic/img/tablist.png) repeat-x center top;
+    color: #888;
+}
+
+ul.nv-tabList li.dropped a,
+ul.nv-tabList li.dropped a:hover,
+ul.nv-tabList li a:hover,
+ul.nv-tabList li.selected a {
+    border: 1px solid #DDD;
+    border-bottom: 0;
+    background: #F0F0F0 url(/css/themes/garlic/img/tablist-selected.png) repeat-x center top;
+    color: #333;
+}
+
+.nv-tabContent{
+    border: 1px solid #DDD;
+    background: #FFF;
+}
+

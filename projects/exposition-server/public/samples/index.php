@@ -53,6 +53,11 @@ if (isset($_GET['json'])) {
         Sed sollicitudin risus vel orci semper consequat. Aenean lacus tortor, imperdiet
         id pellentesque eget, pretium vitae ipsum
     </p>
+
+    <p>
+
+        "'
+    </p>
     <?php
     exit(0);
 }
@@ -94,7 +99,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
     <style type="text/css">
 
         div#moduleContent {
-                background: url(<?php echo MAIN_URL; ?>/samples/back.gif) repeat-x ;
+              background: #FFF url(<?php echo MAIN_URL; ?>/samples/back.gif) repeat-x ;
         }
 
         div#moduleContent ul.export-list li img {
@@ -478,6 +483,10 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                         Google Chrome:
                         <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Packed With CRX</a> -
                         <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&disableCrx=true">Packed With ZIP</a>
+                    </li>
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/apple.gif" alt="Iphone" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/iphone?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Iphone</a>
                     </li>
                 </ul>
 

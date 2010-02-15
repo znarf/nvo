@@ -1,0 +1,93 @@
+/**
+ * Copyright Netvibes 2006-2009.
+ * This file is part of Exposition PHP Server.
+ *
+ * Exposition PHP Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Exposition PHP Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* uwa base stylesheets */
+
+@import "/css/base/uwa-core.css";
+@import "/css/base/uwa-typo.css";
+@import "/css/base/uwa-extras.css";
+/*@import "base/uwa-icons.css";*/
+
+/* to have a nicer look & feel, we import parts of the netvibes garlic theme */
+
+@import "/css/themes/iphone/uwa-core.css";
+@import "/css/themes/iphone/uwa-icons.css";
+
+/* base layout */
+
+body, html {
+    padding: 0;
+    margin: 0;
+}
+
+#moduleContent {
+    text-align: left;
+    border-top: 0;
+}
+
+/* rules imported from /css/themes/base/screen.css */
+
+a:link, a:visited{
+    color: #333;
+}
+
+a:hover{
+    color: #F60;
+}
+
+img{
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+}
+
+table {
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    padding-left: 5px;
+}
+
+li {
+    list-style-type: none;
+    background: transparent url(/css/base/img/bullet.png) no-repeat left 0.5ex;
+    margin-bottom: 2px;
+    padding-left: 10px;
+}
+
+/* rules imported from /css/themes/exposition-blueberry/screen.css */
+a {
+    text-decoration: none;
+}
+
+/* hand cursor not needed in iframe environment */
+
+.moduleHeader {
+    cursor:inherit;
+}
+
+/* tune the editContent */
+
+.editContent {
+    display:block;
+    margin-bottom:0;
+}
+
+
+
