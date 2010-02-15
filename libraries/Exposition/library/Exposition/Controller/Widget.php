@@ -124,6 +124,21 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
     }
 
     /**
+     * Renders the widget in standalone mode with XML well-formedness and Iphone Skin
+     */
+    public function iphoneAction()
+    {
+        $compiler = Exposition_Compiler_Factory::getCompiler('iphone', $this->_widget);
+        $content = $compiler->render();
+
+        // Configure output
+        $this->getResponse()
+            ->setHeader('Content-Type', 'application/xhtml+xml; charset=utf-8')
+            ->setHeader('Cache-Control', 'max-age=300')
+            ->appendBody($content);
+    }
+
+    /**
      * Renders the widget styles.
      */
     public function cssAction()
@@ -251,7 +266,6 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
             'disableCrx' => $this->getRequest()->getParam('disableCrx'),
             'privateKey' => $this->getRequest()->getParam('privateKey')
         );
-
 
         $compiler = Exposition_Compiler_Factory::getCompiler('Chrome', $this->_widget, $options);
         $content = $compiler->getFileContent();
