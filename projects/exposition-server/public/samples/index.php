@@ -71,6 +71,8 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
   xmlns:widget="http://www.netvibes.com/ns/">
 
   <head>
+    <title>My Sample Widget</title>
+
     <meta name="author" content="Exposition Libraries" />
     <meta name="description" content="Displays Sample CSS and Crontols for UWA" />
     <meta name="apiVersion" content="1.2" />
@@ -79,14 +81,13 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
     <link rel="stylesheet" type="text/css"
       href="<?php echo MAIN_URL; ?>/css/uwa-standalone.css" />
 
+    <link rel="icon" type="image/png" href="<?php echo MAIN_URL; ?>/img/icon.png" />
+
     <script type="text/javascript"
       src="<?php echo MAIN_URL; ?>/js/c/UWA_Standalone.js?v=preview3"></script>
 
     <script type="text/javascript"
       src="<?php echo MAIN_URL; ?>/js/c/UWA_Controls_TabView.js?v=preview3"></script>
-
-    <title>My Sample Widget</title>
-    <link rel="icon" type="image/png" href="<?php echo MAIN_URL; ?>/img/icon.png" />
 
     <widget:preferences>
         <preference name="my_text" type="text" label="My text pref" defaultValue="" />
@@ -114,15 +115,14 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
         UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
         UWA_STATIC = '<?php echo MAIN_URL; ?>/img';
 
-        // update widget elements
-        widget.setTitle('Test Title update');
-        widget.setIcon("http://cdn.netvibes.com/modules/uwa/icon.png");
-        widget.setUnreadCount(1);
-        widget.setSearchResultCount(2);
-
         var TabViewSample = {};
 
         widget.onLoad = function() {
+
+          // update widget elements
+          widget.setTitle('Test Title update');
+          widget.setUnreadCount(1);
+          widget.setSearchResultCount(2);
 
           // init tab system
           if (typeof(TabViewSample.tabs) == "undefined") {
@@ -176,7 +176,6 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
           }
 
           widget.setBody(TabViewSample.tabs.tabSet);
-          widget.onResize();
         }
 
         TabViewSample.onActiveTabChanged = function(name, data) {
@@ -224,15 +223,6 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 
               tabs.setContent(name, html);
           }
-
-          widget.onResize();
-        }
-
-        var resized = 0;
-        var OriginalTitle = widget.getTitle();
-
-        widget.onResize = function() {
-          widget.setTitle(OriginalTitle + '(resized:' + resized++ + ')' );
         }
 
     </script>
