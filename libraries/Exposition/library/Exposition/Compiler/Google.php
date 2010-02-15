@@ -114,8 +114,7 @@ class Exposition_Compiler_Google extends Exposition_Compiler
 
             $l[] = $this->_getJavascriptConstants();
 
-            $javascripts = $this->_getJavascripts( array('platform' => $this->_platform) );
-
+            $javascripts = $this->_getJavascripts(array('platform' => $this->_platform));
             foreach ($javascripts as $javascript) {
                 $l[] = '<script type="text/javascript" src="' . $javascript . '"></script>';
             }
@@ -169,13 +168,18 @@ class Exposition_Compiler_Google extends Exposition_Compiler
         $string = '';
         $dom = new DOMDocument('1.0', 'utf-8');
         $preferences = $this->_widget->getPreferences();
+
         foreach($preferences as $preference) {
+
             $preference = $preference->toArray();
             $element = $dom->createElement('UserPref');
             $element->setAttribute('name', $preference['name']);
+
             if (isset($preference['defaultValue'])) $element->setAttribute('default_value', $preference['defaultValue']);
             if (isset($preference['label'])) $element->setAttribute('display_name', $preference['label']);
+
             switch($preference['type']) {
+
                 case 'list':
                     $element->setAttribute('datatype', 'enum');
                     if (isset($preference['options']) && count($preference['options']) > 0) {
@@ -187,6 +191,7 @@ class Exposition_Compiler_Google extends Exposition_Compiler
                         }
                     }
                     break;
+
                 case 'range':
                     $element->setAttribute('datatype', 'enum');
                     for($i = $preference['min']; $i <= $preference['max']; $i += $preference['step'] ) {
@@ -195,19 +200,25 @@ class Exposition_Compiler_Google extends Exposition_Compiler
                         $element->appendChild($value);
                     }
                     break;
+
                 case 'boolean':
                     $element->setAttribute('datatype', 'bool');
                     break;
+
                 case 'hidden':
                     $element->setAttribute('datatype', 'hidden');
                     break;
+
                 case 'string':
                 default:
                     $element->setAttribute('datatype', 'string');
                     break;
             }
+
             $string .= $dom->saveXML($element) . "\n";
         }
+
         return $string;
     }
 }
+

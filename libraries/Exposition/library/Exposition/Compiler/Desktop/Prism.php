@@ -23,7 +23,7 @@ require_once 'Exposition/Compiler/Desktop.php';
 /**
  * Prism Widgets Compiler.
  */
-final class Exposition_Compiler_Desktop_Prism extends Exposition_Compiler_Desktop
+final class Exposition_Compiler_Desktop_Prism extends Exposition_Compiler_Desktop_W3c
 {
     /**
      * Archive Format of the widget.
@@ -37,7 +37,7 @@ final class Exposition_Compiler_Desktop_Prism extends Exposition_Compiler_Deskto
      *
      * @var string
      */
-    protected $_platform = 'frame';
+    protected $_platform = 'Uwa';
 
     /**
      * Extension.
@@ -63,8 +63,15 @@ final class Exposition_Compiler_Desktop_Prism extends Exposition_Compiler_Deskto
 
         $this->addDirToArchive($ressourcePath . '/prism');
 
+        // Replace the default icon if a rich icon is given
+        $richIcon = $this->_widget->getRichIcon();
+        if (!empty($richIcon) && preg_match('/\\.png$/i', $richIcon)) {
+            $this->addDistantFileToArchive($richIcon, 'webapp.png');
+        }
+
+        // Add other widget files
         $this->addFileFromStringToArchive('override.ini', $this->_getOverrideConfig());
-        $this->addFileFromStringToArchive('webapp.ini', $this->_getWebappConfig());
+        $this->addFileFromStringToArchive('webapp.ini', $this->_getManifest());
     }
 
     protected function getHtml()
@@ -96,7 +103,7 @@ final class Exposition_Compiler_Desktop_Prism extends Exposition_Compiler_Deskto
         return implode("\n", $content);
     }
 
-    protected function _getWebappConfig()
+    protected function _getManifest()
     {
         $widgetEndpoint = Exposition_Load::getConfig('endpoint', 'widget');
 
@@ -117,16 +124,27 @@ final class Exposition_Compiler_Desktop_Prism extends Exposition_Compiler_Deskto
         return implode("\n", $content);
     }
 
-    public function getFileName()
-    {
-        return $this->getNormalizedTitle() . '.' . $this->_extension;
-    }
 
     public function getNormalizedId()
     {
         return strtolower($this->getNormalizedTitle()) . '@prism.app';
     }
 
+    /**
+     * Get clean widget file name
+     *
+     * @return string a clean widget name
+     */
+    public function getFileName()
+    {
+        return $this->getNormalizedTitle() . '.' . $this->_extension;
+    }
+
+    /**
+     * Get clean widget title
+     *
+     * @return string a clean widget name
+     */
     public function getNormalizedTitle()
     {
         $filename = preg_replace('/[^a-z0-9]/i', '', $this->_widget->getTitle());
@@ -137,6 +155,11 @@ final class Exposition_Compiler_Desktop_Prism extends Exposition_Compiler_Deskto
         }
     }
 
+    /**
+     * Get widget minetype header value
+     *
+     * @return string minetype header value
+     */
     public function getFileMimeType()
     {
         return $this->_mimeType;

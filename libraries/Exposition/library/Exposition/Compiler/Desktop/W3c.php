@@ -55,10 +55,13 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
             ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
         $l[] = '<html xmlns="http://www.w3.org/1999/xhtml">';
         $l[] = '<head>';
-        $l[] = '<title>' . $this->_widget->getTitle() . '</title>';
+
+        $l[] = '<title>' . htmlspecialchars($this->_widget->getTitle()) . '</title>';
         $l[] = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
 
-        foreach ($this->getStylesheets() as $stylesheet) {
+        // Add Widget stylesheet
+        $stylesheets = $this->getStylesheets();
+        foreach ($stylesheets as $stylesheet) {
             $l[] = '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($stylesheet) . '"/>';
         }
 
@@ -67,10 +70,11 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
 
         $l[] = $this->_getHtmlBody();
 
+        // Add Widget javascript constants
         $l[] = $this->_getJavascriptConstants();
 
-        $javascripts = $this->_getJavascripts( array('platform' => $this->_platform) );
-
+        // Add Widget javascripts
+        $javascripts = $this->_getJavascripts(array('platform' => $this->_platform));
         foreach ($javascripts as $script) {
             $l[] = '<script type="text/javascript" src="' . htmlspecialchars($script) . '" charset="utf-8"/></script>';
         }
@@ -110,15 +114,6 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
     protected function _getScript()
     {
         $l = array();
-
-        $proxyEndPoint = Exposition_Load::getConfig('endpoint', 'proxy');
-        $proxies = array(
-            'ajax' => $proxyEndPoint . '/ajax',
-            'feed' => $proxyEndPoint . '/feed'
-        );
-
-        $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));
-
         $l[] = "var id = window.widget ? widget.identifier : Math.round(Math.random() * 1000);";
         $l[] = "if (typeof Environments == 'undefined') var Environments = {};";
         $l[] = "if (typeof Widgets == 'undefined') var Widgets = {};";
@@ -130,6 +125,11 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
         return implode("\n", $l);
     }
 
+    /**
+     * Get clean widget file name
+     *
+     * @return string a clean widget name
+     */
     public function getFileName()
     {
         $filename = $this->getNormalizedTitle();
@@ -140,11 +140,21 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
         }
     }
 
+    /**
+     * Get clean widget title
+     *
+     * @return string a clean widget name
+     */
     public function getNormalizedTitle()
     {
         return $this->_widget->getTitle();
     }
 
+    /**
+     * Get widget minetype header value
+     *
+     * @return string minetype header value
+     */
     public function getFileMimeType()
     {
         return $this->_mimeType;
@@ -152,6 +162,6 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
 
     /*** ABSTRACT FUNCTIONS ***/
 
-    abstract protected function _getXmlManifest();
-
+    abstract protected function _getManifest();
 }
+

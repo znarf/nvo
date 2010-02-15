@@ -26,6 +26,13 @@ require_once 'Exposition/Compiler/Desktop/W3c.php';
 final class Exposition_Compiler_Desktop_Dashboard extends Exposition_Compiler_Desktop_W3c
 {
     /**
+     * Archive Format of the widget
+     *
+     * @var string
+     */
+    protected $_archiveFormat = 'zip';
+
+    /**
      * Javascript UWA environment.
      *
      * @var string
@@ -77,6 +84,7 @@ final class Exposition_Compiler_Desktop_Dashboard extends Exposition_Compiler_De
         if (!is_readable($ressourcePath)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
+
         $this->addDirToArchive($ressourcePath . '/dashboard', $dirname);
 
         // Replace the default icon if a rich icon is given
@@ -85,12 +93,12 @@ final class Exposition_Compiler_Desktop_Dashboard extends Exposition_Compiler_De
             $this->addDistantFileToArchive($richIcon, $dirname . 'Icon.png');
         }
 
-        $this->addFileFromStringToArchive($dirname . 'index.html', $this->getHtml() );
-
-        $this->addFileFromStringToArchive($dirname . 'Info.plist', $this->_getXmlManifest() );
+        // Add other widget files
+        $this->addFileFromStringToArchive($dirname . 'index.html', $this->getHtml());
+        $this->addFileFromStringToArchive($dirname . 'Info.plist', $this->_getManifest());
     }
 
-    protected function _getXmlManifest()
+    protected function _getManifest()
     {
         $title = $this->_widget->getTitle();
         $metas = $this->_widget->getMetas();
@@ -143,5 +151,5 @@ final class Exposition_Compiler_Desktop_Dashboard extends Exposition_Compiler_De
         $javascripts[] = '/System/Library/WidgetResources/AppleClasses/AppleButton.js';
         return $javascripts;
     }
-
 }
+

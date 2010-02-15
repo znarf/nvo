@@ -30,7 +30,7 @@ final class Exposition_Compiler_Desktop_Jil extends Exposition_Compiler_Desktop
      *
      * @var string
      */
-    protected $archiveFormat = 'zip';
+    protected $_archiveFormat = 'zip';
 
     /**
      * Width of the widget.

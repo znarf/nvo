@@ -58,33 +58,32 @@ class Exposition_Compiler_Live extends Exposition_Compiler
         $description = isset($metas['description']) ? $metas['description'] : '';
 
         $l = array();
-
         $l[] = '<?xml version="1.0" encoding="utf-8"?>';
         $l[] = '<rss version="2.0" xmlns:binding="http://www.live.com">';
         $l[] = '<channel>';
+
         $l[] = '<title>' . htmlspecialchars( $this->_widget->getTitle() ) . '</title>';
         $l[] = '<description>' . htmlspecialchars($description) . '</description>';
 
         $l[] = '<language>en-us</language>';
         $l[] = '<binding:type>Netvibes.UWA.Live</binding:type>';
 
-        $javascripts = $this->_getJavascripts( array('platform' => $this->_platform) );
-
+        $javascripts = $this->_getJavascripts(array('platform' => $this->_platform));
         foreach ($javascripts as $javascript) {
             $l[] = '<item>';
-            $l[] = '<link>' . htmlspecialchars($javascript) . '</link>';
+            $l[] = '    <link>' . htmlspecialchars($javascript) . '</link>';
             $l[] = '</item>';
         }
 
         foreach ($this->getStylesheets() as $stylesheet) {
             $l[] = '<item>';
-            $l[] = '<link binding:type="css">' . htmlspecialchars($stylesheet) . '</link>';
+            $l[] = '    <link binding:type="css">' . htmlspecialchars($stylesheet) . '</link>';
             $l[] = '</item>';
         }
 
         if (isset($richIcon)) {
             $l[] = '<item>';
-            $l[] = '<icon>' . $richIcon . '</icon>';
+            $l[] = '    <icon>' . $richIcon . '</icon>';
             $l[] = '</item>';
         }
 

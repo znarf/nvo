@@ -74,50 +74,6 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
         echo $this->getFileContent();
     }
 
-    /*** ZIP ARCHIVE DEPRECATED FUNCTIONS ALIAS ***/
-
-    protected function addDirToZip($directory, $root = '')
-    {
-        return $this->addDirToArchive($directory, $root);
-    }
-
-    /**
-     * Adds a file to the ZIP archive.
-     *
-     * @param  string  $path The path of the file to add
-     * @param  string  $zipEntryName The ZIP archive name
-     * @return boolean True if the file has been successfully added, otherwise false
-     */
-    protected function addFileToZip($path, $zipEntryName)
-    {
-        return $this->addFileToArchive($path, $zipEntryName);
-    }
-
-    /**
-     * Adds a distant file to the ZIP archive.
-     *
-     * @param  string $url
-     * @param  string $filePath
-     * @param  string $dirPath
-     * @return string The file path into the archive.
-     */
-    protected function addDistantFileToZip($url, $filePath = '', $dirPath = '')
-    {
-        return $this->addDistantFileToArchive($url, $filePath, $dirPath);
-    }
-
-    /**
-     * Adds a file to the ZIP Archive.
-     *
-     * @param  string  $path The path of the file to add
-     * @param  string  $EntryName The ZIP archive name
-     * @return boolean True if the file has been successfully added, otherwise false
-     */
-    protected function addFileFromStringToZip($EntryName, $contents)
-    {
-        return $this->addFileFromStringToArchive($EntryName, $contents);
-    }
-
     /*** ARCHIVE FUNCTIONS ***/
 
     /**
@@ -205,3 +161,4 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
      */
     abstract public function getFileMimeType();
 }
+

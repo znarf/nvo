@@ -26,26 +26,25 @@ require_once 'Exposition/Compiler/Desktop.php';
 final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Desktop
 {
     /**
-     * Javascript UWA environment.
-     *
-     * @var string
-     */
-    protected $_environment = 'Frame';
-
-    /**
      * Archive Format of the widget.
      *
-     * @todo should be switched to 'crx'
      * @var string
      */
     protected $_archiveFormat = 'crx';
 
     /**
-     * Compiler Name.
+     * Javascript UWA environment.
      *
      * @var string
      */
-    protected $_platform = 'frame';
+    protected $_environment = 'Standalone';
+
+    /**
+     * Platform Name.
+     *
+     * @var string
+     */
+    protected $_platform = 'Uwa';
 
     /**
      * Stylesheet.

@@ -240,6 +240,7 @@ class Exposition_Container
         $widget = $this->_buildWidget($widgetDescriptor);
 
         $template = $this->_renderTemplate($this->_chromeTemplate, array('content' => $this->_inlineTemplate));
+
         if (!empty($script)) {
             $jsOptions = array(
                 'id'         => $id,
@@ -249,6 +250,7 @@ class Exposition_Container
             );
             $js = sprintf("UWA.Widgets.push(%s);", Zend_Json::encode($jsOptions));
         }
+
         $tplOptions = array(
             'id'    => $widgetDescriptor->getId(),
             'title' => $widgetDescriptor->getTitle(),
@@ -256,6 +258,7 @@ class Exposition_Container
             'body'  => $widget->getBody(),
             'js'    => isset($js) ? $js : ''
         );
+
         return $this->_renderTemplate($template, $tplOptions);
     }
 
@@ -269,6 +272,7 @@ class Exposition_Container
     {
         $height = $widgetDescriptor->getHeight();
         $template = $this->_renderTemplate($this->_chromeTemplate, array('content' => $this->_iframeTemplate));
+
         $tplOptions = array(
             'id'        => $widgetDescriptor->getId(),
             'title'     => $widgetDescriptor->getTitle(),
@@ -277,6 +281,7 @@ class Exposition_Container
             'height'    => empty($height) ? '200' : $height,
             'iframeUrl' => $this->_getIFrameUrl($widgetDescriptor)
         );
+
         return $this->_renderTemplate($template, $tplOptions);
     }
 

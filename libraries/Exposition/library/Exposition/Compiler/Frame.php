@@ -39,9 +39,6 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
      */
     protected $_stylesheet = 'uwa-iframe.css';
 
-
-
-
     /**
      * Main rendering function.
      *
@@ -55,6 +52,7 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
         $l[] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"' .
             ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
         $l[] = '<html xmlns="http://www.w3.org/1999/xhtml">';
+
         $l[] = '<head>';
         $l[] = '<title>' . $this->_widget->getTitle() . '</title>';
         $l[] = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
@@ -62,17 +60,6 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
         foreach ($this->getStylesheets() as $stylesheet) {
             $l[] = '<link rel="stylesheet" type="text/css" href="' . $stylesheet . '"/>';
         }
-
-        $l[] = '<script type="text/javascript">';
-        $l[] = '//<![CDATA[';
-        $l[] = 'window.onerror = function(msg, url, linenumber){';
-        $l[] = '    if (typeof console != \'undefined\' && console.log){';
-        $l[] = '        console.log("JS error: \'" + msg + "\'\ in " + url + " (line " + linenumber + ")");';
-        $l[] = '    }';
-        $l[] = '    return true;';
-        $l[] = '}';
-        $l[] = '//]]>';
-        $l[] = '</script>';
 
         $l[] = '</head>';
 
@@ -94,6 +81,7 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
     {
         $l = array();
 
+        // Add header if require
         if (isset($this->options['displayHeader']) && $this->options['displayHeader'] == '1') {
             $l[] = $this->_getHtmlHeader();
         }
@@ -102,12 +90,16 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
         $l[] = $this->_widget->getBody();
         $l[] = '</div>';
 
+        // Add footer if require
         if (isset($this->options['displayStatus']) && $this->options['displayStatus'] == '1') {
             $l[] = $this->_getHtmlStatus();
         }
 
+        // Add Widget javascript constants
         $l[] = $this->_getJavascriptConstants();
 
+        // Add Widget javascripts
+        $javascripts = $this->_getJavascripts();
         foreach ($this->_getJavascripts() as $script) {
             $l[] = '<script type="text/javascript" src="' . $script . '"></script>';
         }
@@ -122,14 +114,6 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
     private function _getFrameScript()
     {
         $l = array();
-
-        $proxyEndpoint = Exposition_Load::getConfig('endpoint', 'proxy');
-        $proxies = array(
-            'ajax' => $proxyEndpoint . '/ajax',
-            'feed' => $proxyEndpoint . '/feed'
-        );
-
-        $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));
 
         if (isset($this->options['properties'])) {
             foreach ($this->options['properties'] as $key => $value) {
@@ -165,5 +149,5 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
 
         return implode("\n", $l);
     }
-
 }
+

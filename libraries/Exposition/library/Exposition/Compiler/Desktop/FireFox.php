@@ -33,11 +33,25 @@ final class Exposition_Compiler_Desktop_FireFox extends Exposition_Compiler_Desk
     protected $_archiveFormat = 'zip';
 
     /**
+     * Javascript UWA environment.
+     *
+     * @var string
+     */
+    protected $_environment = 'Standalone';
+
+    /**
      * Compiler Name.
      *
      * @var string
      */
-    protected $_platform = 'frame';
+    protected $_platform = 'Uwa';
+
+    /**
+     * Stylesheet.
+     *
+     * @var string
+     */
+    protected $_stylesheet = 'uwa-chrome.css';
 
     /**
      * Extension.

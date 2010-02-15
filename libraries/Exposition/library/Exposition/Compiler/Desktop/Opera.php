@@ -88,6 +88,7 @@ final class Exposition_Compiler_Desktop_Opera extends Exposition_Compiler_Deskto
         if (!is_readable($ressourcePath)) {
             throw new Exception('UWA ressources directory is not readable.');
         }
+
         $this->addDirToArchive($ressourcePath . '/opera');
 
         // Replace the default icon if a rich icon is given
@@ -96,12 +97,12 @@ final class Exposition_Compiler_Desktop_Opera extends Exposition_Compiler_Deskto
             $this->addDistantFileToArchive($richIcon, 'Icon.png');
         }
 
+        // Add other widget files
         $this->addFileFromStringToArchive('index.html', $this->getHtml());
-
-        $this->addFileFromStringToArchive('config.xml', $this->_getXmlManifest());
+        $this->addFileFromStringToArchive('config.xml', $this->_getManifest());
     }
 
-    protected function _getXmlManifest()
+    protected function _getManifest()
     {
         $title = $this->_widget->getTitle();
         $metas = $this->_widget->getMetas();
@@ -146,5 +147,5 @@ final class Exposition_Compiler_Desktop_Opera extends Exposition_Compiler_Deskto
 
         return implode("\n", $l);
     }
-
 }
+

@@ -33,53 +33,53 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
     protected $_environment = 'Standalone';
 
     /**
+     * Stylesheet.
+     *
+     * @var string
+     */
+    protected $_stylesheet = 'uwa-standalone.css';
+
+    /**
      * Main rendering function.
      *
      * @return string
      */
     public function render()
     {
-        $style = $this->_widget->getStyle();
-        $script = $this->_widget->getCompressedScript();
-        $preferences = $this->_widget->getPreferences();
-
-        $useCompressedJs = Exposition_Load::getConfig('js', 'compressed');
-        $jsEndPoint = Exposition_Load::getConfig('endpoint', 'js');
-        $cssEndPoint = Exposition_Load::getConfig('endpoint', 'css');
-
         $l = array();
-
         $l[] = '<?xml version="1.0" encoding="utf-8"?>';
         $l[] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"' .
             ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
         $l[] = '<html xmlns="http://www.w3.org/1999/xhtml"'.
             ' xmlns:widget="http://www.netvibes.com/ns/">';
+
         $l[] = '<head>';
         $l[] = '<title>' . $this->_widget->getTitle() . '</title>';
         $l[] = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
 
-        foreach ($this->_widget->getMetadata() as $key => $value) {
+        // Add Widget Metas
+        $metas = $this->_widget->getMetadata();
+        foreach ($metas as $key => $value) {
             $l[] = '<meta name="' . $key . '" content="' . $value . '" />';
         }
 
-        $l[] = '<link rel="stylesheet" type="text/css"'.
-            ' href="' . $cssEndPoint . '/uwa-standalone.css"/>';
-
-        $coreLibrary = $this->_widget->getCoreLibrary();
-        $externalScripts = $this->_widget->getExternalScripts();
-
-        if ($coreLibrary == 'uwa') {
-            $library = $jsEndPoint. '/c/UWA_Standalone.js';
-        } else if ($coreLibrary == 'uwa-mootools') {
-            $library = $jsEndPoint . '/c/UWA_Standalone_Mootools.js';
+        // Add Widget stylesheet
+        $stylesheets = $this->getStylesheets();
+        foreach ($stylesheets as $stylesheet) {
+            $l[] = '<link rel="stylesheet" type="text/css"'. ' href="' . $stylesheet . '"/>';
         }
 
-        $l[] = '<script type="text/javascript" src="' . $library .'"></script>';
+        // Add Widget javascript constants
+        $l[] =  $this->_getJavascriptConstants();
 
-        foreach ($externalScripts as $javascript) {
+        // Add Widget javascripts
+        $javascripts = $this->_getJavascripts();
+        foreach ($javascripts as $javascript) {
             $l[] = '<script type="text/javascript" src="' . $javascript . '"></script>';
         }
 
+        // Add Widget Preferences
+        $preferences = $this->_widget->getPreferences();
         if (isset($preferences) && count($preferences) > 0) {
             $l[] = '<widget:preferences>';
             foreach ($preferences as $pref) {
@@ -88,24 +88,18 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
             $l[] = '</widget:preferences>';
         }
 
+        // Add Widget Styles
+        $style = $this->_widget->getStyle();
         if (isset($style) && strlen($style) > 0) {
             $l[] = '<style type="text/css">'. "\n" . $style . '</style>';
         }
 
-        $proxyEndpoint = Exposition_Load::getConfig('endpoint', 'proxy');
-        $proxies = array(
-            'ajax' => $proxyEndpoint . '/ajax',
-            'feed' => $proxyEndpoint . '/feed'
-        );
-
-        $l[] = '<script type="text/javascript"><![CDATA[';
-        $l[] = sprintf('UWA.proxies = %s;', Zend_Json::encode($proxies));
-        $l[] = ']]></script>';
-
+        // Add Widget Javascript
+        $script = $this->_widget->getCompressedScript();
         if (isset($script) && strlen($script) > 0) {
-            $l[] = '<script type="text/javascript"><![CDATA[';
+            $l[] = '<script type="text/javascript">';
             $l[] = $script;
-            $l[] = ']]></script>';
+            $l[] = '</script>';
         }
 
         $l[] = '</head>';
@@ -115,35 +109,6 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         $l[] = '</html>';
 
         return implode("\n", $l);
-    }
-
-    public function _getPreferenceXml($preference)
-    {
-        $preference = $preference->toArray();
-        $xml = "<preference";
-        foreach($preference as $key => $value) {
-            if ($key != "options") {
-                $k = htmlspecialchars($key);
-                $v = htmlspecialchars($value);
-                $xml .= " $k=\"$v\"";
-            }
-        }
-        switch ($preference['type']) {
-            case 'list':
-                $xml .= ">\n";
-                if (isset($preference['options']) && count($preference['options']) > 0) {
-                    foreach ($preference['options'] as $opt) {
-                        $xml .= sprintf("  <option value=\"%s\" label=\"%s\" />\n", $opt['value'], $opt['label']);
-                    }
-                }
-                $xml .= "</preference>";
-                break;
-            default:
-                $xml .= "/>";
-                break;
-
-        }
-        return $xml;
     }
 
     /**
@@ -171,35 +136,39 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
 
         $l[] = 'if (typeof UWA == "undefined") var UWA = {};';
 
+        // Render Widget With Id
         if (isset($this->options['uwaId'])) {
             $l[] = 'if (typeof UWA.Scripts == "undefined") UWA.Scripts = [];';
             $l[] = sprintf("UWA.Scripts['%s']=UWA.script=function(widget){", $this->options['uwaId']);
+
+        // Render Widget Without Id
         } else {
-            $l[] = "UWA.script=function(widget){";
+            $l[] = 'UWA.script=function(widget){';
         }
 
         $l[] = sprintf('widget.uwaUrl = %s;', Zend_Json::encode($this->_widget->getUrl()));
 
+        // Render Widget Javascript
         $l[] = $this->_widget->getCompressedScript();
 
+        // Render Widget Metas
         $metas = $this->_widget->getMetas();
-        $l[] = sprintf("widget.setMetas(%s);", Zend_Json::encode($metas));
+        $l[] = sprintf('widget.setMetas(%s);', Zend_Json::encode($metas));
 
+        // Render Widget Preferences
         $preferences = $this->_widget->getPreferencesArray();
         if (count($preferences) > 0) {
-            $l[] = sprintf("widget.setPreferences(%s);", Zend_Json::encode($preferences));
+            $l[] = sprintf('widget.setPreferences(%s);', Zend_Json::encode($preferences));
         }
 
-        if (isset($this->options['platform']) && in_array($this->options['platform'], array('live', 'opera', 'dashboard'))) {
-            $body = $this->_widget->getBody();
-            if (!empty($body) && $body != '<p>Loading...</p>') {
-                $l[] = sprintf('widget.setBody(%s);', Zend_Json::encode($body));
-            }
+        // Render Widget Body
+        $body = $this->_widget->getBody();
+        if (!empty($body) && $body != '<p>Loading...</p>') {
+            $l[] = sprintf('widget.setBody(%s);', Zend_Json::encode($body));
         }
 
-        $l[] = "return widget;";
-
-        $l[] = "}";
+        $l[] = 'return widget;';
+        $l[] = '}';
 
         return implode("\n", $l);
     }
@@ -278,3 +247,4 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         return $this->_widget->getStyle();
     }
 }
+

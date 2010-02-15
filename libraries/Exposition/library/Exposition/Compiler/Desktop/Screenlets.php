@@ -30,7 +30,7 @@ final class Exposition_Compiler_Desktop_Screenlets extends Exposition_Compiler_D
      *
      * @var string
      */
-    protected $archiveFormat = 'tar';
+    protected $_archiveFormat = 'tar';
 
     /**
      * Width of the widget.
@@ -51,7 +51,7 @@ final class Exposition_Compiler_Desktop_Screenlets extends Exposition_Compiler_D
      *
      * @var string
      */
-    protected $_platform = 'frame';
+    protected $_platform = 'Uwa';
 
     /**
      * Extension.
@@ -59,6 +59,13 @@ final class Exposition_Compiler_Desktop_Screenlets extends Exposition_Compiler_D
      * @var string
      */
     protected $_extension = 'tar.gz';
+
+    /**
+     * Stylesheet.
+     *
+     * @var string
+     */
+    protected $_stylesheet = 'uwa-iframe.css';
 
     /**
      * Mime Type.
@@ -107,6 +114,8 @@ final class Exposition_Compiler_Desktop_Screenlets extends Exposition_Compiler_D
         );
 
         $compiler->setOptions($options);
+
+        $compiler->setStylesheet($this->_stylesheet);
 
         return $compiler->render();
     }
@@ -344,11 +353,21 @@ EOF;
         return str_replace( array_keys( $transliteration ), array_values( $transliteration ), $string);
     }
 
+    /**
+     * Get clean widget file name
+     *
+     * @return string a clean widget name
+     */
     public function getFileName()
     {
         return $this->getNormalizedTitle() . '.' . $this->_extension;
     }
 
+    /**
+     * Get clean widget title
+     *
+     * @return string a clean widget name
+     */
     public function getNormalizedTitle()
     {
         $filename = preg_replace('/[^a-z0-9]/i', '', $this->_widget->getTitle());
@@ -359,9 +378,14 @@ EOF;
         }
     }
 
+    /**
+     * Get widget minetype header value
+     *
+     * @return string minetype header value
+     */
     public function getFileMimeType()
     {
         return $this->_mimeType;
     }
-
 }
+

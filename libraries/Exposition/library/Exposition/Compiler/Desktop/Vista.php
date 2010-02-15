@@ -81,6 +81,9 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
      */
     protected $_mimeType = 'application/x-binary';
 
+    /**
+     * Build Desktop Archive file
+     */
     protected function buildArchive()
     {
         // Uwa need Motools
@@ -100,10 +103,9 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
             $this->addDistantFileToArchive($richIcon, 'Icon.png');
         }
 
+        // Add other widget files
         $this->addFileFromStringToArchive('UWA.html', $this->getHtml(false));
-
         $this->addFileFromStringToArchive('flyout.html', $this->getHtml(true));
-
         $this->addFileFromStringToArchive('gadget.xml', $this->_getXmlManifest());
     }
 
@@ -123,19 +125,11 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
         $l[] = '    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
         $l[] = '    <link rel="icon" href="' . $icon . '" type="image/x-icon" />';
 
-        // require Vista_Mootools !!!
+        // Add Widget javascripts
         $javascripts = $this->_getJavascripts(array(
             'platform'     => $this->_platform,
             'className'    => 'CompiledModule'
         ));
-
-        // for debug only
-        /*
-        $javascripts = array(
-            'http://www.netvibes.com/js/UWA/load.js.php?env=Vista',
-            'http://www.netvibes.com/api/uwa/compile/uwa_javascript.php?platform=vista&className=CompiledModule&moduleUrl=' . urlencode($this->_widget->getUrl()),
-        );
-        */
 
         foreach ($javascripts as $script) {
             $l[] = '<script type="text/javascript" src="' . $script . '" charset="utf-8"></script>';
@@ -178,17 +172,20 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
 
         $l[] = '<div id="wrapper">';
 
+        // Widget header
         $l[] = '    <div id="moduleHeader" class="moduleHeader">';
         $l[] = '        <div class="refresh"><img src="img/refresh.png" onclick="vistaModule.refresh()"></div>';
         $l[] = '        <div id="moduleTitle" class="title">' . htmlspecialchars($this->_widget->getTitle()) . '</div>';
         $l[] = '    </div>';
 
+        // Widget Content
         $l[] = '    <div id="contentWrapper">';
         $l[] = '        <div class="moduleContent" id="moduleContent">';
         $l[] = '            <p>Loading...</p>';
         $l[] = '        </div>';
         $l[] = '    </div>';
 
+        // Widget Footer
         $l[] = '    <div class="moduleFooter" id="moduleFooter">';
         $l[] = '        &nbsp;';
         $l[] = '    </div>';
@@ -226,11 +223,21 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
         return implode("\n", $l);
     }
 
+    /**
+     * Get clean widget file name
+     *
+     * @return string a clean widget name
+     */
     public function getFileName()
     {
         return $this->getNormalizedTitle() . '.' . $this->_extension;
     }
 
+    /**
+     * Get clean widget title
+     *
+     * @return string a clean widget name
+     */
     public function getNormalizedTitle()
     {
         $filename = preg_replace('/[^a-z0-9]/i', '', $this->_widget->getTitle());
@@ -241,6 +248,11 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
         }
     }
 
+    /**
+     * Get widget minetype header value
+     *
+     * @return string minetype header value
+     */
     public function getFileMimeType()
     {
         return $this->_mimeType;

@@ -93,12 +93,14 @@ abstract class Exposition_Compiler
 
         $this->setOptions($options);
 
+        // set uwa alone files
         $this->_coreLibraries['uwa'] = array_merge(array(
             'lib/UWA/UWA.js',
             'lib/UWA/Drivers/UWA-alone.js',
             'lib/UWA/Drivers/UWA-legacy.js',
         ), $this->_baseLibraries);
 
+        // set uwa-mootools files
         $this->_coreLibraries['uwa-mootools'] = array_merge(array(
             'lib/mootools-core.js',
             'lib/mootools-more.js',
@@ -160,11 +162,16 @@ abstract class Exposition_Compiler
         $cssVersion = Exposition_Load::getConfig('css', 'version');
         $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
 
-        $defaultStylesheets = array($cssEndPoint . '/'  . $this->_stylesheet);
-        if (isset($_GET['NVthemeUrl'])) {
+        $defaultStylesheets = array();
 
-            $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
-            $defaultStylesheets[] = 'http://' . $staticEndPoint . $_GET['NVthemeUrl'];
+        // Add default stylesheet
+        if (isset($this->_stylesheet)) {
+            $defaultStylesheets[] = $cssEndPoint . '/'  . $this->_stylesheet;
+        }
+
+        // themes/blueberry/uwa-core.css
+        if (isset($this->options['theme'])) {
+            $defaultStylesheets[] = $cssEndPoint . '/themes/'  . $this->options['theme'] . '/uwa-core.css';
         }
 
         $stylesheets = array();
@@ -197,10 +204,9 @@ abstract class Exposition_Compiler
     /**
      * Retrieves the list of the JavaScript core libraries used in a widget.
      *
-     * @param string $name
      * @return array
      */
-    protected function _getCoreLibraries($name = 'uwa')
+    protected function _getCoreLibraries()
     {
         $javascripts = array();
 
@@ -343,6 +349,12 @@ abstract class Exposition_Compiler
         $proxyEndPoint = Exposition_Load::getConfig('endpoint', 'proxy');
         $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
 
+        // proxies
+        $proxies = array(
+            'ajax' => $proxyEndPoint . '/ajax',
+            'feed' => $proxyEndPoint . '/feed'
+        );
+
         // Netvibes
         $nvAvatarEndPoint = Exposition_Load::getConfig('endpoint', 'nvAvatar');
         $nvEcoEndPoint = Exposition_Load::getConfig('endpoint', 'nvEco');
@@ -360,6 +372,35 @@ abstract class Exposition_Compiler
               . '</script>';
 
         return $html;
+    }
+
+    public function _getPreferenceXml($preference)
+    {
+        $preference = $preference->toArray();
+        $xml = "<preference";
+        foreach($preference as $key => $value) {
+            if ($key != "options") {
+                $k = htmlspecialchars($key);
+                $v = htmlspecialchars($value);
+                $xml .= " $k=\"$v\"";
+            }
+        }
+        switch ($preference['type']) {
+            case 'list':
+                $xml .= ">\n";
+                if (isset($preference['options']) && count($preference['options']) > 0) {
+                    foreach ($preference['options'] as $opt) {
+                        $xml .= sprintf("  <option value=\"%s\" label=\"%s\" />\n", $opt['value'], $opt['label']);
+                    }
+                }
+                $xml .= "</preference>";
+                break;
+            default:
+                $xml .= "/>";
+                break;
+
+        }
+        return $xml;
     }
 
     /*** ABSTRACT FUNCTIONS ***/
