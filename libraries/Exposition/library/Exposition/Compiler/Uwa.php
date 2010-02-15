@@ -63,6 +63,12 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
             $l[] = '<meta name="' . $key . '" content="' . $value . '" />';
         }
 
+        // Add Widget Icon
+        $icon = $this->_widget->getIcon();
+        if (!empty($icon) && strlen($icon) > 0) {
+            $l[] = '<link rel="icon" type="image/png" href="' . $icon . '" />';
+        }
+
         // Add Widget stylesheet
         $stylesheets = $this->getStylesheets();
         foreach ($stylesheets as $stylesheet) {
@@ -97,9 +103,9 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         // Add Widget Javascript
         $script = $this->_widget->getCompressedScript();
         if (isset($script) && strlen($script) > 0) {
-            $l[] = '<script type="text/javascript">';
+            $l[] = '<script type="text/javascript"><![CDATA[';
             $l[] = $script;
-            $l[] = '</script>';
+            $l[] = ']]></script>';
         }
 
         $l[] = '</head>';
