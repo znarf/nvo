@@ -150,12 +150,16 @@ UWA.extend(UWA.Environment.prototype, {
 
  setData: function(name, value) {
    widget.log('setData:' + name + ':' + value);
+
    if (typeof(document.cookie) != "undefined") { // Valid cookie ?
      var name = 'uwa-' + name;
      var expires = 3600 * 60 * 24; // 24 days by default
      var expires_date = new Date( new Date().getTime() + (expires) );
-     var cookieData = name + "=" + escape(value) +
-       ((expires) ? "; expires=" + expires_date.toGMTString() : "");
+     var cookieData = name + "=" + escape(value) + ';' +
+       ((expires) ? "expires=" + expires_date.toGMTString() + ';' : "") +
+       "path=" + escape(window.location.pathname) + ';' +
+       "domain=" + escape(window.location.hostname);
+
        document.cookie = cookieData;
        return true;
    }
