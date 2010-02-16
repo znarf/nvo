@@ -402,6 +402,10 @@ class Exposition_Parser_Uwa extends Exposition_Parser
             }
         }
 
+        // set default Icon
+        $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+        $this->_widget->setIcon($staticEndPoint . '/icon.png');
+
         return $this;
     }
 
@@ -416,6 +420,10 @@ class Exposition_Parser_Uwa extends Exposition_Parser
                 return;
             }
         }
+
+        // set default RichIcon
+        $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
+        $this->_widget->setRichIcon($staticEndPoint . '/richIcon.png');
 
         return $this;
     }
