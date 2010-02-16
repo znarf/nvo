@@ -152,11 +152,11 @@ if (typeof UWA_NETVIBES_COMPATIBILY == "undefined") {
 
 if (UWA_NETVIBES_COMPATIBILY == true) {
 
-  NV_HOST = 'www.netvibes.com';
-  NV_MODULES = 'nvmodules.netvibes.com';
-  NV_AVATARS = 'avatars.netvibes.com';
-  NV_STATIC = 'http://' + NV_HOST;
-  NV_PATH = 'http://' + NV_HOST + '/';
+  var NV_HOST = 'www.netvibes.com';
+  var NV_MODULES = 'nvmodules.netvibes.com';
+  var NV_AVATARS = 'avatars.netvibes.com';
+  var NV_STATIC = 'http://' + NV_HOST;
+  var NV_PATH = 'http://' + NV_HOST + '/';
 
   if (typeof Netvibes == "undefined") var Netvibes = {};
   if (typeof Netvibes.UI == "undefined") Netvibes.UI = {};
