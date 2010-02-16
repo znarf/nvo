@@ -33,6 +33,7 @@
 body, html {
     padding: 0;
     margin: 0;
+    -webkit-text-size-adjust:none
 }
 
 #moduleContent {
@@ -80,6 +81,7 @@ a {
 
 .moduleHeader {
     cursor:inherit;
+    padding:10px 2px
 }
 
 /* tune the editContent */
