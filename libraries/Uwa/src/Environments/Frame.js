@@ -101,7 +101,7 @@ UWA.extend(UWA.Environment.prototype, {
 
   setIcon: function(icon) {
     if (this.widget.elements['icon']) {
-        url = UWA.proxies['icon'] + '?url=' + encodeURIComponent(icon);
+        var url = UWA.proxies['icon'] + '?url=' + encodeURIComponent(icon);
         this.widget.elements['icon'].setHTML('<img width="16" height="16" src="' + icon + '" />');
     } else {
         this.sendRemote('setIcon', false, icon);
