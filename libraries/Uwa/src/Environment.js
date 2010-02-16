@@ -216,13 +216,19 @@ UWA.Environment.prototype = {
     * Nothing, but calls the method associated with the given callback name (key)
   */
   callback: function(name, args, bind) {
+
+    this.log('environment.callback:' + name);
+
     if (typeof bind == 'undefined') bind = this;
     try {
+
       if (this[name]) return this[name].apply(bind, [args]);
       if (this.callbacks[name]) return this.callbacks[name].apply(bind, [args]);
+
     } catch(e) {
-      this.log(e);
+      this.log('Error:' + e);
     }
+
     return false;
   },
 

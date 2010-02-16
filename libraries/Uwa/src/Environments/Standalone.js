@@ -173,24 +173,16 @@ UWA.extend(UWA.Environment.prototype, {
 
  setIcon: function(icon) {
    if (this.html['icon']) {
-     url = UWA.proxies['icon'] + '?url=' + encodeURIComponent(icon);
+     var url = UWA.proxies['icon'] + '?url=' + encodeURIComponent(icon);
      this.html['icon'].setHTML('<img width="16" height="16" src="' + icon + '" />');
    }
  }
 });
 
 var Environment = new UWA.Environment();
-
 var widget = Environment.getModule();
-
-UWA.Data.useJsonRequest = true;
-
-UWA.proxies.feed = UWA.proxies.ajax;
-
-function _(s) {
-  return s
-}
 
 window.onresize = function() {
   widget.callback('onResize');
 }
+

@@ -21,6 +21,9 @@ License:
 Script: Driver UWA MooTools
 */
 
+// Create App namespace
+if (typeof App == 'undefined') App = {};
+
 // Overwite native Object function
 Object.extend = $extend;
 Object.clone = $merge;

@@ -609,18 +609,19 @@ UWA.Controls.TabView.prototype =
     },
 
     hidePopupMenu: function (a) {
+
         if (!this.popupMenu || (a && Event.element(a).tagName == "A")) {
             return false
         }
+
         Element.hide(this.popupMenu);
         var b = $(this.tabList).getElementsByClassName("dropped");
-        $A(b).each(function (c)
-        {
+        $A(b).each(function (c) {
             Element.removeClassName(c, "dropped")
         });
-        if (typeof widget == "object" && typeof widget.callback == "function")
-        {
-            widget.body.style.height = "";
+
+        if (typeof widget == "object" && typeof widget.callback == "function") {
+            widget.body.style.height = '';
             widget.callback("onUpdateBody")
         }
     },

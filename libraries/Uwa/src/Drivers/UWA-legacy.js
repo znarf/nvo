@@ -26,7 +26,6 @@ if (typeof Array.prototype.bindWithEvent != "function") {
 }
 
 if (typeof App == "undefined") App = {};
-
 if (typeof Class == "undefined") Class = {};
 
 Class = function() {

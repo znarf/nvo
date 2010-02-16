@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -23,7 +23,7 @@ Script: Client
 Credits:
   Partially based on MooTools, My Object Oriented Javascript Tools.
   Copyright (c) 2006-2007 Valerio Proietti, <http://mad4milk.net>, MIT Style License.
-    
+
 Class: Client
   Some browser properties are attached to the Client object for browser detection.
 
@@ -56,8 +56,8 @@ UWA.Client.features.xhr = !!(window.XMLHttpRequest);
 UWA.Client.features.xpath = !!(document.evaluate);
 
 //engine
-if (window.opera) UWA.Client.Engine.name = 'opera';
-else if (window.ActiveXObject) UWA.Client.Engine = {'name': 'ie', 'version': (UWA.Client.features.xhr) ? 7 : 6};
+if (typeof window.opera !== "undefined") UWA.Client.Engine.name = 'opera';
+else if (typeof window.ActiveXObject !== "undefined") UWA.Client.Engine = {'name': 'ie', 'version': (UWA.Client.features.xhr) ? 7 : 6};
 else if (!navigator.taintEnabled) UWA.Client.Engine = {'name': 'webkit', 'version': (UWA.Client.features.xpath) ? 420 : 419};
 else if (document.getBoxObjectFor != null) UWA.Client.Engine.name = 'gecko';
 UWA.Client.Engine[UWA.Client.Engine.name] = UWA.Client.Engine[UWA.Client.Engine.name + UWA.Client.Engine.version] = true;
