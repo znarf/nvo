@@ -75,6 +75,18 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
             $l[] = '<link rel="stylesheet" type="text/css"'. ' href="' . $stylesheet . '"/>';
         }
 
+        // May Require for debuging
+        $l[] = '<script type="text/javascript">';
+        $l[] = '//<![CDATA[';
+        $l[] = 'window.onerror = function(msg, url, linenumber){';
+        $l[] = '    if (typeof console != \'undefined\' && console.log){';
+        $l[] = '        console.log("JS error: \'" + msg + "\'\ in " + url + " (line " + linenumber + ")");';
+        $l[] = '    }';
+        $l[] = '    return true;';
+        $l[] = '}';
+        $l[] = '//]]>';
+        $l[] = '</script>';
+
         // Add Widget javascript constants
         $l[] =  $this->_getJavascriptConstants();
 
