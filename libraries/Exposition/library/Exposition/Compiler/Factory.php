@@ -29,20 +29,27 @@ class Exposition_Compiler_Factory
      * @var array
     */
     protected static $_compilers = array(
+
+        // Stable
         'Uwa'        => 'Exposition_Compiler_Uwa',
         'Frame'      => 'Exposition_Compiler_Frame',
         'Google'     => 'Exposition_Compiler_Google',
         'Live'       => 'Exposition_Compiler_Live',
-        'Iphone'     => 'Exposition_Compiler_Iphone',
-        'Kludget'    => 'Exposition_Compiler_Desktop_Kludget',
-        'Chrome'     => 'Exposition_Compiler_Desktop_Chrome',
-        'FireFox'    => 'Exposition_Compiler_Desktop_FireFox',
-        'Prism'      => 'Exposition_Compiler_Desktop_Prism',
         'Opera'      => 'Exposition_Compiler_Desktop_Opera',
+        'Vista'      => 'Exposition_Compiler_Desktop_Vista',
         'Dashboard'  => 'Exposition_Compiler_Desktop_Dashboard',
         'Screenlets' => 'Exposition_Compiler_Desktop_Screenlets',
+
+        // Beta
+        'Iphone'     => 'Exposition_Compiler_Iphone',
+        'Chrome'     => 'Exposition_Compiler_Desktop_Chrome',
+
+        // Draft
+        'Kludget'    => 'Exposition_Compiler_Desktop_Kludget',
+        'FireFox'    => 'Exposition_Compiler_Desktop_FireFox',
+        'Prism'      => 'Exposition_Compiler_Desktop_Prism',
         'Jil'        => 'Exposition_Compiler_Desktop_Jil',
-        'Vista'      => 'Exposition_Compiler_Desktop_Vista',
+        'Air'        => 'Exposition_Compiler_Desktop_Air',
     );
 
     /**
