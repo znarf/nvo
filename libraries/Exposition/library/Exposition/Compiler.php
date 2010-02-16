@@ -293,10 +293,6 @@ abstract class Exposition_Compiler
     protected function _getHtmlHeader()
     {
         $icon = $this->_widget->getIcon();
-        if (empty($icon)) {
-            $staticEndPoint = Exposition_Load::getConfig('endpoint', 'static');
-            $icon = 'http://' . $staticEndPoint . '/icon.png';
-        }
 
         $html  = '<div class="moduleHeaderContainer">' . "\n";
         $html .= '  <div class="moduleHeader" id="moduleHeader">' . "\n";
