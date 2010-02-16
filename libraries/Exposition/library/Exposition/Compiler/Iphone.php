@@ -58,7 +58,7 @@ class Exposition_Compiler_Iphone  extends Exposition_Compiler_Uwa
         $l[] = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
 
         // Add Iphone Metas
-        $l[] = '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable = no" />';
+        $l[] = '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
         $l[] = '<meta name="apple-mobile-web-app-capable" content="yes" />';
 
         // Add Widget Metas
@@ -119,7 +119,7 @@ class Exposition_Compiler_Iphone  extends Exposition_Compiler_Uwa
         }
 
         $l[] = '</head>';
-        $l[] = '<body>';
+        $l[] = '<body onload="window.scrollTo(0, 1)">';
         $l[] = $this->_widget->getBody();
         $l[] = '</body>';
         $l[] = '</html>';

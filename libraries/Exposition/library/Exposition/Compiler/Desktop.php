@@ -38,7 +38,6 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
         static $archive;
 
         // Temporary file path to build the archive
-        // @todo implement cache layer
         if (!isset($archive)) {
             $archive = Exposition_Archive::newArchive($this->_archiveFormat);
         }

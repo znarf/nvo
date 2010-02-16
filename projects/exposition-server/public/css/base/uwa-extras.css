@@ -265,6 +265,34 @@ ul.nv-tabList {
     overflow: hidden;
 }
 
+/* popupMenu */
+.popupMenu{
+    background: #FFF;
+    padding: 4px;
+    margin: 0;
+    border: 1px solid #CCC;
+    z-index: 2001;
+}
+    .popupMenu li{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+    }
+    .popupMenu li a{
+        padding: 2px;
+        display: block;
+        border-bottom: 1px solid #EEE;
+    }
+    .popupMenu li a.last{
+        border: 0;
+    }
+    .popupMenu li a.action{
+        border: 0;
+        border-top: 1px solid #EEE;
+    }
+
+
 /* Datagrid */
 table.nv-datagrid{
     width: 99%;
