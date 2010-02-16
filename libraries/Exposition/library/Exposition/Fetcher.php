@@ -49,6 +49,13 @@ class Exposition_Fetcher
     protected $_useCache;
 
     /**
+     * Cache lifetime.
+     *
+     * @var integer
+     */
+    private $_cachetime = 0;
+
+    /**
      * Constructor.
      *
      * @param string $url URL of the file to fetch
@@ -85,31 +92,11 @@ class Exposition_Fetcher
      */
     private function _getFileHttp()
     {
-        $result = '';
-        $cacheId = md5($this->_url);
-        $registry = Zend_Registry::getInstance();
-        if (isset($registry['cache'])) {
-            $cache = $registry['cache'];
-        }
-        if ($this->_useCache && isset($cache) && $cache->test($cacheId)) {
-            // Extract data from the cache
-            $result = (string) $cache->load($cacheId);
-        } else {
-            // Retrieve the file and cache its content for further use
-            $client = new Zend_Http_Client($this->_url, array('useragent' => self::USER_AGENT));
-            $response = $client->request();
-            if ($response->getStatus() == 200) {
-                $result = $response->getBody();
-                if (empty($result)) {
-                    throw new Zend_Http_Exception('Response body is empty.');
-                }
-                if (isset($cache)) {
-                    $cache->save($result, $cacheId);
-                }
-            } else {
-                throw new Zend_Http_Exception($response->getMessage(), $response->getStatus());
-            }
-        }
-        return $result;
+        $proxy = new Exposition_Proxy($this->_url, array(
+            'useragent' => self::USER_AGENT,
+            'cachetime' => $this->_cachetime,
+        ));
+
+        return $proxy->getBody();
     }
 }
