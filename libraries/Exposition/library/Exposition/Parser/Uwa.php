@@ -266,7 +266,7 @@ class Exposition_Parser_Uwa extends Exposition_Parser
             return false;
         }
 
-        foreach ($scriptsNames as $$scriptName => $scriptPath) {
+        foreach ($scriptsNames as $scriptName => $scriptPath) {
             if (strstr($scriptUrlParts['path'], $scriptPath) !== false) {
                 return false;
             }
