@@ -712,18 +712,21 @@ UWA.Widget.prototype = {
   */
   callback: function(name, args, bind) {
 
-    UWA.log('widget.callback ' + name);
+    this.log('widget.callback:' + name);
 
     if (typeof bind == 'undefined') bind = this;
+
     try {
+
       if (this[name]) this[name].apply(bind, [args]);
       if (this.callbacks[name]) this.callbacks[name].apply(bind, [args]);
+
     } catch(e) {
-      UWA.log(e);
+
+      this.log('Error:' + e);
     }
 
     if(this.environment && this.environment.callback) this.environment.callback(name);
-
   },
 
   /* deprecated - internal or advanced use only */
