@@ -78,10 +78,20 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
     <meta name="apiVersion" content="1.2" />
     <meta name="debugMode" content="true" />
 
+    <link rel="icon" type="image/png" href="<?php echo MAIN_URL; ?>/img/icon.png" />
+
     <link rel="stylesheet" type="text/css"
       href="<?php echo MAIN_URL; ?>/css/uwa-standalone.css" />
 
-    <link rel="icon" type="image/png" href="<?php echo MAIN_URL; ?>/img/icon.png" />
+    <script type="text/javascript">
+
+      var UWA_WIDGET = '<?php echo MAIN_URL; ?>/widget',
+        UWA_JS = '<?php echo MAIN_URL; ?>/js',
+        UWA_CSS = '<?php echo MAIN_URL; ?>/css',
+        UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
+        UWA_STATIC = '<?php echo MAIN_URL; ?>/img';
+
+    </script>
 
     <script type="text/javascript"
       src="<?php echo MAIN_URL; ?>/js/c/UWA_Standalone.js?v=preview3"></script>
@@ -107,13 +117,8 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
             vertical-align:middle;
         }
     </style>
-    <script type="text/javascript">
 
-      var UWA_WIDGET = '<?php echo MAIN_URL; ?>/widget',
-        UWA_JS = '<?php echo MAIN_URL; ?>/js',
-        UWA_CSS = '<?php echo MAIN_URL; ?>/css',
-        UWA_PROXY = '<?php echo MAIN_URL; ?>/proxy',
-        UWA_STATIC = '<?php echo MAIN_URL; ?>/img';
+    <script type="text/javascript">
 
         var TabViewSample = {};
 
