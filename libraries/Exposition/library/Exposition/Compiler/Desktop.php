@@ -132,7 +132,13 @@ abstract class Exposition_Compiler_Desktop extends Exposition_Compiler
             $filePath = $dirPath . basename($fileInfo['path']);
         }
 
-        if ($this->addFileToArchive($url, $filePath)) {
+        $proxy = new Exposition_Proxy($url);
+        $fileContent = $proxy->getResponse();
+
+        // free proxy instance
+        unset($proxy);
+
+        if ($this->addFileFromStringToArchive($filePath, $fileContent)) {
             return $filePath;
         } else {
             return '';

@@ -414,18 +414,6 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
         $compiler = Exposition_Compiler_Factory::getCompiler('frame', $this->_widget, $options);
         $content = $compiler->render();
 
-        // configure view
-        $this->view->headTitle($this->_widget->getTitle());
-        foreach ($compiler->getStylesheets() as $stylesheet) {
-            $this->view->headLink()->appendStylesheet($stylesheet, 'screen');
-        }
-
-        // set color and design
-        $this->view->bodyClass = 'moduleIframe';
-        if (isset($options['chromeColor'])) {
-            $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
-        }
-
         // Configure output
         $this->getResponse()
             ->setHeader('Content-Type', 'text/html')
@@ -478,28 +466,6 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
         $compiler->setEnvironment('Frame_Google');
         $content = $compiler->render();
 
-        // configure view
-        $this->view->headTitle($this->_widget->getTitle());
-        foreach ($compiler->getStylesheets() as $stylesheet) {
-            $this->view->headLink()->appendStylesheet($stylesheet, 'screen');
-        }
-
-        // set color and design
-        $this->view->bodyClass = 'moduleIframe';
-        if (isset($options['chromeColor'])) {
-            $this->view->bodyClass .= ' ' .  $options['chromeColor'] . '-module';
-        }
-
-        // add google lib
-        if ($this->getRequest()->has('libs')) {
-            $libraries = split(',', $this->getRequest()->getParam('libs'));
-            foreach ($libraries as $script) {
-                if (preg_match('@^[a-z0-9/._-]+$@i', $script) && !preg_match('@([.][.])|([.]/)|(//)@', $script)) {
-                    $this->view->headScript()->appendFile("http://www.google.com/ig/f/$script");
-                }
-            }
-        }
-
         // Configure output
         $this->getResponse()
             ->setHeader('Content-Type', 'text/html')
@@ -544,6 +510,19 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
                 $value = stripslashes($value);
                 $options['data'][$name] = $value;
             }
+        }
+
+        // add google lib
+        if ($this->getRequest()->has('libs')) {
+            $libraries = split(',', $this->getRequest()->getParam('libs'));
+            $externalsScripts = $this->_widget->getExternalScripts();
+            foreach ($libraries as $script) {
+                if (preg_match('@^[a-z0-9/._-]+$@i', $script) && !preg_match('@([.][.])|([.]/)|(//)@', $script)) {
+                    $externalsScripts[] = "http://www.google.com/ig/f/$script";
+                }
+            }
+
+            $this->_widget->setExternalScripts($externalsScripts);
         }
 
         return $options;

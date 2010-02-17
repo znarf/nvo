@@ -97,6 +97,11 @@ class Exposition_Fetcher
             'cachetime' => $this->_cachetime,
         ));
 
-        return $proxy->getBody();
+        $response = $proxy->getResponse();
+
+        // free proxy instance
+        unset($proxy);
+
+        return $response;
     }
 }

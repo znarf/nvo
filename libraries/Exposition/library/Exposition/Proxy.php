@@ -121,6 +121,13 @@ class Exposition_Proxy
     private $_cachetime = 0;
 
     /**
+     * Proxy user agent.
+     *
+     * @var string
+     */
+    private $_useragent = self::USER_AGENT;
+
+    /**
      * Constructor.
      *
      * @param string $url
@@ -133,7 +140,7 @@ class Exposition_Proxy
         }
 
         $this->_url = $url;
-        $this->_key = 'ajax_' . sha1($this->_url);
+        $this->_key = 'proxy_' . sha1($this->_url);
 
         foreach ($options as $name => $value) {
             if ($name == 'type') {
@@ -142,13 +149,15 @@ class Exposition_Proxy
                 $this->_cachetime = $value;
             } else  if ($name == 'object') {
                 $this->_object =  preg_replace('/[^a-z0-9]/i', '', $value);
+            } else  if ($name == 'useragent') {
+                $this->_useragent =  $value;
             }
         }
 
         $options = array(
-            'useragent'    => self::USER_AGENT,
+            'useragent'    => $this->_useragent,
             'timeout'      => '60',
-            'maxredirects' => 5
+            'maxredirects' => 5,
         );
 
         $this->_client = new Zend_Http_Client($this->_url, $options);
@@ -264,10 +273,20 @@ class Exposition_Proxy
      * @param string $type
      * @return string javascript var code
      */
-    public function getResponse($string, $type, $object = null)
+    public function getResponse($string = null, $type = null, $object = null)
     {
+        // use current body
+        if (is_null($string)) {
+            $string = $this->getBody();
+        }
+
+        // use current type
+        if (is_null($type)) {
+            $type = $this->_type;
+        }
+
         // use default minType if not valide
-        if (!isset($this->_mimeTypes[$this->_type])) {
+        if (!isset($this->_mimeTypes[$type])) {
             $this->_type = self::DEFAULT_MINE_TYPE;
         }
 
@@ -347,7 +366,7 @@ class Exposition_Proxy
             $proxyCache = Exposition_Load::getConfig('proxy', 'cache');
 
             // no cache config or no cache time
-            if (empty($proxyCache) || $this->_cachetime == 0) {
+            if (empty($proxyCache) || $proxyCache['enable'] === false || $this->_cachetime == 0) {
 
                 $this->_cache = false;
 
