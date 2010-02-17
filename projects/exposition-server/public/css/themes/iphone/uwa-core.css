@@ -44,7 +44,7 @@ body {
 
 .moduleHeader .title,
 .moduleHeader .title a {
-    margin: auto 5px;
+    margin:auto 5px auto 0;
     padding: 0;
     font-size: 15px;
     font-weight: bold;
