@@ -186,6 +186,9 @@ UWA.extend(UWA.Environment.prototype, {
 var Environment = new UWA.Environment();
 var widget = Environment.getModule();
 
+// Force Json Ajax request throw script tag
+UWA.Data.useJsonRequest = true;
+
 window.onresize = function() {
   widget.callback('onResize');
 }
