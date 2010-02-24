@@ -25,15 +25,18 @@ UWA.Utils = {
 
   /* only used in /modules/uwa/uwa2.js */
   buildUrl: function (moduleUrl, linkHref) {
+
         var first_split = moduleUrl.split("://");
         var scheme =  first_split[0]
         var without_resource = first_split[1];
         var second_split = without_resource.split("/");
         var domain = second_split[0];
         var path = '';
+
         for (i=1;i<second_split.length-1;i++) {
             path += '/' + second_split[i];
         }
+
         if (linkHref.split("://").length > 1) { // complete
             return false;
         } else if (linkHref.substring(0, 1) == '/') { // absolute
@@ -46,6 +49,7 @@ UWA.Utils = {
   setTooltip: function(element, text, width) {
     if (window.App && App.toolTip)
       new App.toolTip(element, text, width, "left");
+
     return false;
   },
 
@@ -79,16 +83,17 @@ UWA.Utils = {
     }
   },
 
-  isArray : function (array)
-  {
+  isArray: function (array) {
     return !(array.constructor.toString().indexOf("Array") ==- 1);
   },
 
-  splat : function (array)
-  {
+  splat: function (array) {
+
     if (!array) {
       return []
     }
+
     return UWA.Utils.isArray(array) ? array : [array];
   }
 };
+

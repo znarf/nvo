@@ -51,18 +51,18 @@ Note:
 
 UWA.Client = {Engine: {'name': 'unknown', 'version': ''}, Platform: {}, 'features': {}};
 
-//features
+// detect UWA.Client.features values
 UWA.Client.features.xhr = !!(window.XMLHttpRequest);
 UWA.Client.features.xpath = !!(document.evaluate);
 
-//engine
+// detect UWA.Client.Engine values
 if (typeof window.opera !== "undefined") UWA.Client.Engine.name = 'opera';
 else if (typeof window.ActiveXObject !== "undefined") UWA.Client.Engine = {'name': 'ie', 'version': (UWA.Client.features.xhr) ? 7 : 6};
 else if (!navigator.taintEnabled) UWA.Client.Engine = {'name': 'webkit', 'version': (UWA.Client.features.xpath) ? 420 : 419};
 else if (document.getBoxObjectFor != null) UWA.Client.Engine.name = 'gecko';
 UWA.Client.Engine[UWA.Client.Engine.name] = UWA.Client.Engine[UWA.Client.Engine.name + UWA.Client.Engine.version] = true;
 
-//platform
+// detect UWA.Client.Platform values
 var platform = navigator.platform.match(/(mac)|(win)|(linux)|(nix)/i) || ['Other'];
 UWA.Client.Platform.name = platform[0].toLowerCase();
 UWA.Client.Platform[UWA.Client.Platform.name] = true;
@@ -71,3 +71,4 @@ UWA.Client.Platform[UWA.Client.Platform.name] = true;
 if (typeof Browser == "undefined") var Browser = {};
 if(UWA.Client.Engine.ie) Browser.isIE = true; else Browser.isIE = false;
 if(UWA.Client.Engine.opera) Browser.isOpera = true; else Browser.isOpera = false;
+

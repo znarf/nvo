@@ -74,8 +74,8 @@ UWA.merge(String.prototype, {
     needed for backward compatibility with a third-party UWA implementation
 
   */
-  cut : function (length, truncation)
-  {
+  cut: function (length, truncation) {
+
     length = length || 30;
     truncation = truncation === undefined ? "..." : truncation;
     if (this.length <= length) {
@@ -168,7 +168,7 @@ UWA.merge(String.prototype, {
     needed for compatibility with various Netvibes native widget (new format)
 
   */
-  format : function() {
+  format: function() {
     var args = arguments;
     return this.replace(/\{(\d+)\}/g, function(m, i){
       return args[i];
@@ -246,6 +246,7 @@ UWA.merge(String.prototype, {
   */
   makeClickable: function() {
     var htmlCode = this;
+
     // ( protocol (with optional auth) OR www. ) AND ( host )
     htmlCode = htmlCode.replace(/((\w+:\/\/(\w+(:\w+)?@)?)|www\.)[^\s<$]+/g, function(m, match1) {
       var url = m.replace(/([\.!\?:;\)\]]$)/, '');
@@ -296,8 +297,7 @@ UWA.merge(String.prototype, {
     return content.innerHTML;
   },
 
-  test : function (string, regexp)
-  {
+  test: function (string, regexp) {
     return ((typeof string == "string") ? new RegExp(string, regexp) : string).test(this);
   }
 });

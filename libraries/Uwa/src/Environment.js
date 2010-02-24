@@ -318,8 +318,8 @@ UWA.Environment.prototype = {
   Example:
     > widget.log("Environment is loading");
   */
-  log: function(string) {
-    if (this.debugMode) UWA.log(string);
+  log: function(message) {
+    if (this.debugMode === true) UWA.log(message);
   }
-
 }
+

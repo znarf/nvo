@@ -130,11 +130,7 @@ UWA.merge(Array.prototype, {
       if (this[i] === item) return i;
     }
     return -1;
-  }
-
-});
-
-UWA.merge(Array.prototype, {
+  },
 
   /* Method: normalize
 
@@ -200,3 +196,4 @@ UWA.merge(Array.prototype, {
 if (typeof Array.prototype.each != "function") {
   Array.prototype.each = Array.prototype.forEach;
 }
+

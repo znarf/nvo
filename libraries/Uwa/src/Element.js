@@ -195,7 +195,6 @@ UWA.merge(UWA.Element, {
     Documented in UWA 1.0
 
   */
-
   empty: function() {
     this.innerHTML = '';
     return this;
@@ -211,7 +210,6 @@ UWA.merge(UWA.Element, {
     Documented in UWA 1.0
 
   */
-
   hide: function() {
    return this.setStyle('display', 'none');
   },
@@ -226,7 +224,6 @@ UWA.merge(UWA.Element, {
     Documented in UWA 1.0
 
   */
-
   show: function() {
     return this.setStyle('display', '');
   },
@@ -241,7 +238,6 @@ UWA.merge(UWA.Element, {
     Documented in UWA 1.0 - to deprecate
 
   */
-
   toggle: function() {
     this.style.display == 'none' ? this.setStyle('display', '') : this.setStyle('display', 'none');
     return this;
@@ -257,7 +253,6 @@ UWA.merge(UWA.Element, {
     Documented in UWA 1.0
 
   */
-
   remove: function() {
     return this.parentNode.removeChild(this);
   },
@@ -272,7 +267,6 @@ UWA.merge(UWA.Element, {
     Documented in UWA 1.0
 
   */
-
   getDimensions: function() {
     return { width: this.offsetWidth, height: this.offsetHeight };
   },
@@ -285,7 +279,6 @@ UWA.merge(UWA.Element, {
     Documented in UWA 1.0
 
   */
-
   setStyle: function(style) {
     if (typeof style == 'string') {
       style = style.camelCase();
@@ -330,7 +323,6 @@ UWA.merge(UWA.Element, {
     Introduced in UWA 1.2 (ginger)
 
   */
-
   inject: function(el, where) {
     var where = where || "bottom";
     if (where != "top" && where != "bottom" && where != "after")
@@ -373,7 +365,7 @@ UWA.merge(UWA.Element, {
 
 });
 
-
 if (window.HTMLElement) {
   UWA.merge(window.HTMLElement.prototype, UWA.Element);
 }
+

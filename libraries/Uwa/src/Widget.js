@@ -542,17 +542,23 @@ UWA.Widget.prototype = {
     > var url = widget.getValue("feedUrl");
   */
   getValue: function(name) {
+
     if (typeof this.data[name] != "undefined") {
       return this.data[name];
     }
+
     if (this.environment && this.environment.getData) {
       var value = this.environment.getData(name);
+
       if (value == 'null') {
         value = null;
       }
+
       this.data[name] = value;
+
       return value;
     }
+
     return null;
   },
 
@@ -789,6 +795,7 @@ UWA.Widget.prototype = {
 
   /* internal use only - not documented */
   setMetasXML: function(metas) {
+
     var metasArray = [];
     for(var i = 0; i < metas.length; i++) {
       if(metas[i].name) var name = metas[i].name;
@@ -798,6 +805,7 @@ UWA.Widget.prototype = {
       if(value == 'false') value = false; else if(value == 'true') value = true; // booleanise
       metasArray[name] = value;
     }
+
     this.setMetas(metasArray);
   },
 

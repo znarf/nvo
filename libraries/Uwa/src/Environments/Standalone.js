@@ -132,6 +132,7 @@ UWA.extend(UWA.Environment.prototype, {
  },
 
  getData: function(name) {
+
    widget.log('getData:' + name);
 
    if(typeof(document.cookie) != "undefined") {
@@ -149,6 +150,7 @@ UWA.extend(UWA.Environment.prototype, {
  },
 
  setData: function(name, value) {
+
    widget.log('setData:' + name + ':' + value);
 
    if (typeof(document.cookie) != "undefined") { // Valid cookie ?
