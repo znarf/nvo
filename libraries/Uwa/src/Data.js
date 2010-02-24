@@ -55,47 +55,6 @@ if (typeof UWA.proxies == "undefined") {
   }
 }
 
-if (typeof UWA.Json == "undefined") UWA.Json = {};
-
-UWA.Json.request = function(url, request) {
-
-  var varname = 'json';
-
-  if (request.context && request.context[0]) varname += request.context[0];
-  else varname += Math.round(1000*1000*Math.random());
-
-  eval(varname + '= false');
-
-  url += '&object=' + varname ;
-
-  var script = document.createElement('script');
-  script.setAttribute('type', 'text/javascript');
-  script.src = url;
-  var head = document.getElementsByTagName('head')[0];
-  var insert = head.appendChild(script);
-
-  if (typeof request.onComplete == "undefined") UWA.log('no callback set');
-
-  var callback = request.onComplete;
-
-  var myCallback = function(c){ return function(j) { callback(j, c) } }(request.context);
-
-  var interval = setInterval( ( function() {
-    eval('var json = ' + varname);
-    if (json) {
-      try {
-        myCallback(json);
-      } catch(e) {
-        UWA.log(e);
-      }
-      insert.parentNode.removeChild(insert);
-      clearInterval(interval);
-    }
-  } ).bind(this), 100);
-
-}
-
-
 UWA.Data = {
 
   useJsonRequest: false,
@@ -365,6 +324,7 @@ UWA.Data = {
           this.useJsonRequest = false;
         }
         if (this.useJsonRequest && typeof request.authentication == "undefined") {
+            alert('arf');
           return UWA.Json.request(url, request);
         } else {
           var callback = request.onComplete;
@@ -377,7 +337,6 @@ UWA.Data = {
         }
 
     }
-
   }
-
 };
+

@@ -54,7 +54,11 @@ BASE_FILES = \
 	$(UWA_JS_SRC)/String.js \
 	$(UWA_JS_SRC)/Array.js \
 	$(UWA_JS_SRC)/Element.js \
+    $(UWA_JS_SRC)/Json.js \
 	$(UWA_JS_SRC)/Data.js \
+    $(UWA_JS_SRC)/Data/Storage.js \
+    $(UWA_JS_SRC)/Data/Storage/Abstract.js \
+    $(UWA_JS_SRC)/Data/Storage/Dom.js \
 	$(UWA_JS_SRC)/Environment.js\
 	$(UWA_JS_SRC)/Widget.js \
 	$(UWA_JS_SRC)/Utils.js \
@@ -92,6 +96,17 @@ ENVIRONMENTS = \
 
 UWA_CORE = $(STAGE)/dist/UWA_Core.js
 UWA_MOOTOOLS = $(STAGE)/dist/UWA_Mootools.js
+
+FIND_CLEAN_FILES = find $(UWA_JS) -type f \
+	-iname '*.DS_Store' \
+	-o -iname '*~' \
+	-o -iname '*.~*' \
+	-o -iname '*.bak' \
+	-o -iname '*.marks' \
+	-o -iname '*.thumb' \
+	-o -iname '*Thumbs.db'
+
+# Update Env
 
 all: dist zip tar
 	@echo "UWA JavaScript Runtime build complete."
@@ -151,4 +166,8 @@ clean:
 	-@rm -rf $(STAGE)
 	-@rm -f $(BUILD)/$(NAME)*.zip
 	-@rm -f $(BUILD)/$(NAME)*.tar.gz
+	@list=`$(FIND_CLEAN_FILES)`; \
+	for i in $$list;do \
+		rm -f $$i; \
+	done
 	@echo "Staged files and archives removed."
