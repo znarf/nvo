@@ -44,7 +44,7 @@ UWA.Json = {
         varname += Math.round(1000*1000*Math.random());
     }
 
-    UWA.Json.evalJSON('var ' + varname + '= false');
+    eval(varname + '= false');
 
     url += '&object=' + varname ;
 
@@ -66,7 +66,7 @@ UWA.Json = {
 
     var interval = setInterval( ( function() {
 
-      UWA.Json.evalJSON('var json = ' + varname);
+      eval('var json = ' + varname);
 
       if (json) {
 

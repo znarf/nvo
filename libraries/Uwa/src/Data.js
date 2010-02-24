@@ -324,7 +324,6 @@ UWA.Data = {
           this.useJsonRequest = false;
         }
         if (this.useJsonRequest && typeof request.authentication == "undefined") {
-            alert('arf');
           return UWA.Json.request(url, request);
         } else {
           var callback = request.onComplete;
