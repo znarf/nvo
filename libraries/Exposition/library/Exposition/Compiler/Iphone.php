@@ -113,9 +113,11 @@ class Exposition_Compiler_Iphone  extends Exposition_Compiler_Uwa
         // Add Widget Javascript
         $script = $this->_widget->getCompressedScript();
         if (isset($script) && strlen($script) > 0) {
-            $l[] = '<script type="text/javascript"><![CDATA[';
+            $l[] = '<script type="text/javascript">';
+            $l[] = '//<![CDATA[';
             $l[] = $script;
-            $l[] = ']]></script>';
+            $l[] = '//]]>';
+            $l[] = '</script>';
         }
 
         $l[] = '</head>';
