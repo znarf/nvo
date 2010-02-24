@@ -512,10 +512,12 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
             }
         }
 
-        // add google lib
+        // add google libs require for height resizing
         if ($this->getRequest()->has('libs')) {
+
             $libraries = split(',', $this->getRequest()->getParam('libs'));
             $externalsScripts = $this->_widget->getExternalScripts();
+
             foreach ($libraries as $script) {
                 if (preg_match('@^[a-z0-9/._-]+$@i', $script) && !preg_match('@([.][.])|([.]/)|(//)@', $script)) {
                     $externalsScripts[] = "http://www.google.com/ig/f/$script";
