@@ -29,75 +29,74 @@ Credits:
 if (typeof UWA.Data == "undefined") UWA.Data = {};
 if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
-UWA.Data.Storage.Html5 = function() {
+UWA.Data.Storage.Cookies = function() {
 
     // The type of storage engine
-    this.type = 'HTML5';
+    this.type = 'Cookies';
 
     // Set the Database limit
-    this.limit = 1024 * 200;
+    this.limit = 1024 * 4;
 
     if(this.initialize) this.initialize();
 }
 
-UWA.Data.Storage.Html5.prototype = UWA.merge({
+UWA.Data.Storage.Cookies.prototype = UWA.merge({
 
    connect: function(database) {
 
         // The type of storage engine
         this.database = database;
 
-       // Create our database connection
-        var db = this.db = openDatabase('uwa-data-storage-' + this.database, '1.0', this.database, this.limit);
-        if (!db) throw 'JSTORE_ENGINE_HTML5_NODB';
-        db.transaction(function(db){
-            db.executeSql( 'CREATE TABLE IF NOT EXISTS data (k TEXT UNIQUE NOT NULL PRIMARY KEY, v TEXT NOT NULL)' );
-        });
-
-        // Cache the data from the table
-        this.updateCache();
-
         this.isReady = true;
     },
 
-    updateCache: function(){
-        var self = this;
-        // Read the database into our cache object
-        this.db.transaction(function(db){
-            db.executeSql( 'SELECT k,v FROM data', [], function(db, result) {
-                var rows = result.rows, i = 0, row;
-                for (; i < rows.length; ++i){
-                    row = rows.item(i);
-                    self.data[row.k] = self.safeResurrect(row.v);
-                }
-            });
-        });
-    },
-
     isAvailable: function() {
-        return !!window.openDatabase
+        return typeof(document.cookie) != "undefined";
     },
 
     get: function(key) {
+        this.interruptAccess();
 
+        var name = 'uwa-' + this.database + '-' + key;
+        var index = document.cookie.indexOf(name);
+
+        if ( index != -1) {
+          var nStart = (document.cookie.indexOf("=", index) + 1);
+          var nEnd = document.cookie.indexOf(";", index);
+
+          if (nEnd == -1) {
+            var nEnd = document.cookie.length;
+          }
+
+          return unescape(document.cookie.substring(nStart, nEnd));
+        }
+
+        return null;
     },
 
     set: function(key, value) {
         this.interruptAccess();
-        // Update the database
-        this.db.transaction(function(db){
-            db.executeSql( 'INSERT OR REPLACE INTO data(k, v) VALUES (?, ?)', [key,this.safeStore(value)]);
-        });
-        return this._super(key, value);
+
+        var name = 'uwa-' + this.database + '-' + key;
+        var expires = 3600 * 60 * 24; // 24 days by default
+        var expires_date = new Date( new Date().getTime() + (expires) );
+        var cookieData = name + "=" + escape(value) + ';' +
+          ((expires) ? "expires=" + expires_date.toGMTString() + ';' : "") +
+          "path=" + escape(window.location.pathname) + ';' +
+          "domain=" + escape(window.location.hostname);
+
+        document.cookie = cookieData;
+
+        return value;
     },
 
     rem: function(key) {
         this.interruptAccess();
-        // Update the database
-        this.db.transaction(function(db){
-            db.executeSql( 'DELETE FROM data WHERE k = ?', [key] )
-        })
-        return this._super(key);
+
+        var out = this.get(key, null);
+        this.set(key, null);
+
+        return out;
     }
 }, UWA.Data.Storage.Abstract.prototype);
 

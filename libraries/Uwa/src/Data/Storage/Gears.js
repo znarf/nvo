@@ -29,51 +29,86 @@ Credits:
 if (typeof UWA.Data == "undefined") UWA.Data = {};
 if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
-UWA.Data.Storage.Dom = function(database) {
-    if(this.initialize) this.initialize(database);
+UWA.Data.Storage.Gears = function() {
+
+   // The type of storage engine
+    this.type = 'Google Gears';
+
+    // Set the Database limit
+    this.limit = 5 * 1024 * 1024;
+
+
+
+
+    if(this.initialize) this.initialize();
 }
 
-UWA.Data.Storage.Dom.prototype = Object.extend(UWA.Data.Storage.Abstract.prototype, {
+UWA.Data.Storage.Gears.prototype = UWA.merge({
 
     connect: function(database) {
 
         // The type of storage engine
         this.database = database;
 
-        // The type of storage engine
-        this.type = 'DOM';
+        // Add required third-party scripts
+        this.include('http://code.google.com/apis/gears/gears_init.js');
 
-        // Set the Database limit
-        this.limit = 5 * 1024 * 1024;
+        console.info('wait');
 
-        this.db = !window.globalStorage ? window.localStorage : window.globalStorage[location.hostname];
+        while(!(window.google && window.google.gears)) {
+            console.info('.');
+        }
+
+        console.info('ok');
+
+         // Create our database connection
+        var db = this.db = google.gears.factory.create('beta.database');
+        db.open( 'uwa-' + this.database );
+        db.execute( 'CREATE TABLE IF NOT EXISTS data (k TEXT UNIQUE NOT NULL PRIMARY KEY, v TEXT NOT NULL)' );
+
+        // Cache the data from the table
+        this.updateCache();
 
         this.isReady = true;
     },
 
     isAvailable: function() {
-        !!window.sessionStorage && !!(window.localStorage || window.globalStorage);
+        return true;
+        return !!(window.google && window.google.gears);
     },
 
-    get: function(key) {
-        this.interruptAccess();
-        var out = this.db.getItem(this.database + '-' + key);
-
-        // Gecko's getItem returns {value: 'the value'}, WebKit returns 'the value'
-        return this.safeResurrect((out && out.value ? out.value : out));
+    updateCache: function(){
+        // Read the database into our cache object
+        var result = this.db.execute( 'SELECT k,v FROM data' );
+        while (result.isValidRow()){
+            this.data[result.field(0)] = this.safeResurrect( result.field(1) );
+            result.next();
+        } result.close();
     },
 
-    set: function(key, value) {
+    set: function(key, value){
         this.interruptAccess();
-        this.db.setItem(this.database + '-' + key,this.safeStore(value));
+
+        // Update the database
+        var db = this.db;
+        db.execute( 'BEGIN' );
+        db.execute( 'INSERT OR REPLACE INTO data(k, v) VALUES (?, ?)', [key,this.safeStore(value)] );
+        db.execute( 'COMMIT' );
+
         return value;
     },
-
-    rem: function(key) {
+    rem: function(key){
         this.interruptAccess();
-        var out = this.get(this.database + '-' + key);
-        this.db.removeItem(this.database + '-' + key);
-        return out
+
+        var out = this.get(key);
+
+        // Update the database
+        var db = this.db;
+        db.execute( 'BEGIN' );
+        db.execute( 'DELETE FROM data WHERE k = ?', [key] );
+        db.execute( 'COMMIT' );
+
+        return out;
     }
-});
+}, UWA.Data.Storage.Abstract.prototype);
 

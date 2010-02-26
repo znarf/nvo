@@ -31,6 +31,9 @@ Credits:
 
 UWA.Data.Storage = function(options) {
 
+  //
+  this.EnginesInstances = [];
+
   // The current engine to use for storage
   this.CurrentEngine = null;
 
@@ -38,7 +41,17 @@ UWA.Data.Storage = function(options) {
   this.defaults = {
     database: 'default',
     engine: null,
-    availableEngine: ['dom', 'flash'],
+    availableEngine: [
+    'Gears',
+    /*
+        'Dom',
+        'Html5',
+        'IE',
+        'Flash',
+        'Gears',
+        'Cookies'
+        */
+    ],
   };
 
   // Global settings
@@ -64,10 +77,17 @@ UWA.Data.Storage.prototype = {
 
       this.setOptions(options);
 
+      // if no engine given, update availables ones and set first found has current
       if (this.options.engine == null) {
 
           this.detectAvailableEngine();
-          this.setCurrentEngine();
+
+          // set first available has current
+          if (this.options.availableEngine.length > 0) {
+              this.setCurrentEngine(this.options.availableEngine[0]);
+          } else {
+              throw ('No available engine detected.');
+          }
       }
   },
 
@@ -78,19 +98,46 @@ UWA.Data.Storage.prototype = {
   detectAvailableEngine: function() {
 
       var availableEngine = [];
-      this.options.availableEngine.each(function(position, engine) {
+      this.options.availableEngine.each(function(engineName, position) {
 
-          if (0) {
-              availableEngine.push(engine);
+          if (this.getEngineInstance(engineName).isAvailable()) {
+              availableEngine.push(engineName);
           }
-      });
+
+      }, this);
 
       this.options.availableEngine = availableEngine;
   },
 
-  // Set the current storage engine
-  setCurrentEngine: function(name) {
-      this.CurrentEngine = new UWA.Data.Storage.Dom(this.options.database);
+  getEngineInstance: function(engineName) {
+
+      if (typeof engineName != "string") {
+          throw ('Bad engineName param value <' + engineName + '> for getEngineInstance.');
+      }
+
+      if (typeof this.EnginesInstances[engineName] == "undefined") {
+
+          try {
+              this.EnginesInstances[engineName] = new UWA.Data.Storage[engineName]();
+          } catch (e) {
+              throw ('Unable to initialize engine with name <' + engineName + '> cause: ' + e);
+          }
+      }
+
+      return this.EnginesInstances[engineName];
+  },
+
+  // Set the current storage engine and connect it to current database
+  setCurrentEngine: function(engineName) {
+
+      if (typeof engineName != "string") {
+          throw ('Bad engineName param value <' + engineName + '> for setCurrentEngine.');
+      }
+
+      var engineInstance = this.getEngineInstance(engineName);
+      engineInstance.connect(this.options.database);
+
+      this.CurrentEngine = engineInstance;
   },
 
   // Provide a simple interface for storing/getting values
@@ -114,6 +161,8 @@ UWA.Data.Storage.prototype = {
       return false;
     }
 
+    this.store('lastUpdate', new Date().getTime());
+
     return this.CurrentEngine.rem(key);
   },
 
@@ -124,7 +173,17 @@ UWA.Data.Storage.prototype = {
 
   // Alias access for setting
   set: function(key, value) {
+
+    this.store('lastUpdate', new Date().getTime());
+
     return this.store(key, value);
+  },
+
+  getLastUpdateDate: function() {
+
+      var lastUpdate = this.get('lastUpdate');
+
+      return new Date().setTime(lastUpdate);
   },
 
   setDebugMode: function(mode) {

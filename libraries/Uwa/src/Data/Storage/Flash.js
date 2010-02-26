@@ -29,22 +29,25 @@ Credits:
 if (typeof UWA.Data == "undefined") UWA.Data = {};
 if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
-UWA.Data.Storage.Dom = function(database) {
+UWA.Data.Storage.Flash = function() {
+
+    // The type of storage engine
+    this.type = 'Flash';
+
+    // Set the Database limit
+    this.limit = 5 * 1024 * 1024;
 
     this.flashProxyPath = '';
 
-    if(this.initialize) this.initialize(database);
+    if(this.initialize) this.initialize();
 }
 
-UWA.Data.Storage.Dom.prototype = Object.extend(UWA.Data.Storage.Abstract.prototype, {
+UWA.Data.Storage.Flash.prototype = UWA.merge({
 
-    connect: function() {
+    connect: function(database) {
 
-        // The type of storage engine
-        this.type = 'Flash';
-
-        // Set the Database limit
-        this.limit = 5 * 1024 * 1024;
+        // set current database
+        this.database = database;
 
         var name = 'uwa-data-storage-flash-' + this.database;
 
@@ -55,8 +58,10 @@ UWA.Data.Storage.Dom.prototype = Object.extend(UWA.Data.Storage.Abstract.prototy
         // object tag wrapping an embed tag. Of course, this is unnecessary for
         // all browsers except for IE, which, to my knowledge, is the only browser
         // in existance where you need to complicate your code to fix bugs. Goddamnit. :(
+        /*
         $(document.body).append('<iframe style="height:1px;width:1px;position:absolute;left:0;top:0;margin-left:-100px;" ' +
                 'id="jStoreFlashFrame" src="' + this.flashProxyPath + '"></iframe>');
+                */
 
         this.isReady = true;
     },
@@ -123,5 +128,5 @@ UWA.Data.Storage.Dom.prototype = Object.extend(UWA.Data.Storage.Abstract.prototy
 		}
 		return '0,0,0';
     }
-});
+}, UWA.Data.Storage.Abstract.prototype);
 

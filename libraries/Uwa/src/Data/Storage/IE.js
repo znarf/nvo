@@ -29,19 +29,23 @@ Credits:
 if (typeof UWA.Data == "undefined") UWA.Data = {};
 if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
-UWA.Data.Storage.IE = function(database) {
-    if(this.initialize) this.initialize(database);
+UWA.Data.Storage.IE = function() {
+
+    // The type of storage engine
+    this.type = 'IE';
+
+    // Set the Database limit
+    this.limit = 64 * 1024;
+
+    if(this.initialize) this.initialize();
 }
 
-UWA.Data.Storage.IE.prototype = Object.extend(UWA.Data.Storage.Abstract.prototype, {
+UWA.Data.Storage.IE.prototype = UWA.merge({
 
-    connect: function() {
+    connect: function(database) {
 
         // The type of storage engine
-        this.type = 'IE';
-
-        // Set the Database limit
-        this.limit = 64 * 1024;
+        this.database = database;
 
         // Create a hidden div to store attributes in
         this.db = $('<div style="display:none;behavior:url(\'#default#userData\')" id="uwa-data-storage-' + this.database + '"></div>')
@@ -74,5 +78,5 @@ UWA.Data.Storage.IE.prototype = Object.extend(UWA.Data.Storage.Abstract.prototyp
         this.db.save(this.database);
         return beforeDelete;
     }
-});
+}, UWA.Data.Storage.Abstract.prototype);
 

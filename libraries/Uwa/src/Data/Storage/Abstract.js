@@ -29,13 +29,17 @@ Credits:
 if (typeof UWA.Data == "undefined") UWA.Data = {};
 if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
-UWA.Data.Storage.Abstract = function(database) {
-    if(this.initialize) this.initialize(database);
+UWA.Data.Storage.Abstract = function() {
+
+    // The maximum limit of the storage engine
+    this.limit = -1;
+
+    if(this.initialize) this.initialize();
 }
 
 UWA.Data.Storage.Abstract.prototype = {
 
-    initialize: function(database){
+    initialize: function(){
 
         try {
             this.rxJson = new RegExp('^("(\\\\.|[^"\\\\\\n\\r])*?"|[,:{}\\[\\]0-9.\\-+Eaeflnr-u \\n\\r\\t])+?$')
@@ -44,23 +48,23 @@ UWA.Data.Storage.Abstract.prototype = {
         }
 
         // Configure the database name
-        this.database = database;
+        this.database = null;
 
         // Cache the data so we can work synchronously
         this.data = {};
 
+        // Third party script includes
+        this.includes = [];
+
+        this.delays = [];
+
         // When set, we're ready to transact data
         this.isReady = false;
-
-        // The maximum limit of the storage engine
-        this.limit = -1;
-
-        this.connect(database);
     },
 
     // This should be overloaded with an actual functionality init
     init: function(){
-        throw new Exception('Unable to init UWA.Storage.Abstract');
+        throw new ('Unable to init UWA.Storage.Abstract.');
     },
 
     // This should be overloaded with an actual functionality presence check
@@ -71,9 +75,19 @@ UWA.Data.Storage.Abstract.prototype = {
     // All get/set/rem functions across the engines should add this to the
     // first line of those functions to prevent accessing the engine while unstable.
     interruptAccess: function(){
-        if (!this.isReady) throw 'ENGINE_NOT_READY';
+        if (!this.isReady) throw new ('Engine is not ready.');
     },
 
+    // Performs all necessary script includes
+    include: function(url){
+
+        var script = document.createElement('script');
+        script.setAttribute('type', 'text/javascript');
+        script.src = url;
+
+        var head = document.getElementsByTagName('head')[0];
+        var insert = head.appendChild(script);
+    },
 
     get: function(key){
         this.interruptAccess();
@@ -115,5 +129,42 @@ UWA.Data.Storage.Abstract.prototype = {
     // Restores JSON'd values before returning
     safeResurrect: function(value){
         return this.rxJson.test(value) ? UWA.Json.evalJSON(value) : value;
+    },
+
+    /* Method: setDelayed
+
+    Registers a function as delayed event.
+
+    If 'bind' is not defined, the function will automatically be bound to the current environment object.
+
+    Parameters:
+      * String name: the name of the event
+      * Function fn: the function to register
+      * Integer delay: the delay in milliseconds
+      * Object bind: A javascript object to bind the function to.
+
+    Notes:
+      internal or advanced use only
+
+    */
+    setDelayed: function(name, fn, delay, bind) {
+      this.clearDelayed(name);
+      if(typeof bind == "undefined" || bind === true) fn = fn.bind(this);
+      this.delays[name] = setTimeout(fn, delay);
+    },
+
+    /* Method: clearDelayed
+
+    Unregister a delayed event previously registered with <setDelayed>
+
+    Parameters:
+      * String name: the name of the event
+
+    Notes:
+      internal or advanced use only
+
+    */
+    clearDelayed: function(name) {
+      if (this.delays[name]) { clearTimeout(this.delays[name]) }
     }
 }

@@ -29,19 +29,23 @@ Credits:
 if (typeof UWA.Data == "undefined") UWA.Data = {};
 if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
-UWA.Data.Storage.Dom = function(database) {
-    if(this.initialize) this.initialize(database);
+UWA.Data.Storage.Dom = function() {
+
+    // The type of storage engine
+    this.type = 'DOM';
+
+    // Set the Database limit
+    this.limit = 5 * 1024 * 1024;
+
+    if(this.initialize) this.initialize();
 }
 
-UWA.Data.Storage.Dom.prototype = Object.extend(UWA.Data.Storage.Abstract.prototype, {
+UWA.Data.Storage.Dom.prototype = UWA.merge({
 
-    connect: function() {
+    connect: function(database) {
 
-        // The type of storage engine
-        this.type = 'DOM';
-
-        // Set the Database limit
-        this.limit = 5 * 1024 * 1024;
+        // set current database
+        this.database = database;
 
         if (this.isAvailableLocal()) {
             this.db = !window.globalStorage ? window.localStorage : window.globalStorage[location.hostname];
@@ -82,7 +86,8 @@ UWA.Data.Storage.Dom.prototype = Object.extend(UWA.Data.Storage.Abstract.prototy
         this.interruptAccess();
         var out = this.get(this.database + '-' + key);
         this.db.removeItem(this.database + '-' + key);
-        return out
+        return out;
     }
-});
+
+}, UWA.Data.Storage.Abstract.prototype);
 
