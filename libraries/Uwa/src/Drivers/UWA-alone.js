@@ -193,7 +193,7 @@ UWA.merge(UWA.Element, {
 // Function extensions
 UWA.merge(Function.prototype, {
 
-  create : function (callback)
+  create: function (callback)
   {
    var __method = this;
    callback = callback || {};
@@ -212,7 +212,7 @@ UWA.merge(Function.prototype, {
     }
   },
 
-  bind : function (callback, args)
+  bind: function (callback, args)
   {
     return this.create(
     {
@@ -220,7 +220,7 @@ UWA.merge(Function.prototype, {
     });
   },
 
-  bindAsEventListener : function (callback, args)
+  bindAsEventListener: function (callback, args)
   {
     return this.create(
     {
@@ -229,47 +229,45 @@ UWA.merge(Function.prototype, {
   }
 });
 
-// JSON Interface
-var JSON = {
+// JSON Interface if require only
 
-  $defined: function(obj) {
-    return (obj != undefined);
-  },
+if (typeof UWA.Json == "undefined") {
+  var JSON = {
 
-  encode: function(obj){
-    switch (typeof obj){
-      case 'string':
-        return '"' + obj.replace(/[\x00-\x1f\\"]/g, JSON.$replaceChars) + '"';
-      case 'array':
-        return '[' + String(obj.map(JSON.encode).filter(JSON.$defined)) + ']';
-      case 'object':
-        var string = [];
-        for(var key in obj) {
-          var json = JSON.encode(obj[key]);
-          if (json) string.push(JSON.encode(key) + ':' + json);
-        }
-        return '{' + String(string) + '}';
-      case 'number': case 'boolean': return String(obj);
-      case false: return 'null';
+    $defined: function(obj) {
+      return (obj != undefined);
+    },
+
+    encode: function(obj){
+      switch (typeof obj){
+        case 'string':
+          return '"' + obj.replace(/[\x00-\x1f\\"]/g, JSON.$replaceChars) + '"';
+        case 'array':
+          return '[' + String(obj.map(JSON.encode).filter(JSON.$defined)) + ']';
+        case 'object':
+          var string = [];
+          for(var key in obj) {
+            var json = JSON.encode(obj[key]);
+            if (json) string.push(JSON.encode(key) + ':' + json);
+          }
+          return '{' + String(string) + '}';
+        case 'number': case 'boolean': return String(obj);
+        case false: return 'null';
+      }
+      return null;
+    },
+
+    $specialChars: {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\'},
+
+    $replaceChars: function(chr){
+      return JSON.$specialChars[chr] || '\\u00' + Math.floor(chr.charCodeAt() / 16).toString(16) + (chr.charCodeAt() % 16).toString(16);
+    },
+
+    decode: function(string, secure){
+      if (typeof string != 'string' || !string.length) return null;
+      if (secure && !(/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(string.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, ''))) return null;
+      return eval('(' + string + ')');
     }
-    return null;
-  },
-
-  $specialChars: {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\'},
-
-  $replaceChars: function(chr){
-    return JSON.$specialChars[chr] || '\\u00' + Math.floor(chr.charCodeAt() / 16).toString(16) + (chr.charCodeAt() % 16).toString(16);
-  },
-
-  decode: function(string, secure){
-    if (typeof string != 'string' || !string.length) return null;
-    if (secure && !(/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(string.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, ''))) return null;
-    return eval('(' + string + ')');
   }
-
 }
 
-if (typeof UWA.Json == "undefined") UWA.Json = {};
-
-UWA.Json.encode = JSON.encode;
-UWA.Json.decode = function(string) { return JSON.decode(string, true) }

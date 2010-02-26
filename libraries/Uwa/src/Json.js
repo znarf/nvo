@@ -34,6 +34,12 @@ if (typeof UWA.Json == "undefined") UWA.Json = {};
 
 UWA.Json = {
 
+  encode: JSON.encode,
+
+  decode: function (string) {
+    return JSON.decode(string, true)
+  },
+
   request: function(url, request) {
 
     var varname = 'json';
@@ -73,7 +79,7 @@ UWA.Json = {
         try {
           myCallback(json);
         } catch(e) {
-          UWA.log(e);
+            UWA.log('Error: ' + e);
         }
 
         insert.parentNode.removeChild(insert);
