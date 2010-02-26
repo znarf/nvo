@@ -162,7 +162,7 @@
     .nv-pager a.prev{
         float: left;
         padding-left: 20px;
-        background: url(img/previous.gif) no-repeat left center;
+        background: url(/css/base/img/previous.gif) no-repeat left center;
         border: 0;
         cursor: pointer;
 
@@ -171,7 +171,7 @@
         float: right;
         padding-left: 0px;
         padding-right: 20px;
-        background: url(img/next.gif) no-repeat right center;
+        background: url(/css/base/img/next.gif) no-repeat right center;
         border: 0;
         cursor: pointer;
 
@@ -179,13 +179,13 @@
     .nv-pager a.next{
         float: right;
         padding-right: 20px;
-        background: url(img/next.gif) no-repeat right center;
+        background: url(/css/base/img/next.gif) no-repeat right center;
     }
     .rtl .nv-pager a.next{
         float: left;
         padding-right: 0px;
         padding-left: 20px;
-        background: url(img/previous.gif) no-repeat left center;
+        background: url(/css/base/img/previous.gif) no-repeat left center;
     }
     .nv-pager a.back,
     .nv-pager .numericpages{
