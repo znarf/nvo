@@ -23,6 +23,11 @@ if (typeof Widgets == "undefined") var Widgets = {};
 
 UWA.extend(UWA.Environment.prototype, {
 
+  growboxInset: null,
+
+  minWidth: 358,
+  minHeight: 600,
+
   initialize: function() {
     this.dashboard = {};
   },
@@ -35,6 +40,7 @@ UWA.extend(UWA.Environment.prototype, {
     this.html['edit']       = $('editContent');
     this.html['status']     = $('moduleStatus');
     this.html['editLink']   = $('editLink');
+
   },
 
   onRegisterModule: function(module) {
@@ -49,6 +55,21 @@ UWA.extend(UWA.Environment.prototype, {
     new AppleInfoButton(this.html['editLink'], $('wrapper'), "black", "white", this.showDashboardPrefs.bind(this));
 
     this.callback('onUpdatePreferences');
+
+
+    var resizeButon = UWA.createElement('img', {
+        attributes: {
+          id: 'resizeButton',
+          src: '/System/Library/WidgetResources/resize.png'
+        },
+        events: {
+            mousedown: this.eventResizeButtonDown.bind(this),
+        }
+      }
+    );
+
+    this.html['resizeButon'] = resizeButon;
+    this.html['status'].appendChild(resizeButon);
 
   },
 
@@ -187,12 +208,53 @@ UWA.extend(UWA.Environment.prototype, {
     } else {
       return window.open(url);
     }
+  },
+
+  eventResizeButtonMove: function(event) {
+
+    if (this.growboxInset == -1) {
+        return;
+    }
+
+    var x = event.x + this.growboxInset.x;
+    var y = event.y + this.growboxInset.y;
+
+    // check min sizes
+    x = (x <  this.minWidth ? this.minWidth : x);
+    y = (y <  this.minHeight ? this.minHeight : y);
+
+    document.getElementById("resizeButton").style.top = (y-12);
+    window.resizeTo(x,y);
+
+    event.stopPropagation();
+    event.preventDefault();
+  },
+
+  eventResizeButtonDown: function(event) {
+
+    document.addEventListener("mousemove", this.eventResizeButtonMove.bind(this), true);
+    document.addEventListener("mouseup", this.eventResizeButtonUp.bind(this), true);
+
+    this.growboxInset = {x:(window.innerWidth - event.x), y:(window.innerHeight - event.y)};
+
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.callback('onUpdateBody');
+  },
+
+  eventResizeButtonUp: function(event) {
+
+    this.growboxInset = -1;
+
+    document.removeEventListener("mousemove", this.eventResizeButtonMove.bind(this), true);
+    document.removeEventListener("mouseup", this.eventResizeButtonUp.bind(this), true);
+
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.callback('onUpdateBody');
   }
 
-} );
+});
 
-UWA.log = function(string) {
-  if (window.alert) {
-    window.alert(string)
-  }
-}

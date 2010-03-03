@@ -35,12 +35,10 @@
     padding:0;
 }
 
-html {
+html, body {
     background:none;
-}
-
-body {
     text-align:left;
+    height: 100%;
 }
 
 #wrapper {
@@ -53,25 +51,24 @@ body {
 #contentWrapper {
     margin: 0;
     padding: 0;
-    padding-left:15px;
-    padding-right:14px;
-    width: 333px;
-    background: transparent url(dashboard/background.png) repeat-y center center;
+    border: 5px solid #CCC;
+    border-top: none;
+    border-bottom: none;
+    background: white;
 }
 
 #moduleHeader {
     margin: 0 0;
-    background: transparent url(dashboard/moduleheader.png) no-repeat center center;
+    background: transparent url(dashboard/moduleheader.png) repeat-x top center;
+    -webkit-border-top-right-radius: 10px;
+    -webkit-border-top-left-radius: 10px;
     height: 28px;
     line-height: 28px;
-    padding: 0 21px;
-    width: 320px;
+    padding: 0 5px;
 }
 
 #moduleContent {
     padding:  10px;
-    margin-left:1px;
-    margin-right:1px;
     max-height:550px;
     overflow:auto;
     -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
@@ -88,11 +85,15 @@ body {
 }
 
 #moduleFooter {
-    height: 16px;
+    background: white;
+    height: 5px;
     padding:0 2px;
     margin: 0;
-    width: 358px;
-    background: transparent url(dashboard/bottom.png) no-repeat center center;
+    border: 5px solid #CCC;
+    border-top: none;
+    -webkit-border-radius: 10px;
+    -webkit-border-top-right-radius: 0;
+    -webkit-border-top-left-radius: 0;
 }
 
 #moduleTitle {
@@ -105,18 +106,26 @@ body {
 }
 
 #editContent {
-    background: transparent url(dashboard/background.png) repeat-y center center;
-    border:0;
+    background: white;
+    border: 5px solid #CCC;
+    border-top: none;
+    border-bottom: none;
     padding: 8px 21px;
-    width: 320px;
     margin:0;
     -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
+}
+
+#resizeButton {
+    position:absolute;
+    top: 15px;
+    right: 2px;
+    -apple-dashboard-region: dashboard-region(control rectangle);
 }
 
 .infoButton {
     position:absolute;
     top:2px;
-    right:16px;
+    right:7px;
     height:13px;
     width:13px;
     top:6px;

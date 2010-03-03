@@ -93,6 +93,10 @@ final class Exposition_Compiler_Desktop_Dashboard extends Exposition_Compiler_De
             $this->addDistantFileToArchive($richIcon, $dirname . 'Icon.png');
         }
 
+        // use safari for debug or another webkit powered browser
+        //echo $this->getHtml();
+        //die();
+
         // Add other widget files
         $this->addFileFromStringToArchive($dirname . 'index.html', $this->getHtml());
         $this->addFileFromStringToArchive($dirname . 'Info.plist', $this->_getManifest());
