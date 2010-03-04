@@ -129,105 +129,95 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
           widget.setUnreadCount(1);
           widget.setSearchResultCount(2);
 
-          // init tab system
-          if (typeof(TabViewSample.tabs) == "undefined") {
+          // init widget tabs system
+          if (typeof(widget.tabs) == "undefined") {
 
-          var tabs = new UWA.Controls.TabView();
+              widget.tabs = new UWA.Controls.TabView();
 
-          TabViewSample.tabs = tabs;
+              // Create tab items
+              widget.tabs.addTab('tab1', {text: "UWA Links", customInfo: "custom"});
+              widget.tabs.addTab('tab2', {text: "Grid Data"});
+              widget.tabs.addTab('tab3', {text: "E-Mail List"});
+              widget.tabs.addTab('tab4', {text: "Rich list "});
+              widget.tabs.addTab('tab5', {text: "Thumbs list"});
+              widget.tabs.addTab('tab6', {text: "Json"});
+              widget.tabs.addTab('tab7', {text: "Ajax"});
+              widget.tabs.addTab('tab8', {text: "Prefs"});
+              widget.tabs.addTab('tab9', {text: "Export Widget"});
 
-          // Create tab items
-          tabs.addTab("tab1", {text: "UWA Links", customInfo: "custom"});
-          tabs.addTab("tab2", {text: "Grid Data"});
-          tabs.addTab("tab3", {text: "E-Mail List"});
-          tabs.addTab("tab4", {text: "Rich list "});
-          tabs.addTab("tab5", {text: "Thumbs list"});
-          tabs.addTab("tab6", {text: "Json"});
-          tabs.addTab("tab7", {text: "Ajax"});
-          tabs.addTab("tab8", {text: "Prefs"});
-          tabs.addTab("tab9", {text: "Export Widget"});
+              // Put some content in tabs
+              widget.tabs.setContent('tab1', $('hello-content').innerHTML);
+              widget.tabs.setContent('tab2', $('griddata-content').innerHTML);
+              widget.tabs.setContent('tab3', $('emaillist-content').innerHTML);
+              widget.tabs.setContent('tab4', $('richlist-content').innerHTML);
+              widget.tabs.setContent('tab5', $('thumbist-content').innerHTML);
+              widget.tabs.setContent('tab6', $('json-content').innerHTML);
+              widget.tabs.setContent('tab7', $('ajax-content').innerHTML);
+              widget.tabs.setContent('tab8', $('prefs-content').innerHTML);
+              widget.tabs.setContent('tab9', $('export-content').innerHTML);
 
-          // Put some content in tabs
-          tabs.setContent("tab1", $('hello-content').innerHTML);
-          tabs.setContent("tab2", $('griddata-content').innerHTML);
-          tabs.setContent("tab3", $('emaillist-content').innerHTML);
-          tabs.setContent("tab4", $('richlist-content').innerHTML);
-          tabs.setContent("tab5", $('thumbist-content').innerHTML);
-          tabs.setContent("tab6", $('json-content').innerHTML);
-          tabs.setContent("tab7", $('ajax-content').innerHTML);
-          tabs.setContent("tab8", $('prefs-content').innerHTML);
-          tabs.setContent("tab9", $('export-content').innerHTML);
+              // Handle Some special table
+              widget.tabs.onActiveTabChanged = function(name, data) {
 
-          // Register to activeTabChange event
-          tabs.observe('activeTabChange', TabViewSample.onActiveTabChanged);
+                  // Save active tab
+                  widget.setValue("activeTab", name);
 
-          } else {
-            var tabs = TabViewSample.tabs;
+                  if (name == 'tab6') {
+
+                      var onCompleteJson = function(json) {
+                        widget.tabs.setContent(name, 'json date is:' + json.date);
+                      }
+
+                      UWA.Data.request('<?php echo MAIN_URL; ?>/samples/index.php?json=true', {
+                        method: 'get',
+                        type: 'json',
+                        proxy: 'ajax',
+                        onComplete: onCompleteJson.bind(this)
+                      });
+
+                  } else if (name == 'tab7') {
+
+                      var onCompleteAjax = function(html) {
+                        widget.tabs.setContent(name, html);
+                      }
+
+                      UWA.Data.request('<?php echo MAIN_URL; ?>/samples/index.php?ajax=true', {
+                        method: 'get',
+                        type: 'html',
+                        proxy: 'ajax',
+                        onComplete: onCompleteAjax.bind(this)
+                      });
+
+                  } else if (name == 'tab8') {
+
+                      var html = '<h1>Preference values</h1>'
+                      + '<ul style="padding: 5px;">'
+                      + '<li>my_text: ' + widget.getValue('my_text') + "</li>"
+                      + '<li>my_text: ' + widget.getValue('pass') + "</li>"
+                      + '<li>my_checkbox: ' + widget.getValue('my_checkbox') + "</li>"
+                      + '<li>my_range: ' + widget.getValue('my_range') + "</li>"
+                      + '</ul>'
+
+                      widget.tabs.setContent(name, html);
+                  }
+                }
+
+              // Register to activeTabChange event
+              widget.tabs.observe('activeTabChange', widget.tabs.onActiveTabChanged);
+
           }
 
-          // Restore saved active tab
-          var activeTab = widget.getValue('activeTab');
+          // Restore saved active tab or set default
+          var activeTab = widget.getValue('activeTab') || 'tab1';
+          widget.tabs.selectTab(activeTab);
 
-          if (activeTab) {
-
-            if (TabViewSample.tabs.selectedTab) {
-                tabs.reload();
-            } else {
-                tabs.selectTab(activeTab);
-            }
-
-          } else {
-            tabs.selectTab('tab1');
-          }
-
-          widget.setBody(TabViewSample.tabs.tabSet);
+          // Add tabs to widget body
+          widget.setBody(widget.tabs.tabSet);
         }
 
-        TabViewSample.onActiveTabChanged = function(name, data) {
-
-          var tabs = TabViewSample.tabs;
-
-          // Save active tab
-          widget.setValue("activeTab", name);
-
-          if (name == 'tab6') {
-
-              var onCompleteJson = function(json) {
-                tabs.setContent(name, 'json date is:' + json.date);
-              }
-
-              UWA.Data.request('<?php echo MAIN_URL; ?>/samples/index.php?json=true', {
-                method: 'get',
-                type: 'json',
-                proxy: 'ajax',
-                onComplete: onCompleteJson.bind(this)
-              });
-
-          } else if (name == 'tab7') {
-
-              var onCompleteAjax = function(html) {
-                tabs.setContent(name, html);
-              }
-
-              UWA.Data.request('<?php echo MAIN_URL; ?>/samples/index.php?ajax=true', {
-                method: 'get',
-                type: 'html',
-                proxy: 'ajax',
-                onComplete: onCompleteAjax.bind(this)
-              });
-
-          } else if (name == 'tab8') {
-
-              var html = '<h1>Preference values</h1>'
-              + '<ul style="padding: 5px;">'
-              + '<li>my_text: ' + widget.getValue('my_text') + "</li>"
-              + '<li>my_text: ' + widget.getValue('pass') + "</li>"
-              + '<li>my_checkbox: ' + widget.getValue('my_checkbox') + "</li>"
-              + '<li>my_range: ' + widget.getValue('my_range') + "</li>"
-              + '</ul>'
-
-              tabs.setContent(name, html);
-          }
+        // Handle refresh to update tab content
+        widget.onRefresh = function() {
+            widget.tabs.onActiveTabChanged(widget.getValue('activeTab'))
         }
 
     </script>
@@ -266,26 +256,13 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                     </tfoot>
 
                     <tbody>
-                        <tr>
-                            <td>1</td>
-
-                            <td>line 1</td>
-                            <td>line number 1</td>
-                        </tr>
-
-                        <tr>
-                            <td>2</td>
-                            <td>line 2</td>
-
-                            <td>line number 2</td>
-                        </tr>
-
-                        <tr>
-                            <td>3</td>
-                            <td>col 1</td>
-                            <td>line number 3</td>
-
-                        </tr>
+                        <?php for ($i = 1; $i <= 15; $i++): ?>
+                            <tr <?php echo ($i % 2 == false ? 'class="even"' : '') ?>>
+                                <td><?php echo $i; ?></td>
+                                <td>line <?php echo $i; ?></td>
+                                <td>line number <?php echo $i; ?></td>
+                            </tr>
+                        <?php endfor; ?>
                     </tbody>
                 </table>
 
@@ -294,36 +271,16 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
             <div id="emaillist-content" class="tab-content">
 
                 <dl class="nv-emailList">
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <dt class="read<?php echo ($i % 2 == false ? ' even' : '') ?>">
+                            <a href="#" onclick="return false" title="Read e-mail">
+                            <span class="sender">Sender</span> - My e-mail subject #3</a>
+                        </dt>
 
-                    <dt class="unread">
-
-                        <a href="#" onclick="return false" title="Read e-mail">
-                        <strong class="sender">Sender</strong> - My e-mail subject #1</a>
-                    </dt>
-
-                    <dd>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus condimentum. Phasellus auctor.</p>
-                    </dd>
-
-                    <dt class="read">
-                        <a href="#" onclick="return false" title="Read e-mail">
-                        <strong class="sender">Sender</strong> - My e-mail subject #2</a>
-                    </dt>
-
-                    <dd>
-                        <p>Donec odio turpis, vulputate non, tristique a, placerat non, nunc.</p>
-
-                    </dd>
-
-                    <dt class="read">
-                        <a href="#" onclick="return false" title="Read e-mail">
-                        <span class="sender">Sender</span> - My e-mail subject #3</a>
-                    </dt>
-
-                    <dd>
-
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus condimentum.</p>
-                    </dd>
+                        <dd>
+                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus condimentum.</p>
+                        </dd>
+                    <?php endfor; ?>
                 </dl>
 
             </div>
@@ -333,31 +290,15 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 
                 <div class="nv-richList">
 
-                    <div class="item even">
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                    <div class="item<?php echo ($i % 2 == false ? ' even' : '') ?>">
                         <h3><a href="#">Item #1</a></h3>
                         <p>
                             Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                             Phasellus condimentum.
                         </p>
                     </div>
-
-                    <div class="item odd">
-                        <h3><a href="#">Item #2</a></h3>
-
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                            Phasellus condimentum.
-                        </p>
-                    </div>
-
-                    <div class="item even">
-                        <h3><a href="#">Item #3</a></h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                            Phasellus condimentum.
-                        </p>
-
-                    </div>
+                    <?php endfor; ?>
                 </div>
 
             </div>
@@ -365,7 +306,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
             <div id="thumbist-content">
 
                 <div class="nv-thumbnailedList">
-                    <div class="item even">
+
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                    <div class="item<?php echo ($i % 2 == false ? ' even' : '') ?>">
                         <a href="#"><img src="<?php echo MAIN_URL; ?>/img/uwa-screenshot.png" alt="" class="thumbnail" /></a>
 
                         <h3><a href="#">Item #1</a></h3>
@@ -374,29 +317,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                             consectetuer adipiscing elit. Phasellus
                         </p>
                     </div>
-
-                    <div class="item odd">
-                        <a href="#"><img src="<?php echo MAIN_URL; ?>/img/uwa-screenshot.png" alt="" class="thumbnail" /></a>
-                        <h3><a href="#">Item #2</a></h3>
-
-                        <p>Short text to test flotting picture behaviour.</p>
-                    </div>
-
-                    <div class="item even">
-                        <a href="#"><img src="<?php echo MAIN_URL; ?>/img/uwa-screenshot.png" alt="" class="thumbnail" /></a>
-                        <h3><a href="#">Item #3</a></h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer
-                            adipiscing elit. Maecenas vitae elit at sem dapibus iaculis.
-                            Nullam nec ipsum. Fusce gravida, magna nec tincidunt laoreet,
-                            est lorem porttitor nunc, non suscipit mauris turpis non
-                            turpis. Class aptent taciti sociosqu ad litora torquent per
-                            conubia nostra, per inceptos hymenaeos. Duis nec metus. Lorem
-                            ipsum dolor sit amet, consectetuer adipiscing elit. Sed
-                            gravida aliquam pede.
-                        </p>
-
-                    </div>
+                    <?php endfor; ?>
                 </div>
 
             </div>
