@@ -241,6 +241,7 @@ UWA.extend(UWA.Environment.prototype, {
     event.preventDefault();
 
     this.callback('onUpdateBody');
+    this.callback('onResize');
   },
 
   eventResizeButtonUp: function(event) {
@@ -254,6 +255,7 @@ UWA.extend(UWA.Environment.prototype, {
     event.preventDefault();
 
     this.callback('onUpdateBody');
+    this.callback('onResize');
   }
 
 });
