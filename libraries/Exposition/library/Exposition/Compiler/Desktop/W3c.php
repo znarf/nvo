@@ -132,7 +132,7 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
      */
     public function getFileName()
     {
-        $filename = $this->getNormalizedTitle();
+        $filename = preg_replace('/[^a-z0-9]/i', '', $this->getNormalizedTitle());
         if (!empty($filename)) {
             return $filename . '.' . $this->_extension;
         } else {
