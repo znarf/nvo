@@ -110,7 +110,7 @@ UWA.extend(UWA.Environment.prototype, {
 
   getData: function(name) {
 
-    widget.log('getData:' + name);
+    this.log('getData:' + name);
 
     if(typeof(document.cookie) != "undefined") {
       var name = 'uwa-' + name;
@@ -128,7 +128,7 @@ UWA.extend(UWA.Environment.prototype, {
 
   setData: function(name, value) {
 
-   widget.log('setData:' + name + ':' + value);
+   this.log('setData:' + name + ':' + value);
 
    if (typeof(document.cookie) != "undefined") { // Valid cookie ?
      var name = 'uwa-' + name;
@@ -150,23 +150,6 @@ UWA.extend(UWA.Environment.prototype, {
       return window.widget.identifier + "-" + key;
     }
     return key;
-  },
-
-  onUpdateBody: function() {
-    var content = document.body || this.widget.body;
-    var links = content.getElementsByTagName('a');
-    for (var i = 0, lnk; lnk = links[i]; i++) {
-      if (typeof lnk.onclick != "function") {
-        lnk.onclick = function() {
-          if (window.widget) {
-            window.widget.openURL(this.href);
-          } else {
-            window.open(this.href);
-          }
-          return false;
-        }
-      }
-    }
   },
 
   openURL: function(url) {
