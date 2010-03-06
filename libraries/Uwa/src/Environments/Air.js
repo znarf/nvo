@@ -17,87 +17,49 @@ License:
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
-Class: UWA.Environments.Air
-*/
+if (typeof Environments == "undefined") var Environments = {};
+
+if (typeof Widgets == "undefined") var Widgets = {};
+
+UWA.Data.useJsonRequest = true;
 
 UWA.extend(UWA.Environment.prototype, {
 
- initialize: function() {
-   this.air = {};
-   this.maximized = false;
- },
+  initialize: function() {
+    this.opera = {};
+  },
 
- onInit: function() {
+  onInit: function() {
+    this.html['body']       = $('moduleContent');
+    this.html['header']     = $('moduleHeader');
+    this.html['title']      = $('moduleTitle');
+    this.html['icon']       = $('moduleIcon');
+    this.html['edit']       = $('editContent');
+    this.html['status']     = $('moduleStatus');
+    this.html['editLink']   = $('editLink');
+  },
 
-   // creating module header
-   var moduleHeader = document.createElement('div');
-   moduleHeader.setAttribute('id','moduleHeader');
-   moduleHeader.className = 'moduleHeader';
-   moduleHeader.innerHTML =
-    '<div class="close"><a href="#close">'+ _('Close') + '</a></div>' +
-       '<div class="minimize"><a href="#minimize">'+ _('Minimize') + '</a></div>' +
-       '<div class="maximize"><a href="#maximize">'+ _('Maximize') + '</a></div>' +
-       '<div class="edit"><a href="#edit">'+ _('Edit') + '</a></div>' +
-       '<div class="refresh"><a href="#refresh">'+ _('Refresh') + '</a></div>' +
-       '<div class="ico" id="moduleIcon"></div>' +
-       '<div id="moduleTitle" class="title">' + document.title + '</div>';
+  onRegisterModule: function(module) {
 
-   // creating module content
-   var moduleContent = document.createElement('div');
-   moduleContent.setAttribute('id','moduleContent');
-   moduleContent.className = 'moduleContent';
-   moduleContent.innerHTML = document.body.innerHTML ;
+    for (var key in this.html) {
+      this.widget.elements[key] = UWA.extendElement(this.html[key]);
+    }
 
-   // creating edit content
-   var editContent = document.createElement('div');
-   editContent.setAttribute('id','editContent');
-   editContent.style.display = 'none';
-   editContent.className = 'editContent optionContent configureContent';
+    this.widget.body = this.widget.elements['body'];
 
-   document.body.innerHTML = '';
+    this.html['editLink'].show();
+    this.html['editLink'].addEvent("click", function() {
+      this.callback('toggleEdit');
+      return false;
+    }.bind(this));
 
-   var wrapper = document.createElement('div');
-   wrapper.setAttribute('id','wrapper');
+    this.module.elements['header'].addEvent("mousedown", function() {
+      this.callback('onMove');
+      return false;
+    }.bind(this));
 
-   this.html['header'] = wrapper.appendChild(moduleHeader);
-   this.html['edit'] = wrapper.appendChild(editContent);
-   this.html['body'] = wrapper.appendChild(moduleContent);
-
-   document.body.appendChild(wrapper);
-
-   this.html['title'] = document.getElementById('moduleTitle');
-   this.html['icon'] = document.getElementById('moduleIcon');
-
-   /*
-   var addto = document.createElement('div');
-   addto.setAttribute('id','addto');
-   if( typeof UWA.widgetTrueURL == 'undefined' ) UWA.widgetTrueURL = document.location.href;
-   addto.innerHTML =  '<ul>' +
-   '<li><a title="'+ _('Add this module to Netvibes') + '" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=' + encodeURIComponent(UWA.widgetTrueURL) + '"><img src="' + UWA_STATIC + '/uwa-netvibes.png" /></a></li>' +
-   '<li><a style="border:0" title="'+ _('Add this module to Google Homepage') + '" href="http://www.google.com/ig/adde?moduleurl=' + encodeURIComponent(UWA_WIDGET + '/gspec?uwaUrl=' +  encodeURIComponent(UWA.widgetTrueURL) ) + '"><img src="' + UWA_STATIC + '/uwa-google.png" /></a></li>' +
-   '<ul>';
-   document.body.appendChild(addto);
-   */
-
- },
-
- onRegisterModule: function() {
-
-   for (var key in this.html) {
-     this.module.elements[key] = UWA.$element(this.html[key]);
-   }
-
-   // new syntax
-   this.module.body = this.module.elements['body'];
-
-   var editLink = UWA.$element( this.module.elements['header'].getElementsByClassName('edit')[0] );
-   editLink.addEvent("click", function() {
-     Environment.callback('toggleEdit');
-     return false;
-   });
-
-   var refreshLink = UWA.$element( this.module.elements['header'].getElementsByClassName('refresh')[0] );
+    /*
+    var refreshLink = UWA.$element( this.module.elements['header'].getElementsByClassName('refresh')[0] );
    refreshLink.addEvent("click", function() {
      widget.callback('onRefresh');
      return false;
@@ -121,12 +83,6 @@ UWA.extend(UWA.Environment.prototype, {
      return false;
    });
 
-   var closeLink = UWA.$element( this.module.elements['header'] );
-   closeLink.addEvent("mousedown", function() {
-     widget.callback('onMove');
-     return false;
-   });
-
    var refreshLink = UWA.$element( this.module.elements['header'].getElementsByClassName('refresh')[0] );
    refreshLink.addEvent("click", function() {
      widget.callback('onRefresh');
@@ -138,60 +94,39 @@ UWA.extend(UWA.Environment.prototype, {
      widget.callback('onRefresh');
      return false;
    });
+    */
 
+  },
 
-   var xmlMetas = document.getElementsByTagName("meta");
-   if(xmlMetas && xmlMetas.length) this.module.setMetasXML(xmlMetas);
+  toggleEdit: function() {
+    if (this.widget.elements['edit'].style.display == 'none') {
+      this.widget.callback('onEdit');
+    } else {
+      // note that we don't fire 'endEdit' there because we don't want to save form data
+      this.widget.elements['edit'].hide();
+      this.widget.elements['editLink'].setHTML( _("Edit") );
+    }
+  },
 
-   var xmlPrefs = document.getElementsByTagName("preference");
-   if (xmlPrefs && xmlPrefs.length) this.module.setPreferencesXML(xmlPrefs);
+  getData: function(name) {
 
-   var links = document.getElementsByTagName('link');
-   for(var i = 0; i < links.length; i++) {
-     if(links[i].getAttribute('rel') == 'icon') {
-       this.module.metas.icon = links[i].getAttribute('href');
-     }
-   }
-   if(this.module.metas.icon) {
-     this.module.setIcon(this.module.metas.icon, true);
-   }
+    widget.log('getData:' + name);
 
-   this.setDelayed('launchModule', this.launchModule, 100)
+    if(typeof(document.cookie) != "undefined") {
+      var name = 'uwa-' + name;
+      var index = document.cookie.indexOf(name);
+      if ( index != -1) {
+        var nStart = (document.cookie.indexOf("=", index) + 1);
+        var nEnd = document.cookie.indexOf(";", index);
+        if (nEnd == -1) {
+          var nEnd = document.cookie.length;
+        }
+        return unescape(document.cookie.substring(nStart, nEnd));
+      }
+    }
+  },
 
- },
-
-
- toggleEdit: function() {
-   if (widget.elements['edit'].style.display == 'none') {
-     widget.callback('onEdit');
-   } else {
-     widget.elements['edit'].hide();
-   }
- },
-
- showEdit: function() {
-   if(this.module.onEdit) this.module.onEdit();
- },
-
- getData: function(name) {
-
-   widget.log('getData:' + name);
-
-   if(typeof(document.cookie) != "undefined") {
-     var name = 'uwa-' + name;
-     var index = document.cookie.indexOf(name);
-     if ( index != -1) {
-       var nStart = (document.cookie.indexOf("=", index) + 1);
-       var nEnd = document.cookie.indexOf(";", index);
-       if (nEnd == -1) {
-         var nEnd = document.cookie.length;
-       }
-       return unescape(document.cookie.substring(nStart, nEnd));
-     }
-   }
- },
-
- setData: function(name, value) {
+  setData: function(name, value) {
 
    widget.log('setData:' + name + ':' + value);
 
@@ -206,58 +141,61 @@ UWA.extend(UWA.Environment.prototype, {
 
        document.cookie = cookieData;
        return true;
-   }
-   return false;
- },
-
- deleteData: function(name) {
-   widget.log('deleteData:' + name);
-   return this.setData(name, null);
- },
-
- addStar: function() {
-   alert("Starring not available in Standalone mode.")
- },
-
- setIcon: function(icon) {
-   if (this.html['icon']) {
-     var url = UWA.proxies['icon'] + '?url=' + encodeURIComponent(icon);
-     this.html['icon'].setHTML('<img width="16" height="16" src="' + icon + '" />');
-   }
- },
-
- onClose: function() {
-     window.nativeWindow.close();
- },
-
-
- onMinimize: function() {
-      window.nativeWindow.minimize();
- },
-
-
- onMaximize: function() {
-
-     if (!this.maximized) {
-       window.nativeWindow.maximize();
-       this.maximized = true;
-     } else {
-       window.nativeWindow.restore();
      }
- },
+     return false;
+  },
 
+  createkey: function(key) {
+    if (window.widget) {
+      return window.widget.identifier + "-" + key;
+    }
+    return key;
+  },
 
- onMove: function() {
-     nativeWindow.startMove();
- },
+  onUpdateBody: function() {
+    var content = document.body || this.widget.body;
+    var links = content.getElementsByTagName('a');
+    for (var i = 0, lnk; lnk = links[i]; i++) {
+      if (typeof lnk.onclick != "function") {
+        lnk.onclick = function() {
+          if (window.widget) {
+            window.widget.openURL(this.href);
+          } else {
+            window.open(this.href);
+          }
+          return false;
+        }
+      }
+    }
+  },
+
+  openURL: function(url) {
+    if (window.widget) {
+      return window.widget.openURL(url);
+    } else {
+      return window.open(url);
+    }
+  },
+
+  onClose: function() {
+    window.nativeWindow.close();
+  },
+
+  onMinimize: function() {
+    window.nativeWindow.minimize();
+  },
+
+  onMaximize: function() {
+
+    if (!this.maximized) {
+      window.nativeWindow.maximize();
+      this.maximized = true;
+    } else {
+      window.nativeWindow.restore();
+    }
+  },
+
+  onMove: function() {
+    nativeWindow.startMove();
+  }
 });
-
-var Environment = new UWA.Environment();
-var widget = Environment.getModule();
-
-// Force Json Ajax request throw script tag
-UWA.Data.useJsonRequest = true;
-
-window.onresize = function() {
-  widget.callback('onResize');
-}
