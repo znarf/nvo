@@ -54,16 +54,16 @@ BASE_FILES = \
 	$(UWA_JS_SRC)/String.js \
 	$(UWA_JS_SRC)/Array.js \
 	$(UWA_JS_SRC)/Element.js \
-    $(UWA_JS_SRC)/Json.js \
+	$(UWA_JS_SRC)/Json.js \
 	$(UWA_JS_SRC)/Data.js \
-    $(UWA_JS_SRC)/Data/Storage.js \
-    $(UWA_JS_SRC)/Data/Storage/Abstract.js \
-    $(UWA_JS_SRC)/Data/Storage/Dom.js \
-    $(UWA_JS_SRC)/Data/Storage/Flash.js \
-    $(UWA_JS_SRC)/Data/Storage/Gears.js \
-    $(UWA_JS_SRC)/Data/Storage/Html5.js \
-    $(UWA_JS_SRC)/Data/Storage/IE.js \
-    $(UWA_JS_SRC)/Data/Storage/Cookies.js \
+	$(UWA_JS_SRC)/Data/Storage.js \
+	$(UWA_JS_SRC)/Data/Storage/Abstract.js \
+	$(UWA_JS_SRC)/Data/Storage/Dom.js \
+	$(UWA_JS_SRC)/Data/Storage/Flash.js \
+	$(UWA_JS_SRC)/Data/Storage/Gears.js \
+	$(UWA_JS_SRC)/Data/Storage/Html5.js \
+	$(UWA_JS_SRC)/Data/Storage/IE.js \
+	$(UWA_JS_SRC)/Data/Storage/Cookies.js \
 	$(UWA_JS_SRC)/Environment.js\
 	$(UWA_JS_SRC)/Widget.js \
 	$(UWA_JS_SRC)/Utils.js \
@@ -86,7 +86,7 @@ MOOTOOLS_FILES = \
 CONTROLS = \
 	PrefsForm \
 	TabView \
-    Pager
+	Pager
 
 ENVIRONMENTS = \
 	Frame \
@@ -97,7 +97,7 @@ ENVIRONMENTS = \
 	Live2 \
 	Opera2 \
 	Vista \
-    Blog
+	Air
 
 UWA_CORE = $(STAGE)/dist/UWA_Core.js
 UWA_MOOTOOLS = $(STAGE)/dist/UWA_Mootools.js

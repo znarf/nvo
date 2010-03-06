@@ -285,6 +285,27 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
     }
 
     /**
+     * Renders the widget as an Adobe Air package.
+     */
+    public function airAction()
+    {
+        $options = array(
+            'privateKey' => $this->getRequest()->getParam('privateKey')
+        );
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('Air', $this->_widget, $options);
+        $content = $compiler->getFileContent();
+
+        // Configure output
+        $this->getResponse()
+            ->setHeader('Pragma', 'no-cache')
+            ->setHeader('Cache-Control', 'no-cache')
+            ->setHeader('Content-Type', $compiler->getFileMimeType())
+            ->setHeader('Content-Disposition', 'filename="' . $compiler->getFileName() . '"')
+            ->appendBody($content);
+    }
+
+    /**
      * Renders the widget as an JIL package.
      */
     public function jilAction()
