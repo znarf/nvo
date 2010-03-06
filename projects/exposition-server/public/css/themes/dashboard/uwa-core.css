@@ -1,0 +1,136 @@
+/**
+ * Copyright Netvibes 2006-2009.
+ * This file is part of Exposition PHP Server.
+ *
+ * Exposition PHP Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Exposition PHP Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* base layout */
+
+#wrapper {
+    margin:auto;
+    width:auto;
+    border:0;
+}
+
+#contentWrapper {
+    margin: 0;
+    padding: 0;
+}
+
+#moduleHeader {
+    margin: 0 0;
+    background: transparent url(img/moduleheader.png) repeat-x center center;
+    height: 28px;
+    line-height: 28px;
+    padding: 0 5px;
+}
+
+#moduleContent {
+    padding:  10px;
+    max-height:550px;
+    overflow:auto;
+}
+
+#moduleStatus {
+    margin-left:1px;
+    margin-right:1px;
+}
+
+#moduleStatus .share {
+    left:30px;
+}
+
+#moduleFooter {
+    height: 5px;
+    padding:0 2px;
+    margin: 0;
+}
+
+#moduleTitle {
+    padding-top:7px;
+}
+
+#moduleIcon {
+    padding-top:4px;
+    padding-right:2px;
+}
+
+#editContent {
+    padding: 8px 21px;
+    margin:0;
+}
+
+#resizeButton {
+    position:absolute;
+    top: 15px;
+    right: 2px;
+}
+
+.infoButton {
+    position:absolute;
+    top:2px;
+    right:7px;
+    height:13px;
+    width:13px;
+    top:6px;
+}
+
+#editContent form, #doneButton {
+    margin-left:10px;
+}
+
+.nv-pager:after {
+    content: "";
+}
+
+/* rules imported from /css/themes/base/screen.css */
+
+a:link, a:visited{
+    color: #333;
+}
+a:hover{
+    color: #F60;
+}
+img{
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+}
+table {
+    padding: 0;
+    margin: 0;
+}
+ul {
+    padding-left: 5px;
+}
+li {
+    list-style-type: none;
+    background: transparent url(base/img/bullet.png) no-repeat left 0.5ex;
+    margin-bottom: 2px;
+    padding-left: 10px;
+}
+
+/* rules imported from /css/themes/garlic/screen.css */
+
+a {
+    text-decoration: none;
+}
+
+/* tune the editContent */
+
+#editContent {
+    display:block;
+    margin-bottom:0;
+}
+

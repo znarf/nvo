@@ -41,12 +41,14 @@ html, body {
     height: 100%;
 }
 
+
 #moduleHeader {
     -webkit-border-top-right-radius: 10px;
     -webkit-border-top-left-radius: 10px;
 }
 
 #moduleFooter{
+    background: red;
     -webkit-border-radius: 10px;
     -webkit-border-top-right-radius: 0px;
     -webkit-border-top-left-radius: 0px;
@@ -58,14 +60,6 @@ html, body {
 
 #moduleStatus {
     -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
-}
-
-
-#moduleFooter {
-    -webkit-border-radius: 10px;
-    -webkit-border-top-right-radius: 0;
-    -webkit-border-top-left-radius: 0;
-    /*-webkit-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);*/
 }
 
 #editContent {

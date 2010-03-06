@@ -163,7 +163,7 @@ html>body select {
 }
 
 .moduleHeader .refresh {
-    padding-left:3px;
+
 }
 
 
@@ -179,13 +179,12 @@ html>body select {
 
 .moduleHeader .share,
 .moduleHeader .edit,
-.moduleHeader .refresh {
+.moduleHeader .refresh,
+.moduleHeader .close,
+.moduleHeader .maximize,
+.moduleHeader .minimize {
     float: right;
-}
-
-.moduleHeader .share,
-.moduleHeader .edit,
-.moduleHeader .refresh {
+    padding-left:3px;
     margin: 2px 5px 0 5px;
     cursor: pointer;
 }
@@ -255,16 +254,16 @@ html>body select {
 }
 
 .moduleStatus .configure {
-	display: block;
-	width: 20px;
-	height: 18px;
-	margin: 0;
-	position: absolute;
-	top: -1px;
-	right: 5px;
-	background-image: url(/css/base/img/options.png);
-	text-decoration: none;
-	border: none;
+    display: block;
+    width: 20px;
+    height: 18px;
+    margin: 0;
+    position: absolute;
+    top: -1px;
+    right: 5px;
+    background-image: url(base/img/options.png);
+    text-decoration: none;
+    border: none;
 }
 
 .moduleStatus {

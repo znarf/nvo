@@ -30,10 +30,10 @@ body {
 }
 
 .module, .moduleEdit {
-	background: transparent url(/css/themes/garlic/img/white30.png);
-	margin: 10px;
-	border: 0;
-	padding: 6px;
+    background: transparent url(/css/themes/garlic/img/white30.png);
+    margin: 10px;
+    border: 0;
+    padding: 6px;
 }
 
 .module .moduleFrame,
