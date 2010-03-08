@@ -73,11 +73,14 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
         // Add Widget javascript constants
         $l[] = $this->_getJavascriptConstants();
 
-        // Add Widget javascripts
+        // Add Widget javascripts libs
         $javascripts = $this->_getJavascripts(array('platform' => $this->_platform));
         foreach ($javascripts as $script) {
-            $l[] = '<script type="text/javascript" src="' . htmlspecialchars($script) . '" charset="utf-8"/></script>';
+            $l[] = '<script type="text/javascript" src="' . htmlspecialchars($script) . '" charset="utf-8"></script>';
         }
+
+        // Add Widget javascripts
+        $l[] = '<script type="text/javascript" src="' . $this->_getWidgetJavascripts() . '"  charset="utf-8"></script>';
 
         $l[] = '<script type="text/javascript">';
         $l[] = $this->_getScript();
@@ -101,7 +104,7 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
         $l[] =   $this->_getHtmlHeader();
         $l[] =   '<div id="contentWrapper">';
         $l[] =     '<div class="moduleContent" id="moduleContent">';
-        $l[] =       $this->_widget->getBody();
+        $l[] =       'Loading....';
         $l[] =     '</div>';
         $l[] =     $this->_getHtmlStatus();
         $l[] =   '</div>';

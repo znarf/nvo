@@ -87,7 +87,7 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
         }
 
         $l[] = '<div class="moduleContent" id="moduleContent">';
-        $l[] = $this->_widget->getBody();
+        $l[] = '  Loading....';
         $l[] = '</div>';
 
         // Add footer if require
@@ -98,11 +98,14 @@ class Exposition_Compiler_Frame extends Exposition_Compiler
         // Add Widget javascript constants
         $l[] = $this->_getJavascriptConstants();
 
-        // Add Widget javascripts
+        // Add Widget javascripts Libs
         $javascripts = $this->_getJavascripts();
-        foreach ($this->_getJavascripts() as $script) {
+        foreach ($javascripts as $script) {
             $l[] = '<script type="text/javascript" src="' . $script . '"></script>';
         }
+
+        // Add Widget javascripts
+        $l[] = '<script type="text/javascript" src="' . $this->_getWidgetJavascripts() . '"></script>';
 
         $l[] = '<script type="text/javascript">';
         $l[] = $this->_getFrameScript();
