@@ -70,6 +70,20 @@ final class Exposition_Compiler_Desktop_Air extends Exposition_Compiler_Desktop_
     protected $_mimeType = 'application/vnd.adobe.air-application-installer-package+zip';
 
     /**
+     * Width of the widget.
+     *
+     * @var string
+     */
+    protected $_width = 358;
+
+    /**
+     * Height of the widget.
+     *
+     * @var string
+     */
+    protected $_height = 625;
+
+    /**
      * Build Desktop Archive file
      */
     protected function buildArchive()
@@ -82,8 +96,9 @@ final class Exposition_Compiler_Desktop_Air extends Exposition_Compiler_Desktop_
 
         $this->addDirToArchive($ressourcePath . '/air');
 
-        echo $this->getHtml();
-        die();
+        // use safari for debug or another webkit powered browser
+        //echo $this->getHtml();
+        //die();
 
         // Add other widget files
         $this->addFileFromStringToArchive('source/index.html', $this->getHtml());
@@ -102,97 +117,46 @@ final class Exposition_Compiler_Desktop_Air extends Exposition_Compiler_Desktop_
 
         $l[] = '<application xmlns="http://ns.adobe.com/air/application/1.0">';
 
-        $l[] = '<name>' . $title . '</name>';
-        $l[] = '<id>org.netvibes.uwa.' . $fileName . '</id>';
-        $l[] = '<filename>' . $fileName . '</filename>';
+        $l[] = '    <id>com.uwa.widget.' . $fileName . '</id>';
+        $l[] = '    <filename>' . $fileName . '</filename>';
 
-        $l[] = '<version>1.0</version>';
+        $l[] = '    <name>' . $title . '</name>';
+        $l[] = '    <description>' . htmlspecialchars($metas['description']) . '</description>';
+        $l[] = '    <copyright>' . htmlspecialchars($metas['author']) . '</copyright>';
+        $l[] = '    <version>' . (isset($metas['version']) ? $metas['version'] : '1.0') . '</version>';
 
-        $l[] = '<initialWindow>';
-        $l[] = '    <content>source/index.html</content>';
-        $l[] = '    <title/>';
-        $l[] = '    <systemChrome>none</systemChrome>';
-        $l[] = '    <transparent>true</transparent>';
-        $l[] = '    <visible>true</visible>';
-        $l[] = '    <minimizable>true</minimizable>';
-        $l[] = '    <maximizable>true</maximizable>';
-        $l[] = '    <resizable>true</resizable>';
-        $l[] = '    <width>' . $this->_width . '</width>';
-        $l[] = '    <height>' . $this->_height . '</height>';
-        $l[] = '    <x>200</x>';
-        $l[] = '    <y>200</y>';
-        $l[] = '  </initialWindow>';
+        $l[] = '    <initialWindow>';
+        $l[] = '        <content>source/index.html</content>';
+        $l[] = '        <title/>';
+        $l[] = '        <systemChrome>none</systemChrome>';
+        $l[] = '        <transparent>true</transparent>';
+        $l[] = '        <visible>true</visible>';
+        $l[] = '        <minimizable>true</minimizable>';
+        $l[] = '        <maximizable>true</maximizable>';
+        $l[] = '        <resizable>true</resizable>';
+        $l[] = '        <width>' . $this->_width . '</width>';
+        $l[] = '        <height>' . $this->_height . '</height>';
+        $l[] = '        <x>200</x>';
+        $l[] = '        <y>200</y>';
+        $l[] = '    </initialWindow>';
+
+        $l[] = '    <icon>';
+        $l[] = '        <image16x16>source/icons/Icon.png</image16x16>';
+        $l[] = '        <image32x32>source/icons/Icon.png</image32x32>';
+        $l[] = '        <image48x48>source/icons/Icon.png</image48x48>';
+        $l[] = '        <image128x128>source/icons/Icon.png</image128x128>';
+        $l[] = '    </icon>';
 
         $l[] = '</application>';
 
-         $l[] = '<icon>';
-         $l[] = '    <image16x16>source/icons/Icon.png</image16x16>';
-         $l[] = '    <image32x32>source/icons/Icon.png</image32x32>';
-         $l[] = '    <image48x48>source/icons/Icon.png</image48x48>';
-         $l[] = '    <image128x128>source/icons/Icon.png</image128x128>';
-         $l[] = '</icon>';
-
         return implode("\n", $l);
+    }
 
-        /*
-       <?xml version="1.0" encoding="utf-8" ?>
-<application
-        xmlns="http://ns.adobe.com/air/application/1.5.3"
-        minimumPatchLevel="0">
-<!-- AIR Application Descriptor File. See http://www.adobe.com/go/learn_air_1.0_application_descriptor_en. -->
-        <id>com.example.ExampleApplication</id>
-        <name>
-                <text xml:lang="en">Example Co. Example Application 1.0</text>
-        </name>
-        <version>1.0</version>
-        <filename>Example Application</filename>
-        <description>
-                <text xml:lang="en">This is a sample Adobe AIR application.</text>
-        </description>
-        <copyright>Copyright 2009, Example Co., Inc.</copyright>
-        <initialWindow>
-                <content>ExampleApplication.swf</content>
-                <title>Example Application</title>
-                <systemChrome>standard</systemChrome>
-                <transparent>false</transparent>
-                <visible>false</visible>
-                <minimizable>true</minimizable>
-                <maximizable>true</maximizable>
-                <resizable>true</resizable>
-                <width>500</width>
-                <height>500</height>
-                <x>150</x>
-                <y>150</y>
-                <minSize>300 300</minSize>
-                <maxSize>800 800</maxSize>
-        </initialWindow>
-        <installFolder>Example Company/Example Application</installFolder>
-        <programMenuFolder>Example Company/Example Application</programMenuFolder>
-        <icon>
-                <image16x16>icons/AIRApp_16.png</image16x16>
-                <image32x32>icons/AIRApp_32.png</image32x32>
-                <image48x48>icons/AIRApp_48.png</image48x48>
-                <image128x128>icons/AIRApp_128.png</image128x128>
-        </icon>
-        <customUpdateUI>false</customUpdateUI>
-        <allowBrowserInvocation>false</allowBrowserInvocation>
-        <fileTypes>
-                <fileType>
-                        <name>com.example</name>
-                        <extension>xmpl</extension>
-                        <description>Example file</description>
-                        <contentType>example/x-data-type</contentType>
-                        <icon>
-                                <image16x16>icons/AIRApp_16.png</image16x16>
-                                <image32x32>icons/AIRApp_32.png</image32x32>
-                                <image48x48>icons/AIRApp_48.png</image48x48>
-                                <image128x128>icons/AIRApp_128.png</image128x128>
-                        </icon>
-                </fileType>
-        </fileTypes>
-</application>
-
-        */
+    protected function _getJavascripts($options = array())
+    {
+        $javascripts = parent::_getJavascripts($options);
+        $javascripts[] = 'AIRAliases.js';
+        return $javascripts;
     }
 }
 
