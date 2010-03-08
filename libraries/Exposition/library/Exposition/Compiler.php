@@ -269,15 +269,26 @@ abstract class Exposition_Compiler
     protected function _getJavascripts($options = array())
     {
         $javascripts = $this->_getCoreLibraries();
+        $externalJavascripts = $this->_widget->getExternalScripts();
 
+        // Merge with external scripts
+        return array_merge($javascripts, $externalJavascripts);
+    }
+
+    /**
+     * Retrieves the list of the JavaScript libraries used in a widget (both UWA and specific ones).
+     *
+     * @param string $name
+     * @return array
+     */
+    protected function _getWidgetJavascripts($options = array())
+    {
         // Widget script
-        $useCompressedJs = Exposition_Load::getConfig('js', 'compressed');
         $widgetEndPoint = Exposition_Load::getConfig('endpoint', 'widget');
 
         $urlOptions = array();
 
         // Allowed Scripts Options
-
         $urlOptions['uwaUrl'] = $this->_widget->getUrl();
 
         if (isset($options['platform'])) {
@@ -288,10 +299,7 @@ abstract class Exposition_Compiler
             $urlOptions['className'] = $options['className'];
         }
 
-        $javascripts[] = $widgetEndPoint . '/js' . (!empty($urlOptions) ? '?' . http_build_query($urlOptions) : '');
-
-        // Merge with external scripts
-        return array_merge($javascripts, $this->_widget->getExternalScripts());
+        return $widgetEndPoint . '/js' . (!empty($urlOptions) ? '?' . http_build_query($urlOptions) : '');
     }
 
     /**
@@ -305,7 +313,10 @@ abstract class Exposition_Compiler
 
         $html  = '<div class="moduleHeaderContainer">' . "\n";
         $html .= '  <div class="moduleHeader" id="moduleHeader">' . "\n";
+        $html .= '    <a id="closeLink" class="close" style="display:none" href="javascript:void(0)">Close</a>' . "\n";
         $html .= '    <a id="editLink" class="edit" style="display:none" href="javascript:void(0)">Edit</a>' . "\n";
+        $html .= '    <a id="refreshLink" class="refresh" style="display:none" href="javascript:void(0)">Refresh</a>' . "\n";
+        $html .= '    <a id="minimizeLink" class="minimize" style="display:none" href="javascript:void(0)">Minimize</a>' . "\n";
         $html .= '    <a id="moduleIcon" class="ico">' . "\n";
         $html .= '      <img class="hicon" width="16" height="16" src="' . $icon . '"/>' . "\n";
         $html .= '    </a>' . "\n";
