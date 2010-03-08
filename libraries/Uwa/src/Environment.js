@@ -226,7 +226,7 @@ UWA.Environment.prototype = {
       if (this.callbacks[name]) return this.callbacks[name].apply(bind, [args]);
 
     } catch(e) {
-      this.log('Error:' + e);
+      this.log('UWA.Environment.callback(' + name + ') Error:' + e);
     }
 
     return false;

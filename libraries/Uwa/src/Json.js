@@ -79,7 +79,7 @@ UWA.Json = {
         try {
           myCallback(json);
         } catch(e) {
-            UWA.log('Error: ' + e);
+            UWA.log('UWA.Json.request(' + url + ') Error: ' + e);
         }
 
         insert.parentNode.removeChild(insert);

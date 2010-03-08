@@ -728,8 +728,7 @@ UWA.Widget.prototype = {
       if (this.callbacks[name]) this.callbacks[name].apply(bind, [args]);
 
     } catch(e) {
-
-      this.log('Error:' + e);
+        this.log('UWA.Widget.callback(' + name + ') Error:' + e);
     }
 
     if(this.environment && this.environment.callback) this.environment.callback(name);
