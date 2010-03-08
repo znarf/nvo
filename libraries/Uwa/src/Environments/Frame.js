@@ -55,10 +55,10 @@ UWA.extend(UWA.Environment.prototype, {
     this.widget.body = this.widget.elements['body']; // shortcut
 
     if (this.html['editLink']) {
-      this.html['editLink'].onclick = function() {
+      this.html['editLink'].addEvent('click', function() {
         Environment.callback('toggleEdit');
         return false;
-      };
+      });
     }
 
     this.setPeriodical('handleResizePeriodical', this.handleResize, 250);
