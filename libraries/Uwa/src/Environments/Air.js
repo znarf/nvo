@@ -21,22 +21,33 @@ if (typeof Environments == "undefined") var Environments = {};
 
 if (typeof Widgets == "undefined") var Widgets = {};
 
-UWA.Data.useJsonRequest = true;
+UWA.Data.useJsonRequest = false;
+
+// Overload UWa log function
+UWA.log = function(msg) {
+    air.trace(msg);
+}
 
 UWA.extend(UWA.Environment.prototype, {
 
   initialize: function() {
-    this.opera = {};
+    this.air = {};
   },
 
   onInit: function() {
-    this.html['body']       = $('moduleContent');
-    this.html['header']     = $('moduleHeader');
-    this.html['title']      = $('moduleTitle');
-    this.html['icon']       = $('moduleIcon');
-    this.html['edit']       = $('editContent');
-    this.html['status']     = $('moduleStatus');
-    this.html['editLink']   = $('editLink');
+    this.html['body']         = $('moduleContent');
+    this.html['header']       = $('moduleHeader');
+    this.html['title']        = $('moduleTitle');
+    this.html['icon']         = $('moduleIcon');
+    this.html['edit']         = $('editContent');
+    this.html['status']       = $('moduleStatus');
+    this.html['closeLink']    = $('closeLink');
+    this.html['refreshLink']  = $('refreshLink');
+    this.html['editLink']     = $('editLink');
+    this.html['minimizeLink'] = $('minimizeLink');
+
+    // for debug only
+    air.EncryptedLocalStore.reset();
   },
 
   onRegisterModule: function(module) {
@@ -47,55 +58,43 @@ UWA.extend(UWA.Environment.prototype, {
 
     this.widget.body = this.widget.elements['body'];
 
+    // Handle Edit link click
     this.html['editLink'].show();
     this.html['editLink'].addEvent("click", function() {
       this.callback('toggleEdit');
       return false;
     }.bind(this));
 
+    // Handle move widget
     this.module.elements['header'].addEvent("mousedown", function() {
       this.callback('onMove');
       return false;
     }.bind(this));
 
-    /*
-    var refreshLink = UWA.$element( this.module.elements['header'].getElementsByClassName('refresh')[0] );
-   refreshLink.addEvent("click", function() {
-     widget.callback('onRefresh');
-     return false;
-   });
 
-   var closeLink = UWA.$element( this.module.elements['header'].getElementsByClassName('close')[0] );
-   closeLink.addEvent("click", function() {
-     widget.callback('onClose');
-     return false;
-   });
+    // Handle Refresh link click
+    this.html['refreshLink'].show();
+    this.html['refreshLink'].addEvent("click", function() {
+      this.callback('onRefresh');
+      return false;
+    }.bind(this));
 
-   var closeLink = UWA.$element( this.module.elements['header'].getElementsByClassName('minimize')[0] );
-   closeLink.addEvent("click", function() {
-     widget.callback('onMinimize');
-     return false;
-   });
+    // Handle Close link click
+    this.html['closeLink'].show();
+    this.html['closeLink'].addEvent("click", function() {
+      this.callback('onClose');
+      return false;
+    }.bind(this));
 
-   var closeLink = UWA.$element( this.module.elements['header'].getElementsByClassName('maximize')[0] );
-   closeLink.addEvent("click", function() {
-     widget.callback('onMaximize');
-     return false;
-   });
+    // Handle collapse link click
+    this.html['minimizeLink'].show();
+    this.html['minimizeLink'].addEvent("click", function() {
+      this.callback('onMinimize');
+      return false;
+    }.bind(this));
 
-   var refreshLink = UWA.$element( this.module.elements['header'].getElementsByClassName('refresh')[0] );
-   refreshLink.addEvent("click", function() {
-     widget.callback('onRefresh');
-     return false;
-   });
-
-   var refreshLink = UWA.$element( this.module.elements['header'].getElementsByClassName('refresh')[0] );
-   refreshLink.addEvent("click", function() {
-     widget.callback('onRefresh');
-     return false;
-   });
-    */
-
+    // Handle Resize
+    this.setPeriodical('handleResizePeriodical', this.handleResize, 250);
   },
 
   toggleEdit: function() {
@@ -108,41 +107,40 @@ UWA.extend(UWA.Environment.prototype, {
     }
   },
 
+  onUpdateBody: function() {
+    this.setDelayed('handleLinks', this.handleLinks, 100);
+    this.setDelayed('handleResize', this.handleResize, 100);
+  },
+
+  handleResize: function() {
+      // Calculate total widget height by adding widget body/header/status height
+      // note: document.body.offsetHeight is wrong in IE6 as it always return the full windows/iframe height
+      var height = parseInt(this.html['body'].offsetHeight);
+      height += (this.html['header']) ? this.html['header'].offsetHeight : 0;
+      height += (this.html['status']) ? this.html['status'].offsetHeight : 0;
+      height += (this.html['edit']) ? this.html['edit'].offsetHeight : 0;
+      if (height > 0 && height != this.prevHeight) {
+        window.nativeWindow.height = height+5;
+      }
+      this.prevHeight = height;
+  },
+
   getData: function(name) {
 
     this.log('getData:' + name);
 
-    if(typeof(document.cookie) != "undefined") {
-      var name = 'uwa-' + name;
-      var index = document.cookie.indexOf(name);
-      if ( index != -1) {
-        var nStart = (document.cookie.indexOf("=", index) + 1);
-        var nEnd = document.cookie.indexOf(";", index);
-        if (nEnd == -1) {
-          var nEnd = document.cookie.length;
-        }
-        return unescape(document.cookie.substring(nStart, nEnd));
-      }
-    }
+    return air.EncryptedLocalStore.getItem(name);
   },
 
   setData: function(name, value) {
 
-   this.log('setData:' + name + ':' + value);
+    this.log('setData:' + name + ':' + value);
 
-   if (typeof(document.cookie) != "undefined") { // Valid cookie ?
-     var name = 'uwa-' + name;
-     var expires = 3600 * 60 * 24; // 24 days by default
-     var expires_date = new Date( new Date().getTime() + (expires) );
-     var cookieData = name + "=" + escape(value) + ';' +
-       ((expires) ? "expires=" + expires_date.toGMTString() + ';' : "") +
-       "path=" + escape(window.location.pathname) + ';' +
-       "domain=" + escape(window.location.hostname);
+    var bytes = new air.ByteArray();
+    bytes.writeUTFBytes(value);
+    air.EncryptedLocalStore.setItem(name, bytes);
 
-       document.cookie = cookieData;
-       return true;
-     }
-     return false;
+    return value;
   },
 
   createkey: function(key) {

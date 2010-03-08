@@ -2,17 +2,17 @@
 License:
     Copyright Netvibes 2006-2009.
     This file is part of UWA JS Runtime.
-    
+
     UWA JS Runtime is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     UWA JS Runtime is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with UWA JS Runtime. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -86,7 +86,7 @@ UWA.Controls.PrefsForm.prototype.controls['textarea'] = function(pref) {
   return textarea;
 }
 
-UWA.Controls.PrefsForm.prototype.controls['range'] = function(pref) {   
+UWA.Controls.PrefsForm.prototype.controls['range'] = function(pref) {
   var select = this.widget.createElement('select', {
     'id'   : 'm_' + this.widget.id + '_' + pref.name,
     'name' : pref.name
@@ -96,7 +96,7 @@ UWA.Controls.PrefsForm.prototype.controls['range'] = function(pref) {
       var option = this.widget.createElement('option', { 'value': i }).setText("" + i);
       if (this.widget.getValue(pref.name) == i) {
         option.setAttribute('selected', 'selected');
-      } 
+      }
       select.appendChild(option);
     }
   }
@@ -110,7 +110,7 @@ UWA.Controls.PrefsForm.prototype.controls['range'] = function(pref) {
   return select;
 }
 
-UWA.Controls.PrefsForm.prototype.controls['list'] = function(pref) {   
+UWA.Controls.PrefsForm.prototype.controls['list'] = function(pref) {
   var select = this.widget.createElement('select', {
     'id'   :  'm_' + this.widget.id + '_' + pref.name,
     'name' :  pref.name
@@ -145,7 +145,7 @@ Returns:
 * String: the HTML version of the preference form.
 */
 UWA.Controls.PrefsForm.prototype.build = function() {
-    
+
   var widget = this.widget;
 
   var form = this.form = widget.createElement("form");
@@ -161,7 +161,7 @@ UWA.Controls.PrefsForm.prototype.build = function() {
     var label = _( (pref.label || pref.name) + ':' );
     var tdl = widget.createElement("td").inject(tr);
     var label = widget.createElement("label", {
-      'for': widget.id + '_' + pref.name 
+      'for': widget.id + '_' + pref.name
     }).setText(label).inject(tdl);
     if (typeof this.controls[pref.type] == 'undefined') {
       pref.type = 'default';
@@ -175,7 +175,7 @@ UWA.Controls.PrefsForm.prototype.build = function() {
     var tds = widget.createElement("td", {'colSpan' : 2}).inject(tr);
     widget.createElement('input', {
       'type'  : 'submit',
-      'value' :  _("Ok")
+      'value' :  _("Done")
     }).addClassName('buttonClean').inject(tds);
   }
 
@@ -194,7 +194,7 @@ UWA.Controls.PrefsForm.prototype.build = function() {
 UWA.Controls.PrefsForm.prototype.getContent = UWA.Controls.PrefsForm.prototype.build;
 
 UWA.Controls.PrefsForm.prototype.saveValues = function(formElement) {
-    
+
   var widget = this.widget;
   var form = formElement || this.form
   var formElements = UWA.Form.getElements(form);
@@ -215,7 +215,7 @@ UWA.Controls.PrefsForm.prototype.saveValues = function(formElement) {
         } else {
           widget.setValue(el.name, 'false');
         }
-        break;  
+        break;
       case 'radio':
         if (el.checked) {
           widget.setValue(el.name, el.value);
