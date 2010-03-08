@@ -31,52 +31,52 @@ if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
 UWA.Data.Storage.IE = function() {
 
-    // The type of storage engine
-    this.type = 'IE';
+  // The type of storage engine
+  this.type = 'IE';
 
-    // Set the Database limit
-    this.limit = 64 * 1024;
+  // Set the Database limit
+  this.limit = 64 * 1024;
 
-    if(this.initialize) this.initialize();
+  if(this.initialize) this.initialize();
 }
 
 UWA.Data.Storage.IE.prototype = UWA.merge({
 
-    connect: function(database) {
+  connect: function(database) {
 
-        // The type of storage engine
-        this.database = database;
+    // The type of storage engine
+    this.database = database;
 
-        // Create a hidden div to store attributes in
-        this.db = $('<div style="display:none;behavior:url(\'#default#userData\')" id="uwa-data-storage-' + this.database + '"></div>')
-                    .appendTo(document.body).get(0);
+    // Create a hidden div to store attributes in
+    this.db = $('<div style="display:none;behavior:url(\'#default#userData\')" id="uwa-data-storage-' + this.database + '"></div>')
+                .appendTo(document.body).get(0);
 
-        this.isReady = true;
-    },
+    this.isReady = true;
+  },
 
-    isAvailable: function() {
-        return !!window.ActiveXObject;
-    },
+  isAvailable: function() {
+    return !!window.ActiveXObject;
+  },
 
-    get: function(key) {
-        this.interruptAccess();
-        this.db.load(this.database);
-        return this.safeResurrect( this.db.getAttribute(key) );
-    },
+  get: function(key) {
+    this.interruptAccess();
+    this.db.load(this.database);
+    return this.safeResurrect( this.db.getAttribute(key) );
+  },
 
-    set: function(key, value) {
-        this.interruptAccess();
-			this.db.setAttribute(key, this.safeStore(value));
-			this.db.save(this.database);
-			return value;
-    },
+  set: function(key, value) {
+    this.interruptAccess();
+	this.db.setAttribute(key, this.safeStore(value));
+	this.db.save(this.database);
+	return value;
+  },
 
-    rem: function(key) {
-        this.interruptAccess();
-        var beforeDelete = this.get(key);
-        this.db.removeAttribute(key);
-        this.db.save(this.database);
-        return beforeDelete;
-    }
+  rem: function(key) {
+    this.interruptAccess();
+    var beforeDelete = this.get(key);
+    this.db.removeAttribute(key);
+    this.db.save(this.database);
+    return beforeDelete;
+  }
 }, UWA.Data.Storage.Abstract.prototype);
 

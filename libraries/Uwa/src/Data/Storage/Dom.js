@@ -30,64 +30,63 @@ if (typeof UWA.Data == "undefined") UWA.Data = {};
 if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
 UWA.Data.Storage.Dom = function() {
+   // The type of storage engine
+   this.type = 'DOM';
 
-    // The type of storage engine
-    this.type = 'DOM';
+   // Set the Database limit
+   this.limit = 5 * 1024 * 1024;
 
-    // Set the Database limit
-    this.limit = 5 * 1024 * 1024;
-
-    if(this.initialize) this.initialize();
+   if(this.initialize) this.initialize();
 }
 
 UWA.Data.Storage.Dom.prototype = UWA.merge({
 
-    connect: function(database) {
+  connect: function(database) {
 
-        // set current database
-        this.database = database;
+    // set current database
+    this.database = database;
 
-        if (this.isAvailableLocal()) {
-            this.db = !window.globalStorage ? window.localStorage : window.globalStorage[location.hostname];
-        } else if (this.isAvailableSession()) {
-            this.db = sessionStorage;
-        }
-
-        this.isReady = true;
-    },
-
-    isAvailable: function() {
-        return this.isAvailableSession() || this.isAvailableLocal();
-    },
-
-    isAvailableSession: function() {
-        return !!window.sessionStorage;
-    },
-
-    isAvailableLocal: function() {
-        return !!(window.localStorage || window.globalStorage);
-    },
-
-    get: function(key) {
-        this.interruptAccess();
-        var out = this.db.getItem(this.database + '-' + key);
-
-        // Gecko's getItem returns {value: 'the value'}, WebKit returns 'the value'
-        return this.safeResurrect((out && out.value ? out.value : out));
-    },
-
-    set: function(key, value) {
-        this.interruptAccess();
-        this.db.setItem(this.database + '-' + key,this.safeStore(value));
-        return value;
-    },
-
-    rem: function(key) {
-        this.interruptAccess();
-        var out = this.get(this.database + '-' + key);
-        this.db.removeItem(this.database + '-' + key);
-        return out;
+    if (this.isAvailableLocal()) {
+        this.db = !window.globalStorage ? window.localStorage : window.globalStorage[location.hostname];
+    } else if (this.isAvailableSession()) {
+        this.db = sessionStorage;
     }
+
+    this.isReady = true;
+  },
+
+  isAvailable: function() {
+    return this.isAvailableSession() || this.isAvailableLocal();
+  },
+
+  isAvailableSession: function() {
+    return !!window.sessionStorage;
+  },
+
+  isAvailableLocal: function() {
+    return !!(window.localStorage || window.globalStorage);
+  },
+
+  get: function(key) {
+    this.interruptAccess();
+    var out = this.db.getItem(this.database + '-' + key);
+
+    // Gecko's getItem returns {value: 'the value'}, WebKit returns 'the value'
+    return this.safeResurrect((out && out.value ? out.value : out));
+  },
+
+  set: function(key, value) {
+    this.interruptAccess();
+    this.db.setItem(this.database + '-' + key,this.safeStore(value));
+    return value;
+  },
+
+  rem: function(key) {
+    this.interruptAccess();
+    var out = this.get(this.database + '-' + key);
+    this.db.removeItem(this.database + '-' + key);
+    return out;
+  }
 
 }, UWA.Data.Storage.Abstract.prototype);
 

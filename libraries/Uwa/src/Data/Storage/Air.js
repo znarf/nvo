@@ -29,78 +29,56 @@ Credits:
 if (typeof UWA.Data == "undefined") UWA.Data = {};
 if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
-UWA.Data.Storage.Gears = function() {
+UWA.Data.Storage.Air = function() {
 
-   // The type of storage engine
-    this.type = 'Google Gears';
+  // The type of storage engine
+  this.type = 'Air';
 
-    // Set the Database limit
-    this.limit = 5 * 1024 * 1024;
+  // Set the Database limit
+  this.limit = 64 * 1024;
 
-
-
-
-    if(this.initialize) this.initialize();
+  if(this.initialize) this.initialize();
 }
 
-UWA.Data.Storage.Gears.prototype = UWA.merge({
+UWA.Data.Storage.Air.prototype = UWA.merge({
 
   connect: function(database) {
 
     // The type of storage engine
     this.database = database;
 
-     // Create our database connection
-    var db = this.db = google.gears.factory.create('beta.database');
-    db.open( 'uwa-' + this.database );
-    db.execute( 'CREATE TABLE IF NOT EXISTS data (k TEXT UNIQUE NOT NULL PRIMARY KEY, v TEXT NOT NULL)' );
-
-    // Cache the data from the table
-    this.updateCache();
+    // Create a hidden div to store attributes in
+    this.db = null;
 
     this.isReady = true;
   },
 
   isAvailable: function() {
-     // Add required third-party scripts
-     this.include('http://code.google.com/apis/gears/gears_init.js');
-
-     return !!(window.google && window.google.gears);
+      return !!window.ActiveXObject;
   },
 
-  updateCache: function(){
-    // Read the database into our cache object
-    var result = this.db.execute( 'SELECT k,v FROM data' );
-    while (result.isValidRow()){
-        this.data[result.field(0)] = this.safeResurrect( result.field(1) );
-        result.next();
-    } result.close();
-  },
-
-  set: function(key, value){
+  get: function(key) {
     this.interruptAccess();
 
-    // Update the database
-    var db = this.db;
-    db.execute( 'BEGIN' );
-    db.execute( 'INSERT OR REPLACE INTO data(k, v) VALUES (?, ?)', [key,this.safeStore(value)] );
-    db.execute( 'COMMIT' );
+    // @todo
+
+  },
+
+  set: function(key, value) {
+    this.interruptAccess();
+
+    // @todo
 
     return value;
   },
 
-  rem: function(key){
+  rem: function(key) {
     this.interruptAccess();
+    var beforeDelete = this.get(key);
 
-    var out = this.get(key);
+    // @todo
 
-    // Update the database
-    var db = this.db;
-    db.execute( 'BEGIN' );
-    db.execute( 'DELETE FROM data WHERE k = ?', [key] );
-    db.execute( 'COMMIT' );
-
-    return out;
+    return beforeDelete;
   }
 }, UWA.Data.Storage.Abstract.prototype);
 

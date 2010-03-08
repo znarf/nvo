@@ -31,73 +31,73 @@ if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
 UWA.Data.Storage.Html5 = function() {
 
-    // The type of storage engine
-    this.type = 'HTML5';
+  // The type of storage engine
+  this.type = 'HTML5';
 
-    // Set the Database limit
-    this.limit = 1024 * 200;
+  // Set the Database limit
+  this.limit = 1024 * 200;
 
-    if(this.initialize) this.initialize();
+  if(this.initialize) this.initialize();
 }
 
 UWA.Data.Storage.Html5.prototype = UWA.merge({
 
-   connect: function(database) {
+  connect: function(database) {
+    // The type of storage engine
+    this.database = database;
 
-        // The type of storage engine
-        this.database = database;
+    // Create our database connection
+    var db = this.db = openDatabase('uwa-data-storage-' + this.database, '1.0', this.database, this.limit);
+    if (!db) throw 'JSTORE_ENGINE_HTML5_NODB';
+    db.transaction(function(db){
+        db.executeSql( 'CREATE TABLE IF NOT EXISTS data (k TEXT UNIQUE NOT NULL PRIMARY KEY, v TEXT NOT NULL)' );
+    });
 
-       // Create our database connection
-        var db = this.db = openDatabase('uwa-data-storage-' + this.database, '1.0', this.database, this.limit);
-        if (!db) throw 'JSTORE_ENGINE_HTML5_NODB';
-        db.transaction(function(db){
-            db.executeSql( 'CREATE TABLE IF NOT EXISTS data (k TEXT UNIQUE NOT NULL PRIMARY KEY, v TEXT NOT NULL)' );
+    // Cache the data from the table
+    this.updateCache();
+
+    this.isReady = true;
+  },
+
+  updateCache: function() {
+    var self = this;
+    // Read the database into our cache object
+    this.db.transaction(function(db){
+        db.executeSql( 'SELECT k,v FROM data', [], function(db, result) {
+            var rows = result.rows, i = 0, row;
+            for (; i < rows.length; ++i){
+                row = rows.item(i);
+                self.data[row.k] = self.safeResurrect(row.v);
+            }
         });
+    });
+  },
 
-        // Cache the data from the table
-        this.updateCache();
+  isAvailable: function() {
+    return !!window.openDatabase
+  },
 
-        this.isReady = true;
-    },
+  get: function(key) {
+    this.interruptAccess();
+    //@todo
+  },
 
-    updateCache: function(){
-        var self = this;
-        // Read the database into our cache object
-        this.db.transaction(function(db){
-            db.executeSql( 'SELECT k,v FROM data', [], function(db, result) {
-                var rows = result.rows, i = 0, row;
-                for (; i < rows.length; ++i){
-                    row = rows.item(i);
-                    self.data[row.k] = self.safeResurrect(row.v);
-                }
-            });
-        });
-    },
+  set: function(key, value) {
+    this.interruptAccess();
+    // Update the database
+    this.db.transaction(function(db){
+        db.executeSql( 'INSERT OR REPLACE INTO data(k, v) VALUES (?, ?)', [key,this.safeStore(value)]);
+    });
+    return this._super(key, value);
+  },
 
-    isAvailable: function() {
-        return !!window.openDatabase
-    },
-
-    get: function(key) {
-
-    },
-
-    set: function(key, value) {
-        this.interruptAccess();
-        // Update the database
-        this.db.transaction(function(db){
-            db.executeSql( 'INSERT OR REPLACE INTO data(k, v) VALUES (?, ?)', [key,this.safeStore(value)]);
-        });
-        return this._super(key, value);
-    },
-
-    rem: function(key) {
-        this.interruptAccess();
-        // Update the database
-        this.db.transaction(function(db){
-            db.executeSql( 'DELETE FROM data WHERE k = ?', [key] )
-        })
-        return this._super(key);
-    }
+  rem: function(key) {
+    this.interruptAccess();
+    // Update the database
+    this.db.transaction(function(db){
+        db.executeSql( 'DELETE FROM data WHERE k = ?', [key] )
+    })
+    return this._super(key);
+  }
 }, UWA.Data.Storage.Abstract.prototype);
 

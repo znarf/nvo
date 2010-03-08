@@ -31,102 +31,108 @@ if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
 UWA.Data.Storage.Flash = function() {
 
-    // The type of storage engine
-    this.type = 'Flash';
+  // The type of storage engine
+  this.type = 'Flash';
 
-    // Set the Database limit
-    this.limit = 5 * 1024 * 1024;
+  // Set the Database limit
+  this.limit = 5 * 1024 * 1024;
 
-    this.flashProxyPath = '';
+  this.flashProxyPath = '';
 
-    if(this.initialize) this.initialize();
+  if(this.initialize) this.initialize();
 }
 
 UWA.Data.Storage.Flash.prototype = UWA.merge({
 
-    connect: function(database) {
+  connect: function(database) {
 
-        // set current database
-        this.database = database;
+    // set current database
+    this.database = database;
 
-        var name = 'uwa-data-storage-flash-' + this.database;
+    var name = 'uwa-data-storage-flash-' + this.database;
 
-        this.db = !window.globalStorage ? window.localStorage : window.globalStorage[location.hostname];
+    this.db = !window.globalStorage ? window.localStorage : window.globalStorage[location.hostname];
 
-        // To make Flash Storage work on IE, we have to load up an iFrame
-        // which contains an HTML page that embeds the object using an
-        // object tag wrapping an embed tag. Of course, this is unnecessary for
-        // all browsers except for IE, which, to my knowledge, is the only browser
-        // in existance where you need to complicate your code to fix bugs. Goddamnit. :(
-        /*
-        $(document.body).append('<iframe style="height:1px;width:1px;position:absolute;left:0;top:0;margin-left:-100px;" ' +
-                'id="jStoreFlashFrame" src="' + this.flashProxyPath + '"></iframe>');
-                */
+    // To make Flash Storage work on IE, we have to load up an iFrame
+    // which contains an HTML page that embeds the object using an
+    // object tag wrapping an embed tag. Of course, this is unnecessary for
+    // all browsers except for IE, which, to my knowledge, is the only browser
+    // in existance where you need to complicate your code to fix bugs. Goddamnit. :(
+    /*
+    $(document.body).append('<iframe style="height:1px;width:1px;position:absolute;left:0;top:0;margin-left:-100px;" ' +
+            'id="jStoreFlashFrame" src="' + this.flashProxyPath + '"></iframe>');
+            */
 
-        this.isReady = true;
-    },
+    this.isReady = true;
+  },
 
-    isAvailable: function() {
-        return !!(this.hasFlash('8.0.0'));
-    },
+  isAvailable: function() {
+    return !!(this.hasFlash('8.0.0'));
+  },
 
-    get: function(key) {
-        this.interruptAccess();
-        var out = this.db.f_get_cookie(key);
-        return out == 'null' ? null : this.safeResurrect(out);
-    },
+  get: function(key) {
+    this.interruptAccess();
+    var out = this.db.f_get_cookie(key);
+    return out == 'null' ? null : this.safeResurrect(out);
+  },
 
-    set: function(key, value) {
-        this.interruptAccess();
-        this.db.f_set_cookie(key, this.safeStore(value));
-        return value;
-    },
+  set: function(key, value) {
+    this.interruptAccess();
+    this.db.f_set_cookie(key, this.safeStore(value));
+    return value;
+  },
 
-    rem: function(key) {
-        this.interruptAccess();
-        var beforeDelete = this.get(key);
-        this.db.f_delete_cookie(key);
-        return beforeDelete;
-    },
+  rem: function(key) {
+    this.interruptAccess();
+    var beforeDelete = this.get(key);
+    this.db.f_delete_cookie(key);
+    return beforeDelete;
+  },
 
-    hasFlash: function(version) {
-        var pv = this.flashVersion().match(/\d+/g),
-			rv = version.match(/\d+/g);
+   hasFlash: function(version) {
+    var pv = this.flashVersion().match(/\d+/g),
+    rv = version.match(/\d+/g);
 
-		for(var i = 0; i < 3; i++) {
-			pv[i] = parseInt(pv[i] || 0);
-			rv[i] = parseInt(rv[i] || 0);
-			// player is less than required
-			if(pv[i] < rv[i]) return false;
-			// player is greater than required
-			if(pv[i] > rv[i]) return true;
-		}
-
-		// major version, minor version and revision match exactly
-		return true;
-    },
-
-    flashVersion: function() {
-
-        // ie
-		try {
-			try {
-				// avoid fp6 minor version lookup issues
-				// see: http://blog.deconcept.com/2006/01/11/getvariable-setvariable-crash-internet-explorer-flash-6/
-				var axo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.6');
-				try { axo.AllowScriptAccess = 'always';	}
-				catch(e) { return '6,0,0'; }
-			} catch(e) {}
-				return new ActiveXObject('ShockwaveFlash.ShockwaveFlash').GetVariable('$version').replace(/\D+/g, ',').match(/^,?(.+),?$/)[1];
-		// other browsers
-		} catch(e) {
-			try {
-				if(navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin){
-					return (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]).description.replace(/\D+/g, ",").match(/^,?(.+),?$/)[1];
-				}
-			} catch(e) {}
-		}
-		return '0,0,0';
+    for(var i = 0; i < 3; i++) {
+      pv[i] = parseInt(pv[i] || 0);
+      rv[i] = parseInt(rv[i] || 0);
+      // player is less than required
+      if(pv[i] < rv[i]) return false;
+      // player is greater than required
+      if(pv[i] > rv[i]) return true;
     }
+
+    // major version, minor version and revision match exactly
+    return true;
+   },
+
+   flashVersion: function() {
+
+     // ie
+	 try {
+	 	try {
+	      // avoid fp6 minor version lookup issues
+	      // see: http://blog.deconcept.com/2006/01/11/getvariable-setvariable-crash-internet-explorer-flash-6/
+	      var axo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.6');
+	      try { axo.AllowScriptAccess = 'always';	}
+	      catch(e) { return '6,0,0'; }
+
+	 	} catch(e) {
+
+        }
+
+	    return new ActiveXObject('ShockwaveFlash.ShockwaveFlash').GetVariable('$version').replace(/\D+/g, ',').match(/^,?(.+),?$/)[1];
+	 // other browsers
+	 } catch(e) {
+
+	 	try {
+          if(navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin){
+	 		return (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]).description.replace(/\D+/g, ",").match(/^,?(.+),?$/)[1];
+	      }
+	 	} catch(e) {}
+	 }
+
+	 return '0,0,0';
+   }
 }, UWA.Data.Storage.Abstract.prototype);
 

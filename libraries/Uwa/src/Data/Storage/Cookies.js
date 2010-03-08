@@ -31,72 +31,72 @@ if (typeof UWA.Data.Storage == "undefined") UWA.Data.Storage = {};
 
 UWA.Data.Storage.Cookies = function() {
 
-    // The type of storage engine
-    this.type = 'Cookies';
+  // The type of storage engine
+  this.type = 'Cookies';
 
-    // Set the Database limit
-    this.limit = 1024 * 4;
+  // Set the Database limit
+  this.limit = 1024 * 4;
 
-    if(this.initialize) this.initialize();
+  if(this.initialize) this.initialize();
 }
 
 UWA.Data.Storage.Cookies.prototype = UWA.merge({
 
-   connect: function(database) {
+  connect: function(database) {
 
-        // The type of storage engine
-        this.database = database;
+    // The type of storage engine
+    this.database = database;
 
-        this.isReady = true;
-    },
+    this.isReady = true;
+  },
 
-    isAvailable: function() {
-        return typeof(document.cookie) != "undefined";
-    },
+  isAvailable: function() {
+    return typeof(document.cookie) != "undefined";
+  },
 
-    get: function(key) {
-        this.interruptAccess();
+  get: function(key) {
+    this.interruptAccess();
 
-        var name = 'uwa-' + this.database + '-' + key;
-        var index = document.cookie.indexOf(name);
+    var name = 'uwa-' + this.database + '-' + key;
+    var index = document.cookie.indexOf(name);
 
-        if ( index != -1) {
-          var nStart = (document.cookie.indexOf("=", index) + 1);
-          var nEnd = document.cookie.indexOf(";", index);
+    if ( index != -1) {
+      var nStart = (document.cookie.indexOf("=", index) + 1);
+      var nEnd = document.cookie.indexOf(";", index);
 
-          if (nEnd == -1) {
-            var nEnd = document.cookie.length;
-          }
+      if (nEnd == -1) {
+        var nEnd = document.cookie.length;
+      }
 
-          return unescape(document.cookie.substring(nStart, nEnd));
-        }
-
-        return null;
-    },
-
-    set: function(key, value) {
-        this.interruptAccess();
-
-        var name = 'uwa-' + this.database + '-' + key;
-        var expires = 3600 * 60 * 24; // 24 days by default
-        var expires_date = new Date( new Date().getTime() + (expires) );
-        var cookieData = name + "=" + escape(value) + ';' +
-          ((expires) ? "expires=" + expires_date.toGMTString() + ';' : "") +
-          "path=" + escape(window.location.pathname) + ';' +
-          "domain=" + escape(window.location.hostname);
-
-        document.cookie = cookieData;
-
-        return value;
-    },
-
-    rem: function(key) {
-        this.interruptAccess();
-
-        var out = this.get(key, null);
-        this.set(key, null);
-
-        return out;
+      return unescape(document.cookie.substring(nStart, nEnd));
     }
+
+    return null;
+  },
+
+  set: function(key, value) {
+    this.interruptAccess();
+
+    var name = 'uwa-' + this.database + '-' + key;
+    var expires = 3600 * 60 * 24; // 24 days by default
+    var expires_date = new Date( new Date().getTime() + (expires) );
+    var cookieData = name + "=" + escape(value) + ';' +
+      ((expires) ? "expires=" + expires_date.toGMTString() + ';' : "") +
+      "path=" + escape(window.location.pathname) + ';' +
+      "domain=" + escape(window.location.hostname);
+
+    document.cookie = cookieData;
+
+    return value;
+  },
+
+  rem: function(key) {
+    this.interruptAccess();
+
+    var out = this.get(key, null);
+    this.set(key, null);
+
+    return out;
+  }
 }, UWA.Data.Storage.Abstract.prototype);
 
