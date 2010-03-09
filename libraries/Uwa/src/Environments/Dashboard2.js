@@ -40,22 +40,22 @@ UWA.extend(UWA.Environment.prototype, {
     this.html['edit']       = $('editContent');
     this.html['status']     = $('moduleStatus');
     this.html['editLink']   = $('editLink');
-
   },
 
   onRegisterModule: function(module) {
 
+    // Map element with UWA.Element
     for (var key in this.html) {
-      this.widget.elements[key] = UWA.extendElement(this.html[key]);
+        this.module.elements[key] = UWA.$element(this.html[key]);
     }
 
-    this.widget.body = this.widget.elements['body'];
+    this.module.body = this.module.elements['body']; // shortcut
 
-    this.widget.elements['editLink'].empty().show().addClassName('infoButton');
+    // Handle edit link
+    this.module.elements['editLink'].empty().show().addClassName('infoButton');
     new AppleInfoButton(this.html['editLink'], $('wrapper'), "black", "white", this.showDashboardPrefs.bind(this));
 
     this.callback('onUpdatePreferences');
-
 
     var resizeButon = UWA.createElement('img', {
         attributes: {
@@ -75,39 +75,43 @@ UWA.extend(UWA.Environment.prototype, {
 
   showDashboardPrefs: function() {
 
-    var editContent = this.widget.elements['edit'];
+    var editContent = this.module.elements['edit'];
 
-    this.widget.elements['edit'].empty();
+    this.module.elements['edit'].empty();
 
     if (this.hasPreferences()) {
-      this.prefsForm = new Netvibes.UI.PrefsForm( { module: this.widget, displayButton: (window.widget ? false : true) } );
-      this.form = this.widget.elements['edit'].appendChild(this.prefsForm.getContent());
+      this.prefsForm = new Netvibes.UI.PrefsForm( { module: this.module, displayButton: (window.widget ? false : true) } );
+      this.form = this.module.elements['edit'].appendChild(this.prefsForm.getContent());
     }
 
     if (window.widget) {
+
       if (this.form) {
         this.form.onsubmit = function() { return false }; // desactive browser default form handling
       }
+
       var doneButton = UWA.createElement('div');
       doneButton.setAttribute('id','doneButton');
-      this.widget.elements['edit'].appendChild(doneButton);
-      doneButton = new AppleGlassButton(doneButton, "Done", this.hideDashboardPrefs.bind(this) );
+      this.module.elements['edit'].appendChild(doneButton);
+      doneButton = new AppleGlassButton(doneButton, _("Done"), this.hideDashboardPrefs.bind(this) );
       doneButton.textElement.style.color = '#333';
     }
 
-    var infos = this.widget.getInfos();
+    var infos = this.module.getInfos();
     if (infos) {
-      this.widget.elements['edit'].addContent(infos);
+      this.module.elements['edit'].addContent(infos);
     }
 
-    if (this.widget.uwaUrl) {
+    if (this.module.uwaUrl) {
+
       var upgrade = UWA.createElement('a', {
-        href:  UWA_WIDGET + '/dashboard/?uwaUrl=' + encodeURIComponent(this.widget.uwaUrl)
+        href:  UWA_WIDGET + '/dashboard/?uwaUrl=' + encodeURIComponent(this.module.uwaUrl)
       }).setStyle(
         {'display': 'block', 'padding': '10px', 'text-align': 'right'}
       ).setHTML(
         _('Recompile this widget')
       ).inject(editContent);
+
       // to handle links with window.widget.openURL
       this.callback('onUpdateBody');
     }
@@ -116,11 +120,11 @@ UWA.extend(UWA.Environment.prototype, {
       window.widget.prepareForTransition("ToBack");
     }
 
-    this.widget.elements['body'].hide();
-    this.widget.elements['edit'].show();
-    this.widget.elements['editLink'].hide();
+    this.module.elements['body'].hide();
+    this.module.elements['edit'].show();
+    this.module.elements['editLink'].hide();
 
-    this.widget.callback('onShowEdit', this.widget.elements['edit']);
+    this.module.callback('onShowEdit', this.module.elements['edit']);
 
     if (window.widget) {
       setTimeout("window.widget.performTransition()", 0);
@@ -134,30 +138,26 @@ UWA.extend(UWA.Environment.prototype, {
       this.prefsForm.saveValues();
     }
 
+    // freezes the widget so that you can change it without the user noticing
     if (window.widget) {
       this.html['editLink'].show();
-      // freezes the widget so that you can change it without the user noticing
       window.widget.prepareForTransition("ToFront");
     }
 
-    this.widget.elements['body'].show();
-    this.widget.elements['edit'].hide();
+    this.module.elements['body'].show();
+    this.module.elements['edit'].hide();
 
-    if (this.widget.onRefresh) {
-      this.widget.onRefresh();
-    } else if (this.widget.onLoad) {
-      this.widget.onLoad();
-    }
+    this.module.callback('onRefresh');
+    this.module.callback('onLoad');
 
     // and flip the widget over
     if (window.widget) {
       setTimeout("window.widget.performTransition()", 250);
     }
-
   },
 
   hasPreferences: function() {
-    return this.widget.preferences.some(function(pref){
+    return this.module.preferences.some(function(pref){
       return pref.type != 'hidden';
     });
   },

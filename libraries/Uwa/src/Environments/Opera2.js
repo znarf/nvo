@@ -41,29 +41,28 @@ UWA.extend(UWA.Environment.prototype, {
 
   onRegisterModule: function(module) {
 
+    // Map element with UWA.Element
     for (var key in this.html) {
-      this.widget.elements[key] = UWA.extendElement(this.html[key]);
+      this.module.elements[key] = UWA.extendElement(this.html[key]);
     }
 
-    this.widget.body = this.widget.elements['body'];
+    this.module.body = this.module.elements['body']; // shortcut
 
-    if (this.html['editLink']) {
-      this.html['editLink'].show();
-      this.html['editLink'].onclick = ( function() {
-        this.callback('toggleEdit');
-        return false;
-      } ).bind(this);
-    }
-
+    // Handle Edit link click
+    this.html['editLink'].show();
+    this.html['editLink'].addEvent("click", function() {
+      this.callback('toggleEdit');
+      return false;
+    }.bind(this));
   },
 
   toggleEdit: function() {
-    if (this.widget.elements['edit'].style.display == 'none') {
-      this.widget.callback('onEdit');
+    if (this.module.elements['edit'].style.display == 'none') {
+      this.module.callback('onEdit');
     } else {
       // note that we don't fire 'endEdit' there because we don't want to save form data
-      this.widget.elements['edit'].hide();
-      this.widget.elements['editLink'].setHTML( _("Edit") );
+      this.module.elements['edit'].hide();
+      this.module.elements['editLink'].setHTML( _("Edit") );
     }
   },
 
@@ -114,5 +113,5 @@ UWA.extend(UWA.Environment.prototype, {
       return window.open(url);
     }
   }
+});
 
-} );

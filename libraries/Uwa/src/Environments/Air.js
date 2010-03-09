@@ -52,11 +52,12 @@ UWA.extend(UWA.Environment.prototype, {
 
   onRegisterModule: function(module) {
 
+    // Map element with UWA.Element
     for (var key in this.html) {
-      this.widget.elements[key] = UWA.extendElement(this.html[key]);
+      this.module.elements[key] = UWA.extendElement(this.html[key]);
     }
 
-    this.widget.body = this.widget.elements['body'];
+    this.module.body = this.module.elements['body']; // shortcut
 
     // Handle Edit link click
     this.html['editLink'].show();

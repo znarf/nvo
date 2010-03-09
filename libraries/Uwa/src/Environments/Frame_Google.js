@@ -24,16 +24,19 @@ UWA.extend(UWA.Environment.prototype, {
     if (window._IG_Prefs) this.prefs = new _IG_Prefs();
   },
 
+  onInit: function () {
+      this.html['body']       = $('moduleContent');
+      this.html['status']     = $('moduleStatus');
+  },
+
   onRegisterModule: function(module) {
 
-    this.html['body']       = $('moduleContent');
-    this.html['status']     = $('moduleStatus');
-
+    // Map element with UWA.Element
     for (var key in this.html) {
-      this.widget.elements[key] = UWA.extendElement(this.html[key]);
+      this.module.elements[key] = UWA.extendElement(this.html[key]);
     }
 
-    this.widget.body = this.widget.elements['body'];
+    this.module.body = this.module.elements['body'];  // shortcut
 
     this.setPeriodical('handleResizePeriodical', this.handleResize, 250);
   },
@@ -88,10 +91,10 @@ UWA.extend(UWA.Environment.prototype, {
 
   onUpdatePreferences: function() {
     // fix boolean
-    for (var i = 0 ; i < widget.preferences.length; i++) {
-      var pref = widget.preferences[i];
+    for (var i = 0 ; i < this.module.preferences.length; i++) {
+      var pref = this.module.preferences[i];
       if (pref.type == 'boolean' && widget.data[pref.name] == '1') {
-        widget.data[pref.name] = 'true';
+        this.module.data[pref.name] = 'true';
       }
     }
   }
@@ -99,5 +102,4 @@ UWA.extend(UWA.Environment.prototype, {
 });
 
 var Environment = new UWA.Environment();
-
 var widget = Environment.getModule();

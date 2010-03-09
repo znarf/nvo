@@ -84,9 +84,7 @@ UWA.extend(UWA.Environment.prototype, {
     this.liveObject.body.innerHTML = '';
 
     this.html['edit'] = UWA.createElement('div').addClassName('editContent').hide().inject(this.liveObject.body);
-
     this.html['body'] = UWA.createElement('div').addClassName('moduleContent').inject(this.liveObject.body);
-
     this.html['status'] = UWA.createElement('div').addClassName('moduleStatus').inject(this.liveObject.body);
     this.html['status'].setHTML(
       '<a class="share" target="_blank" href="javascript:void(0)">' +

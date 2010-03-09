@@ -29,111 +29,110 @@ UWA.extend(UWA.Environment.prototype, {
 
  onInit: function() {
 
-   // creating module header
+   // Creating module header
    var moduleHeader = document.createElement('div');
    moduleHeader.setAttribute('id','moduleHeader');
    moduleHeader.className = 'moduleHeader';
    moduleHeader.innerHTML =
-       '<div class="edit"><a href="#edit">'+ _('Edit') + '</a></div>' +
-       '<div class="refresh"><a href="#refresh">'+ _('Refresh') + '</a></div>' +
-       '<div class="ico" id="moduleIcon"></div>' +
-       '<div id="moduleTitle" class="title">' + document.title + '</div>';
+        '<a id="closeLink" class="close" style="display:none" href="javascript:void(0)">' + _('Close') + '</a>' +
+        '<a id="editLink" class="edit" style="display:none" href="javascript:void(0)">' + _('Edit') + '</a>' +
+        '<a id="refreshLink" class="refresh" style="display:none" href="javascript:void(0)">' + _('Refresh') + '</a>' +
+        '<a id="minimizeLink" class="minimize" style="display:none" href="javascript:void(0)">Minimize</a>' +
+        '<a id="moduleIcon" class="ico">' +
+        '  <img class="hicon" width="16" height="16" src="http://uwa.service.japanim.fr/img/icon.png"/>' +
+        '</a>' +
+        '<span id="moduleTitle" class="title">' + document.title + '</span>';
 
-   // creating module content
+   // Creating module content
    var moduleContent = document.createElement('div');
    moduleContent.setAttribute('id','moduleContent');
    moduleContent.className = 'moduleContent';
    moduleContent.innerHTML = document.body.innerHTML ;
 
-   // creating edit content
+   // Creating edit content
    var editContent = document.createElement('div');
    editContent.setAttribute('id','editContent');
    editContent.style.display = 'none';
    editContent.className = 'editContent optionContent configureContent';
 
+   // Creating widget env into docurment body
    document.body.innerHTML = '';
 
    var wrapper = document.createElement('div');
    wrapper.setAttribute('id','wrapper');
 
-   this.html['header'] = wrapper.appendChild(moduleHeader);
-   this.html['edit'] = wrapper.appendChild(editContent);
-   this.html['body'] = wrapper.appendChild(moduleContent);
+   this.html['header']  = wrapper.appendChild(moduleHeader);
+   this.html['edit']    = wrapper.appendChild(editContent);
+   this.html['body']    = wrapper.appendChild(moduleContent);
 
    document.body.appendChild(wrapper);
 
-   this.html['title'] = document.getElementById('moduleTitle');
-   this.html['icon'] = document.getElementById('moduleIcon');
-
-   /*
-   var addto = document.createElement('div');
-   addto.setAttribute('id','addto');
-   if( typeof UWA.widgetTrueURL == 'undefined' ) UWA.widgetTrueURL = document.location.href;
-   addto.innerHTML =  '<ul>' +
-   '<li><a title="'+ _('Add this module to Netvibes') + '" href="http://www.netvibes.com/subscribe.php?module=UWA&amp;moduleUrl=' + encodeURIComponent(UWA.widgetTrueURL) + '"><img src="' + UWA_STATIC + '/uwa-netvibes.png" /></a></li>' +
-   '<li><a style="border:0" title="'+ _('Add this module to Google Homepage') + '" href="http://www.google.com/ig/adde?moduleurl=' + encodeURIComponent(UWA_WIDGET + '/gspec?uwaUrl=' +  encodeURIComponent(UWA.widgetTrueURL) ) + '"><img src="' + UWA_STATIC + '/uwa-google.png" /></a></li>' +
-   '<ul>';
-   document.body.appendChild(addto);
-   */
+   this.html['title']       = document.getElementById('moduleTitle');
+   this.html['icon']        = document.getElementById('moduleIcon');
+   this.html['editLink']    = document.getElementById('editLink');
+   this.html['refreshLink'] = document.getElementById('refreshLink');
 
  },
 
  onRegisterModule: function() {
 
    for (var key in this.html) {
-     this.module.elements[key] = UWA.$element(this.html[key]);
-   }
+      this.module.elements[key] = UWA.extendElement(this.html[key]);
+    }
 
-   // new syntax
    this.module.body = this.module.elements['body'];
 
-   var editLink = UWA.$element( this.module.elements['header'].getElementsByClassName('edit')[0] );
-   editLink.addEvent("click", function() {
-     Environment.callback('toggleEdit');
+   // Handle Edit link click
+   this.html['editLink'].show();
+   this.html['editLink'].addEvent("click", function() {
+     this.callback('toggleEdit');
      return false;
-   });
+   }.bind(this));
 
-   var refreshLink = UWA.$element( this.module.elements['header'].getElementsByClassName('refresh')[0] );
-   refreshLink.addEvent("click", function() {
-     widget.callback('onRefresh');
+   // Handle Refresh link click
+   this.html['refreshLink'].show();
+   this.html['refreshLink'].addEvent("click", function() {
+     this.module.callback('onRefresh');
      return false;
-   });
+   }.bind(this));
 
+   // Load preferences
    var xmlMetas = document.getElementsByTagName("meta");
    if(xmlMetas && xmlMetas.length) this.module.setMetasXML(xmlMetas);
 
    var xmlPrefs = document.getElementsByTagName("preference");
    if (xmlPrefs && xmlPrefs.length) this.module.setPreferencesXML(xmlPrefs);
 
+   // Load icon
    var links = document.getElementsByTagName('link');
    for(var i = 0; i < links.length; i++) {
      if(links[i].getAttribute('rel') == 'icon') {
        this.module.metas.icon = links[i].getAttribute('href');
      }
    }
+
    if(this.module.metas.icon) {
      this.module.setIcon(this.module.metas.icon, true);
    }
 
-   this.setDelayed('launchModule', this.launchModule, 100)
-
+   this.setDelayed('launchModule', this.launchModule, 100);
  },
 
  toggleEdit: function() {
    if (widget.elements['edit'].style.display == 'none') {
-     widget.callback('onEdit');
+     this.showEdit();
    } else {
-     widget.elements['edit'].hide();
+     this.html['edit'].hide();
    }
  },
 
  showEdit: function() {
-   if(this.module.onEdit) this.module.onEdit();
+   this.module.callback('onEdit');
  },
 
  getData: function(name) {
 
-   widget.log('getData:' + name);
+   this.log('getData:' + name);
 
    if(typeof(document.cookie) != "undefined") {
      var name = 'uwa-' + name;
@@ -169,7 +168,9 @@ UWA.extend(UWA.Environment.prototype, {
  },
 
  deleteData: function(name) {
-   widget.log('deleteData:' + name);
+
+   this.log('deleteData:' + name);
+
    return this.setData(name, null);
  },
 
@@ -194,4 +195,5 @@ UWA.Data.useJsonRequest = true;
 window.onresize = function() {
   widget.callback('onResize');
 }
+
 

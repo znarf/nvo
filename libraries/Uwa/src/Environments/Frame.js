@@ -48,29 +48,32 @@ UWA.extend(UWA.Environment.prototype, {
     this.html['editLink']   = $('editLink');
     this.html['icon']       = $('moduleIcon');
 
+    // Map element with UWA.Element
     for (var key in this.html) {
-      this.widget.elements[key] = UWA.$element(this.html[key]);
+      this.module.elements[key] = UWA.$element(this.html[key]);
     }
 
-    this.widget.body = this.widget.elements['body']; // shortcut
+    this.module.body = this.module.elements['body']; // shortcut
 
+    // Handle edit link
     if (this.html['editLink']) {
       this.html['editLink'].addEvent('click', function() {
-        Environment.callback('toggleEdit');
+        this.callback('toggleEdit');
         return false;
-      });
+      }.bind(this));
     }
 
+    // Handle resize
     this.setPeriodical('handleResizePeriodical', this.handleResize, 250);
   },
 
   toggleEdit: function() {
-    if (widget.elements['edit'].style.display == 'none') {
-      widget.callback('onEdit');
+    if (this.html['edit'].style.display == 'none') {
+      this.module.callback('onEdit');
     } else {
       // note that we don't fire 'endEdit' there because we don't want to save form data
-      widget.elements['edit'].hide();
-      widget.elements['editLink'].setHTML( _("Edit") );
+      this.html['edit'].hide();
+      this.html['editLink'].setHTML( _("Edit") );
     }
   },
 
@@ -100,9 +103,9 @@ UWA.extend(UWA.Environment.prototype, {
   },
 
   setIcon: function(icon) {
-    if (this.widget.elements['icon']) {
+    if (this.module.elements['icon']) {
         var url = UWA.proxies['icon'] + '?url=' + encodeURIComponent(icon);
-        this.widget.elements['icon'].setHTML('<img width="16" height="16" src="' + icon + '" />');
+        this.module.elements['icon'].setHTML('<img width="16" height="16" src="' + icon + '" />');
     } else {
         this.sendRemote('setIcon', false, icon);
     }
@@ -117,9 +120,9 @@ UWA.extend(UWA.Environment.prototype, {
   },
 
   handleResize: function() {
-    if(typeof this.widget.body == "undefined") {
-      this.widget.log('widget.body is not defined : widget #' + this.widget.id + '');
-      this.widget.log(this.widget.body);
+    if(typeof this.module.body == "undefined") {
+      this.module.log('widget.body is not defined : widget #' + this.module.id + '');
+      this.module.log(this.module.body);
       return;
     }
 
@@ -149,14 +152,14 @@ UWA.extend(UWA.Environment.prototype, {
   },
 
   onUpdatePreferences: function() {
-    if (this.widget.elements['editLink']) {
-      var editable = this.widget.preferences.some(function(pref){
+    if (this.html['editLink']) {
+      var editable = this.module.preferences.some(function(pref){
         return pref.type != 'hidden';
       });
       if (editable) {
-        this.widget.elements['editLink'].show();
+        this.html['editLink'].show();
       } else {
-        this.widget.elements['editLink'].hide();
+        this.html['editLink'].hide();
       }
     }
   },
@@ -184,12 +187,12 @@ UWA.extend(UWA.Environment.prototype, {
     if (action) {
       switch (action) {
         case 'onResize':
-          this.widget.callback('onResize');
-          this.widget.callback('onUpdateBody');
+          this.module.callback('onResize');
+          this.module.callback('onUpdateBody');
           break;
         case 'onRefresh':
-          if(this.widget.onRefresh) this.widget.callback('onRefresh');
-          else if(this.widget.onLoad) this.widget.callback('onLoad');
+          this.module.callback('onRefresh');
+          this.module.callback('onLoad');
           break;
         case 'onUpdateTheme':
           this.updateTheme(value);
@@ -198,24 +201,24 @@ UWA.extend(UWA.Environment.prototype, {
           this.launchModule();
           break;
         case 'setValue':
-          this.widget.data[name] = value;
+          this.module.data[name] = value;
           break;
         case 'deleteValue':
           delete this.data[name];
-          delete this.widget.data[name];
+          delete this.module.data[name];
           break;
         case 'onSearch':
         case 'onResetSearch':
         case 'onResetUnreadCount':
         case 'onKeyboardAction':
-          this.widget.callback(action, value);
+          this.module.callback(action, value);
           break;
       }
     }
   },
 
   sendRemote: function(action, name, value) {
-    if (this.widget.id == '') {
+    if (this.module.id == '') {
       UWA.log(action);
       UWA.log('no widget id defined yet.');
       return false;
@@ -272,7 +275,7 @@ UWA.extend(UWA.Environment.prototype, {
 
   sendRemoteUsingProxy: function (proxy, target, message) {
     // Create a new hidden iframe
-    var iframe = this.widget.createElement('iframe');
+    var iframe = this.module.createElement('iframe');
     iframe.setStyle({
       'position'   : 'absolute',
       'visibility' : 'hidden',

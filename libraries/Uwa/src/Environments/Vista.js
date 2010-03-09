@@ -21,145 +21,145 @@ if (typeof Environments == "undefined") var Environments = {};
 
 if (typeof Widgets == "undefined") var Widgets = {};
 
-Object.extend(UWA.Environment.prototype,
-{
-    initialize: function (){
-        this.vista = {}
-    },
+Object.extend(UWA.Environment.prototype, {
 
-    onInit: function ()
-    {
-        if ((!vistaModule.inFlyout) && System.Gadget.docked) {
+  initialize: function () {
+      this.vista = {}
+  },
 
-            document.getElementById("vistaContent").innerHTML = "";
+  onInit: function () {
 
-            var header = document.createElement("div");
-            header.setAttribute("id", "moduleDocked");
-            header.className = "moduleDocked";
-            header.innerHTML = '<div class="ico" id="moduleIcon">&nbsp;</div><div id="moduleTitle" class="title">' + document.title + "</div>";
+    if ((!vistaModule.inFlyout) && System.Gadget.docked) {
 
-            var wrapper = document.createElement("div");
-            wrapper.setAttribute("id", "wrapper");
-            wrapper.className = "docked";
-            wrapper.appendChild(header);
-            document.getElementById("vistaContent").appendChild(wrapper);
+      document.getElementById("vistaContent").innerHTML = "";
 
-            this.html.body = document.createElement("div");
-            this.html.header = header;
-            this.html.edit = document.createElement("div");
-            this.html.title = document.getElementById("moduleTitle");
-            this.html.icon = document.getElementById("moduleIcon")
+      var header = document.createElement("div");
+      header.setAttribute("id", "moduleDocked");
+      header.className = "moduleDocked";
+      header.innerHTML = '<div class="ico" id="moduleIcon">&nbsp;</div><div id="moduleTitle" class="title">' + document.title + "</div>";
 
-        } else {
+      var wrapper = document.createElement("div");
+      wrapper.setAttribute("id", "wrapper");
+      wrapper.className = "docked";
+      wrapper.appendChild(header);
+      document.getElementById("vistaContent").appendChild(wrapper);
 
-            var header = document.createElement("div");
-            header.setAttribute("id", "moduleHeader");
-            header.className = "moduleHeader";
-            header.innerHTML = '<div class="refresh"><img src="img/refresh.png" onclick="vistaModule.refresh()"></div><div class="ico" id="moduleIcon">&nbsp;</div><div id="moduleTitle" class="title">' + document.title + "</div>";
+      this.html.body = document.createElement("div");
+      this.html.header = header;
+      this.html.edit = document.createElement("div");
+      this.html.title = document.getElementById("moduleTitle");
+      this.html.icon = document.getElementById("moduleIcon")
 
-            var content = document.createElement("div");
-            content.setAttribute("id", "moduleContent");
-            content.className = "moduleContent";
-            if (document.getElementById("moduleContent") != null && document.getElementById("moduleContent").innerHTML != null) {
-                content.innerHTML = document.getElementById("moduleContent").innerHTML
-            }
+    } else {
 
-            var footer = document.createElement("div");
-            footer.setAttribute("id", "moduleFooter");
-            footer.className = "moduleFooter";
+      var header = document.createElement("div");
+      header.setAttribute("id", "moduleHeader");
+      header.className = "moduleHeader";
+      header.innerHTML = '<div class="refresh"><img src="img/refresh.png" onclick="vistaModule.refresh()"></div><div class="ico" id="moduleIcon">&nbsp;</div><div id="moduleTitle" class="title">' + document.title + "</div>";
 
-            var wrapper = document.createElement("div");
-            wrapper.setAttribute("id", "wrapper");
+      var content = document.createElement("div");
+      content.setAttribute("id", "moduleContent");
+      content.className = "moduleContent";
+      if (document.getElementById("moduleContent") != null && document.getElementById("moduleContent").innerHTML != null) {
+          content.innerHTML = document.getElementById("moduleContent").innerHTML
+      }
 
-            var contentWrapper = document.createElement("div");
-            contentWrapper.setAttribute("id", "contentWrapper");
+      var footer = document.createElement("div");
+      footer.setAttribute("id", "moduleFooter");
+      footer.className = "moduleFooter";
 
-            this.html.body = contentWrapper.appendChild(content);
-            this.html.header = wrapper.appendChild(header);
-            this.html.edit = document.createElement("div");
+      var wrapper = document.createElement("div");
+      wrapper.setAttribute("id", "wrapper");
 
-            wrapper.appendChild(contentWrapper);
-            wrapper.appendChild(footer);
-            document.getElementById("vistaContent").innerHTML = "";
-            document.getElementById("vistaContent").appendChild(wrapper);
+      var contentWrapper = document.createElement("div");
+      contentWrapper.setAttribute("id", "contentWrapper");
 
-            this.html.icon = document.getElementById("moduleIcon");
-            this.html.title = document.getElementById("moduleTitle");
-        }
-    },
+      this.html.body = contentWrapper.appendChild(content);
+      this.html.header = wrapper.appendChild(header);
+      this.html.edit = document.createElement("div");
 
-    onRegisterModule: function ()
-    {
-        for (var key in this.html) {
-            this.module.elements[key] = UWA.$element(this.html[key])
-        }
-        this.module.body = this.module.elements.body;
-        var value = this.module.$("header").getElementsByClassName("edit")[0];
+      wrapper.appendChild(contentWrapper);
+      wrapper.appendChild(footer);
+      document.getElementById("vistaContent").innerHTML = "";
+      document.getElementById("vistaContent").appendChild(wrapper);
 
-        if (typeof(value) != "undefined") {
-
-            value.onclick = (function ()
-            {
-                if (this.$("edit").style.display == "none") {
-                    this.callback("onEdit")
-                }
-                else {
-                    this.callback("endEdit")
-                }
-                return false;
-            }).bindAsEventListener(this.module);
-        }
-
-        var name = document.getElementsByTagName("preference");
-        if (name) {
-            this.module.setPreferencesXML(name)
-        }
-    },
-
-    getData: function (name)
-    {
-        if (this.data[name]) {
-            var value = this.data[name]
-        } else {
-            var value = System.Gadget.Settings.read("uwa_" + name)
-        }
-
-        if (value == "") {
-            value = null
-        }
-
-        return value;
-    },
-
-    setData: function (name, value)
-    {
-        this.data[name] = value;
-        if (this.module.id) {
-            this.setDelayed("saveDatas", this.saveDatas, 1000)
-        }
-        if (value == null) {
-            value = ""
-        }
-        return System.Gadget.Settings.write("uwa_" + name, value);
-    },
-
-    onUpdateBody: function ()
-    {
-        this.setDelayed("updateSize", vistaModule.refreshSize.bind(vistaModule), 200)
-    },
-
-    setIcon: function (name)
-    {
-        if (this.module.elements.icon)
-        {
-            var url = UWA.proxies['icon'] + "?url=" + encodeURIComponent(this.module.elements.icon);
-            this.module.elements.icon.innerHTML = '<img width="16" height="16" src="' + url + '" />';
-        }
+      this.html.icon = document.getElementById("moduleIcon");
+      this.html.title = document.getElementById("moduleTitle");
+      //this.html.editLink = $("header").getElementsByClassName("edit")[0];
     }
-});
+  },
 
-function _(A)
-{
-    return A;
-};;
+  onRegisterModule: function () {
+
+    // Map element with UWA.Element
+    for (var key in this.html) {
+        this.module.elements[key] = UWA.$element(this.html[key]);
+    }
+
+    this.module.body = this.module.elements['body']; // shortcut
+
+    // Handle edit link
+    if (this.html['editLink']) {
+      this.html['editLink'].addEvent('click', function() {
+        this.callback('toggleEdit');
+        return false;
+      }.bind(this));
+    }
+
+    // Load Module preferences
+    var name = document.getElementsByTagName("preference");
+    if (name) {
+        this.module.setPreferencesXML(name)
+    }
+  },
+
+  toggleEdit: function() {
+    if (this.html['edit'].style.display == 'none') {
+      this.module.callback('onEdit');
+    } else {
+      this.module.callback("endEdit")
+    }
+  },
+
+  getData: function (name) {
+    if (this.data[name]) {
+        var value = this.data[name]
+    } else {
+        var value = System.Gadget.Settings.read("uwa_" + name)
+    }
+
+    if (value == "") {
+        value = null
+    }
+
+    return value;
+  },
+
+  setData: function (name, value) {
+
+    this.data[name] = value;
+
+    if (this.module.id) {
+        this.setDelayed("saveDatas", this.saveDatas, 1000)
+    }
+
+    if (value == null) {
+        value = ""
+    }
+
+    return System.Gadget.Settings.write("uwa_" + name, value);
+  },
+
+  onUpdateBody: function () {
+    this.setDelayed("updateSize", vistaModule.refreshSize.bind(vistaModule), 200)
+  },
+
+  setIcon: function (name) {
+
+    if (this.module.elements.icon) {
+        var url = UWA.proxies['icon'] + "?url=" + encodeURIComponent(this.module.elements.icon);
+        this.module.elements.icon.innerHTML = '<img width="16" height="16" src="' + url + '" />';
+    }
+  }
+});
 
