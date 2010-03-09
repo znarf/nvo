@@ -106,7 +106,6 @@ abstract class Exposition_Compiler
         $this->_coreLibraries['uwa'] = array_merge(array(
             'lib/UWA/UWA.js',
             'lib/UWA/Drivers/UWA-alone.js',
-            'lib/UWA/Drivers/UWA-legacy.js',
         ), $this->_baseLibraries);
 
         // set uwa-mootools files
