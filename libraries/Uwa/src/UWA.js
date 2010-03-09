@@ -60,7 +60,7 @@ if (typeof UWA.Scripts == "undefined") UWA.Scripts = {};
 if (typeof UWA.Controls == "undefined") UWA.Controls = {};
 if (typeof UWA.Services == "undefined") UWA.Services = {};
 if (typeof UWA.Templates == "undefined") UWA.Templates = {};
-
+if (typeof App == 'undefined') App = {};
 
 // @todo Translation of text from English to another language
 if (typeof _ == "undefined") {
@@ -111,8 +111,8 @@ Example:
 UWA.log = function(message) {
     if (window.console && typeof(console.log) == "function") console.log(message); // firebug, safari
     else if (window.opera && typeof(opera.postError) == "function") opera.postError(message);
-    // else if (window.widget) window.alert(message); // dashboard
-    // else window.alert(message); // IE
+    //else if (window.widget) window.alert(message); // dashboard
+    //else window.alert(message); // IE
 }
 
 /*
