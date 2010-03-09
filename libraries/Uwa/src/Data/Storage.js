@@ -42,17 +42,15 @@ UWA.Data.Storage = function(options) {
     database: 'default',
     engine: null,
     availableEngine: [
-    'Gears',
-    /*
-        'Dom',
-        'Html5',
-        'IE',
-        'Flash',
-        'Gears',
-        'Cookies'
-        */
-    ],
-  };
+      'Gears',
+      'Dom',
+      'Html5',
+      'IE',
+      'Flash',
+      'Gears',
+      'Cookies'
+    ]
+  },
 
   // Global settings
   this.options = {};

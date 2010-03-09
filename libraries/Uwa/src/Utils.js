@@ -72,7 +72,6 @@ UWA.Utils = {
 
     content = "\n" + content + "\n"; // fix a problem with the final regexp
     content = content.replace(/,/g, ",\n"); // fix a problem with the final regexp
-    content = content.replace(/#moduleContent/g, ''); // remove namespace (Netvibes - not documented)
     content = content.replace(/#container/g, ''); // remove namespace (WZD)
     content = content.replace(/\n\s*([a-zA-z0-9\.\-, :#]*)\s*([{|,])/g, "\n" + namespace + " $1$2");
 

@@ -75,6 +75,7 @@ UWA.Data.Storage.Cookies.prototype = UWA.merge({
   },
 
   set: function(key, value) {
+
     this.interruptAccess();
 
     var name = 'uwa-' + this.database + '-' + key;
@@ -91,9 +92,10 @@ UWA.Data.Storage.Cookies.prototype = UWA.merge({
   },
 
   rem: function(key) {
+
     this.interruptAccess();
 
-    var out = this.get(key, null);
+    var out = this.get(key);
     this.set(key, null);
 
     return out;
