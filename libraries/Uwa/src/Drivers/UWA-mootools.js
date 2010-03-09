@@ -21,26 +21,30 @@ License:
 Script: Driver UWA MooTools
 */
 
-// Create App namespace
-if (typeof App == 'undefined') App = {};
-
 // Overwite native Object function
-Object.extend = $extend;
+Object.extend = UWA.extend;
 Object.clone = $merge;
 Object.toQueryString = Hash.toQueryString;
 
-// Add some alias for Mootools compatibility
-Cookie.set = Cookie.write;
-Cookie.get = Cookie.read;
-Cookie.remove = Cookie.dispose;
+//
+// Class Interface
+//
 
-Array.alias({
-  erase: "remove"
+UWA.Class = UWA.extend(Class, {
+  create: function() {
+    return function() {
+      this.initialize.apply(this, arguments);
+    }
+  }
 });
 
-Element.alias({
-  dispose: "remove"
-});
+//
+// Element Interface
+//
+
+if (typeof UWA.Element == "undefined") UWA.Element = {};
+
+// Element Interface
 
 Element.implement({
 
@@ -71,25 +75,87 @@ Element.implement({
   }
 });
 
-// Extend an Element with UWA element extensions
-UWA.extendElement = function(el){
-  if (el) {
+UWA.merge(UWA.Element, {
+
+  getElementById: function(el) {
+
+    if (typeof el == 'string') {
+        el = $(el);
+    }
+
+    return UWA.extendElement(el);
+  },
+
+  setAttributes: function(properties) {
+    return this.setProperties(properties);
+  },
+
+  getElementsByClassName: function (className) {
+    return this.getElements("." + className);
+  },
+
+  getValue: function () {
+    return this.get("value");
+  },
+
+  setHTML: function () {
+    return this.set("html", arguments);
+  },
+
+  getHTML: function () {
+    return this.get("html");
+  },
+
+  getTag: function () {
+    return this.get("tag");
+  }
+});
+
+Native.implement([Element, Document], {
+  getElementsByClassName: function (className) {
+    return this.getElements("." + className);
+  }
+});
+
+//
+// Element builder
+//
+
+UWA.merge(UWA, {
+
+   extendElement: function(el) {
+
     el = $(el);
     if (!el.isUwaExtended) {
       UWA.merge(el, UWA.Element);
       el.setStyle = UWA.Element.setStyle; // conflict between mootools setStyle and UWA setStyle
       el.isUwaExtended = true;
     }
-    return el;
-  }
-}
 
+    return el;
+  },
+
+  createElement: function(tagName, options) {
+      return UWA.$element(new Element(tagName, options));
+  }
+});
+
+// Shortcut for getElementById AND Element extensions
 UWA.$element = UWA.extendElement;
 
-// Element builder
-UWA.createElement = function(tagName, options){
-  return UWA.$element( new Element(tagName, options) );
-}
+UWA.merge(Element, {
+  hasClassName: function(el, className) { return $(el).hasClass(className) },
+  addClassName: function(el, className) { return $(el).addClass(className) },
+  removeClassName: function(el, className) { return $(el).removeClass(className) },
+  getDimensions: function(el) { return $(el).getDimensions() },
+  hide: function(el) { return el.style.display = "none"; },
+  show: function(el) { return el.style.display = ""; },
+  getElementsByClassName: function (el, className) { return el.getElements("." + className); }
+});
+
+//
+// Form Interface
+//
 
 UWA.Form = {
   getElements: function(form) {
@@ -97,7 +163,10 @@ UWA.Form = {
   }
 }
 
+//
 // Ajax Interface
+//
+
 UWA.Ajax = {
 
   getRequest: function(url, options) {
@@ -164,45 +233,12 @@ UWA.Ajax = {
   }
 }
 
-// Element extensions
-if (typeof UWA.Element == "undefined") UWA.Element = {};
 
-UWA.extend(UWA.Element, {
-  setAttributes: function(properties) {
-    return this.setProperties(properties);
-  },
-  getElementsByClassName: function (className) {
-    return this.getElements("." + className);
-  }
-});
+//
+// Event Interface
+//
 
-Native.implement([Element, Document], {
-  getElementsByClassName: function (className) {
-    return this.getElements("." + className);
-  }
-});
-
-UWA.merge(Object, {
-  extend: UWA.extend
-});
-
-UWA.Class = UWA.extend(Class, {
-  create: function() {
-    return function() {
-      this.initialize.apply(this, arguments);
-    }
-  }
-});
-
-UWA.merge(Element, {
-  hasClassName: function(el, className) { return $(el).hasClass(className) },
-  addClassName: function(el, className) { return $(el).addClass(className) },
-  removeClassName: function(el, className) { return $(el).removeClass(className) },
-  getDimensions: function(el) { return $(el).getDimensions() },
-  hide: function(el) { return el.style.display = "none"; },
-  show: function(el) { return el.style.display = ""; },
-  getElementsByClassName: function (el, className) { return el.getElements("." + className); }
-});
+if (typeof Event == "undefined") Event = {};
 
 UWA.merge(Event, {
 
@@ -218,7 +254,9 @@ UWA.merge(Event, {
   }
 });
 
+//
 // Function extensions
+//
 
 Function.implement({
   bindAsEventListener: function(bind, args){
@@ -226,9 +264,28 @@ Function.implement({
   }
 });
 
-// JSON Interface
+//
+// JSON Interface if require only
+//
+
 if (typeof UWA.Json == "undefined") UWA.Json = {};
 
 UWA.Json.encode = JSON.encode;
 UWA.Json.decode = function(string) { return JSON.decode(string, true) }
+
+//
+// Add some alias for Mootools compatibility
+//
+
+Cookie.set = Cookie.write;
+Cookie.get = Cookie.read;
+Cookie.remove = Cookie.dispose;
+
+Array.alias({
+  erase: "remove"
+});
+
+Element.alias({
+  dispose: "remove"
+});
 
