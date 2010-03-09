@@ -21,80 +21,165 @@ License:
 Script: Driver UWA Alone
 */
 
-// Shortcut for getElementById AND extend element
-var $ = function(el) {
-  if (typeof el == 'string') {
-    el = document.getElementById(el);
+// Overwite native Object function
+if (typeof Object == "undefined") Object = {};
+Object.extend = UWA.extend;
+
+//
+// Class Interface
+//
+
+UWA.Class = function() {
+  return function() {
+    if (this.initialize) this.initialize.apply(this, arguments);
   }
-  if (el && !el.isUwaExtended) {
-    UWA.merge(el, UWA.Element);
-    el.isUwaExtended = true;
-  }
-  return el;
 }
 
-// getElementsByClassName for browsers that don't support it yet
-UWA.merge(document, {
-  getElementsByClassName: function(className, elm) {
-    var node = elm || document;
-    var children = node.getElementsByTagName('*');
-    var elements = new Array();
-    for (var i=0; i<children.length; i++) {
-      var child = children[i];
-      var classNames = child.className.split(' ');
-      for (var j = 0; j < classNames.length; j++) {
-        if (classNames[j] == className) {
-          elements.push(child);
-          break;
-        }
-      }
+UWA.Class.create = function() {
+  return new Class();
+}
+
+Class = UWA.Class;
+
+//
+// Element Interface
+//
+
+if (typeof UWA.Element == "undefined") UWA.Element = {};
+
+UWA.merge(UWA.Element, {
+
+  getElementById: function(el) {
+
+    if (typeof el == 'string') {
+        el = document.getElementById(el);
     }
-    return elements;
+
+    return UWA.extendElement(el);
+  },
+
+  getElementsByClassName: function(className) {
+    var el = document.getElementsByClassName(className, this);
+    return UWA.extendElement(el);
+  },
+
+  setAttributes: function(properties) {
+    UWA.log('warning el.setAttributes : partially implemented');
+    for (key in properties) {
+      this.setAttribute(key, properties[key]);
+    }
+    return this;
+  },
+
+  getElements: function(selector) {
+    UWA.log('warning el.getElements("' + selector + '") : partially implemented');
+    // if string without spaces ->
+    return this.getElementsByTagName(selector);
+    // if string starting with a . ->
+    // return this.getElementsByClassName(selector);
+  },
+
+  getElement: function(selector) {
+    UWA.log('warning el.getElement("' + selector + '") : partially implemented');
+    return this.getElements(selector)[0];
+  },
+
+  addEvent: function(type, fn) {
+    return this.addListener(type, fn);
+  },
+
+  addEvents: function(events) {
+    for (key in events) {
+        this.addEvent(key, events[key]);
+    }
+    return this;
+  },
+
+  removeEvent: function(type, fn) {
+    return this.removeListener(type, fn);
+  },
+
+  removeEvents: function(events) {
+    for (key in events) {
+        this.removeEvent(key, events[key]);
+    }
+    return this;
   }
 });
 
-// Extend an Element with UWA element extensions
-UWA.extendElement = function(el) {
-  return $(el);
+//
+// Element builder
+//
+
+UWA.merge(UWA, {
+
+   extendElement: function(el) {
+
+    if (el && !el.isUwaExtended) {
+      UWA.merge(el, UWA.Element);
+      el.isUwaExtended = true;
+    }
+
+    return el;
+  },
+
+  createElement: function(tagName, options) {
+
+    var el = UWA.extendElement( document.createElement(tagName) );
+    if (typeof options == 'string') {
+        UWA.log('widget.createElement : elName as 2nd argument is deprecated');
+        this.elements[options] = el;
+    } else if (typeof options == "object") {
+      for (var name in options) {
+        var option = options[name];
+        switch(name) {
+        case 'styles':
+            el.setStyle(option);
+            break;
+        case 'attributes':
+            el.setAttributes(option);
+            break;
+        case 'id':
+            el.id = option;
+            break;
+        case 'class':
+            el.className = option;
+            break;
+        case 'events':
+            el.addEvents(option);
+            break;
+        default:
+            el.setAttribute(name, option);
+        }
+      }
+    }
+    return el;
+  }
+});
+
+Element = function(tagName, options) {
+  return UWA.createElement(tagName, options);
 }
 
+// Shortcut for getElementById AND Element extensions
+var $ = UWA.Element.getElementById
 UWA.$element = UWA.extendElement;
 
-// Element builder
-UWA.createElement = function(tagName, options){
-  var el = UWA.extendElement( document.createElement(tagName) );
-  if (typeof options == 'string') {
-    UWA.log('widget.createElement : elName as 2nd argument is deprecated');
-    this.elements[options] = el;
-  } else if (typeof options == "object") {
-    for (var name in options) {
-     var option = options[name];
-     switch(name) {
-       case 'styles':
-         el.setStyle(option);
-         break;
-       case 'attributes':
-         el.setAttributes(option);
-         break;
-       case 'id':
-         el.id = option;
-         break;
-       case 'class':
-         el.className = option;
-         break;
-       case 'events':
-         el.addEvents(option);
-         break;
-       default:
-         el.setAttribute(name, option);
-     }
-   }
- }
- return el;
-}
+UWA.merge(Element, {
+  hasClassName: function(e, n) { e = UWA.$element(e); if(e) return e.hasClassName(n) },
+  addClassName: function(e, n) {e = UWA.$element(e); if(e) return e.addClassName(n) },
+  removeClassName: function(e, n) { e = UWA.$element(e); if(e) return e.removeClassName(n) },
+  getDimensions: function(e) { e = UWA.$element(e); if(e) return e.getDimensions() },
+  hide: function(e) { e = UWA.$element(e); if(e) return e.hide() },
+  show: function(e) { e = UWA.$element(e); if(e) return e.show() }
+});
+
+//
+// Form Interface
+//
 
 UWA.Form = {
-  collectionToArray : function(collection) {
+  collectionToArray: function(collection) {
     resultArray = new Array();
     for (i = 0; i < collection.length; i++) {
       resultArray[resultArray.length] = collection[i];
@@ -103,13 +188,17 @@ UWA.Form = {
   },
 
   getElements: function(form) {
+    var textareaArray = UWA.Form.collectionToArray($(form).getElementsByTagName('textarea'));
     var inputArray = UWA.Form.collectionToArray($(form).getElementsByTagName('input'));
     var selectArray = UWA.Form.collectionToArray($(form).getElementsByTagName('select'));
-    return inputArray.concat(selectArray);
+    return inputArray.concat(selectArray).concat(textareaArray);
   }
 }
 
+//
 // Ajax Interface
+//
+
 UWA.Ajax = {
   getRequest: function(url, options) {
     options.url = url;
@@ -137,6 +226,7 @@ UWA.Ajax = {
     }
     return client;
   },
+
   Request: function(url, options) {
     var request = this.getRequest(url, options);
     if (options.postBody) {
@@ -149,12 +239,15 @@ UWA.Ajax = {
     }
     return request.send(options.data || null);
   },
+
   onCompleteXML: function(arg, callback, context) {
     if (typeof callback == "function") callback(arg[1])
   },
+
   onCompleteText: function(arg, callback, context) {
     if (typeof callback == "function") callback(arg[0])
   },
+
   onCompleteFeed: function(arg, callback, context) {
     var response = {responseText: arg[0], responseXML: arg[1]};
     if (typeof UWA.Utils.parseFeed == 'function') {
@@ -165,6 +258,7 @@ UWA.Ajax = {
     }
     if (typeof callback == "function") callback(response)
   },
+
   onCompleteJson: function(arg, callback, context) {
     try {
       eval("var j = " + arg[0]);
@@ -175,70 +269,108 @@ UWA.Ajax = {
   }
 }
 
-// Element extensions
-if (typeof UWA.Element == "undefined") UWA.Element = {};
+//
+// Event Interface
+//
 
-UWA.merge(UWA.Element, {
+if (typeof Event == "undefined") Event = {};
 
-  getElementById: function(id) {
-    return document.getElementById(id);
+UWA.merge(Event, {
+  element: function(event) {
+    return event.target || event.srcElement;
   },
 
-  getElementsByClassName: function(className) {
-    return document.getElementsByClassName(className, this);
-  }
+  findElement: function(event, tagName) {
+    var element = Event.element(event);
+    while (element.parentNode && (!element.tagName || (element.tagName.toUpperCase() != tagName.toUpperCase())))
+      element = element.parentNode;
+    return element;
+  },
 
+  stop: function(e){
+    Event.stopPropagation(e)
+    Event.preventDefault(e);
+  },
+
+  stopPropagation: function(e){
+    if (e.stopPropagation) e.stopPropagation();
+    else e.cancelBubble = true;
+  },
+
+  preventDefault: function(e){
+    if (e.preventDefault) e.preventDefault();
+    else e.returnValue = false;
+  }
 });
 
+//
 // Function extensions
+//
+
+// @todo remove
+function $A(iterable) {
+  if (typeof iterable == 'object') {
+    var array = [];
+    for (var i = 0, l = iterable.length; i < l; i++) array[i] = iterable[i];
+    return array;
+  }
+  return Array.prototype.slice.call(iterable);
+};
+
 UWA.merge(Function.prototype, {
 
-  create: function (callback)
-  {
-   var __method = this;
-   callback = callback || {};
-   return function (object)
-   {
-     var args = callback.arguments;
-     args = (typeof args !== "undefined") ? UWA.Utils.splat(args) : $A(arguments).slice((callback.event) ? 1 : 0);
-     if (callback.event) {
-       args = [object || window.event].concat(args)
-     }
-     var event = function ()
-     {
-       return __method.apply(callback.bind || null, args);
-     };
-     return event();
+  create: function (callback) {
+
+    var __method = this;
+     callback = callback || {};
+
+     return function (object) {
+
+       var args = callback.arguments;
+       args = (typeof args !== "undefined") ? UWA.Utils.splat(args) : $A(arguments).slice((callback.event) ? 1 : 0);
+
+       if (callback.event) {
+         args = [object || window.event].concat(args)
+       }
+
+       var event = function () {
+         return __method.apply(callback.bind || null, args);
+       };
+
+       return event();
     }
   },
 
-  bind: function (callback, args)
-  {
-    return this.create(
-    {
-      bind : callback, "arguments" : args
-    });
+  bind: function (callback, args) {
+    return this.create({bind: callback, "arguments": args});
   },
 
-  bindAsEventListener: function (callback, args)
-  {
-    return this.create(
-    {
-      bind : callback, event : true, "arguments" : args
-    });
+  bindAsEventListener: function (callback, args) {
+    return this.create({bind: callback, event: true, "arguments": args});
   }
 });
 
-// JSON Interface if require only
+//
+// Array extensions
+//
 
-if (typeof UWA.Json == "undefined") {
+if (typeof Array.prototype.bindWithEvent != "function") {
+  Function.prototype.bindWithEvent = Function.prototype.bindAsEventListener;
+}
+
+//
+// JSON Interface if require only
+//
+
+if (typeof JSON == "undefined") {
+
   var JSON = {
 
     $defined: function(obj) {
       return (obj != undefined);
     },
 
-    encode: function(obj){
+    encode: function(obj) {
       switch (typeof obj){
         case 'string':
           return '"' + obj.replace(/[\x00-\x1f\\"]/g, JSON.$replaceChars) + '"';
@@ -259,11 +391,11 @@ if (typeof UWA.Json == "undefined") {
 
     $specialChars: {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\'},
 
-    $replaceChars: function(chr){
+    $replaceChars: function(chr) {
       return JSON.$specialChars[chr] || '\\u00' + Math.floor(chr.charCodeAt() / 16).toString(16) + (chr.charCodeAt() % 16).toString(16);
     },
 
-    decode: function(string, secure){
+    decode: function(string, secure) {
       if (typeof string != 'string' || !string.length) return null;
       if (secure && !(/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(string.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, ''))) return null;
       return eval('(' + string + ')');
