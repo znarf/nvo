@@ -256,11 +256,11 @@ ul.nv-tabList {
         background: #F1F1F1;
     }
 
-.nv-tabContent{
+.nv-tabContent {
     clear: both;
     border: 1px solid #D3E2F4;
     background: #FFF;
-    padding: 10px;
+    padding: 5px 10px 10px 10px;
     outline: none;
     overflow: hidden;
 }

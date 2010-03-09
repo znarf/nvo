@@ -25,16 +25,58 @@
 
 /* to have a nicer look & feel, we import parts of the netvibes garlic theme */
 
-@import "themes/garlic/uwa-core.css";
-@import "themes/garlic/uwa-icons.css";
+@import "themes/vista/uwa-core.css";
+@import "themes/vista/uwa-icons.css";
 
 /* base layout */
+
+* {
+    margin:0;
+    padding:0;
+}
 
 body {
   width:311px;
   height:100px;
   text-align:left;
   background: transparent;
+}
+
+img{
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+}
+
+table {
+	padding:0;
+	margin:0;
+	border:0;
+	border-collapse:collapse;
+	font-size: 11px;
+}
+
+ul {
+    padding-left: 5px;
+}
+
+ul li {
+	background: url(base/img/bullet.png) no-repeat;
+	background-position: 0 5px;
+	margin-bottom: 2px;
+	padding-left: 10px;
+	list-style-type: none;
+}
+
+ol {
+	padding-left: 30px;
+}
+
+ol li {
+	padding-left: 0px;
+}
+
+h1, h2, h3, h4, p, ul, ol {
+	margin:0.25em 0;
 }
 
 #vistaContent {
@@ -58,16 +100,7 @@ body {
     padding-left:14px;
     padding-right:14px;
     width: 311px;
-    background: transparent url(vista/moduleContent.gif) repeat-y center center;
-}
-
-#wrapper .moduleHeader{
-    margin: 0;
-    background: transparent url(vista/moduleHeader.gif) no-repeat center center;
-    height: 34px;
-    line-height: 34px;
-    padding: 0 5px;
-    width: 311px;
+    background: transparent url(themes/vista/img/moduleContent.gif) repeat-y center center;
 }
 
 #wrapper .moduleContent{
@@ -81,28 +114,6 @@ body {
   overflow-y: hidden;
 }
 
-#wrapper .moduleFooter{
-    height: 12px;
-    padding:0 2px;
-    margin: -2px 0 0 0;
-    width: 311px;
-    background: transparent url(vista/moduleFooter.gif) no-repeat center center;
-}
-
-#wrapper .title {
- height: 22px;
- font-family: Segoe UI, Tahoma, Sans-Serif;
- font-size: 12px;
- margin-top:3px;
- padding-top:0px;
- color: white;
- overflow: hidden;
-}
-
-#wrapper .title a, #wrapper .title a:hover{
- color: white;
-}
-
 #wrapper .refresh {
  margin-top: 5px;
 }
@@ -110,7 +121,7 @@ body {
 #wrapper .ico {
  float: left;
  text-indent: 15px;
- margin-top: 3px;
+ margin-top: 5px;
 }
 
 .nv-pager a.next:hover, .nv-pager a.prev:hover{

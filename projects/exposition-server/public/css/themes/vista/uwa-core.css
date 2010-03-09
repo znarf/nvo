@@ -1,0 +1,99 @@
+/**
+ * Copyright Netvibes 2006-2009.
+ * This file is part of Exposition PHP Server.
+ *
+ * Exposition PHP Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Exposition PHP Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Exposition PHP Server. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.module, .moduleEdit{
+    background: transparent url(img/white30.png);
+    margin: 10px;
+    border: 0;
+    padding: 6px;
+}
+
+.module .moduleFrame,
+.moduleEdit .moduleFrame{
+    border: 1px solid #86abe4;
+    background: #FFF;
+}
+
+.moduleHeader .title {
+ height: 22px;
+ font-family: Segoe UI, Tahoma, Sans-Serif;
+ font-size: 12px;
+ margin-top:3px;
+ padding-top:0px;
+ color: white;
+ overflow: hidden;
+}
+
+.moduleHeader .title a,
+.moduleHeader .title a:hover{
+    color: #white;
+}
+
+.editContent{
+    background: #F5F5F5 url(img/editContent.gif) repeat-x center top;
+    border: 0;
+    border-bottom: 1px solid #DDD;
+}
+
+/* white, default */
+.moduleHeader {
+    margin: 0;
+    background: transparent url(img/moduleHeader.gif) no-repeat center center;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 5px;
+    width: 311px;
+}
+
+.moduleFooter{
+    height: 12px;
+    padding:0 2px;
+    margin: -2px 0 0 0;
+    width: 311px;
+    background: transparent url(img/moduleFooter.gif) no-repeat center center;
+}
+
+/* Tabs */
+ul.nv-tabList {
+}
+ul.nv-tabList li {
+
+}
+
+ul.nv-tabList li a {
+    border: 1px solid #DDD;
+    border-bottom: 0;
+    background: #FFF url(img/tablist.png) repeat-x center top;
+    color: #888;
+}
+
+ul.nv-tabList li.dropped a,
+ul.nv-tabList li.dropped a:hover,
+ul.nv-tabList li a:hover,
+ul.nv-tabList li.selected a {
+    border: 1px solid #DDD;
+    border-bottom: 0;
+    background: #F0F0F0 url(img/tablist-selected.png) repeat-x center top;
+    color: #333;
+}
+
+.nv-tabContent{
+    border: 1px solid #DDD;
+    background: #FFF;
+}
+
