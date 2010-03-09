@@ -73,7 +73,6 @@ BASE_FILES = \
 CORE_FILES = \
 	$(UWA_JS_SRC)/UWA.js \
 	$(UWA_JS_SRC)/Drivers/UWA-alone.js \
-	$(UWA_JS_SRC)/Drivers/UWA-legacy.js \
 	$(BASE_FILES)
 
 MOOTOOLS_FILES = \
