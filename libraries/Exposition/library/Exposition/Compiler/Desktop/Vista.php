@@ -125,15 +125,20 @@ final class Exposition_Compiler_Desktop_Vista extends Exposition_Compiler_Deskto
         $l[] = '    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
         $l[] = '    <link rel="icon" href="' . $icon . '" type="image/x-icon" />';
 
-        // Add Widget javascripts
-        $javascripts = $this->_getJavascripts(array(
-            'platform'     => $this->_platform,
-            'className'    => 'CompiledModule'
-        ));
+        // Add Widget javascripts lib
+        $javascripts = $this->_getJavascripts();
 
         foreach ($javascripts as $script) {
             $l[] = '<script type="text/javascript" src="' . $script . '" charset="utf-8"></script>';
         }
+
+         // Add Widget javascripts
+        $WidgetJavascripts = $this->_getWidgetJavascripts(array(
+            'platform'     => $this->_platform,
+            'className'    => 'CompiledModule'
+        ));
+        $l[] = '<script type="text/javascript" src="' . $WidgetJavascripts . '"  charset="utf-8"></script>';
+
 
         $l[] = '    <!-- <script type="text/javascript" src="js/System.js"></script> -->';
         $l[] = '    <script type="text/javascript" src="js/VistaModule.js"></script>';

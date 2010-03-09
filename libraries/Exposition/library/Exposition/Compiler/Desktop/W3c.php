@@ -80,7 +80,8 @@ abstract class Exposition_Compiler_Desktop_W3c extends Exposition_Compiler_Deskt
         }
 
         // Add Widget javascripts
-        $l[] = '<script type="text/javascript" src="' . $this->_getWidgetJavascripts() . '"  charset="utf-8"></script>';
+        $WidgetJavascripts = $this->_getWidgetJavascripts();
+        $l[] = '<script type="text/javascript" src="' . $WidgetJavascripts . '"  charset="utf-8"></script>';
 
         $l[] = '<script type="text/javascript">';
         $l[] = $this->_getScript();
