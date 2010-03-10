@@ -133,6 +133,8 @@ UWA.merge(UWA, {
       for (var name in options) {
         var option = options[name];
         switch(name) {
+        case 'html':
+            el.setHTML(option);
         case 'styles':
             el.setStyle(option);
             break;
@@ -166,7 +168,7 @@ var $ = UWA.Element.getElementById
 UWA.$element = UWA.extendElement;
 
 UWA.merge(Element, {
-  hasClassName: function(e, n) { e = UWA.$element(e); if(e) return e.hasClassName(n) },
+  hasClassName: function(e, n) {e = UWA.$element(e); if(e) return e.hasClassName(n) },
   addClassName: function(e, n) {e = UWA.$element(e); if(e) return e.addClassName(n) },
   removeClassName: function(e, n) { e = UWA.$element(e); if(e) return e.removeClassName(n) },
   getDimensions: function(e) { e = UWA.$element(e); if(e) return e.getDimensions() },
