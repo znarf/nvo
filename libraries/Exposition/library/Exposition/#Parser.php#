@@ -184,7 +184,7 @@ abstract class Exposition_Parser
         }
         return $this->_errors;
     }
-
+    
     /**
      * Fill the title & body of the widget object
      * with XML debugging informations

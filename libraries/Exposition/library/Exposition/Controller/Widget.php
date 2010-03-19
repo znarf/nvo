@@ -73,7 +73,8 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
         } catch (Exception $e) {
 
             // Create an empty widget
-            $this->_widget = new Exposition_Widget();
+            $this->_widget = new Exposition_Widget($this->_uwaUrl);
+            $this->_widget->setTitle('Widget Error');
 
             if (0) {
                 $this->_widget->setBody('<p>This widget cannot be displayed.</p>');
@@ -101,8 +102,8 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
             }
         }
 
-        if (empty($uwaUrl)) {
-            throw new Exception('Unable to get uwaUrl param');
+        if (empty($uwaUrl) || $uwaUrl == 'uwaUrl=') {
+            throw new Exposition_Exception('Unable to get uwaUrl param');
         }
 
         return $uwaUrl;

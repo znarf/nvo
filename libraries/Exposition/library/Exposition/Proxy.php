@@ -212,8 +212,12 @@ class Exposition_Proxy
 
                 // Service unavailable
                 if ($this->_response->getStatus() == 503) {
-                    header('HTTP/1.1 ' . $this->_response->getStatus() . ' ' . $this->_response->getMessage());
-                    exit;
+                    throw new Exposition_Proxy_Exception(sprintf(
+                        'Unable to get content of url %s HTTP/1.1 %s cause: %s',
+                        $this->_client->getUri(),
+                        $this->_response->getStatus(),
+                        $this->_response->getMessage()
+                    ));
                 }
 
                 // get body has var
@@ -224,9 +228,13 @@ class Exposition_Proxy
                     $cache->save($body, $this->_key);
                 }
 
-            } catch (Zend_Http_Client_Exception $e) {
-                error_log("Http exception via AjaxProxy on " . $this->_url);
-                return null;
+            } catch (Exception $e) {
+
+                throw new Exposition_Proxy_Exception(sprintf(
+                    'Unable to get content of url %s cause: %s',
+                    $this->_client->getUri(),
+                    $e->getMessage()
+                ));
             }
         }
 
