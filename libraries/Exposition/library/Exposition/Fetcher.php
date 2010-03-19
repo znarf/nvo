@@ -62,11 +62,12 @@ class Exposition_Fetcher
      */
     public function __construct($url, $cache = true)
     {
-        if (empty($url)) {
+        $this->_url = trim($url);
+
+        if (empty($this->_url)) {
             throw new Exposition_Exception('Unable to fetch empty url');
         }
 
-        $this->_url = $url;
         $this->_useCache = $cache;
     }
 

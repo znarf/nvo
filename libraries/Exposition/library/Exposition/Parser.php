@@ -74,7 +74,7 @@ abstract class Exposition_Parser
     {
         $this->_url = trim($url);
 
-        if (mb_strlen($this->_url) == 0) {
+        if (empty($this->_url)) {
             throw new Exposition_Parser_Exception('Unable to fetch empty Url.');
         }
 
