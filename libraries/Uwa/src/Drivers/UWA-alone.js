@@ -364,44 +364,42 @@ if (typeof Array.prototype.bindWithEvent != "function") {
 // JSON Interface if require only
 //
 
-if (typeof JSON == "undefined") {
+var JSON = {
 
-  var JSON = {
+  $defined: function(obj) {
+    return (obj != undefined);
+  },
 
-    $defined: function(obj) {
-      return (obj != undefined);
-    },
+  $specialChars: {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\'},
 
-    encode: function(obj) {
-      switch (typeof obj){
-        case 'string':
-          return '"' + obj.replace(/[\x00-\x1f\\"]/g, JSON.$replaceChars) + '"';
-        case 'array':
-          return '[' + String(obj.map(JSON.encode).filter(JSON.$defined)) + ']';
-        case 'object':
-          var string = [];
-          for(var key in obj) {
-            var json = JSON.encode(obj[key]);
-            if (json) string.push(JSON.encode(key) + ':' + json);
-          }
-          return '{' + String(string) + '}';
-        case 'number': case 'boolean': return String(obj);
-        case false: return 'null';
-      }
-      return null;
-    },
+  $replaceChars: function(chr) {
+    return JSON.$specialChars[chr] || '\\u00' + Math.floor(chr.charCodeAt() / 16).toString(16) + (chr.charCodeAt() % 16).toString(16);
+  },
 
-    $specialChars: {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\'},
-
-    $replaceChars: function(chr) {
-      return JSON.$specialChars[chr] || '\\u00' + Math.floor(chr.charCodeAt() / 16).toString(16) + (chr.charCodeAt() % 16).toString(16);
-    },
-
-    decode: function(string, secure) {
-      if (typeof string != 'string' || !string.length) return null;
-      if (secure && !(/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(string.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, ''))) return null;
-      return eval('(' + string + ')');
+  encode: function(obj) {
+    switch (typeof obj){
+      case 'string':
+        return '"' + obj.replace(/[\x00-\x1f\\"]/g, JSON.$replaceChars) + '"';
+      case 'array':
+        return '[' + String(obj.map(JSON.encode).filter(JSON.$defined)) + ']';
+      case 'object':
+        var string = [];
+        for(var key in obj) {
+          var json = JSON.encode(obj[key]);
+          if (json) string.push(JSON.encode(key) + ':' + json);
+        }
+        return '{' + String(string) + '}';
+      case 'number': case 'boolean': return String(obj);
+      case false: return 'null';
     }
+    return null;
+  },
+
+  decode: function(string, secure) {
+    if (typeof string != 'string' || !string.length) return null;
+    if (secure && !(/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(string.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, ''))) return null;
+    return eval('(' + string + ')');
   }
 }
+
 
