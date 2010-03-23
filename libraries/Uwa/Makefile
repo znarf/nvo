@@ -41,7 +41,7 @@ BUILD = $(ROOT)/build
 COPYING = $(ROOT)/COPYING
 COPYING_LESSER = $(ROOT)/COPYING.LESSER
 
-YUI_VERSION = 2.3.5
+YUI_VERSION = 2.4.2
 YUI = java -jar $(UWA_JS_BIN)/yuicompressor-$(YUI_VERSION).jar --charset UTF-8
 
 NAME = uwa-js-runtime
