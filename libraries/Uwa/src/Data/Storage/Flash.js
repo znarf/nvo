@@ -21,9 +21,8 @@ License:
 Credits:
   Partially based on MooTools, My Object Oriented Javascript Tools.
   Copyright (c) 2006-2007 Valerio Proietti, <http://mad4milk.net>, MIT Style License.
-  Partially based on Prototype JavaScript framework, version 1.6.0 (c) 2005-2007 Sam Stephenson.
-  Prototype is freely distributable under the terms of an MIT-style license.
-  For details, see the Prototype web site: http://www.prototypejs.org/
+  Partially based on jStore JavaScript, version 1.0
+  Copyright (c) 2009 Eric Garside (http://eric.garside.name)
 */
 
 if (typeof UWA.Data == "undefined") UWA.Data = {};

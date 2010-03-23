@@ -21,9 +21,8 @@ License:
 Credits:
   Partially based on MooTools, My Object Oriented Javascript Tools.
   Copyright (c) 2006-2007 Valerio Proietti, <http://mad4milk.net>, MIT Style License.
-  Partially based on Prototype JavaScript framework, version 1.6.0 (c) 2005-2007 Sam Stephenson.
-  Prototype is freely distributable under the terms of an MIT-style license.
-  For details, see the Prototype web site: http://www.prototypejs.org/
+  Partially based on jStore JavaScript, version 1.0
+  Copyright (c) 2009 Eric Garside (http://eric.garside.name)
 */
 
 if (typeof UWA.Data == "undefined") UWA.Data = {};
@@ -60,6 +59,14 @@ UWA.Data.Storage.Abstract.prototype = {
 
     // When set, we're ready to transact data
     this.isReady = false;
+
+    /* Property: delays
+
+     *Object*: Stores environment's delayed events.
+
+     The object is initially empty. It is filled by the <setDelayed> method.
+    */
+    this.delays = {};
   },
 
   // This should be overloaded with an actual functionality init
@@ -79,14 +86,69 @@ UWA.Data.Storage.Abstract.prototype = {
   },
 
   // Performs all necessary script includes
-  include: function(url){
+  includeScript: function(url, callback) {
 
-    var script = document.createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.src = url;
+    var script = UWA.createElement('script', {
+        type: 'text/javascript',
+        src: url
+    });
 
     var head = document.getElementsByTagName('head')[0];
     var insert = head.appendChild(script);
+
+    if (typeof callback != "undefined") {
+
+        var callbackName = 'includeScript:' + url
+        var myScriptCallBack = function() {
+
+            try {
+                callback();
+                this.clearDelayed(callbackName);
+            } catch (e) {
+                this.log('UWA.Data.Storage.Abstract.includeScript(' +  callbackName + ') Error:' + e);
+            }
+
+        }.bind(this);
+
+        this.setDelayed(callbackName, myScriptCallBack, 500);
+    }
+  },
+
+  /* Method: setDelayed
+
+  Registers a function as delayed event.
+
+  If 'bind' is not defined, the function will automatically be bound to the current environment object.
+
+  Parameters:
+    * String name: the name of the event
+    * Function fn: the function to register
+    * Integer delay: the delay in milliseconds
+    * Object bind: A javascript object to bind the function to.
+
+  Notes:
+    internal or advanced use only
+
+  */
+  setDelayed: function(name, fn, delay, bind) {
+    this.clearDelayed(name);
+    if(typeof bind == "undefined" || bind === true) fn = fn.bind(this);
+    this.delays[name] = setTimeout(fn, delay);
+  },
+
+  /* Method: clearDelayed
+
+  Unregister a delayed event previously registered with <setDelayed>
+
+  Parameters:
+    * String name: the name of the event
+
+  Notes:
+    internal or advanced use only
+
+  */
+  clearDelayed: function(name) {
+    if (this.delays[name]) { clearTimeout(this.delays[name]) }
   },
 
   get: function(key){
@@ -129,42 +191,5 @@ UWA.Data.Storage.Abstract.prototype = {
   // Restores JSON'd values before returning
   safeResurrect: function(value){
       return this.rxJson.test(value) ? UWA.Json.evalJSON(value) : value;
-  },
-
-  /* Method: setDelayed
-
-  Registers a function as delayed event.
-
-  If 'bind' is not defined, the function will automatically be bound to the current environment object.
-
-  Parameters:
-    * String name: the name of the event
-    * Function fn: the function to register
-    * Integer delay: the delay in milliseconds
-    * Object bind: A javascript object to bind the function to.
-
-  Notes:
-    internal or advanced use only
-
-  */
-  setDelayed: function(name, fn, delay, bind) {
-    this.clearDelayed(name);
-    if(typeof bind == "undefined" || bind === true) fn = fn.bind(this);
-    this.delays[name] = setTimeout(fn, delay);
-  },
-
-  /* Method: clearDelayed
-
-  Unregister a delayed event previously registered with <setDelayed>
-
-  Parameters:
-    * String name: the name of the event
-
-  Notes:
-    internal or advanced use only
-
-  */
-  clearDelayed: function(name) {
-    if (this.delays[name]) { clearTimeout(this.delays[name]) }
   }
 }

@@ -42,13 +42,7 @@ UWA.Data.Storage = function(options) {
     database: 'default',
     engine: null,
     availableEngine: [
-      'Gears',
-      'Dom',
-      'Html5',
-      'IE',
-      'Flash',
-      'Gears',
-      'Cookies'
+      'Air', 'Dashboard', 'Gears', 'IE',  'Html5', 'Dom', 'Flash', 'Cookies'
     ]
   },
 
@@ -78,6 +72,8 @@ UWA.Data.Storage.prototype = {
       // if no engine given, update availables ones and set first found has current
       if (this.options.engine == null) {
 
+          this.initAvailableEngines();
+
           this.detectAvailableEngine();
 
           // set first available has current
@@ -93,19 +89,30 @@ UWA.Data.Storage.prototype = {
       this.options = Object.extend(this.defaults, options || {})
   },
 
+  initAvailableEngines: function() {
+      this.options.availableEngine.each(function(engineName, position) {
+          this.getEngineInstance(engineName);
+      }, this);
+  },
+
   detectAvailableEngine: function() {
 
       var availableEngine = [];
       this.options.availableEngine.each(function(engineName, position) {
 
           if (this.getEngineInstance(engineName).isAvailable()) {
+              this.log('UWA.Data.Storage:detectAvailableEngine: ' + engineName + ' is available;');
               availableEngine.push(engineName);
+          } else {
+              this.log('UWA.Data.Storage:detectAvailableEngine: ' + engineName + ' is not available;');
+              delete(this.EnginesInstances[engineName]);
           }
 
       }, this);
 
       this.options.availableEngine = availableEngine;
   },
+
 
   getEngineInstance: function(engineName) {
 
@@ -134,6 +141,8 @@ UWA.Data.Storage.prototype = {
 
       var engineInstance = this.getEngineInstance(engineName);
       engineInstance.connect(this.options.database);
+
+      this.log('UWA.Data.Storage:setCurrentEngine: ' + engineName + ';');
 
       this.CurrentEngine = engineInstance;
   },
