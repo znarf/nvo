@@ -1,0 +1,193 @@
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 2em 1em 2em 6.5em;
+    background: white url('uwa-wd.png') top left repeat-y;
+    font-size:80%;
+    line-height: 1.35;
+} /* fixed no-repeat for w3c-like */
+
+body, th, td {
+	font-family: Verdana, sans-serif;
+}
+
+:link {
+	color: #00C;
+	background: transparent;
+}
+
+:visited {
+	color: #609;
+	background: transparent;
+}
+
+:link:active, :visited:active {
+	color: #C00;
+	background: transparent;
+}
+
+:link:hover, :visited:hover {
+	background: #ffa;
+}
+
+code :link, code :visited {
+	color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Trebuchet MS", Verdana, sans-serif;
+    font-weight: normal;
+    border-bottom: none;
+	text-align: left;
+}
+
+h1, h2 {
+	border-bottom:1px solid #cecece;
+}
+
+h1, h2, h3 {
+	color: #3c790a /* w3c-like: #005A9C */;
+	background: transparent;
+}
+
+h1 {
+	font-size: 160%;
+    padding: 5px 0;
+    color: #000;
+    border-bottom:1px solid #F1F1F1;
+}
+
+h2 {
+	font-size: 150%;
+    color: #365F91;
+}
+
+h3 {
+	font-size: 120%;
+	font-weight: bold;
+    color: #19406A;
+}
+
+h4 {
+	font-size: 120%;
+}
+
+h5 {
+		font-weight: bold;
+    color: #19406A;
+}
+
+img {
+    border: none;
+    vertical-align: middle;
+}
+
+#content li {
+  list-style-type: square;
+  list-style-image: url(../images/puce.png);
+}
+
+code, pre {
+    font:normal 105% "Bitstream Vera Sans Mono", monaco, "Courier New", courier, monospace;
+    color: #333;
+    white-space: preserve;
+    margin:0;
+    padding: 0;
+}
+
+pre {
+    border:1px solid #ccc;
+    padding: 0.5em;
+   -moz-border-radius:6px;
+    background: #dedede;
+}
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
+	font-size: 95%;
+}
+
+var sub {
+	vertical-align: bottom;
+	font-size: smaller;
+	position: relative;
+	top: 0.1em;
+}
+
+table {
+	border-collapse: collapse;
+	border-style: hidden hidden none hidden;
+}
+
+table thead {
+	border-bottom: solid;
+}
+
+table tbody th:first-child {
+	border-left: solid;
+}
+
+table td, table th {
+	border-left: solid;
+	border-right: solid;
+	border-bottom: solid thin;
+	vertical-align: top;
+	padding: 0.2em;
+}
+
+blockquote {
+	margin: 0 0 0 2em;
+	border: 0;
+	padding: 0;
+	font-style: italic;
+}
+
+ins {
+	background: green;
+	color: white;
+	text-decoration: none;
+}
+
+del {
+	background: maroon;
+	color: white;
+	text-decoration: line-through;
+}
+
+body ins, body del {
+	display: block;
+}
+
+body * ins, body * del {
+	display: inline;
+}
+
+#navigation {
+	float: right;
+	width: 300px;
+	border: 3px double #888;
+	margin: 3px;
+	padding: 10px;
+	font-size: 80%;
+	background: #fff;
+	overflow: hidden;
+}
+#navigation a {
+	display: block;
+	color: #3c790a;
+	text-decoration: none;
+}
+#navigation a.H1 {
+	font-weight: bold;
+}
+#navigation a.H2 {
+	padding-top: 3px;
+	padding-left: 10px;
+}
+#navigation a.H3 {
+	padding-left: 20px;
+}
+

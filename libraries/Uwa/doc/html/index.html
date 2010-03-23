@@ -1,0 +1,1655 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			Universal Widget API (UWA) 1.2
+		</title>
+		<link rel="stylesheet" type="text/css" href="screen.css" media="screen" />
+	</head>
+	<body>
+		<h1>
+
+			Universal Widget <acronym title="Application Programming Interface">API</acronym> (<acronym title="Universal Widget API">UWA</acronym>) 1.2
+		</h1>
+		<p>
+			Working Draft - 22 August 2008
+		</p>
+		<p>
+			Latest Version:
+		</p>
+
+		<ul>
+			<li class="level1">
+				<div class="li">
+					<a rel="nofollow" title="http://dev.netvibes.com/uwa/" class="urlextern" href="http://netvibes.org/specs/uwa/current-work/">http://netvibes.org/specs/uwa/current-work/</a>
+				</div>
+			</li>
+		</ul>
+		<p>
+
+			Editors:
+		</p>
+		<ul>
+			<li class="level1">
+				<div class="li">
+					Xavier Borderie (Netvibes <acronym title="Société par actions simplifiée">SAS</acronym>)
+				</div>
+			</li>
+			<li class="level1">
+
+				<div class="li">
+					François Hodierne (Netvibes <acronym title="Société par actions simplifiée">SAS</acronym>)
+				</div>
+			</li>
+		</ul>
+		<p>
+			Copyright © 2007-2008 Netvibes®, Some Rights Reserved.<br />
+			Licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by-sa/3.0/">BY-SA license</a>.
+		</p>
+
+		<h1>
+			<a id="abstract" name="abstract">Abstract</a>
+		</h1>
+		<div class="level1">
+			<p>
+				This document describes the Universal Widget <acronym title="Application Programming Interface">API</acronym> (<acronym title="Universal Widget API">UWA</acronym>), a combination of a <acronym title="Extensible HyperText Markup Language">XHTML</acronym>-based file format and a JavaScript framework. Its goal is to allow developers to use existing Web standards to build Web widgets. Support for these widgets should be easy to implement on any platform that already supports the usual Web standards: <acronym title="Extensible HyperText Markup Language">XHTML</acronym>, <acronym title="Cascading Style Sheets">CSS</acronym> and JavaScript. Compilers might be required to turn the widget (notably its <acronym title="Extensible Markup Language">XML</acronym> format for preferences) into the platform's own model.
+			</p>
+
+		</div>
+		<h1>
+			<a id="status_of_this_document" name="status_of_this_document">Status of this Document</a>
+		</h1>
+		<div class="level1">
+			<p>
+				This is the 22 August 2008 Working Draft of the <acronym title="Universal Widget API">UWA</acronym> specification. Please post comments to the dedicated forum at <a href="http:/:dev.netvibes.com/forum">http:/dev.netvibes.com/forum</a>.
+			</p>
+
+		</div>
+		<h1>
+			<a id="table_of_contents" name="table_of_contents">Table of Contents</a>
+		</h1>
+		<div class="level1">
+
+
+<ul>
+	<li><a href="#introduction">Introduction</a>
+		<ul>
+
+			<li><a href="#example_of_widget">Example of widget</a></li>
+		</ul>
+	</li>
+	<li><a href="#file_format_and_conformance">File format and Conformance</a>
+		<ul>
+			<li><a href="#widget_preferences">Widget preferences</a>
+				<ul>
+
+					<li><a href="#text_preference">Text preference</a></li>
+					<li><a href="#boolean_preference">Boolean preference</a></li>
+					<li><a href="#hidden_preference">Hidden preference</a></li>
+					<li><a href="#password_preference">Password preference</a></li>
+					<li><a href="#list_preference">List preference</a></li>
+					<li><a href="#range_preference">Range preference</a></li>
+
+				</ul>
+			</li>
+			<li><a href="#meta_tags">Meta tags</a>
+				<ul>
+					<li><a href="#meta_author">Meta Author</a></li>
+					<li><a href="#meta_e-mail">Meta E-mail</a></li>
+					<li><a href="#meta_website">Meta Website</a></li>
+
+					<li><a href="#meta_description">Meta Description</a></li>
+					<li><a href="#meta_version">Meta Version</a></li>
+					<li><a href="#meta_api_version">Meta API Version</a></li>
+					<li><a href="#meta_auto-refresh">Meta Auto-refresh</a></li>
+					<li><a href="#meta_debug_mode">Meta Debug mode</a></li>
+					<li><a href="#meta_thumbnail">Meta Thumbnail</a></li>
+
+					<li><a href="#meta_screenshot">Meta Screenshot</a></li>
+				</ul>
+			</li>
+			<li><a href="#other_head_content">Other <code>head</code> content</a>
+				<ul>
+					<li><a href="#icon_link_tag">Icon link tag</a></li>
+
+					<li><a href="#rich-icon_link_tag">Rich-icon link tag</a></li>
+					<li><a href="#standalone_emulation_files">Standalone emulation files</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li><a href="#styling_with_css">Styling with CSS</a></li>
+
+	<li><a href="#javascript_framework">JavaScript framework</a>
+		<ul>
+			<li><a href="#javascript_usage">JavaScript usage</a></li>
+			<li><a href="#widget_object"><code>widget</code> object</a>
+				<ul>
+					<li><a href="#uwa_events"><acronym title="Universal Widget API">UWA</acronym> events</a>
+
+						<ul>
+							<li><a href="#widget_events">Widget events</a></li>
+							<li><a href="#callback_events">Callback events</a></li>
+						</ul>
+					</li>
+					<li><a href="#widget_methods"><code>widget</code> methods</a>
+
+						<ul>
+							<li><a href="#widget_methods1">Widget methods</a></li>
+							<li><a href="#platform_methods">Platform methods</a></li>
+							<li><a href="#dom_methods">DOM methods</a></li>
+							<li><a href="#widget_preferences_methods">Widget preferences methods</a></li>
+							<li><a href="#widget_properties">Widget properties</a></li>
+
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li><a href="#uwa_object">UWA object</a>
+				<ul>
+					<li><a href="#uwa.data_methods_ajax_methods">UWA.Data methods (Ajax methods)</a>
+						<ul>
+
+							<li><a href="#main_ajax_methodrequest">Main Ajax method: request()</a></li>
+							<li><a href="#shortcut_ajax_methodsgettext">Shortcut Ajax methods: getText()</a></li>
+							<li><a href="#shortcut_ajax_methodsgetxml">Shortcut Ajax methods: getXml()</a></li>
+							<li><a href="#shortcut_ajax_methodsgetjson">Shortcut Ajax methods: getJson()</a></li>
+							<li><a href="#shortcut_ajax_methodsgetfeed">Shortcut Ajax methods: getFeed()</a></li>
+						</ul>
+
+					</li>
+				</ul>
+			</li>
+			<li><a href="#element_extensions">Element extensions</a>
+				<ul>
+					<li><a href="#modifying_the_element_s_content">Modifying the element's content</a></li>
+					<li><a href="#getting_the_element_s_dom_info">Getting the element's DOM info</a></li>
+
+					<li><a href="#modifying_the_element_s_display">Modifying the element's display</a></li>
+					<li><a href="#modifying_the_element_s_classes">Modifying the element's classes</a></li>
+				</ul>
+			</li>
+			<li><a href="#array_extensions">Array extensions</a>
+				<ul>
+					<li><a href="#extensions_based_on_javascript_1.6">Extensions based on JavaScript 1.6</a></li>
+
+					<li><a href="#compatibility_extensions">Compatibility extensions</a></li>
+				</ul>
+			</li>
+			<li><a href="#string_extensions">String extensions</a>
+				<ul>
+					<li><a href="#utility_extensions">Utility extensions</a></li>
+					<li><a href="#internal_compatibility_extensions">Internal/compatibility extensions</a></li>
+
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li><a href="#reference">Reference</a></li>
+	<li><a href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+
+
+		</div>
+		<h1>
+			<a id="introduction" name="introduction">Introduction</a>
+		</h1>
+		<div class="level1">
+			<p>
+				The Universal Widget <acronym title="Application Programming Interface">API</acronym> is a widget format that aims to be easy to use for Web developers, easy to implement for platform developers, and as portable as possible. To that end, it is based on well-known web technologies, such as <acronym title="Extensible HyperText Markup Language">XHTML</acronym> for content, <acronym title="Extensible Markup Language">XML</acronym> for preference handling, JavaScript for behavior, and <acronym title="Cascading Style Sheets">CSS</acronym> for styling. It has been designed from the get-go so that Web developers could build a working widget in a manner of minutes, and that platform implementer could quickly have it working for their platform.
+			</p>
+
+			<p>
+				In the context of this specification, a widget is defined as a piece of code residing on a Web server that can be embedded into a container prior to being server to the client. That container can either be embedded within a website (for instance, an online widget engine or a simple web page), or exported as single-file archive, compatible with a desktop widget engines.
+			</p>
+			<p>
+				For this purpose, this specification defines:
+			</p>
+			<ul>
+				<li class="level1">
+					<div class="li">
+						a file format, based on <acronym title="Extensible HyperText Markup Language">XHTML</acronym> 1.0 Strict,
+					</div>
+
+				</li>
+				<li class="level1">
+					<div class="li">
+						a preference format, based on <acronym title="Extensible Markup Language">XML</acronym>,
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+
+						an JavaScript framework, extending the language with useful and proven methods, such as Ajax helper methods.
+					</div>
+				</li>
+			</ul>
+			<p>
+				These three products are expected to work within the constrains of usual web-development: their are no different than the usual format used every day to produce a regular website.
+			</p>
+		</div>
+		<h2>
+			<a id="example_of_widget" name="example_of_widget">Example of widget</a>
+
+		</h2>
+		<div class="level2">
+			<p>
+				This section is non-normative, but is functional. Its purpose is to get a view of a typical source for a widget.
+			</p>
+			<pre class="code xhtml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:widget="http://www.netvibes.com/ns/"&gt;
+
+  &lt;head&gt;
+    &lt;meta name="author" content="Netvibes" /&gt;
+    &lt;meta name="description" content="Displays latest post from a feed" /&gt;
+    &lt;meta name="apiVersion" content="1.0" /&gt;
+    &lt;meta name="debugMode" content="true" /&gt;
+
+    &lt;link rel="stylesheet" type="text/css"
+      href="http://www.netvibes.com/themes/uwa/style.css" /&gt;
+
+    &lt;script type="text/javascript"
+      src="http://www.netvibes.com/js/UWA/load.js.php?env=Standalone"&gt;&lt;/script&gt;
+
+    &lt;title&gt;Latest blog post&lt;/title&gt;
+    &lt;link rel="icon" type="image/png" href="http://www.netvibes.com/favicon.ico" /&gt;
+
+    &lt;widget:preferences&gt;
+      &lt;preference type="text" name="theFeed" label="RSS/Atom feed to use"
+        defaultValue="http://blog.netvibes.com/rss.php" /&gt;
+
+    &lt;/widget:preferences&gt;
+
+    &lt;script type="text/javascript"&gt;
+      var DisplayLatestBlogPost = {};
+      DisplayLatestBlogPost.display = function(feed) {
+        var latestPost = feed.items[0];
+
+        widget.setTitle('&lt;a href="'+feed.htmlUrl+'"&gt;'+feed.title+'&lt;/a&gt;');
+
+        var contentHtml = '';
+        contentHtml += '&lt;h2&gt;&lt;a href="' + latestPost.link + '"&gt;' + latestPost.title + '&lt;/a&gt;&lt;/h2&gt;';
+        contentHtml += 'Posted on ' + latestPost.date + '&lt;br /&gt;';
+        contentHtml += latestPost.content;
+        contentHtml += '&lt;em&gt;Read all the previous posts by
+          &lt;a href="' + feed.htmlUrl + '"&gt;visiting the blog&lt;/a&gt;!&lt;/em&gt;'
+        widget.setBody(contentHtml);
+      }
+
+      widget.onLoad = function() {
+        UWA.Data.getFeed( widget.getValue('theFeed'), DisplayLatestBlogPost.display );
+      }
+    &lt;/script&gt;
+
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;Loading...&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
+</pre>
+		</div>
+		<h1>
+			<a id="file_format_and_conformance" name="file_format_and_conformance">File format and Conformance</a>
+		</h1>
+		<div class="level1">
+			<p>
+				The key words MUST, MUST NOT, SHOULD and MAY in this document are to be interpreted as described in RFC 2119.
+			</p>
+
+			<p>
+				<acronym title="Universal Widget API">UWA</acronym> is a widget format based entirely on <acronym title="Extensible HyperText Markup Language">XHTML</acronym>, <acronym title="Cascading Style Sheets">CSS</acronym>, and JavaScript, upon which a couple additions are made:
+			</p>
+			<ul>
+				<li class="level1">
+					<div class="li">
+
+						a namespace: <code>&lt;html xmlns="http://www.w3.org/1999/xhtml" xmlns:"widget=http://www.netvibes.com/ns/"&gt;</code>,
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+						a <code>&lt;widget:preferences&gt;</code> element with <code>&lt;preference&gt;</code> tags.
+					</div>
+
+				</li>
+			</ul>
+			<p>
+				Apart from these specifics, the file-format stays the same as any other well-formed <acronym title="Extensible HyperText Markup Language">XHTML</acronym> web page.
+			</p>
+			<p>
+				A valid <acronym title="Universal Widget API">UWA</acronym> widget file follows the following rules:
+			</p>
+
+			<ul>
+				<li class="level1">
+					<div class="li">
+						MUST be made of well-formed <acronym title="Extensible Markup Language">XML</acronym>,
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+
+						MUST be encoded in UTF-8,
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+						MUST feature the proper namespace if it uses <acronym title="Universal Widget API">UWA</acronym> <acronym title="Extensible Markup Language">XML</acronym> preferences element,
+					</div>
+
+				</li>
+				<li class="level1">
+					<div class="li">
+						SHOULD make use of one of the following extension: .html, .html, .xhtml, .xml.
+					</div>
+				</li>
+			</ul>
+			<p>
+				The <acronym title="Extensible Markup Language">XML</acronym> well-formedness is very important, as widgets are rendered through an <acronym title="Extensible Markup Language">XML</acronym> parser. Without it, rendering the widget would be impossible, as would be compilation for other platforms. As a debugging facility, it is advised for implementers to display an error message instead of the widget if any <acronym title="Extensible Markup Language">XML</acronym> error is found.<br />
+
+				Note that no specific <acronym title="Document Type Definition">DTD</acronym> is used, so the <acronym title="Extensible Markup Language">XML</acronym> preferences are bound to break <acronym title="Extensible HyperText Markup Language">XHTML</acronym> validation. This should not impact on the proper display of the widget.
+			</p>
+			<p>
+				While it is recommended for a widget to be based on a single static file and to rely on a remote dynamic file for data reading/sending through Ajax requests, the widget developer can choose to rely solely on a dynamically-generated widget based on a series of dynamic files if need be.<br />
+
+				Implementations of <acronym title="Universal Widget API">UWA</acronym> SHOULD take into account that the widget might be dynamically generated.
+			</p>
+		</div>
+		<h2>
+			<a id="widget_preferences" name="widget_preferences">Widget preferences</a>
+		</h2>
+		<div class="level2">
+
+			<p>
+				The <acronym title="Universal Widget API">UWA</acronym> format should be able to work as-is on any Web- or desktop-platform, as long as it supports standards Web technologies such as <acronym title="Extensible HyperText Markup Language">XHTML</acronym>, JavaScript and <acronym title="Cascading Style Sheets">CSS</acronym>. Failing that, it has been designed to be easily parse-able thanks to <acronym title="Extensible Markup Language">XML</acronym>, in order to be recompiled into the target platform's specific inner functioning.<br />
+				Since <acronym title="Extensible HyperText Markup Language">XHTML</acronym> doesn't offer any portable solution for preferences handling, <acronym title="Universal Widget API">UWA</acronym> defines its own, through an <acronym title="Extensible Markup Language">XML</acronym> extension of <acronym title="Extensible HyperText Markup Language">XHTML</acronym>.
+			</p>
+
+			<ul>
+				<li class="level1">
+					<div class="li">
+						The preferences section MUST be placed within the <acronym title="Extensible HyperText Markup Language">XHTML</acronym> file's &lt;head&gt; tag.
+					</div>
+				</li>
+
+				<li class="level1">
+					<div class="li">
+						The preferences MUST be within a <code>&lt;widget:preferences&gt;</code> element.
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+						There MUST be only one <code>&lt;widget:preferences&gt;</code> element per widget.
+					</div>
+
+				</li>
+				<li class="level1">
+					<div class="li">
+						Each preference MUST be defined within a single <code>&lt;preference&gt;</code> tag within the &lt;widget:preferences&gt; element.
+					</div>
+				</li>
+
+				<li class="level1">
+					<div class="li">
+						Each preference MUST use a unique value for its “name” attribute. That value MUST NOT already be used as a method name within the <acronym title="Universal Widget API">UWA</acronym> JavaScript framework.
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+						The <code>&lt;widget:preferences&gt;</code> element and its content MUST be well-formed <acronym title="Extensible Markup Language">XML</acronym>. Notably, <acronym title="Extensible HyperText Markup Language">XHTML</acronym> entities SHOULD be avoided.
+					</div>
+
+				</li>
+			</ul>
+		</div>
+		<h3>
+			<a id="text_preference" name="text_preference">Text preference</a>
+		</h3>
+		<div class="level3">
+			<p>
+
+				Format:
+			</p>
+			<pre class="code xhtml">
+&lt;preference type="text" name="url" label="Feed URL" defaultValue="http://dev.netvibes.com/blog/feed/" /&gt;
+</pre>
+			<p>
+				Rendering:<br />
+				Should be rendered as a standard <code>&lt;input&gt;</code> tag of type “text”, or the platform's equivalent rendering.
+			</p>
+
+			<p>
+				Sample rendering:
+			</p>
+			<pre class="code xhtml">
+&lt;label for="m__url"&gt;Feed URL:
+&lt;input id="m__url" type="text" name="url" value="http://dev.netvibes.com/blog/feed/" /&gt;&lt;/label&gt;
+</pre>
+		</div>
+		<h3>
+
+			<a id="boolean_preference" name="boolean_preference">Boolean preference</a>
+		</h3>
+		<div class="level3">
+			<p>
+				Format:
+			</p>
+			<pre class="code xhtml">
+&lt;preference type="boolean" name="displayImg" label="Display images" defaultValue="true" /&gt;
+</pre>
+
+			<p>
+				Rendering: <br />
+				Should be rendered as a standard <code>&lt;input&gt;</code> tag of type “checkbox”, or the platform's equivalent rendering.
+			</p>
+			<p>
+				Sample rendering:
+			</p>
+			<pre class="code xhtml">
+
+&lt;label for="m__displayImg"&gt;Display images:
+&lt;input id="m__displayImg" type="checkbox" name="displayImg" checked="checked" /&gt;&lt;/label&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="hidden_preference" name="hidden_preference">Hidden preference</a>
+		</h3>
+		<div class="level3">
+
+			<p>
+				Format:
+			</p>
+			<pre class="code xhtml">
+&lt;preference type="hidden" name="searchQuery" defaultValue="" /&gt;
+</pre>
+			<p>
+				Rendering: <br />
+				Should be rendered as a standard <code>&lt;input&gt;</code> tag of type “hidden”, or the platform's equivalent rendering.<br />
+
+				It may also be not rendered at all, and be handled directly by the platform using JavaScript or the platform's own methods.
+			</p>
+			<p>
+				Sample rendering:
+			</p>
+			<pre class="code xhtml">
+&lt;input id="m__searchQuery" type="hidden" name="searchQuery" /&gt;
+</pre>
+		</div>
+		<h3>
+
+			<a id="password_preference" name="password_preference">Password preference</a>
+		</h3>
+		<div class="level3">
+			<p>
+				Format:
+			</p>
+			<pre class="code xhtml">
+&lt;preference type="password" name="authPass" label="User password" /&gt;
+</pre>
+
+			<p>
+				Rendering: <br />
+				Should be rendered as a standard <code>&lt;input&gt;</code> tag of type “password”, or the platform's equivalent rendering.&gt;
+			</p>
+			<p>
+				Sample rendering:
+			</p>
+
+			<pre class="code xhtml">
+&lt;label for="m__authPass"&gt;User password:
+&lt;input id="m__authPass" type="password" name="authPass" value="" /&gt;&lt;/label&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="list_preference" name="list_preference">List preference</a>
+		</h3>
+
+		<div class="level3">
+			<p>
+				Format:
+			</p>
+			<pre class="code xhtml">
+&lt;preference type="list" name="category" label="Category" defaultValue="1st"&gt;
+	&lt;option value="all" label="all" /&gt;
+	&lt;option value="1st" label="First category" /&gt;
+
+	&lt;option value="2nd" label="Second category" /&gt;
+	&lt;option value="3rd" label="Third category" /&gt;
+&lt;/preference&gt;
+</pre>
+			<p>
+				Rendering: <br />
+				Should be rendered as a standard <code>&lt;select&gt;</code> tag with standard &lt;option&gt; inner tags, or the platform's equivalent rendering.
+			</p>
+
+			<p>
+				Sample rendering:
+			</p>
+			<pre class="code xhtml">
+&lt;label for="m__category"&gt;User password:&lt;/label&gt;
+&lt;select id="m__category" name="category"&gt;
+	&lt;option value="all"&gt;all
+	&lt;option value="1st" selected="selected"&gt;First category
+	&lt;option value="2nd"&gt;Second category
+	&lt;option value="3rd"&gt;Third category
+
+&lt;/select&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="range_preference" name="range_preference">Range preference</a>
+		</h3>
+		<div class="level3">
+			<p>
+				Format:
+			</p>
+
+			<pre class="code xhtml">
+&lt;preference type="range" name="limit"
+	step="1" min="1" max="7" defaultValue="5"
+	label="Number of items to display"  /&gt;
+</pre>
+			<p>
+				Rendering: <br />
+				Should be rendered as a standard <code>&lt;select&gt;</code> tag with standard &lt;option&gt; inner tags, or the platform's equivalent rendering.<br />
+
+				In case the platform implements an HTML5-enabled Web engine (with Web Forms 2.0 support), the Range preference should be rendered as a standard HTML5 <code>&lt;input&gt;</code> tag of type “number”.
+			</p>
+			<p>
+				Sample <acronym title="HyperText Markup Language">HTML</acronym> 4 / <acronym title="Extensible HyperText Markup Language">XHTML</acronym> 1 rendering:
+			</p>
+
+			<pre class="code xhtml">
+&lt;label for="m__limit"&gt;Number of items to display:
+&lt;select id="m__limit" name="limit"&gt;
+	&lt;option value="1" /&gt;1&lt;/option&gt;
+	&lt;option value="2" /&gt;2&lt;/option&gt;
+	&lt;option value="3" /&gt;3&lt;/option&gt;
+
+	&lt;option value="4" /&gt;4&lt;/option&gt;
+	&lt;option value="5" selected="selected" /&gt;5&lt;/option&gt;
+	&lt;option value="6" /&gt;6&lt;/option&gt;
+	&lt;option value="7" /&gt;7&lt;/option&gt;
+
+&lt;/select&gt;
+&lt;/label&gt;
+</pre>
+			<p>
+				Sample Web Forms 2.0 rendering:
+			</p>
+			<pre class="code xhtml">
+&lt;label for="m__limit"&gt;Number of items to display:
+&lt;input id="m__limit" name="limit" type="number" step="1" min="1" max="7" defaultValue="5" /&gt;&lt;/label&gt;
+
+</pre>
+		</div>
+		<h2>
+			<a id="meta_tags" name="meta_tags">Meta tags</a>
+		</h2>
+		<div class="level2">
+			<p>
+				<acronym title="Universal Widget API">UWA</acronym> defines a number of specific meta tags, in order to give more information about the widget, its developers, etc.<br />
+
+				These meta tags use the same format as <acronym title="Extensible HyperText Markup Language">XHTML</acronym>'s standard meta tags: they use a “name” attribute for identification, and a “content” attribute for value.<br />
+				If meta tags are present, a <acronym title="Universal Widget API">UWA</acronym> implementation should make use of them to either display information to the user, or trigger internal code, depending of the meta's purpose.<br />
+				All these meta are optional, but some are mandatory on a platform basis.
+			</p>
+			<p>
+				TODO: for each meta, indicate for which platform it is mandatory.
+			</p>
+
+		</div>
+		<h3>
+			<a id="meta_author" name="meta_author">Meta Author</a>
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: indicates the name of the developer/company responsible for the widget.<br />
+				Implementations could display that name to users, for instance when the preference section is opened.
+			</p>
+
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;meta name="author" content="John Doe from ACME Inc." /&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="meta_e-mail" name="meta_e-mail">Meta E-mail</a>
+
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: indicates the e-mail address of the developer/company responsible for the widget.<br />
+				The value of the “content” attribute SHOULD be a valid e-mail.<br />
+				Implementations could use it to generate a contact/bug report form.
+			</p>
+			<p>
+
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;meta name="email" content="john@example.com" /&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="meta_website" name="meta_website">Meta Website</a>
+		</h3>
+
+		<div class="level3">
+			<p>
+				Purpose: indicates the <acronym title="Uniform Resource Locator">URL</acronym> of the developer's website.<br />
+				The value of the “content” attribute SHOULD be a valid <acronym title="Uniform Resource Locator">URL</acronym>.<br />
+				Implementations could use as a link to place on the developer's name, if present.
+			</p>
+
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;meta name="website" content="http://www.example.org" /&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="meta_description" name="meta_description">Meta Description</a>
+
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: provides a description of the widget.<br />
+				Implementations could use within their widget directory.
+			</p>
+			<p>
+				Sample usage:
+			</p>
+
+			<pre class="code xhtml">
+&lt;meta name="description" content="A descriptive description" /&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="meta_version" name="meta_version">Meta Version</a>
+		</h3>
+		<div class="level3">
+			<p>
+
+				Purpose: indicates the version of the widget.<br />
+				Implementations could display that version to users, for instance when the preference section is opened.
+			</p>
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;meta name="version" content="0.7 beta 2" /&gt;
+</pre>
+		</div>
+
+		<h3>
+			<a id="meta_api_version" name="meta_api_version">Meta API Version</a>
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: indicates the version of <acronym title="Universal Widget API">UWA</acronym> JavaScript <acronym title="Application Programming Interface">API</acronym> used throughout the widget.<br />
+
+				For internal use only.
+			</p>
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;meta name="apiVersion" content="1.2" /&gt;
+</pre>
+		</div>
+		<h3>
+
+			<a id="meta_auto-refresh" name="meta_auto-refresh">Meta Auto-refresh</a>
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: indicates the number of minutes between two reloading of the widget, or between two triggerings of the <code>widget.onRefresh()</code> method if it exists.<br />
+				The value of the “content” attribute MUST be a positive integer.
+			</p>
+
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;meta name="autoRefresh" content="20" /&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="meta_debug_mode" name="meta_debug_mode">Meta Debug mode</a>
+
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: if true, a call to the <code>widget.log()</code> method SHOULD send the value of the method's first argument to the platform's local console (i.e., Firebug, console, etc.). If false, nothing is done when the <code>widget.log()</code> method is called.<br />
+				The value of the “content” attribute MUST be a textual boolean value: either “true” or “false”.
+			</p>
+
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;meta name="debugMode" content="true" /&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="meta_thumbnail" name="meta_thumbnail">Meta Thumbnail</a>
+
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: gives a link to a thumbnail image, or the service's logo.<br />
+				The value of the “content” attribute MUST be a valid <acronym title="Uniform Resource Locator">URL</acronym>.<br />
+				Preferred size is 120<acronym title="pixels">px</acronym> width by 60<acronym title="pixels">px</acronym> height.<br />
+
+				Preferred file format is <acronym title="Portable Network Graphics">PNG</acronym>. <acronym title="Graphics Interchange Format">GIF</acronym> and <acronym title="Joint Photographics Experts Group">JPEG</acronym> are also accepted.
+			</p>
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+
+&lt;meta name="thumbnail" content="http://www.example.org/widget-logo.png" /&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="meta_screenshot" name="meta_screenshot">Meta Screenshot</a>
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: gives a link to a screen-capture of the widget in action.<br />
+
+				The value of the “content” attribute MUST be a valid <acronym title="Uniform Resource Locator">URL</acronym>.<br />
+				Preferred size is 280<acronym title="pixels">px</acronym> width.<br />
+				Preferred file format is <acronym title="Portable Network Graphics">PNG</acronym>. <acronym title="Graphics Interchange Format">GIF</acronym> and <acronym title="Joint Photographics Experts Group">JPEG</acronym> are also accepted.
+			</p>
+
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;meta name="screenshot" content="http://www.example.org/widget-full.png" /&gt;
+</pre>
+		</div>
+		<h2>
+			<a id="other_head_content" name="other_head_content">Other &lt;head&gt; content</a>
+
+		</h2>
+		<div class="level2"></div>
+		<h3>
+			<a id="icon_link_tag" name="icon_link_tag">Icon link tag</a>
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: gives a link to the widget's logo, in the usual favicon format.<br />
+
+				Preferred size is 16<acronym title="pixels">px</acronym> width by 16<acronym title="pixels">px</acronym> height, using 256 colors.<br />
+				Preferred file format is <acronym title="Portable Network Graphics">PNG</acronym>. <acronym title="Graphics Interchange Format">GIF</acronym> and <acronym title="Joint Photographics Experts Group">JPEG</acronym> are also accepted.<br />
+
+				The file extension can also be ”.ico”.
+			</p>
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;link rel="icon" type="image/x-icon" href="http://www.example.com/widget/favicon.ico" /&gt;
+&lt;link rel="icon" type="image/png" href="http://www.example.com/widget/favicon.png" /&gt;
+</pre>
+		</div>
+
+		<h3>
+			<a id="rich-icon_link_tag" name="rich-icon_link_tag">Rich-icon link tag</a>
+		</h3>
+		<div class="level3">
+			<p>
+				Purpose: some platforms require a bigger logo than the usual thumbnail (i.e., Apple Dashboard, Windows Vista, Yahoo! Widget, etc.). In such case, compilers should make use of the rich-icon as the widget's main graphic identifier instead of the regular icon.<br />
+				Preferred size is 128<acronym title="pixels">px</acronym> width by 128<acronym title="pixels">px</acronym> height.<br />
+
+				Preferred file format is <acronym title="Portable Network Graphics">PNG</acronym>. <acronym title="Graphics Interchange Format">GIF</acronym> and <acronym title="Joint Photographics Experts Group">JPEG</acronym> are also accepted.
+			</p>
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+
+&lt;link rel="rich-icon" type="image/png" href="http://www.example.com/widget/richicon.png" /&gt;
+</pre>
+		</div>
+		<h3>
+			<a id="standalone_emulation_files" name="standalone_emulation_files">Standalone emulation files</a>
+		</h3>
+		<div class="level3">
+			<p>
+				While not mandatory, these two files may be added to the widget's <code>&lt;head&gt;</code> section in order to test-drive the widget in standalone mode. They give the widget a basic styling and a basic JavaScript framework.<br />
+
+				They therefore only exist for such purpose, and should be entirely ignored by implementing platforms.
+			</p>
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+&lt;link rel="stylesheet" type="text/css" href="http://www.netvibes.com/themes/uwa/style.css" /&gt;
+&lt;script type="text/javascript" src="http://www.netvibes.com/js/UWA/load.js.php?env=Standalone"&gt;
+</pre>
+			<p>
+
+				Note that these are the only two external files that should be linked to or called from the widget's code. Notably, it SHOULD be the only other &lt;script&gt; tag in the whole file, the other one being the one where the widget's JavaScript code resides.
+			</p>
+		</div>
+		<h1>
+			<a id="styling_with_css" name="styling_with_css">Styling with CSS</a>
+		</h1>
+		<div class="level1">
+
+			<p>
+				TODO: complete this section.
+			</p>
+		</div>
+		<h1>
+			<a id="javascript_framework" name="javascript_framework">JavaScript framework</a>
+		</h1>
+		<div class="level1">
+			<p>
+
+				<acronym title="Universal Widget API">UWA</acronym> provides widget developers with JavaScript tools to help them handle day to day tasks such as updating the <acronym title="Document Object Model">DOM</acronym> or sending Ajax requests.<br />
+				<acronym title="Universal Widget API">UWA</acronym> both extends and limits JavaScript, in order to offer more tools to developers, and to ensure that widgets do not interfere with each other.
+			</p>
+		</div>
+		<h2>
+
+			<a id="javascript_usage" name="javascript_usage">JavaScript usage</a>
+		</h2>
+		<div class="level2">
+			<ul>
+				<li class="level1">
+					<div class="li">
+						The bulk of JavaScript code used by the widget MUST be placed within its main file - external files SHOULD NOT be called. This may change in future version.
+					</div>
+				</li>
+
+				<li class="level1">
+					<div class="li">
+						There SHOULD only be one <code>&lt;script&gt;</code> element per widget file.
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+						JavaScript code SHOULD be triggered from the <code>widget.onLoad()</code> method. Note that there are circumstances where the <acronym title="Universal Widget API">UWA</acronym> environment may not be fully ready until this event is triggered.
+					</div>
+
+				</li>
+				<li class="level1">
+					<div class="li">
+						The 'document' and 'window' objects SHOULD NOT be used. Most of their methods/properties are available through the <code>widget</code> object, while others are not available/recommended.
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+
+						JavaScript code SHOULD NOT be triggered from code such as , but using <code>widget.onLoad()</code>. Those onload arguments will be ignored by the parser and thus likely not triggered.
+					</div>
+				</li>
+			</ul>
+		</div>
+		<h2>
+			<a id="widget_object" name="widget_object"><code>widget</code> object</a>
+
+		</h2>
+		<div class="level2"></div>
+		<h3>
+			<a id="uwa_events" name="uwa_events"><acronym title="Universal Widget API">UWA</acronym> events</a>
+		</h3>
+		<div class="level3"></div>
+		<h4>
+
+			<a id="widget_events" name="widget_events">Widget events</a>
+		</h4>
+		<div class="level4">
+			<p>
+				The following events should be declared only once, by assigning a function or block of code to them.<br />
+				Unless said otherwise, all these events MUST be implemented.
+			</p>
+			<p>
+
+				<code>widget.onLoad()</code><br />
+				Triggered when the widget is launched.<br />
+				This event MUST be declared in any widget, in order for the whole JavaScript code to be launched from it.<br />
+				Implementations MUST trigger this event once the widget is done loading.<br />
+				If <code>widget.onRefresh()</code> or <code>widget.onResize()</code> are not declared, implementations SHOULD trigger this event instead if the respective triggering events happen.
+			</p>
+
+			<p>
+				<code>widget.onRefresh()</code><br />
+				Triggered when the widget is refreshed (manually or programmatically).<br />
+				Implementations SHOULD trigger this event when the <acronym title="Document Object Model">DOM</acronym> is updated through JavaScript, or when new preference values are validated. If this event is not declared, the <code>widget.onLoad()</code> event SHOULD be triggered instead.
+			</p>
+
+			<p>
+				<code>widget.onResize()</code><br />
+				Triggered when the widget is resized (manually or programmatically).<br />
+				Implementations SHOULD trigger this event when the size of the widget container is resized (for instance, when the user resizes the containing column, or changes the number of columns on the page). If this event is not declared, the <code>widget.onLoad()</code> event SHOULD be triggered instead.
+			</p>
+			<p>
+				<code>widget.onKeyboardAction()</code><br />
+
+				Triggered when a key is pressed within the widget's area.<br />
+				Implementations may first require the user to click within the widget's area in order to limit the interaction to that widget only.<br />
+				Implementations SHOULD pass the key-code as first argument of the event.
+			</p>
+			<p>
+				<code>widget.onSearch()</code><br />
+				Triggered when a search is performed from within the platform.<br />
+
+				Implementing platforms that feature a search form SHOULD trigger this event, with the search query as first argument, so that the widget may use it to further perform a search with its own data, if such thing is possible.<br />
+				Implementation is not mandatory.
+			</p>
+			<p>
+				<code>widget.onResetSearch()</code><br />
+				Triggered when a search is performed from within the platform is reseted.<br />
+				Implementations that already implement <code>widget.onSearch()</code> MUST also implement <code>widget.onResetSearch()</code>.<br />
+
+				Implementation is not mandatory.
+			</p>
+		</div>
+		<h4>
+			<a id="callback_events" name="callback_events">Callback events</a>
+		</h4>
+		<div class="level4">
+			<p>
+				The following events are for internal use, but a developer can trigger them using <code>widget.callback()</code>: for instance, <code>widget.callback('onUpdateBody');</code>.
+			</p>
+
+			<p>
+				<code>onUpdateTitle</code><br />
+				To be triggered when the widget's title is modified.<br />
+				Implementations MUST trigger it when <code>widget.setTitle()</code> is used.<br />
+				Implementations MAY also trigger for internal reasons.
+			</p>
+
+			<p>
+				<code>onUpdateBody</code><br />
+				To be triggered when the widget's content is set or updated.<br />
+				Results in the container being resized (in height) in order to fit the updated display of the widget.<br />
+				Developers can thus call <code>widget.callback('onUpdateBody')</code> in order to resize the widget.<br />
+
+				Implementations MUST trigger it in the following cases:
+			</p>
+			<ul>
+				<li class="level1">
+					<div class="li">
+						when <code>widget.setBody()</code> is used,
+					</div>
+				</li>
+
+				<li class="level1">
+					<div class="li">
+						when <code>widget.addBody()</code> is used.
+					</div>
+				</li>
+			</ul>
+			<p>
+				Implementations SHOULD also trigger it when the preferences are validated.<br />
+
+				Implementations MAY also trigger it for internal reasons.
+			</p>
+		</div>
+		<h3>
+			<a id="widget_methods" name="widget_methods"><code>widget</code> methods</a>
+		</h3>
+		<div class="level3"></div>
+		<h4>
+
+			<a id="widget_methods1" name="widget_methods1">Widget methods</a>
+		</h4>
+		<div class="level4">
+			<p>
+				<code>widget.setAutoRefresh(delay)</code><br />
+				Sets the refreshing value. Overrides the <code>autoRefresh</code> meta, if present. Delay is expressed in minutes.<br />
+
+				Argument MUST be expressed as an integer.
+			</p>
+			<p>
+				<code>widget.setSearchResultCount(count)</code><br />
+				If greater or equal to zero, updates the widget's container with a result count. It may for instance add the number next to the title: “(5) Latest blog posts”.<br />
+				Implementation is not mandatory. SHOULD be implemented if the <code>widget.onSearch()</code> and <code>widget.onResetSearch()</code> events are themselves implemented.<br />
+
+				Argument MUST be expressed as an integer.<br />
+				If argument equals 0, implementations MAY remove the result indicator. For instance, “Latest blog posts” instead of “(5) Latest blog posts”.
+			</p>
+			<p>
+				<code>widget.setTitle(title)</code><br />
+				Sets the disaplyed title of the widget. Overrides the file's <code>&lt;title&gt;</code> tag value.<br />
+
+				Triggers the 'onUpdateTitle' callback event.
+			</p>
+			<p>
+				<code>widget.setUnreadCount(count)</code><br />
+				If greater or equal to zero, updates the displayed title of the widget with a count of the widget's items that are still unread by the user. It may for instance add the number next to the title: “(5) Latest blog posts”.<br />
+				Argument MUST be expressed as an integer.<br />
+				If value equals 0, implementations MAY remove the result indicator. For instance, “Latest blog posts” instead of “(5) Latest blog posts”.
+			</p>
+
+		</div>
+		<h4>
+			<a id="platform_methods" name="platform_methods">Platform methods</a>
+		</h4>
+		<div class="level4">
+			<p>
+				<code>widget.addStar(data)</code><br />
+				Triggers Netvibes starring system, in order to add a favorite to the logged user's timeline.<br />
+
+				Argument MUST be a JavaScript object, in the following form:
+			</p>
+				<pre class="code javascript">
+{
+  'title':'The title for the starred link',
+  'url':'http://www.example.org/',
+  'comment':'user comment about the link'
+}
+</pre>
+
+			<p>
+				Being Netvibes-specific in nature, this method MAY not be implemented.
+			</p>
+			<p>
+				<code>widget.log(string)</code><br />
+
+				If the “debugMode” meta tag is set to “true”, SHOULD log the given string to the platform's JavaScript console (i.e. with Firebug).<br />
+				Equivalent to JavaScript <code>console.log()</code>.<br />
+				Argument MUST be a string.
+			</p>
+			<p>
+				<code>widget.openURL(url)</code><br />
+				Opens a new browser window with the given <acronym title="Uniform Resource Locator">URL</acronym>.<br />
+
+				Argument MUST be a string containing a valid <acronym title="Uniform Resource Locator">URL</acronym>.
+			</p>
+		</div>
+		<h4>
+			<a id="dom_methods" name="dom_methods">DOM methods</a>
+		</h4>
+		<div class="level4">
+			<p>
+
+				<code>widget.body</code><br />
+				Provides a reference to the widget's <code>&lt;body&gt;</code> content.<br />
+				Equivalent to <code>document.body</code>, but limited to the current widget.
+			</p>
+			<p>
+				<code>widget.createElement(tagName)</code><br />
+
+				Creates a new <acronym title="Document Object Model">DOM</acronym> element.<br />
+				Equivalent to <code>document.createElement()</code>.
+			</p>
+			<p>
+				<code>widget.setBody(code)</code><br />
+				Sets content to the widget's <code>&lt;body&gt;</code> tag.<br />
+
+				Argument MUST be a string containing valid <acronym title="Extensible HyperText Markup Language">XHTML</acronym> code, or be a <acronym title="Document Object Model">DOM</acronym> node.<br />
+				The previous content of the body MUST be erased and replaced with the value of the argument.
+			</p>
+		</div>
+		<h4>
+			<a id="widget_preferences_methods" name="widget_preferences_methods">Widget preferences methods</a>
+
+		</h4>
+		<div class="level4">
+			<p>
+				These methods are specifically built to change the widget's preferences.
+			</p>
+			<p>
+				<code>widget.getValue(name)</code><br />
+				Retrieves the value of the given preference name. Returns a string.<br />
+
+				If the preference is not of the corresponding type, implementations MUST apply a type conversion.<br />
+				Argument MUST be an existing preference name.
+			</p>
+			<p>
+				<code>widget.getInt(name)</code><br />
+				Retrieves the value of the given preference name. Returns an integer.<br />
+				If the preference is not of the corresponding type, implementations MUST apply a type conversion.<br />
+
+				Argument MUST be an existing preference name.
+			</p>
+			<p>
+				<code>widget.getBool(name)</code><br />
+				Retrieves the value of the given preference name. Returns a boolean value (true/false).<br />
+				If the preference is not of the corresponding type, implementations MUST apply a type conversion.<br />
+				Argument MUST be an existing preference name.
+			</p>
+
+			<p>
+				<code>widget.setValue(name, value)</code><br />
+				Sets a preference with the given value.<br />
+				First argument MUST be an existing preference name.<br />
+				Second argument SHOULD be a value of a type supported by the preference. If this is not the case, implementations MUST apply a type conversion.
+			</p>
+		</div>
+		<h4>
+
+			<a id="widget_properties" name="widget_properties">Widget properties</a>
+		</h4>
+		<div class="level4">
+			<p>
+				<code>widget.lang</code><br />
+				Returns the user's language/dialect, depending on his platform settings (default: “en_US”).
+			</p>
+			<p>
+
+				<code>widget.locale</code><br />
+				Returns the user's locale, depending on his platform settings (default: “us”).
+			</p>
+			<p>
+				<code>widget.readOnly</code><br />
+				Netvibes only - returns true if the widget is displayed within a Netvibes Universe, false otherwise. <br />
+				Being Netvibes-specific in nature, this method MAY not be implemented.
+			</p>
+
+		</div>
+		<h2>
+			<a id="uwa_object" name="uwa_object">UWA object</a>
+		</h2>
+		<div class="level2">
+			<p>
+				<code>UWA.extendElement(element)</code><br />
+				Extends hand-created <acronym title="Extensible HyperText Markup Language">XHTML</acronym> elements with <acronym title="Universal Widget API">UWA</acronym>'s element extensions - as opposed to programmatically-created elements, using for instance <code>widget.createElement</code>, which are automatically extended with <acronym title="Universal Widget API">UWA</acronym>'s JavaScript framework support.<br />
+
+				First argument MUST be a <acronym title="Document Object Model">DOM</acronym> node.<br />
+				Replaces and deprecates UWA.$element().
+			</p>
+		</div>
+		<h3>
+			<a id="uwa.data_methods_ajax_methods" name="uwa.data_methods_ajax_methods">UWA.Data methods (Ajax methods)</a>
+		</h3>
+
+		<div class="level3">
+			<p>
+				Full documentation for these Ajax methods is available at <a rel="nofollow" title="http://dev.netvibes.com/doc/" class="urlextern" href="http://dev.netvibes.com/doc/">http://dev.netvibes.com/doc/</a>
+			</p>
+		</div>
+		<h4>
+			<a id="main_ajax_methodrequest" name="main_ajax_methodrequest">Main Ajax method: request()</a>
+
+		</h4>
+		<div class="level4">
+			<p>
+				<code>UWA.Data.request(url, request object)</code><br />
+				Gets the content of an external plain-text data source.<br />
+				First argument MUST be a valid <acronym title="Uniform Resource Locator">URL</acronym>, returning data. The returned data SHOULD be textual (plain-text, <acronym title="Extensible Markup Language">XML</acronym> or <acronym title="JavaScript Object Notation">JSON</acronym>).<br />
+
+				Second argument MUST be a JavaScript object, defining options values for the request.
+			</p>
+			<p>
+				The request object options are as follows:
+			</p>
+			<ul>
+				<li class="level1">
+					<div class="li">
+						'method': 'get' or 'post'. Default is 'post'.
+					</div>
+
+				</li>
+				<li class="level1">
+					<div class="li">
+						'proxy': 'ajax' or 'feed'. Default is 'ajax'.
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+						'type': 'text', 'xml', 'html' or 'json'. Default is 'text'.
+					</div>
+
+				</li>
+				<li class="level1">
+					<div class="li">
+						'cache': seconds of server caching. Default is undefined.
+					</div>
+				</li>
+				<li class="level1">
+					<div class="li">
+						'onComplete': name of the callback method. Default is undefined.
+					</div>
+
+				</li>
+				<li class="level1">
+					<div class="li">
+						'parameters': if 'method' is of type 'post', this option must receive the POST parameters, <acronym title="Uniform Resource Locator">URL</acronym>-encoded. Default is undefined.
+					</div>
+				</li>
+			</ul>
+			<p>
+
+				The object MUST at least explicitly set the <code>onComplete</code> option. The callback method attached to <code>onComplete</code> MUST have one parameter, to receive the content returned by the request. All other options, if not set explicitly, fall back on their respective default setting.
+			</p>
+			<p>
+				Sample usage:
+			</p>
+			<pre class="code xhtml">
+UWA.Data.request(
+  'http://www.example.org/api.php',
+   {
+     method: 'post',
+     proxy: 'ajax',
+     type: 'xml',
+     cache: 3600,
+     onComplete: myCallbackMethod,
+     parameters: 'firstname=James&amp;lastname=Bond&amp;number=007'
+   });
+
+
+</pre>
+		</div>
+		<h4>
+			<a id="shortcut_ajax_methodsgettext" name="shortcut_ajax_methodsgettext">Shortcut Ajax methods: getText()</a>
+		</h4>
+		<div class="level4">
+			<p>
+				<code>UWA.Data.getText(url, callback)</code><br />
+
+				Gets the content of an external plain-text data source.<br />
+				First argument MUST be a valid <acronym title="Uniform Resource Locator">URL</acronym>, returning data.<br />
+				Second argument MUST be a method name, to be called once the data has been properly loaded. That method MUST receive the plain-text data as its first argument.
+			</p>
+			<p>
+				This method is a short form for the following Ajax call using <code>UWA.Data.request()</code>:
+			</p>
+
+			<pre class="code xhtml">
+UWA.Data.request(url, { method : 'GET', type: 'text', onComplete: callback } );
+</pre>
+		</div>
+		<h4>
+			<a id="shortcut_ajax_methodsgetxml" name="shortcut_ajax_methodsgetxml">Shortcut Ajax methods: getXml()</a>
+		</h4>
+		<div class="level4">
+			<p>
+
+				<code>UWA.Data.getXml(url, callback)</code><br />
+				Gets the content of an external <acronym title="Extensible Markup Language">XML</acronym> data source.<br />
+				First argument MUST be a valid <acronym title="Uniform Resource Locator">URL</acronym>, returning valid <acronym title="Extensible Markup Language">XML</acronym> data.<br />
+
+				Second argument MUST be a method name, to be called once the <acronym title="Extensible Markup Language">XML</acronym> data has been properly loaded. That method MUST receive the <acronym title="Extensible Markup Language">XML</acronym> data as its first argument.<br />
+				The loaded <acronym title="Extensible Markup Language">XML</acronym> data must remain as valid <acronym title="Extensible Markup Language">XML</acronym>, and should be parse-able using standard <acronym title="Extensible Markup Language">XML</acronym> methods, such as <code>node.childNodes()</code> or <code>node.nodeValue()</code>.
+			</p>
+
+			<p>
+				This method is a short form for the following Ajax call using <code>UWA.Data.request()</code>:
+			</p>
+			<pre class="code xhtml">
+UWA.Data.request(url, { method : 'GET', type: 'xml', onComplete: callback } );
+</pre>
+		</div>
+		<h4>
+			<a id="shortcut_ajax_methodsgetjson" name="shortcut_ajax_methodsgetjson">Shortcut Ajax methods: getJson()</a>
+
+		</h4>
+		<div class="level4">
+			<p>
+				<code>UWA.Data.geJson(url, callback)</code><br />
+				Gets the content of an external <acronym title="JavaScript Object Notation">JSON</acronym> data source.<br />
+				First argument MUST be a valid <acronym title="Uniform Resource Locator">URL</acronym>, returning valid <acronym title="JavaScript Object Notation">JSON</acronym> data.<br />
+
+				Second argument MUST be a method name, to be called once the <acronym title="JavaScript Object Notation">JSON</acronym> data has been properly loaded. That method MUST receive <acronym title="JavaScript Object Notation">JSON</acronym> the data as its first argument.
+			</p>
+			<p>
+				This method is a short form for the following Ajax call using <code>UWA.Data.request()</code>:
+			</p>
+			<pre class="code xhtml">
+
+UWA.Data.request(url, { method : 'GET', type: 'json', onComplete: callback } );
+</pre>
+		</div>
+		<h4>
+			<a id="shortcut_ajax_methodsgetfeed" name="shortcut_ajax_methodsgetfeed">Shortcut Ajax methods: getFeed()</a>
+		</h4>
+		<div class="level4">
+			<p>
+				<code>UWA.Data.getFeed(url, callback)</code><br />
+
+				Gets the content of a feed, in the internal <acronym title="JavaScript Object Notation">JSON</acronym> Feed format, which is documented here: <a rel="nofollow" title="http://dev.netvibes.com/doc/uwa_specification/uwa_json_feed_format" class="urlextern" href="http://dev.netvibes.com/doc/uwa_specification/uwa_json_feed_format">http://dev.netvibes.com/doc/uwa_specification/uwa_json_feed_format</a> .<br />
+				Implementations MUST also implement a <acronym title="Rich Site Summary">RSS</acronym>/Atom feed to <acronym title="JavaScript Object Notation">JSON</acronym> Feed format converter, for instance through a specific local proxy.<br />
+
+				First argument MUST be a valid <acronym title="Uniform Resource Locator">URL</acronym>, returning a valid <acronym title="Rich Site Summary">RSS</acronym> feed or Atom feed. The method then converts that feed into the internal <acronym title="JavaScript Object Notation">JSON</acronym> Feed format.<br />
+				Second argument MUST be a method name, to be called once the data has been properly loaded. That method MUST receive the <acronym title="JavaScript Object Notation">JSON</acronym> data as its first argument.
+			</p>
+
+			<p>
+				This method is a short form for the following Ajax call using <code>UWA.Data.request()</code>:
+			</p>
+			<pre class="code xhtml">
+UWA.Data.request(url, { method : 'GET', proxy: 'feed', type: 'json', onComplete: callback } );
+</pre>
+		</div>
+		<h2>
+			<a id="element_extensions" name="element_extensions">Element extensions</a>
+
+		</h2>
+		<div class="level2">
+			<p>
+				For 'el' being a reference to an existing <acronym title="Extensible HyperText Markup Language">XHTML</acronym> element within the widget's &lt;body&gt; tag.
+			</p>
+		</div>
+
+		<h3>
+			<a name="modifying_the_element_s_content" id="modifying_the_element_s_content">Modifying the element's content</a>
+		</h3>
+		<div class="level3">
+			<p>
+				<code>el.addContent(content)</code><br />
+				Adds content in a div at the end of the element's existing content.<br />
+
+				Argument MUST be a string or a valid DOM node.<br />
+				WARNING: this method is deprecated since version 1.2.
+			</p>
+			<p>
+				<code>el.appendText(text)</code><br />
+				Adds a new text string at the end of the element's existing content.<br />
+				Argument MUST be a string.
+			</p>
+
+			<p>
+				<code>el.empty()</code><br />
+				Empties the element (equivalent to <code>el.innerHTML = ""</code>).
+			</p>
+			<p>
+				<code>el.setText(text)</code><br />
+				Sets a text string in the element.<br />
+
+				Argument MUST be a string.
+			</p>
+			<p>
+				<code>el.setHTML()</code><br />
+				Sets the <acronym title="HyperText Markup Language">HTML</acronym> content of the element (equivalent to using <code>el.innerHTML</code>).<br />
+				Argument MUST be an XHTML node.
+			</p>
+
+			<p>
+				<code>el.setContent()</code><br />
+				Empties the element, then fills it with content.<br />
+				Argument MUST be a string or an object.
+				WARNING: this method is deprecated since version 1.2.
+			</p>
+			<p>
+				<code>el.setStyle()</code><br />
+				Sets the property <acronym title="Cascading Style Sheets">CSS</acronym> property, with the value value.
+			</p>
+
+		</div>
+		<h3>
+			<a name="getting_the_element_s_dom_info" id="getting_the_element_s_dom_info">Getting the element's DOM info</a>
+		</h3>
+		<div class="level3">
+			<p>
+				<code>el.getDimensions()</code><br />
+				Returns a <acronym title="JavaScript Object Notation">JSON</acronym> object with 2 properties: width and height, each relating to the element's width and height. For instance:
+			</p>
+
+			<pre class="code javascript">{ width: 240, height: 140 }</pre>
+			<p>
+				<code>el.getElementsByClassName(className)</code><br />
+				Returns all the elements that are associated with the given <acronym title="Cascading Style Sheets">CSS</acronym> class name.
+			</p>
+			<p>
+				<code>el.getElementsByTagName(tagName)</code><br />
+
+				Returns an array of elements corresponding to the given tag name.
+			</p>
+			<p>
+				<code>el.getParent()</code><br />
+				Returns a collection of the element's parent node.
+			</p>
+			<p>
+				<code>el.getChildren()</code><br />
+				Returns a collection of the element's child nodes.
+			</p>
+
+		</div>
+		<h3>
+			<a name="modifying_the_element_s_display" id="modifying_the_element_s_display">Modifying the element's display</a>
+		</h3>
+		<div class="level3">
+			<p>
+				<code>el.hide()</code><br />
+				Sets the element's <code>display</code> <acronym title="Cascading Style Sheets">CSS</acronym> rule to none.
+			</p>
+
+			<p>
+				<code>el.show()</code><br />
+				Empties the element's <code>display</code> <acronym title="Cascading Style Sheets">CSS</acronym> rule.
+			</p>
+			<p>
+				<code>el.toggle()</code><br />
+
+				Toggles the element's <code>display</code> <acronym title="Cascading Style Sheets">CSS</acronym> rule between none and an empty value.
+			</p>
+			<p>
+				<code>el.remove()</code><br />
+				Removes the element from the <acronym title="Document Object Model">DOM</acronym> tree
+			</p>
+
+		</div>
+		<h3>
+			<a name="modifying_the_element_s_classes" id="modifying_the_element_s_classes">Modifying the element's classes</a>
+		</h3>
+		<div class="level3">
+			<p>
+				<code>el.hasClassName(className)</code><br />
+				Returns true if the element has the given class name as one of its class names.
+			</p>
+
+			<p>
+				<code>el.addClassName(className)</code><br />
+				Adds the given class name to the element's existing class names.
+			</p>
+			<p>
+				<code>el.removeClassName(className)</code><br />
+				Removes the given class name from the element's existing class names.
+			</p>
+		</div>
+
+		<h2>
+			<a id="array_extensions" name="array_extensions">Array extensions</a>
+		</h2>
+		<div class="level2">
+			<p>
+				For 'arr' being a JavaScript array.
+			</p>
+		</div>
+		<h3>
+
+			<a name="extensions_based_on_javascript_1.6" id="extensions_based_on_javascript_1.6">Extensions based on JavaScript 1.6</a>
+		</h3>
+		<div class="level3">
+			<p>
+				<code>arr.every(callback)</code><br />
+				Tests whether all elements in the array pass the test implemented by the provided function.<br />
+				Returns a boolean.
+			</p>
+
+			<p>
+				<code>arr.filter(callback)</code><br />
+				Returns a new array with all elements that pass the test implemented by the provided function.
+			</p>
+			<p>
+				<code>array.forEach(callback)</code><br />
+				Executes a provided function once per array element.<br />
+				<code>array.each</code> works identically.
+			</p>
+
+			<p>
+				<code>arr.indexOf(item, from)</code><br />
+				Returns the first index at which a given element can be found in the array, or -1 if it is not present.<br />
+				Returns an integer.
+			</p>
+			<p>
+				<code>arr.map(callback)</code><br />
+				Returns a new array with the results of calling a provided function on every element in this array.
+			</p>
+
+			<p>
+				<code>arr.some(callback)</code><br />
+				Tests whether some element in the array passes the test implemented by the provided function.<br />
+				Returns a boolean.
+			</p>
+		</div>
+		<h3>
+			<a name="compatibility_extensions" id="compatibility_extensions">Compatibility extensions</a>
+
+		</h3>
+		<div class="level3">
+			<p>
+				<code>arr.equals(compare)</code><br />
+				Test wether the array equals to the one passed as parameter.<br />
+				Returns a boolean.<br />
+				Needed for compatibility with a third-party <acronym title="Universal Widget API">UWA</acronym> implementation.
+			</p>
+
+			<p>
+				<code>arr.detect(iterator)</code><br />
+				TODO: document this extension.<br />
+				Needed for compatibility with the TabView Control.<br />
+				Needed for compatibility with the MultipleFeeds native widget.
+			</p>
+			<p>
+				<code>arr.normalize(sum)</code><br />
+
+				TODO: document this extension.<br />
+				Needed for compatibility with a third-party <acronym title="Universal Widget API">UWA</acronym> implementation.
+			</p>
+		</div>
+		<h2>
+			<a name="string_extensions" id="string_extensions">String extensions</a>
+		</h2>
+
+		<div class="level2">
+			<p>
+				For 'str' being a JavaScript string.
+			</p>
+		</div>
+		<h3>
+			<a name="utility_extensions" id="utility_extensions">Utility extensions</a>
+		</h3>
+		<div class="level3">
+
+			<p>
+				<code>str.escapeRegExp()</code><br />
+				Returns the string with escaped regular expression characters.<br />
+				Needed for compatibility with Vibes native widget.
+			</p>
+			<p>
+				<code>str.isEmail()</code><br />
+				Tests wether the string uses a valid e-mail format.<br />
+
+				Returns a boolean.<br />
+				Needed for compatibility with a third-party <acronym title="Universal Widget API">UWA</acronym> implementation.
+			</p>
+			<p>
+				<code>str.stripTags()</code><br />
+				Strips a string of any <acronym title="HyperText Markup Language">HTML</acronym> tag.<br />
+
+				Returns the cleaned-up string.
+			</p>
+			<p>
+				<code>str.trim()</code><br />
+				Trims the leading and trailing spaces off a string.<br />
+				Returns the trimmed string.<br />
+				Needed for compatibility with a third-party <acronym title="Universal Widget API">UWA</acronym> implementation.
+			</p>
+
+			<p>
+				<code>str.truncate(length, suffix)</code><br />
+				Truncates a string to the given length and appends a suffix to it (indicating that it is only an excerpt).<br />
+				Returns the truncated string.<br />
+				Needed for backward compatibility with a third-party <acronym title="Universal Widget API">UWA</acronym> implementation.
+			</p>
+
+		</div>
+		<h3>
+			<a id="internal_compatibility_extensions" name="internal_compatibility_extensions">Internal/compatibility extensions</a>
+		</h3>
+		<div class="level3">
+			<p>
+				As indicated, these extensions are listed for compatibility reasons.<br />
+				While a widget developer SHOULD NOT make use of them, <acronym title="Universal Widget API">UWA</acronym>-compatible platforms SHOULD implement them to maximize compatibility.
+			</p>
+
+		</div>
+		<div class="level3">
+			<p>
+				<code>str.camelCase()</code><br />
+				TODO: document this extension.<br />
+				Returns a string.<br />
+				Used in <code>el.setStyle</code> implementation in <code>Element.js</code>.
+			</p>
+
+			<p>
+				<code>str.contains(string, separator)</code><br />
+				TODO: document this extension.<br />
+				Returns a string.<br />
+				Used in <code>el.hasClassName</code> implementation in <code>Element.js</code>.
+			</p>
+
+			<p>
+				<code>str.format()</code><br />
+				TODO: document this extension.<br />
+				Returns a string.<br />
+				Needed for compatibility with various Netvibes native widget (new format).
+			</p>
+			<p>
+				<code>str.makeClickable()</code><br />
+
+				TODO: document this extension.<br />
+				Returns a string.<br />
+				Needed for compatibility with various Netvibes native widget.
+			</p>
+			<p>
+				<code>str.parseRelativeTime(date, offset)</code><br />
+				Returns the time elapsed between the given date and now, ie. “about 3 hours ago”.<br />
+
+				Returns a <code>false</code> boolean if the first argument is not in the “2008-01-01 23:56:47” format, otherwise it returns a string.<br />
+				Needed for Timeline Control.
+			</p>
+			<p>
+				<code>str.s()</code><br />
+				TODO: document this extension.<br />
+
+				Returns a string.<br />
+				Needed for compatibility with various Netvibes native widget.
+			</p>
+			<p>
+				<code>str.unescapeHTML()</code><br />
+				TODO: document this extension.<br />
+				Returns a string.<br />
+
+				Needed for compatibility with various Netvibes native widget.
+			</p>
+		</div>
+
+		<h1>
+			<a id="reference" name="reference">Reference</a>
+		</h1>
+		<div class="level1">
+			TODO: complete this section.
+		</div>
+
+
+		<h1>
+			<a id="acknowledgements" name="acknowledgements">Acknowledgements</a>
+		</h1>
+		<div class="level1">
+			TODO: complete this section.
+		</div>
+
+	</body>
+</html>
+
