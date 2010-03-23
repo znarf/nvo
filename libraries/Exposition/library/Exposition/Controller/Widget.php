@@ -110,6 +110,22 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
     }
 
     /**
+     * Check if a newest version of widget if available
+     */
+    public function checkforupdateAction()
+    {
+        $comparedVersion = $this->getRequest()->getParam('v', 0);
+
+        $response = $this->_widget->checkForUpdate($comparedVersion);
+        $content = Zend_Json::encode($response);
+
+        // Configure output
+        $this->getResponse()
+            ->setHeader('Content-Type', 'application/json')
+            ->appendBody($content);
+    }
+
+    /**
      * Renders the widget in standalone mode with XML well-formedness.
      */
     public function uwaAction()

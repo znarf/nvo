@@ -92,11 +92,21 @@ class Exposition_Parser_Uwa extends Exposition_Parser
             }
         }
 
+        // create a version checksum if no version number provided
+        if (!isset($metas['version'])) {
+            $metas['version'] = $this->_getVersionCheckSum();
+        }
+
         asort($metas);
 
         $this->_widget->setMetadata($metas);
 
         return $this;
+    }
+
+    protected function _getVersionCheckSum()
+    {
+        return substr(sha1($this->_xml->asXML()), 0, 6);
     }
 
     /**

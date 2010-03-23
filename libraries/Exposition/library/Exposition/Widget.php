@@ -427,5 +427,31 @@ class Exposition_Widget
     {
         return $this->_richIcon;
     }
+
+    /**
+     * Returns the widget current version and version compare results
+     *
+     * @return array
+     */
+    public function checkForUpdate($comparedVersion)
+    {
+        $currentVersion = $this->_metadata['version'];
+
+        // Compare checksum version
+        if (strlen($currentVersion) > 5) {
+            $needUpdate = ($currentVersion != $comparedVersion) ? 1 : 0;
+
+        // Compare version number
+        } else {
+            $needUpdate = version_compare($currentVersion, $comparedVersion);
+        }
+
+        $results = array(
+            'needUpdate'     => $needUpdate,
+            'currentVersion' => $currentVersion,
+        );
+
+        return $results;
+    }
 }
 
