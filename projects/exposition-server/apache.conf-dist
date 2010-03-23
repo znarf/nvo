@@ -31,7 +31,7 @@
     RewriteEngine On
 
     # DocumentRoot && Locations
-    DocumentRoot /var/www/Exposition/projects/exposition-server/public
+    DocumentRoot /var/www/netvives.org/projects/exposition-server/public
 
     <Location />
         Order allow,deny
@@ -39,7 +39,7 @@
     </Location>
 
     # Directories
-    <Directory /var/www/Exposition/projects/exposition-server/public>
+    <Directory /var/www/netvives.org/projects/exposition-server/public>
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
 
@@ -68,8 +68,8 @@
     <IfModule mod_rewrite.c>
 
         # Zend framework RewriteCond
-        RewriteCond /var/www/Exposition/projects/exposition-server/public%{REQUEST_FILENAME} !-f
-        RewriteCond /var/www/Exposition/projects/exposition-server/public%{REQUEST_FILENAME} !-d
+        RewriteCond /var/www/netvives.org/projects/exposition-server/public%{REQUEST_FILENAME} !-f
+        RewriteCond /var/www/netvives.org/projects/exposition-server/public%{REQUEST_FILENAME} !-d
         RewriteCond %{REQUEST_URI} !^/admin/.*
         RewriteRule ^(.*) /index.php [L]
     </IfModule>
