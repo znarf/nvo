@@ -76,17 +76,8 @@ UWA.Controls.TabView.prototype =
       href: 'javascript:void(0)',
       styles: {
         whiteSpace: 'nowrap'
-      },
-      events: {
-          'click': function() { return false; }
       }
     });
-
-    /*
-    h link
-    j img
-    */
-
 
     if (b.length) {
 
@@ -198,46 +189,52 @@ UWA.Controls.TabView.prototype =
     }
   },
 
-  addTab: function (d, c, b) {
+  addTab: function (name, value, options) {
 
     if (!this.tabSet) {
       this._createTabSet()
     }
 
-    if (typeof b == "undefined") {
-      b = {}
+    if (typeof options == "undefined") {
+      options = {}
     }
 
-    var a = document.createElement("li");
-    a.className = "tab " + d;
-    a.setAttribute("name", d);
-    if (c.disabled) {
-      a.addClassName("disabled")
+    var tab = UWA.createElement("li",{
+        className: "tab " + name,
+        name: name,
+
+    });
+
+    if (value.disabled) {
+      tab.addClassName("disabled")
     } else {
-      a.onclick = this.eventTabClicked.bindAsEventListener(this);
-      if (b.staticText) {
-          a.setAttribute("static", "static")
+
+      tab.addListener('click', this.eventTabClicked.bindAsEventListener(this));
+
+      if (options.staticText) {
+          tab.setAttribute("static", "static")
       }
     }
 
-    a.appendChild(this._createTabItem(a, c, b));
-    if (this.selectedTab == null) {} // ???
-    this.tabList.appendChild(a);
-    this.createTabContent(d);
-    this.dataItems[d] = c;
+    tab.appendChild(this._createTabItem(tab, value, options));
 
-    return a;
+    this.tabList.appendChild(tab);
+    this.createTabContent(name);
+    this.dataItems[name] = value;
+
+    return tab;
   },
 
   removeTab: function (name) {
-    this.getTab(name).remove(b)
+    this.getTab(name).remove()
   },
 
-  setTab: function (name, b, a) {
+  setTab: function (name, value, options)
+  {
     var tab = this.getTab(name);
-    this.dataItems[name] = UWA.merge(tab, this.dataItems[name]);
+    this.dataItems[name] = UWA.merge(value, this.dataItems[name]);
     tab.setHTML("");
-    tab.appendChild(this._createTabItem(d, this.dataItems[name], a))
+    tab.appendChild(this._createTabItem(tab, this.dataItems[name], options))
   },
 
   addExternalLink: function (name, name) {
