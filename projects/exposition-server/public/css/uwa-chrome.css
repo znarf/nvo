@@ -21,85 +21,51 @@
 @import "base/uwa-core.css";
 @import "base/uwa-typo.css";
 @import "base/uwa-extras.css";
-/*@import "base/uwa-icons.css";*/
+@import "base/uwa-icons.css";
 
 /* to have a nicer look & feel, we import parts of the netvibes garlic theme */
 
-@import "themes/garlic/uwa-core.css";
-@import "themes/garlic/uwa-icons.css";
+@import "themes/dashboard/uwa-core.css";
+@import "themes/dashboard/uwa-icons.css";
 
 /* base layout */
 
 * {
-    margin: 0;
-    padding: 0;
+    margin:0;
+    padding:0;
 }
 
-html, body.moduleIframe, #moduleContent {
-    background: #FFF;
-    min-width: 420px;
+html, body {
+    background:none;
+    text-align:left;
 }
 
-html {
-    padding: 0;
-    margin: 0;
+
+#moduleHeader {
+    -webkit-border-top-right-radius: 10px;
+    -webkit-border-top-left-radius: 10px;
 }
 
-body {
-    padding: 0;
-    margin: 5px;
-    text-align: left;
-    color: #333;
-    height: 100%;
+#moduleFooter{
+    -webkit-border-radius: 10px;
+    -webkit-border-top-right-radius: 0px;
+    -webkit-border-top-left-radius: 0px;
 }
 
 #moduleContent {
-    text-align: left;
-    border-top: 0;
+    -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
 }
 
-/* rules imported from /css/themes/base/screen.css */
-
-a:link, a:visited{
-    color: #333;
-}
-a:hover{
-    color: #F60;
-}
-img{
-    border: 0;
-    -ms-interpolation-mode: bicubic;
-}
-table {
-    padding: 0;
-    margin: 0;
-}
-ul {
-    padding-left: 5px;
-}
-li {
-    list-style-type: none;
-    background: transparent url(base/img/bullet.png) no-repeat left 0.5ex;
-    margin-bottom: 2px;
-    padding-left: 10px;
+#moduleStatus {
+    -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
 }
 
-/* rules imported from /css/themes/exposition-blueberry/screen.css */
-
-a {
-    text-decoration: none;
+#editContent {
+    -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
 }
 
-/* hand cursor not needed in iframe environment */
-
-.moduleHeader {
-    cursor:inherit;
+#resizeButton {
+    -apple-dashboard-region: dashboard-region(control rectangle);
 }
 
-/* tune the editContent */
-
-.editContent {
-    display:block;
-    margin-bottom:0;
-}
 
