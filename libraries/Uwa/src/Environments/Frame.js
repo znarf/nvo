@@ -71,9 +71,7 @@ UWA.extend(UWA.Environment.prototype, {
     if (this.html['edit'].style.display == 'none') {
       this.module.callback('onEdit');
     } else {
-      // note that we don't fire 'endEdit' there because we don't want to save form data
-      this.html['edit'].hide();
-      this.html['editLink'].setHTML( _("Edit") );
+      this.module.callback('endEdit');
     }
   },
 

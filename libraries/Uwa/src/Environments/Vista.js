@@ -117,7 +117,7 @@ Object.extend(UWA.Environment.prototype, {
     if (this.html['edit'].style.display == 'none') {
       this.module.callback('onEdit');
     } else {
-      this.module.callback("endEdit")
+      this.module.callback("endEdit");
     }
   },
 

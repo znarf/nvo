@@ -120,14 +120,10 @@ UWA.extend(UWA.Environment.prototype, {
 
  toggleEdit: function() {
    if (widget.elements['edit'].style.display == 'none') {
-     this.showEdit();
+     this.module.callback('onEdit');
    } else {
-     this.html['edit'].hide();
+     this.module.callback('endEdit');
    }
- },
-
- showEdit: function() {
-   this.module.callback('onEdit');
  },
 
  getData: function(name) {

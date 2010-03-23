@@ -183,6 +183,7 @@ UWA.Widget.prototype = {
     Implementation can differ between environments.
   */
   setTitle: function(title, extended) {
+
     this.title = title;
     if (this.elements['title']) {
       if (extended) {
@@ -192,7 +193,10 @@ UWA.Widget.prototype = {
        }
       this.elements['title'].setHTML(title + extended);
     }
-    if (this.environment && this.environment.setTitle) this.environment.setTitle(title);
+
+    if (this.environment && this.environment.setTitle) {
+        this.environment.setTitle(title);
+    }
   },
 
   /*
@@ -207,7 +211,11 @@ UWA.Widget.prototype = {
    * String : the title of the widget. HTML tags are stripped.
   */
   getTitle: function() {
-    if (this.environment && this.environment.getTitle) return this.environment.getTitle();
+
+    if (this.environment && this.environment.getTitle) {
+      return this.environment.getTitle();
+    }
+
     return this.title.stripTags(); // stripTags = prototype.js
   },
 
@@ -476,53 +484,78 @@ UWA.Widget.prototype = {
 
   /* to document */
   onEdit: function() {
+
+    // Get prefsForm
     if (this.prefsForm) {
       var form = this.prefsForm;
     } else {
-      var prefsForm = new UWA.Controls.PrefsForm( { module: this } );
+      var prefsForm = new UWA.Controls.PrefsForm({module: this});
       var form = prefsForm.getContent();
     }
+
+    // Add prefsForm form to edit element
     this.elements['edit'].setContent(form);
+
     var infos = this.getInfos();
-    if(infos) this.elements['edit'].addContent(infos);
+    if(infos) {
+        this.elements['edit'].addContent(infos);
+    }
+
     // Fire "ShowEdit" notification with HTMLDivElement "edit" as argument
     this.callback('onShowEdit', this.elements['edit']);
+    this.elements['body'].hide();
     this.elements['edit'].show();
-    if(this.elements['editLink']) this.elements['editLink'].setHTML( _("Close Edit") );
-  },
-  onCloseEdit: function ()
-  {
-    this.callback("onHideEdit")
-  },
-  /* internal or advanced use only - not documented */
-  getInfos: function() {
-    var content = "";
-    if(this.metas['author']) {
-      if(this.metas['website']) {
-        var content = 'Widget by <strong><a href="' + this.metas['website'] + '" rel="author">' + this.metas['author'] + '</a></strong>';
-      } else {
-        var content = 'Widget by <strong>' + this.metas['author'] + '</strong>';
-      }
-      if(this.metas['version']) {
-        content += ' - version <strong>' + this.metas['version'] + '</strong>';
-      }
+
+    // Change Edit value
+    if(this.elements['editLink']) {
+        this.elements['editLink'].setHTML( _("Close Edit") );
     }
-    return this.createElement('p').setStyle({'padding': '10px', 'textAlign': 'right'}).setHTML(content);
   },
 
-  /* to document */
-  endEdit: function() {
+  endEdit: function () {
+
+    // Fire "ShowEdit" notification with HTMLDivElement "edit" as argument
+    this.callback("onHideEdit", this.elements['edit'])
     this.elements['body'].show();
     this.elements['edit'].hide();
-    if (this.elements['editLink']) {
-      this.elements['editLink'].show().setHTML( _("Edit") );
+
+    // Change Edit value
+    if(this.elements['editLink']) {
+        this.elements['editLink'].setHTML( _("Edit") );
     }
+
     if (this.onRefresh) {
       this.onRefresh();
     } else if (this.onLoad) {
       this.onLoad();
     }
     this.callback('onHideEdit');
+  },
+
+  /* internal or advanced use only - not documented */
+  getInfos: function() {
+    var content = "";
+
+    // Display author info
+    if(this.metas['author']) {
+      if(this.metas['website']) {
+        var content = 'Widget by <strong><a href="' + this.metas['website'] + '" rel="author">' + this.metas['author'] + '</a></strong>';
+      } else {
+        var content = 'Widget by <strong>' + this.metas['author'] + '</strong>';
+      }
+    }
+
+    // Display Version Number if less length < 6
+    if(this.metas['version'] && this.metas['version'].length < 6) {
+      content += ' - Version <strong>' + this.metas['version'] + '</strong>';
+    }
+
+    // Display Recompile link if uwaUrl value isset
+    if(this.uwaUrl) {
+      content += ' - <a href="' + this.environment.getModuleUrl(this.uwaUrl) + '">' + _('Recompile this widget') + '</a>';
+    }
+
+    return this.createElement('p').setStyle({'padding': '10px', 'textAlign': 'right'}).setHTML(content);
   },
 
   /* Group: Data storage */
@@ -918,7 +951,6 @@ UWA.Widget.prototype = {
     this.initPreferences();
     this.callback('onLoad');
   }
-
 };
 
 // old name
