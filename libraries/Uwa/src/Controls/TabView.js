@@ -428,6 +428,7 @@ UWA.Controls.TabView.prototype =
   },
 
   getTab: function (name) {
+
     if (typeof name == "string" || typeof name == "number") {
       var tabs = this.tabList.getElementsByTagName("li");
       for (var c = 0, d; tab = tabs[c]; c++) {
@@ -441,7 +442,10 @@ UWA.Controls.TabView.prototype =
       }
     }
 
-    return b;
+    // if not results match return first tab
+    var tab = this.tabList.getElementsByTagName("li")[0];
+
+    return name;
   },
 
   observe: function (b, a) {
