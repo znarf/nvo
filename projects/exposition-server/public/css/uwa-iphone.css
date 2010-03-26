@@ -89,6 +89,7 @@ a {
 .editContent {
     display:block;
     margin-bottom:0;
+    height: 100%;
 }
 
 

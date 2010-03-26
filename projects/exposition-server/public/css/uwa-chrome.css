@@ -38,6 +38,7 @@
 html, body {
     background:none;
     text-align:left;
+
 }
 
 
@@ -53,6 +54,7 @@ html, body {
 }
 
 #moduleContent {
+    min-width: 460px;
     -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
 }
 
@@ -62,6 +64,7 @@ html, body {
 
 #editContent {
     -apple-dashboard-region: dashboard-region(control rectangle 0 0 0 0);
+    min-width: 460px;
 }
 
 #resizeButton {

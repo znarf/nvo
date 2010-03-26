@@ -53,6 +53,12 @@ body {
     text-align: center;
     line-height:1.5em;
 }
+/*white */
+.white-module .moduleHeader .title,
+.white-module .moduleHeader .title a {
+    color: #000;
+    text-shadow: #CCC 0px -1px 0;
+}
 
 .editContent {
     background: #F5F5F5 url(/css/themes/garlic/img/editcontent.png) repeat-x center top;
@@ -60,7 +66,7 @@ body {
     border-bottom: 1px solid #DDD;
 }
 
-/* white, default */
+/*default */
 .moduleHeader {
     box-sizing: border-box;
     margin: 0;
@@ -73,6 +79,14 @@ body {
     color: #FFFFFF;
     background: url(/css/themes/iphone/img/iPhoneToolbar.png) #6d84a2 repeat-x;
     border-bottom: 1px solid #2d3642;
+}
+
+/*white */
+.white-module .moduleHeader{
+    background: url(/css/themes/iphone/img/iPhoneToolbar-white.png) #6d84a2 repeat-x;
+    color: #000;
+    text-shadow: #CCC 0px -1px 0;
+    border-bottom:1px solid #000;
 }
 
 .moduleHeader a:link, .moduleHeader a:visited, .moduleHeader a:hover{
@@ -96,6 +110,14 @@ body {
     margin: -3px 5px 15px 5px;
 }
 
+/*white */
+.white-module .moduleHeader .edit,
+.white-module .moduleHeader .refresh {
+    -webkit-border-image: url(/css/themes/iphone/img/iPhoneButton-white.png) 0 5 0 5;
+    text-shadow: #CCC 0px -1px 0;
+    color: #000;
+}
+
 .moduleHeader .ico
 {
     -webkit-border-image: url(/css/themes/iphone/img/iPhoneButton.png) 0 5 0 5;
@@ -104,6 +126,12 @@ body {
     padding: 5px 3px 0 3px;
     border: none;
     margin: -6px 5px 15px 5px;
+}
+
+/*white */
+.white-module .moduleHeader .ico
+{
+    -webkit-border-image: url(/css/themes/iphone/img/iPhoneButton-white.png) 0 5 0 5;
 }
 
 .moduleHeader .refresh {

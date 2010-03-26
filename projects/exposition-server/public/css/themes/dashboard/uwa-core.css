@@ -114,7 +114,7 @@ ul {
 }
 li {
     list-style-type: none;
-    background: transparent url(base/img/bullet.png) no-repeat left 0.5ex;
+    background: transparent url(../../base/img/bullet.png) no-repeat left 0.5ex;
     margin-bottom: 2px;
     padding-left: 10px;
 }

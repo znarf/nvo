@@ -261,7 +261,7 @@ html>body select {
     position: absolute;
     top: -1px;
     right: 5px;
-    background-image: url(base/img/options.png);
+    background-image: url(img/options.png);
     text-decoration: none;
     border: none;
 }
