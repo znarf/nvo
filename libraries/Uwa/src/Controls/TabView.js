@@ -71,9 +71,8 @@ UWA.Controls.TabView.prototype =
     }
 
     var h = UWA.createElement('a', {
-      href: 'javascript:void(0)',
+      //href: 'javascript:void(0)',
       title: b.tooltip || '',
-      href: 'javascript:void(0)',
       styles: {
         whiteSpace: 'nowrap'
       }
