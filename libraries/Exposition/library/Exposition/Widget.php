@@ -429,6 +429,16 @@ class Exposition_Widget
     }
 
     /**
+     * Returns the widget rich icon URL.
+     *
+     * @return string
+     */
+    public function getCheckSum()
+    {
+        return sha1(serialize($this));
+    }
+
+    /**
      * Returns the widget current version and version compare results
      *
      * @return array
@@ -437,14 +447,8 @@ class Exposition_Widget
     {
         $currentVersion = $this->_metadata['version'];
 
-        // Compare checksum version
-        if (strlen($currentVersion) > 5) {
-            $needUpdate = ($currentVersion != $comparedVersion) ? 1 : 0;
-
         // Compare version number
-        } else {
-            $needUpdate = version_compare($currentVersion, $comparedVersion);
-        }
+        $needUpdate = version_compare($currentVersion, $comparedVersion);
 
         $results = array(
             'needUpdate'     => $needUpdate,
