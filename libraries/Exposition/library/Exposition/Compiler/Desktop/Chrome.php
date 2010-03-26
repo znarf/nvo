@@ -23,7 +23,7 @@ require_once 'Exposition/Compiler/Desktop.php';
 /**
  * Chrome Widgets Compiler.
  */
-final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Desktop
+final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Desktop_W3c
 {
     /**
      * Archive Format of the widget.
@@ -94,9 +94,13 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
 
         $this->addDirToArchive($ressourcePath . '/chrome');
 
+        // use safari for debug or another webkit powered browser
+        //echo $this->getHtml();
+        //die();
+
         // add archive files
         $this->addFileFromStringToArchive('widget.html', $this->getHtml());
-        $this->addFileFromStringToArchive('manifest.json', $this->_getJsonManifest());
+        $this->addFileFromStringToArchive('manifest.json', $this->_getManifest());
     }
 
     /**
@@ -122,14 +126,14 @@ final class Exposition_Compiler_Desktop_Chrome extends Exposition_Compiler_Deskt
         $compiler->setStylesheet($this->_stylesheet);
 
         return $compiler->render();
-    }
+     }
 
     /**
      * Get manifest.json content
      *
      * @return string manifest.json content for current wigdet
      */
-    protected function _getJsonManifest()
+    protected function _getManifest()
     {
         // se details on http://code.google.com/chrome/extensions/getstarted.html
         // http://gist.github.com/142422 crx scripts
