@@ -80,7 +80,7 @@ class Exposition_Load
      *
      * @return object Zend_Config instance
      */
-    public function setConfig($config = array(), $environment = null)
+    public static function setConfig($config = array(), $environment = null)
     {
         if (is_string($config)) {
             $config = $this->_loadConfigFromFile($config, $environment);
