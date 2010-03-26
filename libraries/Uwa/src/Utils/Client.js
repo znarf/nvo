@@ -72,3 +72,15 @@ if (typeof Browser == "undefined") var Browser = {};
 if(UWA.Client.Engine.ie) Browser.isIE = true; else Browser.isIE = false;
 if(UWA.Client.Engine.opera) Browser.isOpera = true; else Browser.isOpera = false;
 
+
+// Add Client Rating/Star/Favorite/...
+
+UWA.Client.addStar = function(url, title) {
+  if (window.sidebar) { // Mozilla Firefox Bookmark
+    window.sidebar.addPanel(title, url,"");
+  } else if( window.external ) { // IE Favorite
+    window.external.AddFavorite( url, title); }
+  else if(window.opera && window.print) { // Opera Hotlist
+    return true;
+  }
+}

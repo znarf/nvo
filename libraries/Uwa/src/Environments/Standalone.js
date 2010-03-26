@@ -33,6 +33,10 @@ UWA.extend(UWA.Environment.prototype, {
    var moduleHeader = document.createElement('div');
    moduleHeader.setAttribute('id','moduleHeader');
    moduleHeader.className = 'moduleHeader';
+
+   // Buttons
+   // @todo $headerbuttons ?
+
    moduleHeader.innerHTML =
         '<a id="closeLink" class="close" style="display:none" href="javascript:void(0)">' + _('Close') + '</a>' +
         '<a id="editLink" class="edit" style="display:none" href="javascript:void(0)">' + _('Edit') + '</a>' +
@@ -119,7 +123,7 @@ UWA.extend(UWA.Environment.prototype, {
  },
 
  toggleEdit: function() {
-   if (widget.elements['edit'].style.display == 'none') {
+   if (this.module.elements['edit'].style.display == 'none') {
      this.module.callback('onEdit');
    } else {
      this.module.callback('endEdit');
@@ -171,7 +175,8 @@ UWA.extend(UWA.Environment.prototype, {
  },
 
  addStar: function() {
-   alert("Starring not available in Standalone mode.")
+
+   UWA.Client.addStar(location.href, this.module.getTitle());
  },
 
  setIcon: function(icon) {
