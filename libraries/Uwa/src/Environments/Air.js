@@ -99,12 +99,10 @@ UWA.extend(UWA.Environment.prototype, {
   },
 
   toggleEdit: function() {
-    if (this.widget.elements['edit'].style.display == 'none') {
-      this.widget.callback('onEdit');
+    if (this.module.elements['edit'].style.display == 'none') {
+     this.module.callback('onEdit');
     } else {
-      // note that we don't fire 'endEdit' there because we don't want to save form data
-      this.widget.elements['edit'].hide();
-      this.widget.elements['editLink'].setHTML( _("Edit") );
+     this.module.callback('endEdit');
     }
   },
 
