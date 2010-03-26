@@ -283,7 +283,7 @@ abstract class Exposition_Archive_Abstract
             // update root
             $current['path'] = $root . $current['path'];
 
-            $this->_files[] = $current;
+            $this->_files[$root . $current['path']] = $current;
         }
 
         return $this;
