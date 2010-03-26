@@ -396,13 +396,15 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                 <ul class="export-list">
                     <li>
                         <img src="<?php echo MAIN_URL; ?>/img/icons/chrome.gif" alt="Google Chrome" />
-                        Google Chrome:
-                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Packed With CRX</a> -
-                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>&disableCrx=true">Packed With ZIP</a>
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Google Chrome</a>
                     </li>
                     <li>
                         <img src="<?php echo MAIN_URL; ?>/img/icons/apple.gif" alt="Iphone" />
                         <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/iphone?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Iphone</a>
+                    </li>
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/other.gif" alt="Adobe Air" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/air?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Adobe Air</a>
                     </li>
                 </ul>
 
