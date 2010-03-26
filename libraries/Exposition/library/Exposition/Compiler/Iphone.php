@@ -99,7 +99,7 @@ class Exposition_Compiler_Iphone  extends Exposition_Compiler_Uwa
         if (isset($preferences) && count($preferences) > 0) {
             $l[] = '<widget:preferences>';
             foreach ($preferences as $pref) {
-                $l[] = $this->_getPreferenceXml($pref);
+                $l[] = $this->getPreferenceXml($pref);
             }
             $l[] = '</widget:preferences>';
         }
@@ -115,13 +115,20 @@ class Exposition_Compiler_Iphone  extends Exposition_Compiler_Uwa
         if (isset($script) && strlen($script) > 0) {
             $l[] = '<script type="text/javascript">';
             $l[] = '//<![CDATA[';
+            $l[] = sprintf('widget.uwaUrl = %s;', Zend_Json::encode($this->_widget->getUrl()));
             $l[] = $script;
             $l[] = '//]]>';
             $l[] = '</script>';
         }
 
         $l[] = '</head>';
-        $l[] = '<body onload="window.scrollTo(0, 1)">';
+
+        $className = 'moduleIphone';
+        if (isset($this->options['chromeColor'])) {
+            $className .= ' ' .  $this->options['chromeColor'] . '-module';
+        }
+        $l[] = '<body class="' . $className . '"  onload="window.scrollTo(0, 1)">';
+
         $l[] = $this->_widget->getBody();
         $l[] = '</body>';
         $l[] = '</html>';
