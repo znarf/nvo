@@ -157,6 +157,7 @@ if (UWA_NETVIBES_COMPATIBILY == true) {
   var NV_AVATARS = 'avatars.netvibes.com';
   var NV_STATIC = 'http://' + NV_HOST;
   var NV_PATH = 'http://' + NV_HOST + '/';
+  var NV_ECO = "eco.netvibes.com";
 
   if (typeof Netvibes == "undefined") var Netvibes = {};
   if (typeof Netvibes.UI == "undefined") Netvibes.UI = {};
