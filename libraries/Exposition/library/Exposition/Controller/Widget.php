@@ -145,7 +145,12 @@ class Exposition_Controller_Widget extends Zend_Controller_Action
      */
     public function iphoneAction()
     {
-        $compiler = Exposition_Compiler_Factory::getCompiler('iphone', $this->_widget);
+        $options = array(
+            'uwaId'     => $this->getRequest()->getParam('uwaId'),
+            'chromeColor'     => $this->getRequest()->getParam('chromeColor'),
+        );
+
+        $compiler = Exposition_Compiler_Factory::getCompiler('iphone', $this->_widget, $options);
         $content = $compiler->render();
 
         // Configure output
