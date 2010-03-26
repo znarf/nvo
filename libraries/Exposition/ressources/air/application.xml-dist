@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<application xmlns="http://ns.adobe.com/air/application/1.0">
+    <id>com.uwa.widget.MySampleWidget.air</id>
+    <filename>MySampleWidget.air</filename>
+    <name>My Sample Widget</name>
+    <description>Displays Sample CSS and Crontols for UWA</description>
+    <copyright>Exposition Libraries</copyright>
+
+    <version>1.0</version>
+    <initialWindow>
+        <content>source/index.html</content>
+        <title/>
+        <systemChrome>none</systemChrome>
+        <transparent>true</transparent>
+        <visible>true</visible>
+
+        <minimizable>true</minimizable>
+        <maximizable>true</maximizable>
+        <resizable>true</resizable>
+        <width>358</width>
+        <height>625</height>
+        <x>200</x>
+        <y>200</y>
+    </initialWindow>
+
+    <installFolder>Widgets/My Sample Widget World</installFolder>
+    <programMenuFolder>My Sample Widget</programMenuFolder>
+    <allowBrowserInvocation>true</allowBrowserInvocation>
+
+
+    <icon>
+        <image>source/icons/Icon.png</image>
+        <image32x32>source/icons/Icon32.png</image32x32>
+        <image48x48>source/icons/Icon48.png</image48x48>
+        <image128x128>source/icons/Icon128.png</image128x128>
+    </icon>
+</application>
