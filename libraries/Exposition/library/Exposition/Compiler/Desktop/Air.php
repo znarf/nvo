@@ -28,6 +28,27 @@ require_once 'Exposition/Compiler/Desktop.php';
 final class Exposition_Compiler_Desktop_Air extends Exposition_Compiler_Desktop_W3c
 {
     /**
+     * Enable  widget static contents (JS+CSS) storage into archive
+     *
+     * @var bool
+     */
+    protected $_storeStaticIntoArchive = true;
+
+    /**
+     * Index of widget static contents
+     *
+     * @var array
+     */
+    protected $_archiveStaticContents = array();
+
+    /**
+     * Preffix of widget static content
+     *
+     * @var string
+     */
+    protected $_archiveStaticContentPreffix = 'source';
+
+    /**
      * Archive Format of the widget.
      *
      * @var string
@@ -60,7 +81,7 @@ final class Exposition_Compiler_Desktop_Air extends Exposition_Compiler_Desktop_
      *
      * @var string
      */
-    protected $_extension = 'air';
+    protected $_extension = 'zip';
 
     /**
      * Mime Type.
@@ -102,7 +123,7 @@ final class Exposition_Compiler_Desktop_Air extends Exposition_Compiler_Desktop_
 
         // Add other widget files
         $this->addFileFromStringToArchive('source/index.html', $this->getHtml());
-        $this->addFileFromStringToArchive('Application.xml', $this->_getManifest());
+        $this->addFileFromStringToArchive('application.xml', $this->_getManifest());
     }
 
     protected function _getManifest()
@@ -141,10 +162,10 @@ final class Exposition_Compiler_Desktop_Air extends Exposition_Compiler_Desktop_
         $l[] = '    </initialWindow>';
 
         $l[] = '    <icon>';
-        $l[] = '        <image16x16>source/icons/Icon.png</image16x16>';
-        $l[] = '        <image32x32>source/icons/Icon.png</image32x32>';
-        $l[] = '        <image48x48>source/icons/Icon.png</image48x48>';
-        $l[] = '        <image128x128>source/icons/Icon.png</image128x128>';
+        $l[] = '        <image16x16>source/icons/Icon16.png</image16x16>';
+        $l[] = '        <image32x32>source/icons/Icon32.png</image32x32>';
+        $l[] = '        <image48x48>source/icons/Icon48.png</image48x48>';
+        $l[] = '        <image128x128>source/icons/Icon128.png</image128x128>';
         $l[] = '    </icon>';
 
         $l[] = '</application>';
@@ -155,7 +176,7 @@ final class Exposition_Compiler_Desktop_Air extends Exposition_Compiler_Desktop_
     protected function _getJavascripts($options = array())
     {
         $javascripts = parent::_getJavascripts($options);
-        $javascripts[] = 'AIRAliases.js';
+        $javascripts[] = 'js/AIRAliases.js';
         return $javascripts;
     }
 }
