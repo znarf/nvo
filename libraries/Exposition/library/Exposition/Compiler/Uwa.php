@@ -101,7 +101,7 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         if (isset($preferences) && count($preferences) > 0) {
             $l[] = '<widget:preferences>';
             foreach ($preferences as $pref) {
-                $l[] = $this->_getPreferenceXml($pref);
+                $l[] = $this->getPreferenceXml($pref);
             }
             $l[] = '</widget:preferences>';
         }
@@ -117,6 +117,7 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
         if (isset($script) && strlen($script) > 0) {
             $l[] = '<script type="text/javascript">';
             $l[] = '//<![CDATA[';
+            $l[] = sprintf('widget.uwaUrl = %s;', Zend_Json::encode($this->_widget->getUrl()));
             $l[] = $script;
             $l[] = '//]]>';
             $l[] = '</script>';
@@ -138,11 +139,12 @@ class Exposition_Compiler_Uwa  extends Exposition_Compiler
     {
         $l = array();
 
-        $l[] = "(function(){";
+        $l[] = '(function(){';
         $l[] = $this->_widget->getCompressedScript();
-        $l[] = "widget.setMetas(" . $this->_widget->getMetadataJson() . ");";
-        $l[] = "widget.setPreferences(" . $this->_widget->getPreferencesJson() . ");";
-        $l[] = "})();";
+        $l[] = sprintf('widget.setMetas(%s);', $this->_widget->getMetadataJson());
+        $l[] = sprintf('widget.setPreferences(%s);', $this->_widget->getPreferencesJson());
+        $l[] = sprintf('widget.uwaUrl = %s;', Zend_Json::encode($this->_widget->getUrl()));
+        $l[] = '})();';
 
         return implode("\n", $l);
     }

@@ -76,6 +76,8 @@ abstract class Exposition_Compiler
         'lib/UWA/Data/Storage/Gears.js',
         'lib/UWA/Data/Storage/Html5.js',
         'lib/UWA/Data/Storage/IE.js',
+        'lib/UWA/Data/Storage/Air.js',
+        'lib/UWA/Data/Storage/Dashboard.js',
         'lib/UWA/Data/Storage/Cookies.js',
         'lib/UWA/Environment.js',
         'lib/UWA/Widget.js',
@@ -389,7 +391,7 @@ abstract class Exposition_Compiler
         return $html;
     }
 
-    public function _getPreferenceXml($preference)
+    public function getPreferenceXml($preference)
     {
         $preference = $preference->toArray();
         $xml = "<preference";

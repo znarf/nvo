@@ -64,6 +64,8 @@ BASE_FILES = \
 	$(UWA_JS_SRC)/Data/Storage/Html5.js \
 	$(UWA_JS_SRC)/Data/Storage/IE.js \
 	$(UWA_JS_SRC)/Data/Storage/Cookies.js \
+    $(UWA_JS_SRC)/Data/Storage/Air.js \
+    $(UWA_JS_SRC)/Data/Storage/Dashboard.js \
 	$(UWA_JS_SRC)/Environment.js\
 	$(UWA_JS_SRC)/Widget.js \
 	$(UWA_JS_SRC)/Utils.js \
