@@ -539,15 +539,17 @@ UWA.Widget.prototype = {
     // Display author info
     if(this.metas['author']) {
       if(this.metas['website']) {
-        var content = 'Widget by <strong><a href="' + this.metas['website'] + '" rel="author">' + this.metas['author'] + '</a></strong>';
+        var content = '<p>Widget by <strong><a href="' + this.metas['website'] + '" rel="author">' + this.metas['author'] + '</a></strong></p>';
       } else {
-        var content = 'Widget by <strong>' + this.metas['author'] + '</strong>';
+        var content = '<p>Widget by <strong>' + this.metas['author'] + '</strong></p>';
       }
     }
 
+    content += '<p>';
+
     // Display Version Number if less length < 6
     if(this.metas['version'] && this.metas['version'].length < 6) {
-      content += ' - Version <strong>' + this.metas['version'] + '</strong>';
+      content += 'Version <strong>' + this.metas['version'] + '</strong>';
     }
 
     // Display Recompile link if uwaUrl value isset
@@ -555,7 +557,9 @@ UWA.Widget.prototype = {
       content += ' - <a href="' + this.environment.getModuleUrl(this.uwaUrl) + '">' + _('Recompile this widget') + '</a>';
     }
 
-    return this.createElement('p').setStyle({'padding': '10px', 'textAlign': 'right'}).setHTML(content);
+    content += '</p>';
+
+    return this.createElement('div').setStyle({'padding': '0 10px', 'textAlign': 'right'}).setHTML(content);
   },
 
   /* Group: Data storage */
