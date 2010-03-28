@@ -102,20 +102,6 @@ UWA.extend(UWA.Environment.prototype, {
       this.module.elements['edit'].addContent(infos);
     }
 
-    if (this.module.uwaUrl) {
-
-      var upgrade = UWA.createElement('a', {
-        href:  UWA_WIDGET + '/dashboard/?uwaUrl=' + encodeURIComponent(this.module.uwaUrl)
-      }).setStyle(
-        {'display': 'block', 'padding': '10px', 'text-align': 'right'}
-      ).setHTML(
-        _('Recompile this widget')
-      ).inject(editContent);
-
-      // to handle links with window.widget.openURL
-      this.callback('onUpdateBody');
-    }
-
     if (window.widget) {
       window.widget.prepareForTransition("ToBack");
     }
@@ -208,6 +194,11 @@ UWA.extend(UWA.Environment.prototype, {
     } else {
       return window.open(url);
     }
+  },
+
+  getModuleUrl: function(uwaUrl, platform) {
+      var platform = typeof platform == "undefined" ? 'dashboard' : platform;
+      return UWA_WIDGET + '/' + platform + '?uwaUrl=' + encodeURIComponent(uwaUrl);
   },
 
   eventResizeButtonMove: function(event) {
