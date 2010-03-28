@@ -356,11 +356,6 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                     </li>
 
                     <li>
-                        <img src="<?php echo MAIN_URL; ?>/img/icons/blogger.gif" alt="Blogger" />
-                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/blogger?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Blogger</a>
-                    </li>
-
-                    <li>
                         <img src="<?php echo MAIN_URL; ?>/img/icons/microsoft.gif" alt="Windows Vista/Seven" />
                         <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/vista?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Windows Vista/Seven</a>
                     </li>
@@ -381,11 +376,6 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
                     </li>
 
                     <li>
-                        <img src="<?php echo MAIN_URL; ?>/img/icons/other.gif" alt="Screenlets" />
-                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/screenlets?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Screenlets</a>
-                    </li>
-
-                    <li>
                         <img src="<?php echo MAIN_URL; ?>/img/icons/other.gif" alt="Opera" />
                         <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/opera?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Opera</a>
                     </li>
@@ -394,6 +384,20 @@ echo '<?xml version="1.0" encoding="utf-8"?>';
 
                 <h2>Beta - Need testing and improvements</h2>
                 <ul class="export-list">
+
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/other.gif" alt="Screenlets" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/screenlets?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Screenlets</a>
+                    </li>
+
+
+                    <li>
+                        <img src="<?php echo MAIN_URL; ?>/img/icons/blogger.gif" alt="Blogger" />
+                        <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/blogger?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Blogger</a>
+                    </li>
+
+
                     <li>
                         <img src="<?php echo MAIN_URL; ?>/img/icons/chrome.gif" alt="Google Chrome" />
                         <a target="_blank" href="<?php echo MAIN_URL; ?>/widget/chrome?uwaUrl=<?php echo urlencode(WIDGET_URL); ?>">Google Chrome</a>
