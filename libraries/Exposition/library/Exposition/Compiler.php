@@ -17,7 +17,6 @@
  * along with Exposition PHP Lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
  * Compiler main class.
  */
@@ -64,26 +63,26 @@ abstract class Exposition_Compiler
      * @var array
      */
     protected $_baseLibraries = array(
-        'lib/UWA/String.js',
-        'lib/UWA/Array.js',
-        'lib/UWA/Element.js',
-        'lib/UWA/Json.js',
-        'lib/UWA/Data.js',
-        'lib/UWA/Data/Storage.js',
-        'lib/UWA/Data/Storage/Abstract.js',
-        'lib/UWA/Data/Storage/Dom.js',
-        'lib/UWA/Data/Storage/Flash.js',
-        'lib/UWA/Data/Storage/Gears.js',
-        'lib/UWA/Data/Storage/Html5.js',
-        'lib/UWA/Data/Storage/IE.js',
-        'lib/UWA/Data/Storage/Air.js',
-        'lib/UWA/Data/Storage/Dashboard.js',
-        'lib/UWA/Data/Storage/Cookies.js',
-        'lib/UWA/Environment.js',
-        'lib/UWA/Widget.js',
-        'lib/UWA/Utils.js',
-        'lib/UWA/Utils/Client.js',
-        'lib/UWA/Controls/PrefsForm.js'
+        'UWA/String.js',
+        'UWA/Array.js',
+        'UWA/Element.js',
+        'UWA/Json.js',
+        'UWA/Data.js',
+        'UWA/Data/Storage.js',
+        'UWA/Data/Storage/Abstract.js',
+        'UWA/Data/Storage/Dom.js',
+        'UWA/Data/Storage/Flash.js',
+        'UWA/Data/Storage/Gears.js',
+        'UWA/Data/Storage/Html5.js',
+        'UWA/Data/Storage/IE.js',
+        'UWA/Data/Storage/Air.js',
+        'UWA/Data/Storage/Dashboard.js',
+        'UWA/Data/Storage/Cookies.js',
+        'UWA/Environment.js',
+        'UWA/Widget.js',
+        'UWA/Utils.js',
+        'UWA/Utils/Client.js',
+        'UWA/Controls/PrefsForm.js'
     );
 
     /**
@@ -106,16 +105,16 @@ abstract class Exposition_Compiler
 
         // set uwa alone files
         $this->_coreLibraries['uwa'] = array_merge(array(
-            'lib/UWA/UWA.js',
-            'lib/UWA/Drivers/UWA-alone.js',
+            'UWA/UWA.js',
+            'UWA/Drivers/UWA-alone.js',
         ), $this->_baseLibraries);
 
         // set uwa-mootools files
         $this->_coreLibraries['uwa-mootools'] = array_merge(array(
-            'lib/mootools-core.js',
-            'lib/mootools-more.js',
-            'lib/UWA/UWA.js',
-            'lib/UWA/Drivers/UWA-mootools.js'
+            'mootools/mootools-core.js',
+            'mootools/mootools-more.js',
+            'UWA/UWA.js',
+            'UWA/Drivers/UWA-mootools.js'
         ), $this->_baseLibraries);
     }
 
@@ -254,7 +253,7 @@ abstract class Exposition_Compiler
             }
 
             if (isset($this->_environment)) {
-                $javascripts[] = $jsEndPoint . '/lib/UWA/Environments/' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
+                $javascripts[] = $jsEndPoint . '/UWA/Environments/' . ucfirst($this->_environment) . '.js?v=' . $jsVersion;
             }
         }
 
